@@ -1,6 +1,6 @@
 package rdf.museo.events.ontology;
 
-public class Paints<Painter, Paint> extends Creates<Painter, Paint> {
+public class Paints extends Creates<Painter, Paint> {
 
 	/**
 	 * 
