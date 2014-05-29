@@ -8,6 +8,7 @@
 *.war
 *.ear
 
+<<<<<<< HEAD
 # Eclipse
 .classpath
 .project
@@ -23,3 +24,8 @@ target
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/target
+=======
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+>>>>>>> 55ccb0010c1a0bcb95696f5f41cc5621735fd5db
