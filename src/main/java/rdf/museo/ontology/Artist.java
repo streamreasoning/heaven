@@ -4,6 +4,11 @@ import rdf.museo.rdf.RDFObject;
 
 public class Artist extends RDFObject {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public Artist(String name) {
 		super(name);
 	}
@@ -19,13 +24,6 @@ public class Artist extends RDFObject {
 	@Override
 	public String toString() {
 		return "Artist " + getValue();
-	}
-
-	public Class<?> getType() {
-		if (this.getClass().getSuperclass().equals(Object.class))
-			return this.getClass();
-		else
-			return this.getClass().getSuperclass();
 	}
 
 	@Override

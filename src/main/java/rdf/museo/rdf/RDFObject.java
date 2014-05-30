@@ -14,7 +14,10 @@ public abstract class RDFObject implements Serializable {
 		this.setValue(object);
 	}
 
-	public abstract Class<?> getType();
+	public RDFClass getRDFClass() {
+		System.out.println("RDFObj call");
+		return new RDFClass(this.getClass());
+	};
 
 	@Override
 	public int hashCode() {

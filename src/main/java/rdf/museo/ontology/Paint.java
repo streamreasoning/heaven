@@ -3,6 +3,11 @@ package rdf.museo.ontology;
 
 public class Paint extends Piece {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public Paint(String name) {
 		super(name);
 	}
@@ -12,8 +17,4 @@ public class Paint extends Piece {
 		return "Paint " + getName();
 	}
 
-	@Override
-	public Class<?> getType() {
-		return Paint.class;
-	}
 }

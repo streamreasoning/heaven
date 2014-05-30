@@ -2,8 +2,8 @@ package rdf.museo.actionbased.events;
 
 import rdf.RDFEvent;
 import rdf.museo.ontology.Artist;
-import rdf.museo.ontology.Creates;
 import rdf.museo.ontology.Piece;
+import rdf.museo.ontology.properties.Creates;
 
 public class CreatesEvent<S extends Artist, P extends Creates, C extends Piece>
 		extends RDFEvent<Artist, Creates, Piece> {

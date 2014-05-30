@@ -4,6 +4,11 @@ import rdf.museo.rdf.RDFObject;
 
 public class Painter extends Artist {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public Painter(String name) {
 		super(name);
 	}
@@ -29,4 +34,5 @@ public class Painter extends Artist {
 			return getValue().equals(other.getValue());
 		}
 	}
+
 }

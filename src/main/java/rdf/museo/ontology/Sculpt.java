@@ -1,6 +1,12 @@
 package rdf.museo.ontology;
 
+
 public class Sculpt extends Piece {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public Sculpt(String name) {
 		super(name);
@@ -9,11 +15,6 @@ public class Sculpt extends Piece {
 	@Override
 	public String toString() {
 		return "Sculpt " + getName();
-	}
-
-	@Override
-	public Class<?> getType() {
-		return Sculpt.class;
 	}
 
 }

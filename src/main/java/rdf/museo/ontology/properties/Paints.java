@@ -1,5 +1,7 @@
-package rdf.museo.ontology;
+package rdf.museo.ontology.properties;
 
+import rdf.museo.ontology.Paint;
+import rdf.museo.ontology.Painter;
 import rdf.museo.rdf.RDFClass;
 
 public class Paints extends Creates {

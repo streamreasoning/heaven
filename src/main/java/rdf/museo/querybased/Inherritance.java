@@ -6,17 +6,20 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
 import rdf.museo.ontology.Artist;
-import rdf.museo.ontology.Creates;
 import rdf.museo.ontology.Paint;
 import rdf.museo.ontology.Painter;
-import rdf.museo.ontology.Paints;
+import rdf.museo.ontology.Piece;
 import rdf.museo.ontology.Sculpt;
 import rdf.museo.ontology.Sculptor;
-import rdf.museo.ontology.Sculpts;
+import rdf.museo.ontology.properties.Creates;
+import rdf.museo.ontology.properties.Paints;
+import rdf.museo.ontology.properties.Sculpts;
+import rdf.museo.querybased.events.NineTest;
 import rdf.museo.querybased.events.RDFS3;
 import rdf.museo.querybased.events.RDFS9;
 import rdf.museo.querybased.events.RDFSInput;
 import rdf.museo.querybased.events.RDFSOut;
+import rdf.museo.querybased.events.ThreeTest;
 import rdf.museo.rdf.TypeOf;
 
 import com.espertech.esper.client.Configuration;
@@ -72,6 +75,9 @@ public class Inherritance {
 		cepConfig.addEventType("RDFS9Input", RDFS9.class.getName());
 		cepConfig.addEventType("QueryOut", RDFSOut.class.getName());
 
+		cepConfig.addEventType("ThreeTest", ThreeTest.class.getName());
+		cepConfig.addEventType("NineTest", NineTest.class.getName());
+
 		Creates creates = new Creates();
 		Sculpts sculpts = new Sculpts();
 		Paints paints = new Paints();
@@ -101,26 +107,30 @@ public class Inherritance {
 				+ "insert into RDFS3Input select s as s, c as c, p as p "
 				+ "insert into RDFS9Input select s as s, c as c, p as p "
 				+ "insert into QueryOut select s as s, c as c, p as p "
-				+ "output all ";
+				+ "insert into InputTest select * " + "output all ";
 
 		String rdfs3 = "on RDFS3Input "
 				+ "insert into QueryOut select c as s, typeof as p, p.range as c "
 				+ "insert into RDFS9Input select c as s,  typeof as p, p.range as c "
 				+ "insert into QueryOut select s as s, typeof as p, p.domain as c "
 				+ "insert into RDFS9Input select s as s, typeof as p, p.domain as c "
+				+ "insert into ThreeTest select c as s, typeof as p, p.range as c "
+				+ "insert into ThreeTest select s as s, typeof as p, p.domain as c "
 				+ "output all";
 
-		String rdfs9 = "on RDFS9Input "
-				+ "insert into QueryOut select s as s, p, c as c where p=typeof ";
+		String rdfs9 = "on RDFS9Input(p=typeof) "
+				+ "insert into QueryOut select s as s, p, c.RDFClass as c "
+				+ "insert into NineTest select s , p, c.RDFClass  "
+				+ "output all";
 
 		String queryOut = "insert into OutEvent "
-				+ "select distinct s from QueryOut(instanceof(s, rdf.museo.events.ontology.Sculptor) ).win:time_batch(1000 msec)";
+				+ "select distinct s from QueryOut(instanceof(s, rdf.museo.ontology.Sculptor) ).win:time_batch(1000 msec)";
 
 		cepAdm.createEPL(input);
 		cepAdm.createEPL(rdfs3);
 		cepAdm.createEPL(rdfs9);
-		cepAdm.createEPL(queryOut).addListener(
-				new LoggingListener(false, cepConfig,
+		cepAdm.createEPL("select * from NineTest").addListener(
+				new LoggingListener("", false, false, false, cepConfig,
 						(EPServiceProviderSPI) cep, (String[]) null));
 
 		// after statements
@@ -129,7 +139,7 @@ public class Inherritance {
 				new Paint("Gioconda")));
 		cepRT.sendEvent(new RDFSInput(new Sculptor("Michelangelo"), sculpts,
 				new Sculpt("David")));
-		cepRT.sendEvent(new RDFSInput(new Artist("Rodin"), creates, new Sculpt(
+		cepRT.sendEvent(new RDFSInput(new Artist("Rodin"), creates, new Piece(
 				"Kiss")));
 
 		cepRT.sendEvent(new CurrentTimeEvent(500));
@@ -138,13 +148,7 @@ public class Inherritance {
 				"Urlo")));
 		cepRT.sendEvent(new RDFSInput(new Sculptor("Bernini"), sculpts,
 				new Sculpt("Apollo e Dafne")));
-		cepRT.sendEvent(new RDFSInput(new Artist("Canova"), typeof,
-				new Sculptor("Canova")));
-		cepRT.sendEvent(new RDFSInput(new Painter("Michelangelo"), paints,
-				new Paint("giudizio universale")));
 
 		cepRT.sendEvent(new CurrentTimeEvent(1000));
-
 	}
-
 }

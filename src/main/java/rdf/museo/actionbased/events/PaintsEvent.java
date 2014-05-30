@@ -2,7 +2,7 @@ package rdf.museo.actionbased.events;
 
 import rdf.museo.ontology.Paint;
 import rdf.museo.ontology.Painter;
-import rdf.museo.ontology.Paints;
+import rdf.museo.ontology.properties.Paints;
 
 public class PaintsEvent extends CreatesEvent<Painter, Paints, Paint> {
 

@@ -4,6 +4,11 @@ import rdf.museo.rdf.RDFObject;
 
 public class Piece extends RDFObject {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public Piece(String o) {
 		super(o);
 	}
@@ -29,10 +34,6 @@ public class Piece extends RDFObject {
 	@Override
 	public boolean equals(Object obj) {
 		return getValue().equals(obj);
-	}
-
-	public Class<?> getType() {
-		return Piece.class;
 	}
 
 }

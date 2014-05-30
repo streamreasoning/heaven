@@ -1,5 +1,7 @@
-package rdf.museo.ontology;
+package rdf.museo.ontology.properties;
 
+import rdf.museo.ontology.Sculpt;
+import rdf.museo.ontology.Sculptor;
 import rdf.museo.rdf.RDFClass;
 
 public class Sculpts extends Creates {

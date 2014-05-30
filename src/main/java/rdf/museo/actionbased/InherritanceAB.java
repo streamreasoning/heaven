@@ -5,17 +5,20 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
+import rdf.museo.actionbased.events.CreatesEvent;
+import rdf.museo.actionbased.events.PaintsEvent;
+import rdf.museo.actionbased.events.SculptsEvent;
 import rdf.museo.ontology.Artist;
-import rdf.museo.ontology.Creates;
 import rdf.museo.ontology.Paint;
 import rdf.museo.ontology.Painter;
-import rdf.museo.ontology.Paints;
+import rdf.museo.ontology.Piece;
 import rdf.museo.ontology.Sculpt;
 import rdf.museo.ontology.Sculptor;
-import rdf.museo.ontology.Sculpts;
+import rdf.museo.ontology.properties.Creates;
+import rdf.museo.ontology.properties.Paints;
+import rdf.museo.ontology.properties.Sculpts;
 import rdf.museo.querybased.events.RDFS3;
 import rdf.museo.querybased.events.RDFS9;
-import rdf.museo.querybased.events.RDFSInput;
 import rdf.museo.querybased.events.RDFSOut;
 import rdf.museo.rdf.TypeOf;
 
@@ -46,7 +49,7 @@ import commons.LoggingListener;
  * 
  * **/
 
-public class Inherritance {
+public class InherritanceAB {
 	protected static Configuration cepConfig;
 	protected static ConsoleAppender appender;
 	protected static EPServiceProvider cep;
@@ -63,11 +66,12 @@ public class Inherritance {
 
 		ConfigurationMethodRef ref = new ConfigurationMethodRef();
 		cepConfig = new Configuration();
-		cepConfig.addMethodRef(Inherritance.class, ref);
+		cepConfig.addMethodRef(InherritanceAB.class, ref);
 
 		// eventi in classi diverse perche' altrimenti non vengono distinti a
 		// livello di ELP, indagare
-		cepConfig.addEventType("RDFSInput", RDFSInput.class.getName());
+		cepConfig.addEventType("RDFSInput", CreatesEvent.class.getName());
+
 		cepConfig.addEventType("RDFS3Input", RDFS3.class.getName());
 		cepConfig.addEventType("RDFS9Input", RDFS9.class.getName());
 		cepConfig.addEventType("QueryOut", RDFSOut.class.getName());
@@ -90,7 +94,7 @@ public class Inherritance {
 				.setInternalTimerEnabled(false);
 
 		cep = (EPServiceProviderSPI) EPServiceProviderManager.getProvider(
-				Inherritance.class.getName(), cepConfig);
+				InherritanceAB.class.getName(), cepConfig);
 		// We register an EPL statement
 		cepAdm = cep.getEPAdministrator();
 		cepRT = cep.getEPRuntime();
@@ -114,34 +118,35 @@ public class Inherritance {
 				+ "insert into QueryOut select s as s, p, c as c where p=typeof ";
 
 		String queryOut = "insert into OutEvent "
-				+ "select distinct s from QueryOut(instanceof(s, rdf.museo.events.ontology.Sculptor) ).win:time_batch(1000 msec)";
+				+ "select distinct s from QueryOut(instanceof(s, rdf.museo.ontology.Sculptor) ).win:time_batch(1000 msec)";
 
 		cepAdm.createEPL(input);
 		cepAdm.createEPL(rdfs3);
 		cepAdm.createEPL(rdfs9);
 		cepAdm.createEPL(queryOut).addListener(
-				new LoggingListener(false, cepConfig,
+				new LoggingListener("quertout", false, false, false, cepConfig,
 						(EPServiceProviderSPI) cep, (String[]) null));
 
 		// after statements
 
-		cepRT.sendEvent(new RDFSInput(new Painter("Leonardo"), paints,
+		cepRT.sendEvent(new PaintsEvent(new Painter("Leonardo"), paints,
 				new Paint("Gioconda")));
-		cepRT.sendEvent(new RDFSInput(new Sculptor("Michelangelo"), sculpts,
+		cepRT.sendEvent(new SculptsEvent(new Sculptor("Michelangelo"), sculpts,
 				new Sculpt("David")));
-		cepRT.sendEvent(new RDFSInput(new Artist("Rodin"), creates, new Sculpt(
-				"Kiss")));
+		cepRT.sendEvent(new CreatesEvent<Artist, Creates, Piece>(new Artist(
+				"Rodin"), creates, new Piece("Kiss")));
 
 		cepRT.sendEvent(new CurrentTimeEvent(500));
 
-		cepRT.sendEvent(new RDFSInput(new Painter("Munch"), paints, new Paint(
-				"Urlo")));
-		cepRT.sendEvent(new RDFSInput(new Sculptor("Bernini"), sculpts,
+		cepRT.sendEvent(new PaintsEvent(new Painter("Munch"), paints,
+				new Paint("Urlo")));
+		cepRT.sendEvent(new SculptsEvent(new Sculptor("Bernini"), sculpts,
 				new Sculpt("Apollo e Dafne")));
-		cepRT.sendEvent(new RDFSInput(new Artist("Canova"), typeof,
-				new Sculptor("Canova")));
-		cepRT.sendEvent(new RDFSInput(new Painter("Michelangelo"), paints,
-				new Paint("giudizio universale")));
+		/*
+		 * cepRT.sendEvent(new RDFSInput(new Artist("Canova"), typeof, new
+		 * Sculptor("Canova"))); cepRT.sendEvent(new RDFSInput(new
+		 * Painter("Michelangelo"), paints, new Paint("giudizio universale")));
+		 */
 
 		cepRT.sendEvent(new CurrentTimeEvent(1000));
 

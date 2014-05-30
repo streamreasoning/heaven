@@ -10,6 +10,7 @@ public class Sculptor extends Artist {
 
 	@Override
 	public String toString() {
+
 		return "Sculptor " + getName();
 	}
 

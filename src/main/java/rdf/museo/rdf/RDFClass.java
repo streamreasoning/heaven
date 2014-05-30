@@ -14,8 +14,25 @@ public class RDFClass extends RDFObject {
 	}
 
 	@Override
-	public Class<?> getType() {
-		return clazz;
+	public RDFClass getRDFClass() {
+		return this;
 	}
 
+	@Override
+	public String toString() {
+		return "RDFClass " + clazz.getSimpleName();
+	}
+
+	@Override
+	public int hashCode() {
+		return clazz.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (getClass() != obj.getClass() || obj == null)
+			return false;
+		RDFClass other = (RDFClass) obj;
+		return clazz.equals(other.getClass());
+	}
 }

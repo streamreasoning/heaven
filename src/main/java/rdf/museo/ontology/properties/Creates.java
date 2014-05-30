@@ -1,5 +1,7 @@
-package rdf.museo.ontology;
+package rdf.museo.ontology.properties;
 
+import rdf.museo.ontology.Artist;
+import rdf.museo.ontology.Piece;
 import rdf.museo.rdf.RDFClass;
 import rdf.museo.rdf.RDFObject;
 import rdf.museo.rdf.RDFProperty;

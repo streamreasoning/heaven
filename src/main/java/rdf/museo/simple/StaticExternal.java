@@ -70,21 +70,21 @@ public class StaticExternal {
 				+ "output all ";
 
 		String rdfs3 = "on RDFS3Input "
-				+ "insert into QueryOut select c as s, 'typeOf' as p, rdf.museo.StaticExternal.range(s,p,c) as c "
-				+ "insert into RDFS9Input select c as s, 'typeOf' as p, rdf.museo.StaticExternal.range(s,p,c) as c "
-				+ "insert into QueryOut select s as s, 'typeOf' as p, rdf.museo.StaticExternal.domain(s,p,c) as c "
-				+ "insert into RDFS9Input select s as s, 'typeOf' as p, rdf.museo.StaticExternal.domain(s,p,c) as c "
+				+ "insert into QueryOut select c as s, 'typeOf' as p, rdf.museo.simple.StaticExternal.range(s,p,c) as c "
+				+ "insert into RDFS9Input select c as s, 'typeOf' as p, rdf.museo.simple.StaticExternal.range(s,p,c) as c "
+				+ "insert into QueryOut select s as s, 'typeOf' as p, rdf.museo.simple.StaticExternal.domain(s,p,c) as c "
+				+ "insert into RDFS9Input select s as s, 'typeOf' as p, rdf.museo.simple.StaticExternal.domain(s,p,c) as c "
 				+ "output all";
 
-		String rdfs9 = "on RDFS9Input "
-				+ "insert into QueryOut select s as s, p, rdf.museo.StaticExternal.subClassOf(c) as c where p='typeOf' ";
+		String rdfs9 = "on RDFS9Input(p='typeOf')"
+				+ "insert into QueryOut select s as s, p, rdf.museo.simple.StaticExternal.subClassOf(c) as c ";
 
 		String queryOut = "insert into OutEvent "
 				+ "select * from QueryOut "
 
-				+ "where rdf.museo.StaticExternal.subClassOf(c)='Sculptor' or c='Sculptor' ";
+				+ "where rdf.museo.simple.StaticExternal.subClassOf(c)='Sculptor' or c='Sculptor' ";
 		String queryOut1 = "insert into OutEvent " + "select * from QueryOut "
-				+ "where rdf.museo.StaticExternal.subClassOf(s)='Piece'";
+				+ "where rdf.museo.simple.StaticExternal.subClassOf(s)='Piece'";
 		// all artist that are both scluptors and painters with joins, windows
 		// are mandatory
 		String queryOut2 = "insert into OutEvent "
@@ -94,9 +94,11 @@ public class StaticExternal {
 		cepAdm.createEPL(input);
 		cepAdm.createEPL(rdfs3);
 		cepAdm.createEPL(rdfs9);
-		cepAdm.createEPL(queryOut2).addListener(
-				new LoggingListener(false, cepConfig,
-						(EPServiceProviderSPI) cep, (String[]) null));
+		cepAdm.createEPL(queryOut2)
+				.addListener(
+						new LoggingListener("queryout2", false, false, false,
+								cepConfig, (EPServiceProviderSPI) cep,
+								(String[]) null));
 
 		// after statements
 		cepRT.sendEvent(new TEvent("Leonardo", "paints", "Gioconda"));

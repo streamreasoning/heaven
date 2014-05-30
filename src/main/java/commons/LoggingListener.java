@@ -11,11 +11,28 @@ public class LoggingListener implements UpdateListener {
 
 	Configuration config;
 	EPServiceProviderSPI spi;
-	boolean debug;
+	boolean debug, log, red;
 	String[] proStrings = null;
+	String name;
 
 	public LoggingListener(boolean debug, Configuration config,
 			EPServiceProviderSPI spi, String... properties) {
+		this.log = false;
+		this.red = false;
+		this.name = "";
+		this.config = config;
+		this.spi = spi;
+		this.debug = debug;
+		if (properties != null)
+			this.proStrings = properties;
+	}
+
+	public LoggingListener(String name, boolean debug, boolean log,
+			boolean red, Configuration config, EPServiceProviderSPI spi,
+			String... properties) {
+		this.log = log;
+		this.red = red;
+		this.name = name;
 		this.config = config;
 		this.spi = spi;
 		this.debug = debug;
@@ -35,13 +52,23 @@ public class LoggingListener implements UpdateListener {
 			}
 			if (proStrings != null) {
 				for (String s : proStrings) {
-					System.out.println(e.get(s));
+					print(name + " " + e.get(s));
 				}
 			} else {
-				System.out.println(e.getUnderlying());
+				print(name + " " + e.getUnderlying());
 			}
 
 		}
-		System.out.println("--");
+		print("--");
+	}
+
+	private void print(String msg) {
+		if (log)
+			Logger.getRootLogger().info(msg);
+		if (red)
+			System.err.println(msg);
+		else
+			System.out.println(msg);
+
 	}
 }
