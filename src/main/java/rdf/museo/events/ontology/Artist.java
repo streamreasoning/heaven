@@ -9,26 +9,16 @@ public class Artist extends RDFObject {
 	}
 
 	public String getName() {
-		return object;
+		return getValue();
 	}
 
 	public void setName(String name) {
-		object = name;
+		setValue(name);
 	}
 
 	@Override
 	public String toString() {
-		return "Artist " + object;
-	}
-
-	@Override
-	public int hashCode() {
-		return object.hashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return object.equals(obj);
+		return "Artist " + getValue();
 	}
 
 	public Class<?> getType() {
@@ -36,6 +26,23 @@ public class Artist extends RDFObject {
 			return this.getClass();
 		else
 			return this.getClass().getSuperclass();
+	}
+
+	@Override
+	public int hashCode() {
+		return getValue().hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		else if (!(obj instanceof RDFObject))
+			return false;
+		else {
+			RDFObject other = (RDFObject) obj;
+			return getValue().equals(other.getValue());
+		}
 	}
 
 }

@@ -5,10 +5,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
-import rdf.museo.events.QueryOut;
-import rdf.museo.events.RDFEvent;
-import rdf.museo.events.RDFS3Input;
-import rdf.museo.events.RDFS9Input;
 import rdf.museo.events.ontology.Artist;
 import rdf.museo.events.ontology.Creates;
 import rdf.museo.events.ontology.Paint;
@@ -17,6 +13,10 @@ import rdf.museo.events.ontology.Paints;
 import rdf.museo.events.ontology.Sculpt;
 import rdf.museo.events.ontology.Sculptor;
 import rdf.museo.events.ontology.Sculpts;
+import rdf.museo.events.querybased.RDFS3;
+import rdf.museo.events.querybased.RDFS9;
+import rdf.museo.events.querybased.RDFSInput;
+import rdf.museo.events.querybased.RDFSOut;
 import rdf.museo.events.rdfs.TypeOf;
 
 import com.espertech.esper.client.Configuration;
@@ -27,6 +27,7 @@ import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.time.CurrentTimeEvent;
 import com.espertech.esper.core.service.EPServiceProviderSPI;
+
 import commons.LoggingListener;
 
 /**
@@ -46,7 +47,6 @@ import commons.LoggingListener;
  * **/
 
 public class Inherritance {
-	private static final int TypeOf = 0;
 	protected static Configuration cepConfig;
 	protected static ConsoleAppender appender;
 	protected static EPServiceProvider cep;
@@ -67,10 +67,10 @@ public class Inherritance {
 
 		// eventi in classi diverse perche' altrimenti non vengono distinti a
 		// livello di ELP, indagare
-		cepConfig.addEventType("RDFEvent", RDFEvent.class.getName());
-		cepConfig.addEventType("RDFS3Input", RDFS3Input.class.getName());
-		cepConfig.addEventType("RDFS9Input", RDFS9Input.class.getName());
-		cepConfig.addEventType("QueryOut", QueryOut.class.getName());
+		cepConfig.addEventType("RDFSInput", RDFSInput.class.getName());
+		cepConfig.addEventType("RDFS3Input", RDFS3.class.getName());
+		cepConfig.addEventType("RDFS9Input", RDFS9.class.getName());
+		cepConfig.addEventType("QueryOut", RDFSOut.class.getName());
 
 		Creates creates = new Creates();
 		Sculpts sculpts = new Sculpts();
@@ -97,7 +97,7 @@ public class Inherritance {
 
 		cepRT.sendEvent(new CurrentTimeEvent(0));
 
-		String input = "on RDFEvent "
+		String input = "on RDFSInput "
 				+ "insert into RDFS3Input select s as s, c as c, p as p "
 				+ "insert into RDFS9Input select s as s, c as c, p as p "
 				+ "insert into QueryOut select s as s, c as c, p as p "
@@ -114,7 +114,7 @@ public class Inherritance {
 				+ "insert into QueryOut select s as s, p, c as c where p=typeof ";
 
 		String queryOut = "insert into OutEvent "
-				+ "select * from QueryOut where  instanceof(s, rdf.museo.events.ontology.Painter)";
+				+ "select distinct s from QueryOut(instanceof(s, rdf.museo.events.ontology.Sculptor) ).win:time_batch(1000 msec)";
 
 		cepAdm.createEPL(input);
 		cepAdm.createEPL(rdfs3);
@@ -125,19 +125,26 @@ public class Inherritance {
 
 		// after statements
 
-		cepRT.sendEvent(new RDFEvent<Painter, Paints<Painter, Paint>, Paint>(
-				new Painter("Leonardo"), paints, new Paint("Gioconda")));
-		cepRT.sendEvent(new RDFEvent(new Sculptor("Michelangelo"), sculpts,
+		cepRT.sendEvent(new RDFSInput(new Painter("Leonardo"), paints,
+				new Paint("Gioconda")));
+		cepRT.sendEvent(new RDFSInput(new Sculptor("Michelangelo"), sculpts,
 				new Sculpt("David")));
-		cepRT.sendEvent(new RDFEvent(new Artist("Rodin"), creates, new Sculpt(
+		cepRT.sendEvent(new RDFSInput(new Artist("Rodin"), creates, new Sculpt(
 				"Kiss")));
 
 		cepRT.sendEvent(new CurrentTimeEvent(500));
 
+		cepRT.sendEvent(new RDFSInput(new Painter("Munch"), paints, new Paint(
+				"Urlo")));
+		cepRT.sendEvent(new RDFSInput(new Sculptor("Bernini"), sculpts,
+				new Sculpt("Apollo e Dafne")));
+		cepRT.sendEvent(new RDFSInput(new Artist("Canova"), typeof,
+				new Sculptor("Canova")));
+		cepRT.sendEvent(new RDFSInput(new Painter("Michelangelo"), paints,
+				new Paint("giudizio universale")));
+
+		cepRT.sendEvent(new CurrentTimeEvent(1000));
+
 	}
-	/*
-	 * TODO non posso accedere al metodo type della classetrovare un'alternativa
-	 * via epl oppure via java
-	 */
 
 }

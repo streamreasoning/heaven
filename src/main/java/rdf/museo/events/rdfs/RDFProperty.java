@@ -2,28 +2,27 @@ package rdf.museo.events.rdfs;
 
 import java.io.Serializable;
 
-public abstract class RDFProperty<E, T> implements Serializable {
+public abstract class RDFProperty<RDFObject> implements Serializable {
 
 	/**
 	 * 
 	 */
 	static final long serialVersionUID = 1L;
-	protected Class<? extends T> range;
-	protected Class<? extends E> domain;
+	protected RDFClass range;
+	protected RDFClass domain;
 	protected String property;
 
-	public RDFProperty(Class<? extends E> domain, Class<? extends T> range,
-			String property) {
+	public RDFProperty(RDFClass domain, RDFClass range, String property) {
 		this.range = range;
 		this.domain = domain;
 		this.property = property;
 	}
 
-	public Class<?> getRange() {
+	public RDFClass getRange() {
 		return range;
 	}
 
-	public Class<?> getDomain() {
+	public RDFClass getDomain() {
 		return domain;
 
 	}
@@ -58,11 +57,11 @@ public abstract class RDFProperty<E, T> implements Serializable {
 				&& other.property.equals(property);
 	}
 
-	public void setRange(Class<? extends T> range) {
+	public void setRange(RDFClass range) {
 		this.range = range;
 	}
 
-	public void setDomain(Class<? extends E> domain) {
+	public void setDomain(RDFClass domain) {
 		this.domain = domain;
 	}
 }

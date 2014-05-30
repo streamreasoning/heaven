@@ -1,18 +1,15 @@
 package rdf.museo.events.rdfs;
 
-public class TypeOf extends RDFProperty<Object, Object> {
+public class TypeOf extends RDFProperty<RDFObject> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public TypeOf(Class<?> domain, Class<?> range, String property) {
-		super(domain, range, property);
-	}
-
 	public TypeOf() {
-		super(Object.class, Object.class, "typeOf");
+		super(new RDFClass(RDFObject.class), new RDFClass(RDFObject.class),
+				"typeOf");
 	}
 
 }

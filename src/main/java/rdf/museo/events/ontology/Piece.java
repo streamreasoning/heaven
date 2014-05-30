@@ -9,26 +9,26 @@ public class Piece extends RDFObject {
 	}
 
 	public String getName() {
-		return object;
+		return getValue();
 	}
 
 	public void setName(String object) {
-		this.object = object;
+		this.setValue(object);
 	}
 
 	@Override
 	public String toString() {
-		return "Piece " + object;
+		return "Piece " + getValue();
 	}
 
 	@Override
 	public int hashCode() {
-		return object.hashCode();
+		return getValue().hashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		return object.equals(obj);
+		return getValue().equals(obj);
 	}
 
 	public Class<?> getType() {

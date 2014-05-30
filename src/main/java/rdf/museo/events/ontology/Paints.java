@@ -1,6 +1,8 @@
 package rdf.museo.events.ontology;
 
-public class Paints extends Creates<Painter, Paint> {
+import rdf.museo.events.rdfs.RDFClass;
+
+public class Paints extends Creates {
 
 	/**
 	 * 
@@ -8,7 +10,7 @@ public class Paints extends Creates<Painter, Paint> {
 	private static final long serialVersionUID = 1L;
 
 	public Paints(String property) {
-		super(Painter.class, Paint.class, property);
+		super(new RDFClass(Painter.class), new RDFClass(Paint.class), property);
 	}
 
 	public Paints() {

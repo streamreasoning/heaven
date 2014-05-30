@@ -1,23 +1,24 @@
 package rdf.museo.events;
 
+import rdf.museo.events.rdfs.RDFObject;
 import rdf.museo.events.rdfs.RDFProperty;
 
-public class RDFEvent<E, P extends RDFProperty<E, T>, T> {
-	E s;
-	RDFProperty<E, T> p;
-	T c;
+public class RDFEvent<E, P extends RDFProperty<RDFObject>, T> {
+	RDFObject s;
+	RDFProperty<RDFObject> p;
+	RDFObject c;
 
-	public RDFEvent(E s, RDFProperty<E, T> p, T o) {
+	public RDFEvent(RDFObject s, RDFProperty<RDFObject> p, RDFObject o) {
 		this.s = s;
 		this.p = p;
 		this.c = o;
 	}
 
-	public E getS() {
+	public RDFObject getS() {
 		return s;
 	}
 
-	public void setS(E s) {
+	public void setS(RDFObject s) {
 		this.s = s;
 	}
 
@@ -29,11 +30,11 @@ public class RDFEvent<E, P extends RDFProperty<E, T>, T> {
 		this.p = p;
 	}
 
-	public T getC() {
+	public RDFObject getC() {
 		return c;
 	}
 
-	public void setC(T o) {
+	public void setC(RDFObject o) {
 		this.c = o;
 	}
 

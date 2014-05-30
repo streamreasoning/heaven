@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.6" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="rdf.museo.events.ontology.Sculptor" project="obqa" 
+    file="/obqa/src/main/java/rdf/museo/events/ontology/Sculptor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="134" width="154" x="75" y="403"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="rdf.museo.events.ontology.Paints" project="obqa" 
+    file="/obqa/src/main/java/rdf/museo/events/ontology/Paints.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="116" width="149" x="463" y="403"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="rdf.museo.events.ontology.Artist" project="obqa" 
+    file="/obqa/src/main/java/rdf/museo/events/ontology/Artist.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="188" width="154" x="172" y="175"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="rdf.museo.events.ontology.Painter" project="obqa" 
+    file="/obqa/src/main/java/rdf/museo/events/ontology/Painter.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="134" width="154" x="269" y="403"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="rdf.museo.events.ontology.Sculpt" project="obqa" 
+    file="/obqa/src/main/java/rdf/museo/events/ontology/Sculpt.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="116" width="133" x="841" y="403"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="rdf.museo.events.ontology.Paint" project="obqa" 
+    file="/obqa/src/main/java/rdf/museo/events/ontology/Paint.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="116" width="133" x="1014" y="403"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="rdf.museo.events.ontology.Creates" project="obqa" 
+    file="/obqa/src/main/java/rdf/museo/events/ontology/Creates.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="134" width="227" x="558" y="175"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="rdf.museo.events.ontology.Sculpts" project="obqa" 
+    file="/obqa/src/main/java/rdf/museo/events/ontology/Sculpts.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="116" width="149" x="652" y="403"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="rdf.museo.events.ontology.Piece" project="obqa" 
+    file="/obqa/src/main/java/rdf/museo/events/ontology/Piece.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="188" width="154" x="928" y="175"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <generalization id="10">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <generalization id="11">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <generalization id="12">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <generalization id="13">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <generalization id="14">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <generalization id="15">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

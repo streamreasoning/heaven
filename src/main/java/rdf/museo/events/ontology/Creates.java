@@ -1,22 +1,22 @@
 package rdf.museo.events.ontology;
 
+import rdf.museo.events.rdfs.RDFClass;
+import rdf.museo.events.rdfs.RDFObject;
 import rdf.museo.events.rdfs.RDFProperty;
 
-public class Creates<D extends Artist, R extends Piece> extends
-		RDFProperty<Artist, Piece> {
+public class Creates extends RDFProperty<RDFObject> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Creates(Class<? extends Artist> domain,
-			Class<? extends Piece> range, String property) {
+	public Creates(RDFClass domain, RDFClass range, String property) {
 		super(domain, range, property);
 	}
 
 	public Creates(String property) {
-		this(Artist.class, Piece.class, property);
+		this(new RDFClass(Artist.class), new RDFClass(Piece.class), property);
 	}
 
 	public Creates() {
