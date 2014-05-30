@@ -1,16 +1,16 @@
-package rdf.museo.events.ontology;
+package rdf.museo.ontology;
 
-import rdf.museo.events.rdfs.RDFObject;
+import rdf.museo.rdf.RDFObject;
 
-public class Painter extends Artist {
+public class Sculptor extends Artist {
 
-	public Painter(String name) {
+	public Sculptor(String name) {
 		super(name);
 	}
 
 	@Override
 	public String toString() {
-		return "Painter " + getName();
+		return "Sculptor " + getName();
 	}
 
 	@Override
@@ -29,4 +29,5 @@ public class Painter extends Artist {
 			return getValue().equals(other.getValue());
 		}
 	}
+
 }

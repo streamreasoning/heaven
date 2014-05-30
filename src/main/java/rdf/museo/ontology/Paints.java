@@ -1,6 +1,6 @@
-package rdf.museo.events.ontology;
+package rdf.museo.ontology;
 
-import rdf.museo.events.rdfs.RDFClass;
+import rdf.museo.rdf.RDFClass;
 
 public class Paints extends Creates {
 

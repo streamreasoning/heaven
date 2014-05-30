@@ -1,4 +1,4 @@
-package rdf.museo.events.ontology;
+package rdf.museo.ontology;
 
 public class Sculpt extends Piece {
 

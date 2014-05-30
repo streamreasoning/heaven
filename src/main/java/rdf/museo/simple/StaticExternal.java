@@ -1,4 +1,4 @@
-package rdf.museo;
+package rdf.museo.simple;
 
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;

@@ -1,23 +1,23 @@
-package rdf.museo;
+package rdf.museo.querybased;
 
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
-import rdf.museo.events.ontology.Artist;
-import rdf.museo.events.ontology.Creates;
-import rdf.museo.events.ontology.Paint;
-import rdf.museo.events.ontology.Painter;
-import rdf.museo.events.ontology.Paints;
-import rdf.museo.events.ontology.Sculpt;
-import rdf.museo.events.ontology.Sculptor;
-import rdf.museo.events.ontology.Sculpts;
-import rdf.museo.events.querybased.RDFS3;
-import rdf.museo.events.querybased.RDFS9;
-import rdf.museo.events.querybased.RDFSInput;
-import rdf.museo.events.querybased.RDFSOut;
-import rdf.museo.events.rdfs.TypeOf;
+import rdf.museo.ontology.Artist;
+import rdf.museo.ontology.Creates;
+import rdf.museo.ontology.Paint;
+import rdf.museo.ontology.Painter;
+import rdf.museo.ontology.Paints;
+import rdf.museo.ontology.Sculpt;
+import rdf.museo.ontology.Sculptor;
+import rdf.museo.ontology.Sculpts;
+import rdf.museo.querybased.events.RDFS3;
+import rdf.museo.querybased.events.RDFS9;
+import rdf.museo.querybased.events.RDFSInput;
+import rdf.museo.querybased.events.RDFSOut;
+import rdf.museo.rdf.TypeOf;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.ConfigurationMethodRef;

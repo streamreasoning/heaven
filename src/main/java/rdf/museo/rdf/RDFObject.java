@@ -1,4 +1,4 @@
-package rdf.museo.events.rdfs;
+package rdf.museo.rdf;
 
 import java.io.Serializable;
 

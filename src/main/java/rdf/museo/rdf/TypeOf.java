@@ -1,4 +1,4 @@
-package rdf.museo.events.rdfs;
+package rdf.museo.rdf;
 
 public class TypeOf extends RDFProperty<RDFObject> {
 

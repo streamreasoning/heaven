@@ -1,6 +1,6 @@
-package rdf.museo.events.ontology;
+package rdf.museo.ontology;
 
-import rdf.museo.events.rdfs.RDFObject;
+import rdf.museo.rdf.RDFObject;
 
 public class Piece extends RDFObject {
 

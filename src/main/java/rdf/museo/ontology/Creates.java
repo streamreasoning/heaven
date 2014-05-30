@@ -1,8 +1,8 @@
-package rdf.museo.events.ontology;
+package rdf.museo.ontology;
 
-import rdf.museo.events.rdfs.RDFClass;
-import rdf.museo.events.rdfs.RDFObject;
-import rdf.museo.events.rdfs.RDFProperty;
+import rdf.museo.rdf.RDFClass;
+import rdf.museo.rdf.RDFObject;
+import rdf.museo.rdf.RDFProperty;
 
 public class Creates extends RDFProperty<RDFObject> {
 
