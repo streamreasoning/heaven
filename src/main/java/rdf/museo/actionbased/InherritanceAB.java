@@ -30,7 +30,6 @@ import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.time.CurrentTimeEvent;
 import com.espertech.esper.core.service.EPServiceProviderSPI;
-
 import commons.LoggingListener;
 
 /**
@@ -115,16 +114,16 @@ public class InherritanceAB {
 				+ "output all";
 
 		String rdfs9 = "on RDFS9Input "
-				+ "insert into QueryOut select s as s, p, c as c where p=typeof ";
+				+ "insert into QueryOut select s as s, p, c.RDFClass as c where p=typeof ";
 
 		String queryOut = "insert into OutEvent "
-				+ "select distinct s from QueryOut(instanceof(s, rdf.museo.ontology.Sculptor) ).win:time_batch(1000 msec)";
+				+ "select distinct s from QueryOut(instanceof(s, rdf.museo.ontology.Piece) ).win:time_batch(1000 msec)";
 
 		cepAdm.createEPL(input);
 		cepAdm.createEPL(rdfs3);
 		cepAdm.createEPL(rdfs9);
 		cepAdm.createEPL(queryOut).addListener(
-				new LoggingListener("quertout", false, false, false, cepConfig,
+				new LoggingListener("queryout", false, false, false, cepConfig,
 						(EPServiceProviderSPI) cep, (String[]) null));
 
 		// after statements

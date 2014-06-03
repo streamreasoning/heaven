@@ -2,7 +2,7 @@ package rdf.museo.rdf;
 
 import java.io.Serializable;
 
-public abstract class RDFProperty<RDFObject> implements Serializable {
+public abstract class RDFProperty<T> implements Serializable {
 
 	/**
 	 * 
@@ -34,27 +34,19 @@ public abstract class RDFProperty<RDFObject> implements Serializable {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((domain == null) ? 0 : domain.hashCode());
-		result = prime * result
-				+ ((property == null) ? 0 : property.hashCode());
-		result = prime * result + ((range == null) ? 0 : range.hashCode());
-		return result;
+		return domain.hashCode() + range.hashCode() + property.hashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
+		if (obj != null && obj instanceof RDFProperty) {
+			@SuppressWarnings("unchecked")
+			RDFProperty<T> other = (RDFProperty<T>) obj;
+			return other.getDomain().equals(domain)
+					&& other.getRange().equals(range)
+					&& other.property.equals(property);
+		} else
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		RDFProperty other = (RDFProperty) obj;
-		return other.getDomain().equals(domain)
-				&& other.getRange().equals(range)
-				&& other.property.equals(property);
 	}
 
 	public void setRange(RDFClass range) {

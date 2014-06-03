@@ -15,7 +15,7 @@ public class RDFClass extends RDFObject {
 
 	@Override
 	public RDFClass getRDFClass() {
-		return this;
+		return new RDFClass(clazz.getSuperclass());
 	}
 
 	@Override

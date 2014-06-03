@@ -30,7 +30,6 @@ import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.time.CurrentTimeEvent;
 import com.espertech.esper.core.service.EPServiceProviderSPI;
-
 import commons.LoggingListener;
 
 /**
@@ -129,9 +128,11 @@ public class Inherritance {
 		cepAdm.createEPL(input);
 		cepAdm.createEPL(rdfs3);
 		cepAdm.createEPL(rdfs9);
-		cepAdm.createEPL("select * from NineTest").addListener(
-				new LoggingListener("", false, false, false, cepConfig,
-						(EPServiceProviderSPI) cep, (String[]) null));
+		cepAdm.createEPL(
+				"select  cast(s,rdf.museo.ontology.Artist) as s , p, c from QueryOut where    instanceof(p, rdf.museo.ontology.properties.Sculpts) and instanceof(c, rdf.museo.ontology.Sculpt)")
+				.addListener(
+						new LoggingListener("", false, false, false, cepConfig,
+								(EPServiceProviderSPI) cep, (String[]) null));
 
 		// after statements
 
@@ -146,7 +147,7 @@ public class Inherritance {
 
 		cepRT.sendEvent(new RDFSInput(new Painter("Munch"), paints, new Paint(
 				"Urlo")));
-		cepRT.sendEvent(new RDFSInput(new Sculptor("Bernini"), sculpts,
+		cepRT.sendEvent(new RDFSInput(new Artist("Bernini"), sculpts,
 				new Sculpt("Apollo e Dafne")));
 
 		cepRT.sendEvent(new CurrentTimeEvent(1000));
