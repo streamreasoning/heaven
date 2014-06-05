@@ -1,46 +1,46 @@
 package rdf;
 
-import rdf.museo.rdf.RDFObject;
 import rdf.museo.rdf.RDFProperty;
+import rdf.museo.rdf.RDFResource;
 
-public class RDFEvent<E, P extends RDFProperty<RDFObject>, T> {
-	private RDFObject s;
-	private RDFProperty<RDFObject> p;
-	private RDFObject c;
+public class RDFEvent<S extends RDFResource, P extends RDFProperty<RDFResource, RDFResource>, O extends RDFResource> {
+	private S s;
+	private P p;
+	private O c;
 
-	public RDFEvent(RDFObject s, RDFProperty<RDFObject> p, RDFObject o) {
+	public RDFEvent(S s, P p, O o) {
 		this.s = s;
 		this.p = p;
 		this.c = o;
 	}
 
-	public RDFObject getS() {
+	public S getS() {
 		return s;
 	}
 
-	public void setS(RDFObject s) {
+	public void setS(S s) {
 		this.s = s;
 	}
 
-	public RDFProperty<RDFObject> getP() {
+	public P getP() {
 		return p;
 	}
 
-	public RDFObject getC() {
+	public void setP(P p) {
+		this.p = p;
+	}
+
+	public O getC() {
 		return c;
 	}
 
-	public void setC(RDFObject o) {
+	public void setC(O o) {
 		this.c = o;
 	}
 
 	@Override
 	public String toString() {
 		return "RDFEvent [s=" + s + ", p=" + p + ", o=" + c + "]";
-	}
-
-	public void setP(RDFProperty<RDFObject> p) {
-		this.p = p;
 	}
 
 }

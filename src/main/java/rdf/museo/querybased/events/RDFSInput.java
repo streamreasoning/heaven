@@ -1,13 +1,15 @@
 package rdf.museo.querybased.events;
 
 import rdf.RDFEvent;
-import rdf.museo.rdf.RDFObject;
 import rdf.museo.rdf.RDFProperty;
+import rdf.museo.rdf.RDFResource;
 
-public class RDFSInput extends
-		RDFEvent<RDFObject, RDFProperty<RDFObject>, RDFObject> {
+public class RDFSInput
+		extends
+		RDFEvent<RDFResource, RDFProperty<RDFResource, RDFResource>, RDFResource> {
 
-	public RDFSInput(RDFObject s, RDFProperty<RDFObject> p, RDFObject o) {
+	public RDFSInput(RDFResource s, RDFProperty<RDFResource, RDFResource> p,
+			RDFResource o) {
 		super(s, p, o);
 	}
 

@@ -1,6 +1,6 @@
 package rdf.museo.rdf;
 
-public class RDFClass extends RDFObject {
+public class RDFClass extends RDFResource {
 
 	/**
 	 * 

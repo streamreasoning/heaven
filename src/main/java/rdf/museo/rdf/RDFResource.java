@@ -2,7 +2,7 @@ package rdf.museo.rdf;
 
 import java.io.Serializable;
 
-public abstract class RDFObject implements Serializable {
+public abstract class RDFResource implements Serializable {
 
 	/**
 	 * 
@@ -10,7 +10,7 @@ public abstract class RDFObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String value;
 
-	public RDFObject(String object) {
+	public RDFResource(String object) {
 		this.setValue(object);
 	}
 
@@ -28,10 +28,10 @@ public abstract class RDFObject implements Serializable {
 	public boolean equals(Object obj) {
 		if (obj == null)
 			return false;
-		else if (!(obj instanceof RDFObject))
+		else if (!(obj instanceof RDFResource))
 			return false;
 		else {
-			RDFObject other = (RDFObject) obj;
+			RDFResource other = (RDFResource) obj;
 			return getValue().equals(other.getValue());
 		}
 	}

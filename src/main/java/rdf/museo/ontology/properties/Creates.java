@@ -3,10 +3,10 @@ package rdf.museo.ontology.properties;
 import rdf.museo.ontology.Artist;
 import rdf.museo.ontology.Piece;
 import rdf.museo.rdf.RDFClass;
-import rdf.museo.rdf.RDFObject;
 import rdf.museo.rdf.RDFProperty;
+import rdf.museo.rdf.RDFResource;
 
-public class Creates extends RDFProperty<RDFObject> {
+public class Creates extends RDFProperty<RDFResource, RDFResource> {
 
 	/**
 	 * 

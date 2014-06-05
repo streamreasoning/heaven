@@ -1,6 +1,6 @@
 package rdf.museo.ontology;
 
-import rdf.museo.rdf.RDFObject;
+import rdf.museo.rdf.RDFResource;
 
 public class Painter extends Artist {
 
@@ -27,10 +27,10 @@ public class Painter extends Artist {
 	public boolean equals(Object obj) {
 		if (obj == null)
 			return false;
-		else if (!(obj instanceof RDFObject))
+		else if (!(obj instanceof RDFResource))
 			return false;
 		else {
-			RDFObject other = (RDFObject) obj;
+			RDFResource other = (RDFResource) obj;
 			return getValue().equals(other.getValue());
 		}
 	}

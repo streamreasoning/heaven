@@ -159,6 +159,13 @@ public class StaticExternal {
 		}
 	}
 
+	public static String subPropertyOf(String s) {
+		if ("sculpts".equals(s) || "paints".equals(s) || "creates".equals(s)) {
+			return "creates";
+		}
+		return "unknown property";
+	}
+
 	public static String typeOf(String s) {
 		if ("The Kiss".equals(s))
 			return "Paint";

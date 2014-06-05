@@ -1,13 +1,15 @@
 package rdf.museo.querybased.events;
 
 import rdf.RDFEvent;
-import rdf.museo.rdf.RDFObject;
 import rdf.museo.rdf.RDFProperty;
+import rdf.museo.rdf.RDFResource;
 
-public class NineTest extends
-		RDFEvent<RDFObject, RDFProperty<RDFObject>, RDFObject> {
+public class NineTest
+		extends
+		RDFEvent<RDFResource, RDFProperty<RDFResource, RDFResource>, RDFResource> {
 
-	public NineTest(RDFObject s, RDFProperty<RDFObject> p, RDFObject o) {
+	public NineTest(RDFResource s, RDFProperty<RDFResource, RDFResource> p,
+			RDFResource o) {
 		super(s, p, o);
 	}
 

@@ -1,8 +1,8 @@
 package rdf.museo.ontology;
 
-import rdf.museo.rdf.RDFObject;
+import rdf.museo.rdf.RDFResource;
 
-public class Piece extends RDFObject {
+public class Piece extends RDFResource {
 
 	/**
 	 * 
