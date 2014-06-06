@@ -1,9 +1,6 @@
-package rdf;
+package rdf.museo.rdf;
 
-import rdf.museo.rdf.RDFProperty;
-import rdf.museo.rdf.RDFResource;
-
-public class RDFEvent<S extends RDFResource, P extends RDFProperty<?, ?>, O extends RDFResource> {
+public abstract class RDFEvent<S extends RDFResource, P extends RDFProperty<?, ?>, O extends RDFResource> {
 	private S s;
 	private P p;
 	private O c;

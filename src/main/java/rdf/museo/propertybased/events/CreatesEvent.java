@@ -1,9 +1,9 @@
 package rdf.museo.propertybased.events;
 
-import rdf.RDFEvent;
 import rdf.museo.ontology.Artist;
 import rdf.museo.ontology.Piece;
 import rdf.museo.ontology.properties.objectbased.CreatesObject;
+import rdf.museo.rdf.RDFEvent;
 
 public class CreatesEvent<S extends Artist, P extends CreatesObject, C extends Piece>
 		extends RDFEvent<Artist, CreatesObject, Piece> {

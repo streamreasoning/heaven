@@ -1,7 +1,7 @@
 package rdf.museo.querybased.events;
 
-import rdf.RDFEvent;
 import rdf.museo.propertybased.events.Sendable;
+import rdf.museo.rdf.RDFEvent;
 import rdf.museo.rdf.RDFProperty;
 import rdf.museo.rdf.RDFResource;
 

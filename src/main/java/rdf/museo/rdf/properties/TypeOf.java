@@ -1,4 +1,8 @@
-package rdf.museo.rdf;
+package rdf.museo.rdf.properties;
+
+import rdf.museo.rdf.RDFClass;
+import rdf.museo.rdf.RDFProperty;
+import rdf.museo.rdf.RDFResource;
 
 public class TypeOf extends RDFProperty<RDFResource, RDFClass> {
 

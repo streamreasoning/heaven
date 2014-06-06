@@ -23,7 +23,7 @@ import rdf.museo.querybased.events.RDFS9;
 import rdf.museo.querybased.events.RDFSInput;
 import rdf.museo.querybased.events.RDFSOut;
 import rdf.museo.rdf.RDFClass;
-import rdf.museo.rdf.TypeOf;
+import rdf.museo.rdf.properties.TypeOf;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.ConfigurationMethodRef;
@@ -33,6 +33,7 @@ import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.time.CurrentTimeEvent;
 import com.espertech.esper.core.service.EPServiceProviderSPI;
+
 import commons.LoggingListener;
 
 /**

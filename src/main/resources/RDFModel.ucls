@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.6" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
   associations="true" dependencies="false" nesting-relationships="true">  
-  <class id="1" language="java" name="rdf.RDFEvent" project="OBQA-OOCEP" 
-    file="/OBQA-OOCEP/src/main/java/rdf/RDFEvent.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="1" language="java" name="rdf.museo.rdf.RDFEvent" project="OBQA-OOCEP" 
+    file="/OBQA-OOCEP/src/main/java/rdf/museo/rdf/RDFEvent.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="237" y="-70"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -77,17 +77,13 @@
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="18">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="2"/>  
-  </generalization>  
-  <association id="19">    
+  <association id="18">    
     <bendpoint x="468" y="40"/>    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="20" name="domain">        
+      <attribute id="19" name="domain">        
         <position height="18" width="52" x="406" y="6"/>      
       </attribute>      
-      <multiplicity id="21" minimum="0" maximum="1"/>    
+      <multiplicity id="20" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  

@@ -1,9 +1,9 @@
 package rdf.museo.propertybased.events;
 
-import rdf.RDFEvent;
 import rdf.museo.rdf.RDFClass;
+import rdf.museo.rdf.RDFEvent;
 import rdf.museo.rdf.RDFResource;
-import rdf.museo.rdf.TypeOf;
+import rdf.museo.rdf.properties.TypeOf;
 
 public class TypeOfEvent extends
 		RDFEvent<RDFResource, TypeOf, RDFClass<? extends RDFResource>> {

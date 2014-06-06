@@ -18,7 +18,7 @@ import rdf.museo.querybased.events.RDFS3;
 import rdf.museo.querybased.events.RDFS9;
 import rdf.museo.querybased.events.RDFSInput;
 import rdf.museo.querybased.events.RDFSOut;
-import rdf.museo.rdf.TypeOf;
+import rdf.museo.rdf.properties.TypeOf;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.ConfigurationMethodRef;
