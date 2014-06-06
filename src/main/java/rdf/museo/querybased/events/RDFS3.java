@@ -15,7 +15,7 @@ public class RDFS3
 
 	@Override
 	public String toString() {
-		return "RDF3 [s=" + getS() + ", p=" + getP() + ", o=" + getC() + "]";
+		return "RDFS3 [s=" + getS() + ", p=" + getP() + ", o=" + getC() + "]";
 	}
 
 }

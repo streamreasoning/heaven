@@ -1,4 +1,4 @@
-package rdf.museo.ontology.properties;
+package rdf.museo.ontology.properties.classbased;
 
 import rdf.museo.ontology.Sculpt;
 import rdf.museo.ontology.Sculptor;

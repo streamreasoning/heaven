@@ -1,8 +1,15 @@
 package rdf.museo.ontology;
 
+import java.io.Serializable;
+
 import rdf.museo.rdf.RDFResource;
 
-public class Sculptor extends Artist {
+public class Sculptor extends Artist implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public Sculptor(String name) {
 		super(name);

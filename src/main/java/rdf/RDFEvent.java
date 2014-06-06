@@ -3,7 +3,7 @@ package rdf;
 import rdf.museo.rdf.RDFProperty;
 import rdf.museo.rdf.RDFResource;
 
-public class RDFEvent<S extends RDFResource, P extends RDFProperty<RDFResource, RDFResource>, O extends RDFResource> {
+public class RDFEvent<S extends RDFResource, P extends RDFProperty<?, ?>, O extends RDFResource> {
 	private S s;
 	private P p;
 	private O c;

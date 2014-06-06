@@ -1,8 +1,10 @@
 package rdf.museo.ontology;
 
+import java.io.Serializable;
+
 import rdf.museo.rdf.RDFResource;
 
-public class Artist extends RDFResource {
+public class Artist extends RDFResource implements Serializable {
 
 	/**
 	 * 

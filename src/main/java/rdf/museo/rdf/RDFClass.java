@@ -1,26 +1,26 @@
 package rdf.museo.rdf;
 
-public class RDFClass extends RDFResource {
+public final class RDFClass<T extends RDFResource> extends RDFResource {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	protected Class<?> clazz;
+	protected Class<T> clazz;
 
-	public RDFClass(Class<?> clazz) {
-		super(clazz.getCanonicalName());
-		this.clazz = clazz;
+	public RDFClass(Class<T> class1) {
+		super(class1.getCanonicalName());
+		this.clazz = class1;
 	}
 
 	@Override
-	public RDFClass getRDFClass() {
-		return new RDFClass(clazz.getSuperclass());
+	public RDFClass<T> getRDFClass() {
+		return this;
 	}
 
 	@Override
 	public String toString() {
-		return "RDFClass " + clazz.getSimpleName();
+		return clazz.getSimpleName();
 	}
 
 	@Override
@@ -30,9 +30,15 @@ public class RDFClass extends RDFResource {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (getClass() != obj.getClass() || obj == null)
+		if (getClass() != obj.getClass() || obj == null) {
 			return false;
-		RDFClass other = (RDFClass) obj;
-		return clazz.equals(other.getClass());
+		}
+		@SuppressWarnings("unchecked")
+		RDFClass<T> other = (RDFClass<T>) obj;
+		return clazz.equals(other.clazz);
+	}
+
+	public Class<?> getType() {
+		return clazz;
 	}
 }

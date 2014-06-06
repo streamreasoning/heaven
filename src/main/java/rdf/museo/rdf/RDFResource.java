@@ -15,7 +15,6 @@ public abstract class RDFResource implements Serializable {
 	}
 
 	public RDFClass getRDFClass() {
-		System.out.println("RDFObj call");
 		return new RDFClass(this.getClass());
 	};
 

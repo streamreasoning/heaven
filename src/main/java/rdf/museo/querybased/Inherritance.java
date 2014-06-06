@@ -11,9 +11,9 @@ import rdf.museo.ontology.Painter;
 import rdf.museo.ontology.Piece;
 import rdf.museo.ontology.Sculpt;
 import rdf.museo.ontology.Sculptor;
-import rdf.museo.ontology.properties.Creates;
-import rdf.museo.ontology.properties.Paints;
-import rdf.museo.ontology.properties.Sculpts;
+import rdf.museo.ontology.properties.classbased.Creates;
+import rdf.museo.ontology.properties.classbased.Paints;
+import rdf.museo.ontology.properties.classbased.Sculpts;
 import rdf.museo.querybased.events.NineTest;
 import rdf.museo.querybased.events.RDFS3;
 import rdf.museo.querybased.events.RDFS9;
@@ -123,16 +123,14 @@ public class Inherritance {
 				+ "output all";
 
 		String queryOut = "insert into OutEvent "
-				+ "select distinct s from QueryOut(instanceof(s, rdf.museo.ontology.Sculptor) ).win:time_batch(1000 msec)";
+				+ "select * from QueryOut(instanceof(s, rdf.museo.ontology.Sculptor) ).win:time_batch(1000 msec)";
 
 		cepAdm.createEPL(input);
 		cepAdm.createEPL(rdfs3);
 		cepAdm.createEPL(rdfs9);
-		cepAdm.createEPL(
-				"select  cast(s,rdf.museo.ontology.Artist) as s , p, c from QueryOut where    instanceof(p, rdf.museo.ontology.properties.Sculpts) and instanceof(c, rdf.museo.ontology.Sculpt)")
-				.addListener(
-						new LoggingListener("", false, false, false, cepConfig,
-								(EPServiceProviderSPI) cep, (String[]) null));
+		cepAdm.createEPL(queryOut).addListener(
+				new LoggingListener("", false, false, false, cepConfig,
+						(EPServiceProviderSPI) cep, (String[]) null));
 
 		// after statements
 
