@@ -14,12 +14,10 @@ import rdf.museo.ontology.Sculptor;
 import rdf.museo.ontology.properties.classbased.Creates;
 import rdf.museo.ontology.properties.classbased.Paints;
 import rdf.museo.ontology.properties.classbased.Sculpts;
-import rdf.museo.querybased.events.NineTest;
 import rdf.museo.querybased.events.RDFS3;
 import rdf.museo.querybased.events.RDFS9;
 import rdf.museo.querybased.events.RDFSInput;
 import rdf.museo.querybased.events.RDFSOut;
-import rdf.museo.querybased.events.ThreeTest;
 import rdf.museo.rdf.TypeOf;
 
 import com.espertech.esper.client.Configuration;
@@ -73,9 +71,6 @@ public class Inherritance {
 		cepConfig.addEventType("RDFS3Input", RDFS3.class.getName());
 		cepConfig.addEventType("RDFS9Input", RDFS9.class.getName());
 		cepConfig.addEventType("QueryOut", RDFSOut.class.getName());
-
-		cepConfig.addEventType("ThreeTest", ThreeTest.class.getName());
-		cepConfig.addEventType("NineTest", NineTest.class.getName());
 
 		Creates creates = new Creates();
 		Sculpts sculpts = new Sculpts();

@@ -15,7 +15,8 @@ public class RDFSInput
 
 	@Override
 	public String toString() {
-		return "RDF3 [s=" + getS() + ", p=" + getP() + ", o=" + getC() + "]";
+		return "RDFInput [s=" + getS() + ", p=" + getP() + ", o=" + getC()
+				+ "]";
 	}
 
 }

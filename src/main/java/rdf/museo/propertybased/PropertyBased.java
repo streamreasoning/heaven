@@ -133,6 +133,8 @@ public class PropertyBased {
 		cepAdm.createEPL("insert into RDFSInput select s as s, c as c, p as p from TypeOfEvent ");
 		cepAdm.createEPL(rdfIn);
 		cepAdm.createEPL(rdfs3);
+		cepAdm.createEPL(rdfs9);
+
 		cepAdm.createEPL(queryOut).addListener(
 				new LoggingListener("queryout", false, false, false, cepConfig,
 						(EPServiceProviderSPI) cep, (String[]) null));
