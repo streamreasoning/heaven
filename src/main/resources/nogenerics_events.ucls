@@ -42,12 +42,16 @@
     </display>  
   </class>  
   <association id="5">    
-    <bendpoint x="230" y="542"/>    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="6" name="p"/>      
-      <multiplicity id="7" minimum="0" maximum="1"/>    
+    <bendpoint x="680" y="476"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="6" name="domain">        
+        <position height="18" width="52" x="335" y="276"/>      
+      </attribute>      
+      <multiplicity id="7" minimum="0" maximum="1">        
+        <position height="16" width="25" x="356" y="253"/>      
+      </multiplicity>    
     </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
+    <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="8">    
@@ -64,40 +68,32 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="11">    
-    <bendpoint x="680" y="476"/>    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="12" name="domain">        
-        <position height="18" width="52" x="335" y="276"/>      
-      </attribute>      
-      <multiplicity id="13" minimum="0" maximum="1">        
-        <position height="16" width="25" x="356" y="253"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="14">    
-    <bendpoint x="360" y="304"/>    
+    <bendpoint x="230" y="542"/>    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="15" name="s"/>      
-      <multiplicity id="16" minimum="0" maximum="1"/>    
+      <attribute id="12" name="p"/>      
+      <multiplicity id="13" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
+    <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="17">    
+  <generalization id="14">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="4"/>  
   </generalization>  
-  <generalization id="18">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="4"/>  
-  </generalization>  
-  <association id="19">    
+  <association id="15">    
     <bendpoint x="334" y="348"/>    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="20" name="o"/>      
-      <multiplicity id="21" minimum="0" maximum="1"/>    
+      <attribute id="16" name="o"/>      
+      <multiplicity id="17" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="18">    
+    <bendpoint x="360" y="304"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="19" name="s"/>      
+      <multiplicity id="20" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
