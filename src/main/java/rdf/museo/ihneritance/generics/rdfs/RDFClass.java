@@ -14,8 +14,11 @@ public final class RDFClass<T extends RDFResource> extends RDFResource {
 	}
 
 	@Override
-	public RDFClass<T> getRDFClass() {
-		return this;
+	public RDFClass<T> getSuper() {
+		if (clazz.equals(RDFResource.class)) {
+			return new RDFClass(RDFResource.class);
+		} else
+			return new RDFClass(clazz.getSuperclass());
 	}
 
 	@Override

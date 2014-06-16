@@ -16,7 +16,7 @@ public class RDFResource implements Serializable {
 
 	// TODO perche' non e' possibile inserire il parametro?
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public RDFClass getRDFClass() {
+	public RDFClass getSuper() {
 		return new RDFClass(this.getClass());
 	};
 

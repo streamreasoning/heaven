@@ -8,14 +8,14 @@ import rdf.museo.ihneritance.generics.rdfs.RDFResource;
 public class TypeOfEvent extends
 		RDFEvent<RDFResource, TypeOf, RDFClass<? extends RDFResource>> {
 
-	public TypeOfEvent(RDFResource s, RDFClass<? extends RDFResource> o) {
-		super(s, new TypeOf(s.getRDFClass(), o.getRDFClass()), o);
+	public TypeOfEvent(RDFResource s, RDFClass<? extends RDFResource> o, long ts) {
+		super(s, new TypeOf(s, o), o, ts, "TypeOfEvent");
 	}
 
 	@Override
 	public String toString() {
-		return "TypeOfEvent [s=" + getS() + ", p=" + getP() + ", o=" + getC()
-				+ "]";
+		return "TypeOfEvent [c=" + getS() + ", p=" + getP() + ", o=" + getO()
+				+ ", " + getChannel() + ", ts=" + getTimestamp() + "]";
 	}
 
 }

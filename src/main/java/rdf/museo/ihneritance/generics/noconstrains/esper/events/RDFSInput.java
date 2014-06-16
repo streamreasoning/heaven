@@ -6,17 +6,13 @@ import rdf.museo.ihneritance.generics.rdfs.RDFResource;
 
 public class RDFSInput
 		extends
-		RDFEvent<RDFResource, RDFProperty<RDFResource, RDFResource>, RDFResource> {
+		RDFEvent<RDFResource, RDFProperty<? extends RDFResource, ? extends RDFResource>, RDFResource> {
 
-	public RDFSInput(RDFResource s, RDFProperty<RDFResource, RDFResource> p,
-			RDFResource o) {
-		super(s, p, o);
-	}
-
-	@Override
-	public String toString() {
-		return "RDFInput [s=" + getS() + ", p=" + getP() + ", o=" + getC()
-				+ "]";
+	public RDFSInput(RDFResource s,
+			RDFProperty<? extends RDFResource, ? extends RDFResource> p,
+			RDFResource o, long ts) {
+		super(s, p, o, ts, "RDFSInput");
+		// TODO Auto-generated constructor stub
 	}
 
 }

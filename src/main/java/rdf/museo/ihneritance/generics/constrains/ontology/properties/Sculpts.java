@@ -4,14 +4,14 @@ import rdf.museo.ihneritance.generics.ontology.Sculpt;
 import rdf.museo.ihneritance.generics.ontology.Sculptor;
 import rdf.museo.ihneritance.generics.rdfs.RDFClass;
 
-public class SculptsObject extends CreatesObject {
+public class Sculpts extends Creates {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public SculptsObject(RDFClass<Sculptor> sculptor, RDFClass<Sculpt> sculpt) {
+	public Sculpts(RDFClass<Sculptor> sculptor, RDFClass<Sculpt> sculpt) {
 		super(sculptor, sculpt, "sculpts");
 	}
 }

@@ -3,12 +3,16 @@ package rdf.museo.ihneritance.generics.rdfs;
 public abstract class RDFEvent<S extends RDFResource, P extends RDFProperty<?, ?>, O extends RDFResource> {
 	private S s;
 	private P p;
-	private O c;
+	private O o;
+	private long timestamp;
+	private String channel;
 
-	public RDFEvent(S s, P p, O o) {
+	public RDFEvent(S s, P p, O o, long ts, String ch) {
 		this.s = s;
 		this.p = p;
-		this.c = o;
+		this.o = o;
+		this.setTimestamp(ts);
+		this.setChannel(ch);
 	}
 
 	public S getS() {
@@ -27,17 +31,34 @@ public abstract class RDFEvent<S extends RDFResource, P extends RDFProperty<?, ?
 		this.p = p;
 	}
 
-	public O getC() {
-		return c;
+	public O getO() {
+		return o;
 	}
 
-	public void setC(O o) {
-		this.c = o;
+	public void setO(O o) {
+		this.o = o;
+	}
+
+	public String getChannel() {
+		return channel;
+	}
+
+	public void setChannel(String channel) {
+		this.channel = channel;
+	}
+
+	public long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	@Override
 	public String toString() {
-		return "RDFEvent [s=" + s + ", p=" + p + ", o=" + c + "]";
+		return "RDFEvent " + channel + " [s=" + s + ", p=" + p + ", o=" + o
+				+ " ts= " + timestamp + "]";
 	}
 
 }

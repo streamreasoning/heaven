@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import rdf.museo.ihneritance.generics.rdfs.RDFResource;
 
-public class Artist extends RDFResource implements Serializable {
+public class Artist extends Person implements Serializable {
 
 	/**
 	 * 

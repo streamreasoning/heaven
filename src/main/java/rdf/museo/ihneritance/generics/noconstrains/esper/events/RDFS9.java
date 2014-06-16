@@ -9,13 +9,8 @@ public class RDFS9
 		RDFEvent<RDFResource, RDFProperty<RDFResource, RDFResource>, RDFResource> {
 
 	public RDFS9(RDFResource s, RDFProperty<RDFResource, RDFResource> p,
-			RDFResource o) {
-		super(s, p, o);
-	}
-
-	@Override
-	public String toString() {
-		return "RDFS9 [s=" + getS() + ", p=" + getP() + ", o=" + getC() + "]";
+			RDFResource o, long ts) {
+		super(s, p, o, ts, "RDFS9");
 	}
 
 }

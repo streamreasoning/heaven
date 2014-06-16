@@ -1,18 +1,17 @@
-package rdf.museo.ihneritance.nogenerics.ontology;
+package rdf.museo.ihneritance.generics.ontology;
 
 import java.io.Serializable;
 
-import rdf.museo.ihneritance.nogenerics.rdfs.RDFClass;
-import rdf.museo.ihneritance.nogenerics.rdfs.RDFResource;
+import rdf.museo.ihneritance.generics.rdfs.RDFResource;
 
-public class Artist extends Person implements Serializable {
+public class Person extends RDFResource implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Artist(String name) {
+	public Person(String name) {
 		super(name);
 	}
 
@@ -26,7 +25,7 @@ public class Artist extends Person implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Artist " + getValue();
+		return "Person " + getValue();
 	}
 
 	@Override
@@ -44,12 +43,6 @@ public class Artist extends Person implements Serializable {
 			RDFResource other = (RDFResource) obj;
 			return getValue().equals(other.getValue());
 		}
-	}
-
-	@Override
-	public RDFClass getSuper() {
-		System.out.println("Artist " + this.getClass().getSuperclass());
-		return new RDFClass(this.getClass().getSuperclass());
 	}
 
 }

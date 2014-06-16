@@ -40,7 +40,7 @@ public class Plain {
 	protected static EPRuntime cepRT;
 	protected static EPAdministrator cepAdm;
 
-	protected static String[] artistResource = { "Artist", "Painter",
+	protected static String[] artistResource = { "Person", "Artist", "Painter",
 			"Sculptor" };
 	protected static String[] actionsResource = { "creates", "sculpts",
 			"paints" };
@@ -71,40 +71,49 @@ public class Plain {
 		cepRT.sendEvent(new CurrentTimeEvent(0));
 
 		String input = "on TEvent "
-				+ "insert into RDFS3Input select s as s, c as c, p as p, timestamp as timestamp "
-				+ "insert into RDFS9Input select s as s, c as c, p as p, timestamp as timestamp "
-				+ "insert into QueryOut select s as s, c as c, p as p, timestamp as timestamp "
+				+ "insert into RDFS3Input select s as s, c as c, p as p, timestamp as timestamp, channel as channel "
+				+ "insert into RDFS9Input select s as s, c as c, p as p, timestamp as timestamp, channel as channel "
+				+ "insert into QueryOut select s as s, c as c, p as p, timestamp as timestamp, channel as channel "
 				+ "output all ";
 
 		String rdfs3 = "on RDFS3Input "
-				+ "insert into QueryOut select c as s, 'typeOf' as p, rdf.museo.simple.Plain.range(p) as c, timestamp as timestamp "
-				+ "insert into RDFS9Input select c as s, 'typeOf' as p, rdf.museo.simple.Plain.range(p) as c, timestamp as timestamp "
-				+ "insert into QueryOut select s as s, 'typeOf' as p, rdf.museo.simple.Plain.domain(p) as c, timestamp as timestamp "
-				+ "insert into RDFS9Input select s as s, 'typeOf' as p, rdf.museo.simple.Plain.domain(p) as c, timestamp as timestamp "
+				+ "insert into QueryOut select c as s, 'typeOf' as p, rdf.museo.simple.Plain.range(p) as c, timestamp as timestamp , channel || 'RDSF3' as channel "
+				+ "insert into RDFS9Input select c as s, 'typeOf' as p, rdf.museo.simple.Plain.range(p) as c, timestamp as timestamp , channel || 'RDSF3' as channel "
+				+ "insert into QueryOut select s as s, 'typeOf' as p, rdf.museo.simple.Plain.domain(p) as c, timestamp as timestamp , channel || 'RDSF3' as channel "
+				+ "insert into RDFS9Input select s as s, 'typeOf' as p, rdf.museo.simple.Plain.domain(p) as c, timestamp as timestamp , channel || 'RDSF3' as channel "
 				+ "output all";
 
-		String rdfs9 = "on RDFS9Input "
-				+ "insert into QueryOut select s as s, p, rdf.museo.simple.Plain.subClassOf(c) as c, timestamp as timestamp ";
+		String rdfs9 = "on RDFS9Input(p='typeOf') "
+				+ "insert into QueryOut select s as s, p, rdf.museo.simple.Plain.subClassOf(c) as c, timestamp as timestamp , channel || 'RDSF9' as channel ";
 
-		String queryOut = "" + "select current_timestamp(), * from QueryOut ";
+		String queryOut = ""
+				+ "select current_timestamp(), timestamp, s, p, c, channel from QueryOut.win:time_batch(1000 msec) ";
 
 		cepAdm.createEPL(input);
 		cepAdm.createEPL(rdfs3);
 		cepAdm.createEPL(rdfs9);
 		cepAdm.createEPL(queryOut).addListener(
-				new LoggingListener("queryout", false, false, false, cepConfig,
+				new LoggingListener("Queryout", false, false, false, cepConfig,
 						(EPServiceProviderSPI) cep, (String[]) null));
 
 		// after statements
-		cepRT.sendEvent(new TEvent("Leonardo", "paints", "Gioconda"));
-		cepRT.sendEvent(new CurrentTimeEvent(500));
-		cepRT.sendEvent(new TEvent("Leonardo", "paints", "Cenacolo"));
+		cepRT.sendEvent(new TEvent("Leonardo", "paints", "Gioconda", "Input"));
+		cepRT.sendEvent(new CurrentTimeEvent(1000));
 
 	}
 
 	public static class TEvent {
 		String s, p, c;
 		long timestamp;
+		String channel;
+
+		public TEvent(String s, String p, String c, String ch) {
+			this.s = s;
+			this.p = p;
+			this.c = c;
+			this.channel = ch;
+			this.timestamp = cepRT.getCurrentTime();
+		}
 
 		public String getS() {
 			return s;
@@ -130,24 +139,25 @@ public class Plain {
 			this.c = c;
 		}
 
-		@Override
-		public String toString() {
-			return "TEvent [s=" + s + ", p=" + p + ", c=" + c + "]";
-		}
-
-		public TEvent(String s, String p, String c) {
-			this.s = s;
-			this.p = p;
-			this.c = c;
-			this.timestamp = cepRT.getCurrentTime();
-		}
-
 		public long getTimestamp() {
 			return timestamp;
 		}
 
 		public void setTimestamp(long timestamp) {
 			this.timestamp = timestamp;
+		}
+
+		public String getChannel() {
+			return channel;
+		}
+
+		public void setChannel(String channel) {
+			this.channel = channel;
+		}
+
+		@Override
+		public String toString() {
+			return "TEvent [s=" + s + ", p=" + p + ", c=" + c + "]";
 		}
 
 	}

@@ -5,7 +5,7 @@ import rdf.museo.ihneritance.generics.ontology.Piece;
 import rdf.museo.ihneritance.generics.rdfs.RDFClass;
 import rdf.museo.ihneritance.generics.rdfs.RDFProperty;
 
-public class CreatesObject extends
+public class Creates extends
 		RDFProperty<RDFClass<? extends Artist>, RDFClass<? extends Piece>> {
 
 	/**
@@ -13,11 +13,11 @@ public class CreatesObject extends
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public CreatesObject(RDFClass<Artist> domain, RDFClass<Piece> range) {
+	public Creates(RDFClass<Artist> domain, RDFClass<Piece> range) {
 		super(domain, range, "creates");
 	}
 
-	public CreatesObject(RDFClass<? extends Artist> domain,
+	public Creates(RDFClass<? extends Artist> domain,
 			RDFClass<? extends Piece> range, String property) {
 		super(domain, range, property);
 	}

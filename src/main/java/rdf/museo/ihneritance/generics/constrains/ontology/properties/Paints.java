@@ -4,14 +4,14 @@ import rdf.museo.ihneritance.generics.ontology.Paint;
 import rdf.museo.ihneritance.generics.ontology.Painter;
 import rdf.museo.ihneritance.generics.rdfs.RDFClass;
 
-public class PaintsObject extends CreatesObject {
+public class Paints extends Creates {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public PaintsObject(RDFClass<Painter> painter, RDFClass<Paint> paint) {
+	public Paints(RDFClass<Painter> painter, RDFClass<Paint> paint) {
 		super(painter, paint, "paints");
 	}
 
