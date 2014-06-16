@@ -59,7 +59,6 @@ public class LoggingListener implements UpdateListener {
 			}
 
 		}
-		print("--");
 	}
 
 	private void print(String msg) {

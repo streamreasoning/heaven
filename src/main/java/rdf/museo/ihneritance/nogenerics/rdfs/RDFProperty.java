@@ -1,37 +1,33 @@
-package rdf.museo.rdf;
+package rdf.museo.ihneritance.nogenerics.rdfs;
 
 import java.io.Serializable;
 
-public class RDFProperty<D extends RDFResource, R extends RDFResource> extends
-		RDFResource implements Serializable {
+public class RDFProperty extends RDFResource implements Serializable {
 
-	/**
-	 * 
-	 */
 	static final long serialVersionUID = 1L;
-	protected R range;
-	protected D domain;
+	protected RDFResource range;
+	protected RDFResource domain;
 
-	public RDFProperty(D domain, R range, String property) {
+	public RDFProperty(RDFResource domain, RDFResource range, String property) {
 		super(property);
 		this.range = range;
 		this.domain = domain;
 	}
 
-	public R getRange() {
+	public RDFResource getRange() {
 		return range;
 	}
 
-	public D getDomain() {
+	public RDFResource getDomain() {
 		return domain;
 
 	}
 
-	public void setRange(R range) {
+	public void setRange(RDFResource range) {
 		this.range = range;
 	}
 
-	public void setDomain(D domain) {
+	public void setDomain(RDFResource domain) {
 		this.domain = domain;
 	}
 
@@ -48,8 +44,7 @@ public class RDFProperty<D extends RDFResource, R extends RDFResource> extends
 	@Override
 	public boolean equals(Object obj) {
 		if (obj != null && obj instanceof RDFProperty) {
-			@SuppressWarnings("unchecked")
-			RDFProperty<R, D> other = (RDFProperty<R, D>) obj;
+			RDFProperty other = (RDFProperty) obj;
 			return other.getDomain().equals(domain)
 					&& other.getRange().equals(range)
 					&& other.getValue().equals(getValue());

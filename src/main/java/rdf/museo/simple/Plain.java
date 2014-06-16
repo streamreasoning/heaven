@@ -1,5 +1,7 @@
 package rdf.museo.simple;
 
+import java.util.Arrays;
+
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -31,12 +33,18 @@ import commons.LoggingListener;
  * 
  * **/
 
-public class StaticExternal {
+public class Plain {
 	protected static Configuration cepConfig;
 	protected static ConsoleAppender appender;
 	protected static EPServiceProvider cep;
 	protected static EPRuntime cepRT;
 	protected static EPAdministrator cepAdm;
+
+	protected static String[] artistResource = { "Artist", "Painter",
+			"Sculptor" };
+	protected static String[] actionsResource = { "creates", "sculpts",
+			"paints" };
+	protected static String[] piecesResource = { "Piece", "Paint", "Sculpt" };
 
 	public static void main(String argv[]) throws InterruptedException {
 
@@ -48,15 +56,14 @@ public class StaticExternal {
 
 		ConfigurationMethodRef ref = new ConfigurationMethodRef();
 		cepConfig = new Configuration();
-		cepConfig.addMethodRef(StaticExternal.class, ref);
+		cepConfig.addMethodRef(Plain.class, ref);
 
 		cepConfig.addEventType("TEvent", TEvent.class.getName());
-		cepConfig.getEngineDefaults().getViewResources().setShareViews(false);
 		cepConfig.getEngineDefaults().getThreading()
 				.setInternalTimerEnabled(false);
 
 		cep = (EPServiceProviderSPI) EPServiceProviderManager.getProvider(
-				StaticExternal.class.getName(), cepConfig);
+				Plain.class.getName(), cepConfig);
 		// We register an EPL statement
 		cepAdm = cep.getEPAdministrator();
 		cepRT = cep.getEPRuntime();
@@ -64,53 +71,40 @@ public class StaticExternal {
 		cepRT.sendEvent(new CurrentTimeEvent(0));
 
 		String input = "on TEvent "
-				+ "insert into RDFS3Input select s as s, c as c, p as p "
-				+ "insert into RDFS9Input select s as s, c as c, p as p "
-				+ "insert into QueryOut select s as s, c as c, p as p "
+				+ "insert into RDFS3Input select s as s, c as c, p as p, timestamp as timestamp "
+				+ "insert into RDFS9Input select s as s, c as c, p as p, timestamp as timestamp "
+				+ "insert into QueryOut select s as s, c as c, p as p, timestamp as timestamp "
 				+ "output all ";
 
 		String rdfs3 = "on RDFS3Input "
-				+ "insert into QueryOut select c as s, 'typeOf' as p, rdf.museo.simple.StaticExternal.range(s,p,c) as c "
-				+ "insert into RDFS9Input select c as s, 'typeOf' as p, rdf.museo.simple.StaticExternal.range(s,p,c) as c "
-				+ "insert into QueryOut select s as s, 'typeOf' as p, rdf.museo.simple.StaticExternal.domain(s,p,c) as c "
-				+ "insert into RDFS9Input select s as s, 'typeOf' as p, rdf.museo.simple.StaticExternal.domain(s,p,c) as c "
+				+ "insert into QueryOut select c as s, 'typeOf' as p, rdf.museo.simple.Plain.range(p) as c, timestamp as timestamp "
+				+ "insert into RDFS9Input select c as s, 'typeOf' as p, rdf.museo.simple.Plain.range(p) as c, timestamp as timestamp "
+				+ "insert into QueryOut select s as s, 'typeOf' as p, rdf.museo.simple.Plain.domain(p) as c, timestamp as timestamp "
+				+ "insert into RDFS9Input select s as s, 'typeOf' as p, rdf.museo.simple.Plain.domain(p) as c, timestamp as timestamp "
 				+ "output all";
 
-		String rdfs9 = "on RDFS9Input(p='typeOf')"
-				+ "insert into QueryOut select s as s, p, rdf.museo.simple.StaticExternal.subClassOf(c) as c ";
+		String rdfs9 = "on RDFS9Input "
+				+ "insert into QueryOut select s as s, p, rdf.museo.simple.Plain.subClassOf(c) as c, timestamp as timestamp ";
 
-		String queryOut = "insert into OutEvent "
-				+ "select * from QueryOut "
-
-				+ "where rdf.museo.simple.StaticExternal.subClassOf(c)='Sculptor' or c='Sculptor' ";
-		String queryOut1 = "insert into OutEvent " + "select * from QueryOut "
-				+ "where rdf.museo.simple.StaticExternal.subClassOf(s)='Piece'";
-		// all artist that are both scluptors and painters with joins, windows
-		// are mandatory
-		String queryOut2 = "insert into OutEvent "
-				+ "select distinct qo1.s from QueryOut(p='typeOf', c!='Artist' and c!='Piece').win:time(500 msec) as qo1, QueryOut(p='typeOf',c!='Artist' and c!='Piece').win:time(500 msec) as qo2  "
-				+ "where qo1.s=qo2.s  and qo1.c!=qo2.c ";
+		String queryOut = "" + "select current_timestamp(), * from QueryOut ";
 
 		cepAdm.createEPL(input);
 		cepAdm.createEPL(rdfs3);
 		cepAdm.createEPL(rdfs9);
-		cepAdm.createEPL(queryOut2)
-				.addListener(
-						new LoggingListener("queryout2", false, false, false,
-								cepConfig, (EPServiceProviderSPI) cep,
-								(String[]) null));
+		cepAdm.createEPL(queryOut).addListener(
+				new LoggingListener("queryout", false, false, false, cepConfig,
+						(EPServiceProviderSPI) cep, (String[]) null));
 
 		// after statements
 		cepRT.sendEvent(new TEvent("Leonardo", "paints", "Gioconda"));
-		cepRT.sendEvent(new TEvent("Raffaello", "sculpts", "David"));
-		cepRT.sendEvent(new TEvent("Rodin", "creates", "The Kiss"));
-		cepRT.sendEvent(new TEvent("Leonardo", "sculpts", "Cavallo"));
 		cepRT.sendEvent(new CurrentTimeEvent(500));
+		cepRT.sendEvent(new TEvent("Leonardo", "paints", "Cenacolo"));
 
 	}
 
 	public static class TEvent {
 		String s, p, c;
+		long timestamp;
 
 		public String getS() {
 			return s;
@@ -145,75 +139,72 @@ public class StaticExternal {
 			this.s = s;
 			this.p = p;
 			this.c = c;
+			this.timestamp = cepRT.getCurrentTime();
+		}
+
+		public long getTimestamp() {
+			return timestamp;
+		}
+
+		public void setTimestamp(long timestamp) {
+			this.timestamp = timestamp;
 		}
 
 	}
 
 	public static String subClassOf(String s) {
-		if ("Sculptor".equals(s) || "Painter".equals(s) || "Artist".equals(s)) {
+		if (Arrays.asList(artistResource).contains(s)) {
 			return "Artist";
-		} else if ("Paint".equals(s) || "Sculpt".equals(s) || "Piece".equals(s)) {
+		} else if (Arrays.asList(piecesResource).contains(s)) {
 			return "Piece";
-		} else {
-			return typeOf(s);
-		}
+		} else
+			return "RDFResource";
 	}
 
 	public static String subPropertyOf(String s) {
-		if ("sculpts".equals(s) || "paints".equals(s) || "creates".equals(s)) {
+		if (Arrays.asList(actionsResource).contains(s)) {
 			return "creates";
 		}
-		return "unknown property";
+		return "RDFResource";
 	}
 
-	public static String typeOf(String s) {
-		if ("The Kiss".equals(s))
-			return "Paint";
-		else if ("Cavallo".equals(s))
-			return "Sculpt";
-		else if ("Gioconda".equals(s))
-			return "Piece";
-		else if ("David".equals(s))
-			return "Sculpt";
-		else if ("Leonardo".equals(s))
-			return "Artist";
-		else if ("Rodin".equals(s))
-			return "Artist";
-		else if ("Raffaello".equals(s))
-			return "Artist";
-		else
-			return "Unknown Type " + s;
-	}
+	public static String range(String p) {
 
-	public static String range(String s, String p, String c) {
 		if ("sculpts".equals(p))
 			return "Sculpt";
 		else if ("paints".equals(p))
 			return "Paint";
 		else if ("creates".equals(p))
 			return "Piece";
-		else if ("is".equals(p))
-			return c;
-		else if ("typeOf".equals(p))
-			return c;
 		else
-			return "Unknown Range " + p;
+			return "RDFResource";
 
 	}
 
-	public static String domain(String s, String p, String c) {
+	public static String domain(String p) {
+
 		if ("sculpts".equals(p))
 			return "Sculptor";
 		else if ("paints".equals(p))
 			return "Painter";
 		else if ("creates".equals(p))
 			return "Artist";
-		else if ("is".equals(p))
-			return typeOf(s);
-		else if ("typeOf".equals(p))
-			return typeOf(s);
 		else
-			return "Unknown Domain: " + p;
+			return "RDFResource";
 
 	}
+
+	public static String typeOf(String p) {
+
+		if (Arrays.asList(piecesResource).contains(p) || "typeOf".equals(p)
+				|| "subClassOf".equals(p) || "subPropertyOf".equals(p))
+			return "RDFProperty";
+		else if ("RDFProperty".equals(p) || "RDFResource".equals(p)
+				|| "RDFClass".equals(p))
+			return "RDFClass";
+		else
+			return "RDFClass";
+
+	}
+
 }

@@ -1,4 +1,4 @@
-package rdf.museo.rdf;
+package rdf.museo.ihneritance.nogenerics.rdfs;
 
 import java.io.Serializable;
 
@@ -15,8 +15,8 @@ public class RDFResource implements Serializable {
 	}
 
 	// TODO perche' non e' possibile inserire il parametro?
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public RDFClass getRDFClass() {
+	public RDFClass getSuper() {
+		System.out.println("Res " + this.getClass().getSuperclass());
 		return new RDFClass(this.getClass());
 	};
 
