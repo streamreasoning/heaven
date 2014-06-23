@@ -9,26 +9,29 @@ public final class RDFClass extends RDFResource {
 	protected Class<?> clazz;
 
 	public RDFClass(Class<?> class1) {
-		super(class1.getCanonicalName());
+		super("");
 		this.clazz = class1;
 	}
 
 	@Override
 	public RDFClass getSuper() {
-		if (clazz.equals(RDFResource.class))
-			return new RDFClass(RDFClass.class);
-		else
-			return new RDFClass(this.clazz.getSuperclass());
+		return new RDFClass(clazz.getSuperclass());
 	}
 
 	@Override
 	public String toString() {
-		return clazz.getSimpleName();
+		if (clazz != null)
+			return clazz.getSimpleName();
+		else
+			return this.getClass().getCanonicalName();
 	}
 
 	@Override
 	public int hashCode() {
-		return clazz.hashCode();
+		if (clazz != null)
+			return clazz.hashCode();
+		else
+			return "null".hashCode();
 	}
 
 	@Override
@@ -37,7 +40,10 @@ public final class RDFClass extends RDFResource {
 			return false;
 		}
 		RDFClass other = (RDFClass) obj;
-		return clazz.equals(other.clazz);
+		if (other != null && clazz != null)
+			return other.clazz.equals(clazz);
+		else
+			return false;
 	}
 
 	public Class<?> getType() {

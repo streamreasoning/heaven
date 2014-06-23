@@ -10,7 +10,7 @@ import rdf.museo.ihneritance.nogenerics.esper.events.RDFS9;
 import rdf.museo.ihneritance.nogenerics.esper.events.RDFSInput;
 import rdf.museo.ihneritance.nogenerics.esper.events.RDFSOut;
 import rdf.museo.ihneritance.nogenerics.ontology.Paint;
-import rdf.museo.ihneritance.nogenerics.ontology.Painter;
+import rdf.museo.ihneritance.nogenerics.ontology.Person;
 import rdf.museo.ihneritance.nogenerics.ontology.properties.Creates;
 import rdf.museo.ihneritance.nogenerics.ontology.properties.Paints;
 import rdf.museo.ihneritance.nogenerics.ontology.properties.Sculpts;
@@ -103,8 +103,10 @@ public class NoGenerics {
 				+ "insert into RDFS9Input select s as s, typeof as p, p.domain as o, channel || 'RDSF3' as channel "
 				+ "output all";
 
-		String rdfs9 = "on RDFS9Input(p=typeof) "
-				+ "insert into QueryOut select s as s, p, o.super as o , channel || 'RDSF9' as channel ";
+		String rdfs9 = "on RDFS9Input "
+				+ "insert into QueryOut select s as s, p, o.super as o , channel || 'RDSF9' as channel where p=typeof "
+				+ "insert into QueryOut select s as s, p, o as o , channel || 'RDSF9' as channel where p!=typeof "
+				+ "output all";
 		String queryOut = "insert into OutEvent "
 				+ "select current_timestamp, * from QueryOut.win:time_batch(1000 msec)";
 		String queryOut1 = "insert into OutEvent "
@@ -119,8 +121,14 @@ public class NoGenerics {
 
 		// after statements
 		// esempio 1
-		cepRT.sendEvent(new RDFSInput(new Painter("Leonardo"), typeof,
-				new Paint("Gioconda"), cepRT.getCurrentTime()));
+
+		/*
+		 * cepRT.sendEvent(new RDFSInput(new RDFClass(Painter.class), typeof,
+		 * new RDFClass(RDFClass.class), cepRT.getCurrentTime()));
+		 */
+
+		cepRT.sendEvent(new RDFSInput(new Person("Leonardo"), paints,
+				new Paint("gioconda"), cepRT.getCurrentTime()));
 
 		// esempio 2
 		/*

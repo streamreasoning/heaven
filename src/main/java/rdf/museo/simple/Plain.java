@@ -40,7 +40,8 @@ public class Plain {
 	protected static EPRuntime cepRT;
 	protected static EPAdministrator cepAdm;
 
-	protected static String[] artistResource = { "Person", "Artist", "Painter",
+	protected static String[] personResource = { "Person", "Artist", "Worker" };
+	protected static String[] artistResource = { "Artist", "Painter",
 			"Sculptor" };
 	protected static String[] actionsResource = { "creates", "sculpts",
 			"paints" };
@@ -163,7 +164,9 @@ public class Plain {
 	}
 
 	public static String subClassOf(String s) {
-		if (Arrays.asList(artistResource).contains(s)) {
+		if (Arrays.asList(personResource).contains(s)) {
+			return "Person";
+		} else if (Arrays.asList(artistResource).contains(s)) {
 			return "Artist";
 		} else if (Arrays.asList(piecesResource).contains(s)) {
 			return "Piece";

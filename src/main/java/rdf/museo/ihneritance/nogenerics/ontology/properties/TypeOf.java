@@ -11,16 +11,8 @@ public class TypeOf extends RDFProperty {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public TypeOf(RDFClass domain, RDFClass range, String property) {
-		super(domain, range, property);
-	}
-
-	public TypeOf(String property) {
-		this(new RDFClass(RDFResource.class), new RDFClass(RDFClass.class),
-				property);
-	}
-
 	public TypeOf() {
-		this("typeOf");
+		super(RDFResource.class, RDFClass.class, "typeOf");
 	}
+
 }
