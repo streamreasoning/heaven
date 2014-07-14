@@ -9,12 +9,15 @@ import rdf.museo.ihneritance.nogenerics.esper.events.RDFS3;
 import rdf.museo.ihneritance.nogenerics.esper.events.RDFS9;
 import rdf.museo.ihneritance.nogenerics.esper.events.RDFSInput;
 import rdf.museo.ihneritance.nogenerics.esper.events.RDFSOut;
+import rdf.museo.ihneritance.nogenerics.ontology.Artist;
 import rdf.museo.ihneritance.nogenerics.ontology.Paint;
-import rdf.museo.ihneritance.nogenerics.ontology.Person;
-import rdf.museo.ihneritance.nogenerics.ontology.properties.Creates;
-import rdf.museo.ihneritance.nogenerics.ontology.properties.Paints;
-import rdf.museo.ihneritance.nogenerics.ontology.properties.Sculpts;
-import rdf.museo.ihneritance.nogenerics.ontology.properties.TypeOf;
+import rdf.museo.ihneritance.nogenerics.ontology.Painter;
+import rdf.museo.ihneritance.nogenerics.ontology.Piece;
+import rdf.museo.ihneritance.nogenerics.ontology.Sculpt;
+import rdf.museo.ihneritance.nogenerics.ontology.Sculptor;
+import rdf.museo.ihneritance.nogenerics.rdfs.RDFClass;
+import rdf.museo.ihneritance.nogenerics.rdfs.RDFProperty;
+import rdf.museo.ihneritance.nogenerics.rdfs.RDFResource;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.ConfigurationMethodRef;
@@ -42,7 +45,7 @@ import commons.LoggingListener;
  * 
  * **/
 
-public class NoGenerics {
+public class NoGenericsPropertyIstance {
 	protected static Configuration cepConfig;
 	protected static ConsoleAppender appender;
 	protected static EPServiceProvider cep;
@@ -59,7 +62,7 @@ public class NoGenerics {
 
 		ConfigurationMethodRef ref = new ConfigurationMethodRef();
 		cepConfig = new Configuration();
-		cepConfig.addMethodRef(NoGenerics.class, ref);
+		cepConfig.addMethodRef(NoGenericsPropertyIstance.class, ref);
 
 		// eventi in classi diverse perche' altrimenti non vengono distinti a
 		// livello di ELP, indagare
@@ -68,22 +71,26 @@ public class NoGenerics {
 		cepConfig.addEventType("RDFS9Input", RDFS9.class.getName());
 		cepConfig.addEventType("QueryOut", RDFSOut.class.getName());
 
-		Creates creates = new Creates();
-		Sculpts sculpts = new Sculpts();
-		Paints paints = new Paints();
-		TypeOf typeof = new TypeOf();
+		RDFProperty creates = new RDFProperty(Artist.class, Piece.class,
+				"creates");
+		RDFProperty sculpts = new RDFProperty(Sculptor.class, Sculpt.class,
+				"sculpts");
+		RDFProperty paints = new RDFProperty(Painter.class, Paint.class,
+				"paints");
+		RDFProperty typeof = new RDFProperty(RDFResource.class, RDFClass.class,
+				"typeof");
 
-		cepConfig.addVariable("typeof", TypeOf.class, typeof, true);
-		cepConfig.addVariable("creates", Creates.class, creates, true);
-		cepConfig.addVariable("sculpts", Sculpts.class, sculpts, true);
-		cepConfig.addVariable("paints", Paints.class, paints, true);
+		cepConfig.addVariable("typeof", RDFProperty.class, typeof, true);
+		cepConfig.addVariable("creates", RDFProperty.class, creates, true);
+		cepConfig.addVariable("sculpts", RDFProperty.class, sculpts, true);
+		cepConfig.addVariable("paints", RDFProperty.class, paints, true);
 
 		cepConfig.getEngineDefaults().getViewResources().setShareViews(false);
 		cepConfig.getEngineDefaults().getThreading()
 				.setInternalTimerEnabled(false);
 
 		cep = (EPServiceProviderSPI) EPServiceProviderManager.getProvider(
-				NoGenerics.class.getName(), cepConfig);
+				NoGenericsPropertyIstance.class.getName(), cepConfig);
 		// We register an EPL statement
 		cepAdm = cep.getEPAdministrator();
 		cepRT = cep.getEPRuntime();
@@ -96,14 +103,14 @@ public class NoGenerics {
 				+ "insert into QueryOut select s as s, o as o, p as p, channel as channel "
 				+ "output all ";
 
-		String rdfs3 = "on RDFS3Input "
+		String rdfs3 = "on RDFS3Input(p!=typeof) "
 				+ "insert into QueryOut select o as s, typeof as p, p.range as o, channel || 'RDSF3' as channel "
 				+ "insert into RDFS9Input select o as s,  typeof as p, p.range as o, channel || 'RDSF3' as channel "
 				+ "insert into QueryOut select s as s, typeof as p, p.domain as o, channel || 'RDSF3' as channel "
 				+ "insert into RDFS9Input select s as s, typeof as p, p.domain as o, channel || 'RDSF3' as channel "
 				+ "output all";
 
-		String rdfs9 = "on RDFS9Input "
+		String rdfs9 = "on RDFS9Input(p=typeof) "
 				+ "insert into QueryOut select s as s, p, o.super as o , channel || 'RDSF9' as channel where p=typeof "
 				+ "insert into QueryOut select s as s, p, o as o , channel || 'RDSF9' as channel where p!=typeof "
 				+ "output all";
@@ -127,8 +134,8 @@ public class NoGenerics {
 		 * new RDFClass(RDFClass.class), cepRT.getCurrentTime()));
 		 */
 
-		cepRT.sendEvent(new RDFSInput(new Person("Leonardo"), paints,
-				new Paint("gioconda"), cepRT.getCurrentTime()));
+		cepRT.sendEvent(new RDFSInput(new Painter("Leonardo"), paints,
+				new Paint("Gioconda"), cepRT.getCurrentTime()));
 
 		// esempio 2
 		/*

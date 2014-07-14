@@ -55,11 +55,18 @@ public class PlainMultipleInheritance {
 	public static void main(String argv[]) throws InterruptedException {
 
 		ontology = new HashMap<String, String[]>();
-		ontology.put("Artist", new String[] { "Person" });
-		ontology.put("Worker", new String[] { "Person" });
-		ontology.put("Maker", new String[] { "Worker" });
-		ontology.put("Painter", new String[] { "Artist" });
-		ontology.put("Sculptor", new String[] { "Artist", "Maker" });
+		ontology.put("Artist", new String[] { "Person", "RDFResource" });
+		ontology.put("Worker", new String[] { "Person", "RDFResource" });
+		ontology.put("Maker",
+				new String[] { "Worker", "Person", "RDFResource" });
+		ontology.put("Painter", new String[] { "Person", "Artist",
+				"RDFResource" });
+		ontology.put("Sculptor", new String[] { "Person", "Artist", "Maker",
+				"Worker", "RDFResource" });
+
+		ontology.put("Paint", new String[] { "RDFResource", "Piece" });
+		ontology.put("Sculpt", new String[] { "RDFResource", "Piece" });
+		ontology.put("Piece", new String[] { "RDFResource" });
 
 		PatternLayout sl = new PatternLayout(
 				"%d{HH:mm:ss.SS} - %t-%x-%-5p-%-10c:%m%n");
@@ -91,14 +98,14 @@ public class PlainMultipleInheritance {
 				+ "insert into QueryOut select s as s, o as o, p as p, timestamp as timestamp, channel as channel "
 				+ "output all ";
 
-		String rdfs3 = "on RDFS3Input "
+		String rdfs3 = "on RDFS3Input(p!='typeOf') "
 				+ "insert into QueryOut select o as s, 'typeOf' as p, rdf.museo.simple.PlainMultipleInheritance.range(p) as o, timestamp as timestamp , channel || 'RDSF3' as channel "
 				+ "insert into RDFS9Input select o as s, 'typeOf' as p, rdf.museo.simple.PlainMultipleInheritance.range(p) as o, timestamp as timestamp , channel || 'RDSF3' as channel "
 				+ "insert into QueryOut select s as s, 'typeOf' as p, rdf.museo.simple.PlainMultipleInheritance.domain(p) as o, timestamp as timestamp , channel || 'RDSF3' as channel "
 				+ "insert into RDFS9Input select s as s, 'typeOf' as p, rdf.museo.simple.PlainMultipleInheritance.domain(p) as o, timestamp as timestamp , channel || 'RDSF3' as channel "
 				+ "output all";
 
-		String rdfs9 = "on RDFS9Input "
+		String rdfs9 = "on RDFS9Input(p='typeOf') "
 				+ "insert into QueryOut select s as s, p, rdf.museo.simple.PlainMultipleInheritance.subClassOf(o)  as o, timestamp as timestamp , channel || 'RDSF9' as channel ";
 
 		String queryOut = "insert into Out "
@@ -112,9 +119,8 @@ public class PlainMultipleInheritance {
 						(EPServiceProviderSPI) cep, (String[]) null));
 
 		// after statements
-		cepRT.sendEvent(new TEvent(new String[] { "Leonardo" }, "typeOf",
-				new String[] { "Artist", "Artist" }, "Input", cepRT
-						.getCurrentTime()));
+		cepRT.sendEvent(new TEvent(new String[] { "Leonardo" }, "paints",
+				new String[] { "Gioconda" }, "Input", cepRT.getCurrentTime()));
 		cepRT.sendEvent(new CurrentTimeEvent(1000));
 
 	}

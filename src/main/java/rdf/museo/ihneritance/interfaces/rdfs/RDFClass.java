@@ -1,24 +1,19 @@
-package rdf.museo.ihneritance.nogenerics.rdfs;
+package rdf.museo.ihneritance.interfaces.rdfs;
 
-public final class RDFClass extends RDFResource {
+import java.io.Serializable;
+
+public class RDFClass implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	protected Class<?> clazz;
+	protected String value;
 
-	public RDFClass(Class<?> class1) {
-		super("");
+	public RDFClass(Class<?> class1, String value) {
 		this.clazz = class1;
-	}
-
-	@Override
-	public RDFClass getSuper() {
-		if (!clazz.getSuperclass().equals(Object.class))
-			return new RDFClass(clazz.getSuperclass());
-		else
-			return new RDFClass(clazz);
+		this.value = value;
 	}
 
 	@Override
@@ -27,14 +22,6 @@ public final class RDFClass extends RDFResource {
 			return clazz.getSimpleName();
 		else
 			return this.getClass().getCanonicalName();
-	}
-
-	@Override
-	public int hashCode() {
-		if (clazz != null)
-			return clazz.hashCode();
-		else
-			return "null".hashCode();
 	}
 
 	@Override
@@ -51,5 +38,13 @@ public final class RDFClass extends RDFResource {
 
 	public Class<?> getType() {
 		return clazz;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 }

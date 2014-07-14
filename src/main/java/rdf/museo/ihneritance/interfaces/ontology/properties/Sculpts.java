@@ -1,4 +1,4 @@
-package rdf.museo.ihneritance.nogenerics.ontology.properties;
+package rdf.museo.ihneritance.interfaces.ontology.properties;
 
 import rdf.museo.ihneritance.nogenerics.ontology.Sculpt;
 import rdf.museo.ihneritance.nogenerics.ontology.Sculptor;
