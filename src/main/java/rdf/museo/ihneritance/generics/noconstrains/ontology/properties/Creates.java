@@ -18,7 +18,8 @@ public class Creates extends RDFProperty<RDFResource, RDFResource> {
 	}
 
 	public Creates(String property) {
-		this(new RDFClass(Artist.class), new RDFClass(Piece.class), property);
+		this(new RDFClass<Artist>(Artist.class), new RDFClass<Piece>(
+				Piece.class), property);
 	}
 
 	public Creates() {

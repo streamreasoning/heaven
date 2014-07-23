@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.6" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="rdf.museo.ihneritance.interfaces.rdfs.RDFEvent" project="OBQA-OOCEP" 
+    file="/OBQA-OOCEP/src/main/java/rdf/museo/ihneritance/interfaces/rdfs/RDFEvent.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="147" width="178" x="616" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="rdf.museo.ihneritance.interfaces.esper.events.RDFSInput" project="OBQA-OOCEP" 
+    file="/OBQA-OOCEP/src/main/java/rdf/museo/ihneritance/interfaces/esper/events/RDFSInput.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="98" width="354" x="801" y="224"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="rdf.museo.ihneritance.interfaces.esper.events.RDFS3" project="OBQA-OOCEP" 
+    file="/OBQA-OOCEP/src/main/java/rdf/museo/ihneritance/interfaces/esper/events/RDFS3.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="80" width="334" x="1195" y="224"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="rdf.museo.ihneritance.interfaces.esper.events.RDFSOut" project="OBQA-OOCEP" 
+    file="/OBQA-OOCEP/src/main/java/rdf/museo/ihneritance/interfaces/esper/events/RDFSOut.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="80" width="346" x="41" y="224"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="rdf.museo.ihneritance.interfaces.esper.events.RDFS9" project="OBQA-OOCEP" 
+    file="/OBQA-OOCEP/src/main/java/rdf/museo/ihneritance/interfaces/esper/events/RDFS9.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="80" width="334" x="427" y="224"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <generalization id="6">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <generalization id="7">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <generalization id="8">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <generalization id="9">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

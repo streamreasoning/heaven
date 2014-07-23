@@ -1,8 +1,8 @@
 package rdf.museo.ihneritance.interfaces.esper.events;
 
-import rdf.museo.ihneritance.nogenerics.rdfs.RDFEvent;
-import rdf.museo.ihneritance.nogenerics.rdfs.RDFProperty;
-import rdf.museo.ihneritance.nogenerics.rdfs.RDFResource;
+import rdf.museo.ihneritance.interfaces.rdfs.RDFEvent;
+import rdf.museo.ihneritance.interfaces.rdfs.RDFProperty;
+import rdf.museo.ihneritance.interfaces.rdfs.RDFResource;
 
 public class RDFSOut extends RDFEvent {
 

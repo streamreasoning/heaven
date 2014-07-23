@@ -2,7 +2,7 @@ package rdf.museo.ihneritance.interfaces.rdfs;
 
 import java.io.Serializable;
 
-public class RDFClass implements Serializable {
+public class RDFClass implements Serializable, RDFResource {
 
 	/**
 	 * 

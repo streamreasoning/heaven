@@ -1,6 +1,6 @@
 package rdf.museo.ihneritance.generics.constrains.esper.events;
 
-import rdf.museo.ihneritance.generics.ontology.properties.TypeOf;
+import rdf.museo.ihneritance.generics.ontology.TypeOf;
 import rdf.museo.ihneritance.generics.rdfs.RDFClass;
 import rdf.museo.ihneritance.generics.rdfs.RDFEvent;
 import rdf.museo.ihneritance.generics.rdfs.RDFResource;

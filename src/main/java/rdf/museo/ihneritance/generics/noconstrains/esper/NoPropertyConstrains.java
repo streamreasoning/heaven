@@ -16,7 +16,7 @@ import rdf.museo.ihneritance.generics.ontology.Artist;
 import rdf.museo.ihneritance.generics.ontology.Paint;
 import rdf.museo.ihneritance.generics.ontology.Painter;
 import rdf.museo.ihneritance.generics.ontology.Sculptor;
-import rdf.museo.ihneritance.generics.ontology.properties.TypeOf;
+import rdf.museo.ihneritance.generics.ontology.TypeOf;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.ConfigurationMethodRef;
@@ -26,6 +26,7 @@ import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.time.CurrentTimeEvent;
 import com.espertech.esper.core.service.EPServiceProviderSPI;
+
 import commons.LoggingListener;
 
 /**

@@ -2,7 +2,7 @@ package rdf.museo.ihneritance.interfaces.rdfs;
 
 import java.io.Serializable;
 
-public class RDFProperty implements Serializable {
+public class RDFProperty implements Serializable, RDFResource {
 
 	static final long serialVersionUID = 1L;
 	protected String property;

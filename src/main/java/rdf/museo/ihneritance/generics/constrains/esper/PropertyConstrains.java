@@ -18,7 +18,7 @@ import rdf.museo.ihneritance.generics.ontology.Artist;
 import rdf.museo.ihneritance.generics.ontology.Paint;
 import rdf.museo.ihneritance.generics.ontology.Painter;
 import rdf.museo.ihneritance.generics.ontology.Sculptor;
-import rdf.museo.ihneritance.generics.ontology.properties.TypeOf;
+import rdf.museo.ihneritance.generics.ontology.TypeOf;
 import rdf.museo.ihneritance.generics.rdfs.RDFClass;
 
 import com.espertech.esper.client.Configuration;
@@ -106,6 +106,7 @@ public class PropertyConstrains {
 		String rdfIn = "on RDFSInput "
 				+ "insert into RDFS3Input select s as s, o as o, p as p,  channel as channel "
 				+ "insert into RDFS9Input select s as s, o as o, p as p,  channel as channel "
+				+ "insert into QueryOut select s as s, o as o, p as p,  channel as channel "
 				+ "output all ";
 
 		String rdfs3 = "on RDFS3Input "
@@ -115,7 +116,7 @@ public class PropertyConstrains {
 				+ "insert into RDFS9Input select s as s, typeof as p, p.domain as o ,  channel || 'RDSF3' as channel "
 				+ "output all";
 
-		String rdfs9 = "on RDFS9Input "
+		String rdfs9 = "on RDFS9Input( not instanceof(p,  rdf.museo.ihneritance.generics.ontology.Typeof )) "
 				+ "insert into QueryOut select s as s, p, o.super as o, channel || 'RDSF9' as channel ";
 
 		String queryOut = "insert into OutEvent "
@@ -123,7 +124,7 @@ public class PropertyConstrains {
 
 		// solution with o field analysis trivial
 		String queryOutA = "insert into OutEvent "
-				+ "select * from QueryOut( instanceof(s, rdf.museo.ihneritance.generics.ontology.Sculptor) or c=sculptor ).win:time_batch(1000 msec)";
+				+ "select * from QueryOut( instanceof(s, rdf.museo.ihneritance.generics.ontology.Sculptor) or o=sculptor ).win:time_batch(1000 msec)";
 
 		cepAdm.createEPL("insert into RDFSInput select s as s, o as o, p as p, channel as channel from CreatesEvent ");
 		cepAdm.createEPL("insert into RDFSInput select s as s, o as o, p as p, channel as channel from TypeOfEvent ");
@@ -139,8 +140,7 @@ public class PropertyConstrains {
 
 		cepRT.sendEvent(new PaintsEvent(new Painter("Leonardo"), new Paint(
 				"Gioconda"), cepRT.getCurrentTime()));
-		cepRT.sendEvent(new TypeOfEvent(new Painter("Leonardo"),
-				new RDFClass<Painter>(Painter.class), cepRT.getCurrentTime()));
+
 		cepRT.sendEvent(new CurrentTimeEvent(1000));
 	}
 }

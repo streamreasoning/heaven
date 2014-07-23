@@ -9,9 +9,7 @@ import rdf.museo.ihneritance.nogenerics.esper.events.RDFS3;
 import rdf.museo.ihneritance.nogenerics.esper.events.RDFS9;
 import rdf.museo.ihneritance.nogenerics.esper.events.RDFSInput;
 import rdf.museo.ihneritance.nogenerics.esper.events.RDFSOut;
-import rdf.museo.ihneritance.nogenerics.ontology.Paint;
-import rdf.museo.ihneritance.nogenerics.ontology.Painter;
-import rdf.museo.ihneritance.nogenerics.ontology.Person;
+import rdf.museo.ihneritance.nogenerics.ontology.Sculptor;
 import rdf.museo.ihneritance.nogenerics.ontology.properties.Creates;
 import rdf.museo.ihneritance.nogenerics.ontology.properties.Paints;
 import rdf.museo.ihneritance.nogenerics.ontology.properties.Sculpts;
@@ -112,7 +110,7 @@ public class NoGenericsPropertySubclass {
 		String queryOut = "insert into OutEvent "
 				+ "select current_timestamp, * from QueryOut.win:time_batch(1000 msec)";
 		String queryOut1 = "insert into OutEvent "
-				+ "select * from QueryOut(instanceof(s, rdf.museo.ihneritance.nogenerics.ontology.Artist) ).win:time_batch(1000 msec)";
+				+ "select * from QueryOut(instanceof(s, rdf.museo.ihneritance.nogenerics.ontology.Person) ).win:time_batch(1000 msec)";
 
 		cepAdm.createEPL(input);
 		cepAdm.createEPL(rdfs3);
@@ -123,12 +121,10 @@ public class NoGenericsPropertySubclass {
 
 		// esempio 1
 
-		cepRT.sendEvent(new RDFSInput(new Painter("Leonardo"), paints,
-				new Paint("Gioconda"), cepRT.getCurrentTime()));
-
 		// esempio 2
 
-		
+		cepRT.sendEvent(new RDFSInput(new Sculptor("Leonardo"), typeof,
+				new RDFClass(Sculptor.class), cepRT.getCurrentTime()));
 
 		cepRT.sendEvent(new CurrentTimeEvent(1000));
 	}
