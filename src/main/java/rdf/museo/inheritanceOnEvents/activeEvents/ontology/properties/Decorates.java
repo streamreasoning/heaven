@@ -2,8 +2,6 @@ package rdf.museo.inheritanceOnEvents.activeEvents.ontology.properties;
 
 import rdf.museo.inheritanceOnEvents.activeEvents.ontology.Decorator;
 import rdf.museo.inheritanceOnEvents.activeEvents.ontology.Mosaic;
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.Sculpt;
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.Sculptor;
 
 public class Decorates extends Sculpts {
 
@@ -21,7 +19,8 @@ public class Decorates extends Sculpts {
 		super(range, domain, "decorates");
 	}
 
-	public Decorates(Class<Sculptor> sculptor, Class<Sculpt> sculpt, String prop) {
-		super(sculptor, sculpt, prop);
+	public Decorates(Class<Decorator> decorator, Class<Mosaic> mosaic,
+			String prop) {
+		super(decorator, mosaic, prop);
 	}
 }

@@ -2,7 +2,7 @@ package rdf.museo.inheritanceOnEvents.activeEvents.rdfs;
 
 import java.io.Serializable;
 
-public class RDFProperty implements Serializable {
+public abstract class RDFProperty implements Serializable {
 
 	/**
 	 * 

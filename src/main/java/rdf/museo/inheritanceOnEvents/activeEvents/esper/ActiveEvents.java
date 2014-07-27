@@ -153,7 +153,7 @@ public class ActiveEvents {
 		// after statements
 
 		cepRT.sendEvent(new DecoratesEvent<Decorator, Decorates, Mosaic>(
-				new Decorator("Leonardo"), new Mosaic("Gioconda"), cepRT
+				new Decorator("Cartone"), new Mosaic("Trasfigurazioen"), cepRT
 						.getCurrentTime()));
 
 		cepRT.sendEvent(new CurrentTimeEvent(1000));
