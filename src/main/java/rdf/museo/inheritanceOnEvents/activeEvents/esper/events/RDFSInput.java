@@ -1,8 +1,5 @@
 package rdf.museo.inheritanceOnEvents.activeEvents.esper.events;
 
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.Artist;
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.Piece;
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.properties.Creates;
 import rdf.museo.inheritanceOnEvents.activeEvents.rdfs.RDFEvent;
 import rdf.museo.inheritanceOnEvents.activeEvents.rdfs.RDFProperty;
 import rdf.museo.inheritanceOnEvents.activeEvents.rdfs.RDFResource;
@@ -33,8 +30,9 @@ public class RDFSInput extends
 		return e.getChannel();
 	}
 
-	public RDFEvent<? extends Artist, ? extends Creates, ? extends Piece> getSuperEvent() {
-		return e.getSuperEvent();
+	public RDFEvent<? extends RDFResource, ? extends RDFProperty, ? extends RDFResource> getSuperEvent() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

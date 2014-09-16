@@ -1,8 +1,5 @@
 package rdf.museo.inheritanceOnEvents.activeEvents.rdfs;
 
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.Artist;
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.Piece;
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.properties.Creates;
 
 public abstract class RDFEvent<S extends RDFResource, P extends RDFProperty, O extends RDFResource> {
 	private S s;
@@ -78,7 +75,7 @@ public abstract class RDFEvent<S extends RDFResource, P extends RDFProperty, O e
 
 	}
 
-	public abstract RDFEvent<? extends Artist, ? extends Creates, ? extends Piece> getSuperEvent();
+	public abstract RDFEvent<? extends RDFResource, ? extends RDFProperty, ? extends RDFResource> getSuperEvent();
 
 	@Override
 	public int hashCode() {

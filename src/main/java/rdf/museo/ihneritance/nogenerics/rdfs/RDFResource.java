@@ -14,6 +14,11 @@ public class RDFResource implements Serializable {
 		this.setValue(object);
 	}
 
+	@Override
+	public String toString() {
+		return "RDFResource [value=" + value + "]";
+	}
+
 	// TODO perche' non e' possibile inserire il parametro?
 	public RDFClass getSuper() {
 		System.out.println("Res " + this.getClass().getSuperclass());

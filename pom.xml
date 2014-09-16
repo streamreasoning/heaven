@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.polimi.debs.challenge</groupId>
-	<artifactId>goalshot</artifactId>
+	<artifactId>OBQA-OOCEP-LUBM</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<description>
 </description>
@@ -16,6 +16,11 @@
 			<groupId>com.espertech</groupId>
 			<artifactId>esperio-csv</artifactId>
 			<version>4.11.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>0.9.9-RC1</version>
 		</dependency>
 	</dependencies>
 </project>

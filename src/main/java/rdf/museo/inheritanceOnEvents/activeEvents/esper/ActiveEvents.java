@@ -5,23 +5,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
-import rdf.museo.inheritanceOnEvents.activeEvents.esper.events.CreatesEvent;
-import rdf.museo.inheritanceOnEvents.activeEvents.esper.events.DecoratesEvent;
-import rdf.museo.inheritanceOnEvents.activeEvents.esper.events.PaintsEvent;
 import rdf.museo.inheritanceOnEvents.activeEvents.esper.events.RDFSInput;
-import rdf.museo.inheritanceOnEvents.activeEvents.esper.events.SculptsEvent;
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.Artist;
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.Decorator;
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.Mosaic;
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.Painter;
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.Sculptor;
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.properties.Creates;
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.properties.Decorates;
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.properties.Paints;
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.properties.Sculpts;
-import rdf.museo.inheritanceOnEvents.activeEvents.ontology.properties.TypeOf;
-import rdf.museo.inheritanceOnEvents.activeEvents.rdfs.RDFClass;
-import rdf.museo.inheritanceOnEvents.activeEvents.rdfs.RDFEvent;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.ConfigurationMethodRef;
@@ -69,36 +53,36 @@ public class ActiveEvents {
 		cepConfig.addMethodRef(ActiveEvents.class, ref);
 
 		// eventi in classi diverse perche' altrimenti non vengono distinti a
-		// livello di ELP, indagare
-		cepConfig.addEventType("CreatesEvent", CreatesEvent.class.getName());
-		cepConfig.addEventType("PaintsEvent", PaintsEvent.class.getName());
-		cepConfig.addEventType("SculptsEvent", SculptsEvent.class.getName());
-		cepConfig
-				.addEventType("DecoratesEvent", DecoratesEvent.class.getName());
+//		// livello di ELP, indagare
+//		cepConfig.addEventType("CreatesEvent", CreatesEvent.class.getName());
+//		cepConfig.addEventType("PaintsEvent", PaintsEvent.class.getName());
+//		cepConfig.addEventType("SculptsEvent", SculptsEvent.class.getName());
+//		cepConfig
+//				.addEventType("DecoratesEvent", DecoratesEvent.class.getName());
 		cepConfig.addEventType("RDFSInput", RDFSInput.class.getName());
 
-		Creates creates = new Creates();
-		Sculpts sculpts = new Sculpts();
-		Paints paints = new Paints();
-		TypeOf typeof = new TypeOf();
-		Decorates decorates = new Decorates();
+//		Creates creates = new Creates();
+//		Sculpts sculpts = new Sculpts();
+//		Paints paints = new Paints();
+//		TypeOf typeof = new TypeOf();
+//		Decorates decorates = new Decorates();
+//
+//		cepConfig.addVariable("typeof", TypeOf.class, typeof, true);
+//		cepConfig.addVariable("creates", Creates.class, creates, true);
+//		cepConfig.addVariable("sculpts", Sculpts.class, sculpts, true);
+//		cepConfig.addVariable("paints", Paints.class, paints, true);
+//		cepConfig.addVariable("decorates", Decorates.class, decorates, true);
+//
+//		cepConfig.addVariable("ine", RDFEvent.class, null, false);
 
-		cepConfig.addVariable("typeof", TypeOf.class, typeof, true);
-		cepConfig.addVariable("creates", Creates.class, creates, true);
-		cepConfig.addVariable("sculpts", Sculpts.class, sculpts, true);
-		cepConfig.addVariable("paints", Paints.class, paints, true);
-		cepConfig.addVariable("decorates", Decorates.class, decorates, true);
-
-		cepConfig.addVariable("ine", RDFEvent.class, null, false);
-
-		cepConfig.addVariable("artist", RDFClass.class, new RDFClass(
-				Artist.class), true);
-		cepConfig.addVariable("sculptor", RDFClass.class, new RDFClass(
-				Sculptor.class), true);
-		cepConfig.addVariable("painter", RDFClass.class, new RDFClass(
-				Painter.class), true);
-		cepConfig.addVariable("decorator", RDFClass.class, new RDFClass(
-				Decorates.class), true);
+//		cepConfig.addVariable("artist", RDFClass.class, new RDFClass(
+//				Artist.class), true);
+//		cepConfig.addVariable("sculptor", RDFClass.class, new RDFClass(
+//				Sculptor.class), true);
+//		cepConfig.addVariable("painter", RDFClass.class, new RDFClass(
+//				Painter.class), true);
+//		cepConfig.addVariable("decorator", RDFClass.class, new RDFClass(
+//				Decorates.class), true);
 
 		cepConfig.getEngineDefaults().getViewResources().setShareViews(false);
 		cepConfig.getEngineDefaults().getThreading()
@@ -151,10 +135,10 @@ public class ActiveEvents {
 						(EPServiceProviderSPI) cep, (String[]) null));
 
 		// after statements
-
-		cepRT.sendEvent(new DecoratesEvent<Decorator, Decorates, Mosaic>(
-				new Decorator("Cartone"), new Mosaic("Trasfigurazione"), cepRT
-						.getCurrentTime()));
+//
+//		cepRT.sendEvent(new DecoratesEvent<Decorator, Decorates, Mosaic>(
+//				new Decorator("Cartone"), new Mosaic("Trasfigurazione"), cepRT
+//						.getCurrentTime()));
 
 		cepRT.sendEvent(new CurrentTimeEvent(1000));
 	}

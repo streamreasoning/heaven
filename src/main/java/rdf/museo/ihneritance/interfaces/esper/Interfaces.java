@@ -9,15 +9,6 @@ import rdf.museo.ihneritance.nogenerics.esper.events.RDFS3;
 import rdf.museo.ihneritance.nogenerics.esper.events.RDFS9;
 import rdf.museo.ihneritance.nogenerics.esper.events.RDFSInput;
 import rdf.museo.ihneritance.nogenerics.esper.events.RDFSOut;
-import rdf.museo.ihneritance.nogenerics.ontology.Artist;
-import rdf.museo.ihneritance.nogenerics.ontology.Paint;
-import rdf.museo.ihneritance.nogenerics.ontology.Painter;
-import rdf.museo.ihneritance.nogenerics.ontology.Piece;
-import rdf.museo.ihneritance.nogenerics.ontology.Sculpt;
-import rdf.museo.ihneritance.nogenerics.ontology.Sculptor;
-import rdf.museo.ihneritance.nogenerics.rdfs.RDFClass;
-import rdf.museo.ihneritance.nogenerics.rdfs.RDFProperty;
-import rdf.museo.ihneritance.nogenerics.rdfs.RDFResource;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.ConfigurationMethodRef;
@@ -71,20 +62,9 @@ public class Interfaces {
 		config.addEventType("RDFS9Input", RDFS9.class.getName());
 		config.addEventType("QueryOut", RDFSOut.class.getName());
 
-		RDFProperty creates = new RDFProperty(Artist.class, Piece.class,
-				"creates");
-		RDFProperty sculpts = new RDFProperty(Sculptor.class, Sculpt.class,
-				"sculpts");
-		RDFProperty paints = new RDFProperty(Painter.class, Paint.class,
-				"paints");
-		RDFProperty typeof = new RDFProperty(RDFResource.class, RDFClass.class,
-				"typeof");
-
-		config.addVariable("typeof", RDFProperty.class, typeof, true);
-		config.addVariable("creates", RDFProperty.class, creates, true);
-		config.addVariable("sculpts", RDFProperty.class, sculpts, true);
-		config.addVariable("paints", RDFProperty.class, paints, true);
-
+		//TODO ADD PROPERTIES TO THE ENGINE AS CONSTANTS
+		
+		
 		config.getEngineDefaults().getViewResources().setShareViews(false);
 		config.getEngineDefaults().getThreading()
 				.setInternalTimerEnabled(false);
@@ -133,9 +113,6 @@ public class Interfaces {
 		 * cepRT.sendEvent(new RDFSInput(new RDFClass(Painter.class), typeof,
 		 * new RDFClass(RDFClass.class), cepRT.getCurrentTime()));
 		 */
-
-		cepRT.sendEvent(new RDFSInput(new Painter("Leonardo"), paints,
-				new Paint("Gioconda"), cepRT.getCurrentTime()));
 
 		// esempio 2
 		/*
