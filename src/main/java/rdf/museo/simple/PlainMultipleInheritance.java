@@ -1,22 +1,12 @@
 package rdf.museo.simple;
 
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-
 import rdf.museo.simple.events.Out;
 import rdf.museo.simple.events.TEvent;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.ConfigurationMethodRef;
-import com.espertech.esper.client.EPAdministrator;
-import com.espertech.esper.client.EPRuntime;
-import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
-import com.espertech.esper.client.time.CurrentTimeEvent;
 import com.espertech.esper.core.service.EPServiceProviderSPI;
-
 import commons.EsperModel;
 import commons.LoggingListener;
 
@@ -36,25 +26,18 @@ import commons.LoggingListener;
  * 
  * **/
 
-public class PlainMultipleInheritance implements EsperModel {
-	protected static Configuration cepConfig;
-	protected static ConsoleAppender appender;
-	protected static EPServiceProvider cep;
-	protected static EPRuntime cepRT;
-	protected static EPAdministrator cepAdm;
-	private static int time = 0;
-	private static Boolean BUSY = false;
-	
+public class PlainMultipleInheritance extends EsperModel {
+
 	// TODO useless private static final Ontology ontology = new Ontology();
 
-	public PlainMultipleInheritance(){
+	public PlainMultipleInheritance() {
 		initLogger();
 		initEsper();
 		initQueries();
 		moveTime();
 	}
 
-	private static void initQueries() {
+	protected void initQueries() {
 		cepAdm.createEPL(Queries.input);
 		cepAdm.createEPL(Queries.rdfs3);
 		cepAdm.createEPL(Queries.rdfs9);
@@ -64,7 +47,8 @@ public class PlainMultipleInheritance implements EsperModel {
 	}
 
 	private static void initEsper() {
-		ConfigurationMethodRef ref = new ConfigurationMethodRef();
+
+		ref = new ConfigurationMethodRef();
 		cepConfig = new Configuration();
 		cepConfig.addMethodRef(PlainMultipleInheritance.class, ref);
 
@@ -81,14 +65,6 @@ public class PlainMultipleInheritance implements EsperModel {
 		cepRT = cep.getEPRuntime();
 	}
 
-	private static void initLogger() {
-		PatternLayout sl = new PatternLayout(
-				"%d{HH:mm:ss.SS} - %t-%x-%-5p-%-10c:%m%n");
-		appender = new ConsoleAppender(sl);
-		Logger.getRootLogger().addAppender(appender);
-		Logger.getRootLogger().setLevel((Level) Level.INFO);
-	}
-
 	public void sendEvent(String[] eventTriple) {
 		synchronized (BUSY) {
 			BUSY = true;
@@ -101,15 +77,8 @@ public class PlainMultipleInheritance implements EsperModel {
 
 	}
 
-	private static void moveTime() {
-		cepRT.sendEvent(new CurrentTimeEvent(time));
-		time += 1000;
-
-	}
-
 	public boolean isBusy() {
-		// TODO Auto-generated method stub
-		return false;
+		return BUSY;
 	}
 
 }
