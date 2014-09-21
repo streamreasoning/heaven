@@ -17,10 +17,11 @@ public class ReflectionTest {
 
 		int index=0;
 		for (Class<? extends RDFResource> class1 : allClasses) {
-				if("FullProfessor0/Publication8".toLowerCase().contains(class1.getSimpleName().toLowerCase())){
-					if(index<"FullProfessor0/Publication8".toLowerCase().indexOf(class1.getSimpleName().toLowerCase()))
-						index = "FullProfessor0/Publication8".toLowerCase().indexOf(class1.getSimpleName().toLowerCase());
-				}
+//				if("FullProfessor0/Publication8".toLowerCase().contains(class1.getSimpleName().toLowerCase())){
+//					if(index<"FullProfessor0/Publication8".toLowerCase().indexOf(class1.getSimpleName().toLowerCase()))
+//						index = "FullProfessor0/Publication8".toLowerCase().indexOf(class1.getSimpleName().toLowerCase());
+//				}
+			System.out.println(class1.getSimpleName());
 				
 		}
 		System.out.println("FullProfessor0/Publication8".substring(index)+" "+index);
