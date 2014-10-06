@@ -1,11 +1,13 @@
 package it.polimi.teststand.engine.esper.plain.events;
 
 import it.polimi.output.result.Storable;
-import it.polimi.teststand.events.TestResultEvent;
 import it.polimi.teststand.events.Experiment;
+import it.polimi.teststand.events.TestResultEvent;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Out implements Storable {
@@ -82,9 +84,19 @@ public class Out implements Storable {
 	@Override
 	public Set<String[]> getTriples() {
 		Set<String[]> triples = new HashSet<String[]>();
-		for (int i = 0; i < s.length && i < o.length; i++) {
-			triples.add(new String[] { s[i], p, o[i] });
+		List<String> list;
+
+		for (String subj : s) {
+			list = new ArrayList<String>();
+			for (String obj : o) {
+				list.add(subj + "," + p + "," + obj);
+			}
+
+			for (String string : list) {
+				triples.add(string.split(","));
+			}
 		}
+
 		return triples;
 	}
 

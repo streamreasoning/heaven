@@ -1,6 +1,11 @@
 package it.polimi.teststand.utils;
 
 public class RDFSUtils {
+	
+	public static final String UNIV_BENCH_RDFS = "src/main/resource/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
+	public static final String RDFRESOURCE = "http://www.w3.org/2000/01/rdf-schema#Resource";
+	public static final String TYPE_PROPERTY = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+	public static final String RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 
 	public static final String[] DATATYPEPROPERTIES = {
 			"http://swat.cse.lehigh.edu/onto/univ-bench.owl#age",

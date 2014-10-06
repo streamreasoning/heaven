@@ -28,9 +28,6 @@ public class Ontology {
 	private static Map<String, String> propertiesDomain;
 	private static int numProperties, numClasses = 0;
 
-	public static final String UNIV_BENCH_NS = "http://swat.cse.lehigh.edu/onto/univ-bench.owl";
-	public static final String RDFS = "http://www.w3.org/2000/01/rdf-schema#";
-	public static final String RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 	static {
 		properties = new HashMap<String, String[]>();
 		propertiesDomain = new HashMap<String, String>();
@@ -44,11 +41,8 @@ public class Ontology {
 		FileManager.get().addLocatorClassLoader(
 				JenaEngine.class.getClassLoader());
 
-		Model tbox_star = FileManager
-				.get()
-				.loadModel(
-						"src/main/resource/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs",
-						null, "RDF/XML"); // http://en.wikipedia.org/wiki/Tbox
+		Model tbox_star = FileManager.get().loadModel(
+				RDFSUtils.UNIV_BENCH_RDFS, null, "RDF/XML"); // http://en.wikipedia.org/wiki/Tbox
 
 		OntModel om = ModelFactory.createOntologyModel(
 				OntModelSpec.RDFS_MEM_RDFS_INF, tbox_star);
@@ -85,10 +79,10 @@ public class Ontology {
 				}
 			}
 			if (domain.isEmpty()) {
-				domain = "http://www.w3.org/2000/01/rdf-schema#Resource";
+				domain = RDFSUtils.RDFRESOURCE;
 			}
 			if (range.isEmpty()) {
-				range = "http://www.w3.org/2000/01/rdf-schema#Resource";
+				range = RDFSUtils.RDFRESOURCE;
 			}
 			String[] s = new String[supers.size()];
 			properties.put(next.toString(), supers.toArray(s));
@@ -98,9 +92,10 @@ public class Ontology {
 		}
 
 		for (String k : properties.keySet()) {
-			Logger.getRootLogger().debug(k + "   " + Arrays.deepToString(properties.get(k))
-					+ " DOMAIN " + propertiesDomain.get(k) + " RANGE "
-					+ propertiesRange.get(k));
+			Logger.getRootLogger().debug(
+					k + "   " + Arrays.deepToString(properties.get(k))
+							+ " DOMAIN " + propertiesDomain.get(k) + " RANGE "
+							+ propertiesRange.get(k));
 
 		}
 		Logger.getRootLogger().debug("NUM PROPERTIES :" + numProperties);
@@ -112,11 +107,8 @@ public class Ontology {
 		FileManager.get().addLocatorClassLoader(
 				JenaEngine.class.getClassLoader());
 
-		Model tbox_star = FileManager
-				.get()
-				.loadModel(
-						"src/main/resource/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs",
-						null, "RDF/XML"); // http://en.wikipedia.org/wiki/Tbox
+		Model tbox_star = FileManager.get().loadModel(
+				RDFSUtils.UNIV_BENCH_RDFS, null, "RDF/XML"); // http://en.wikipedia.org/wiki/Tbox
 
 		OntModel om = ModelFactory.createOntologyModel(
 				OntModelSpec.RDFS_MEM_RDFS_INF, tbox_star);
@@ -127,7 +119,7 @@ public class Ontology {
 				continue;
 			}
 			Set<String> supers = new HashSet<String>();
-			supers.add("http://www.w3.org/2000/01/rdf-schema#Resource");
+			supers.add(RDFSUtils.RDFRESOURCE);
 			ExtendedIterator<OntClass> scl = next.listSuperClasses();
 			while (scl.hasNext()) {
 				if (RDFSUtils.isSchemaClass(scl.toString())) {
@@ -141,7 +133,8 @@ public class Ontology {
 		}
 
 		for (String k : ontology.keySet()) {
-			Logger.getRootLogger().debug(k + "   " + Arrays.deepToString(ontology.get(k)));
+			Logger.getRootLogger().debug(
+					k + "   " + Arrays.deepToString(ontology.get(k)));
 		}
 
 		Logger.getRootLogger().debug("NUM CLASSES " + numClasses);
@@ -149,13 +142,12 @@ public class Ontology {
 
 	public static String[] subClassOf(String[] listString) {
 		Set<String> retList = new HashSet<String>();
-		for (String string : listString) {
-			if (ontology.containsKey(string)) {
-				for (String s : ontology.get(string)) {
-					retList.add(s);
-				}
+		for (String keyClass : listString) {
+			Logger.getRootLogger().debug(keyClass);
+			if (ontology.containsKey(keyClass)) {
+				retList.addAll(Arrays.asList(ontology.get(keyClass)));
 			} else
-				retList.add(RDFS + "Resource");
+				retList.add(RDFSUtils.RDFRESOURCE);
 		}
 		String[] arr = retList.toArray(new String[retList.size()]);
 		return arr;
@@ -166,14 +158,13 @@ public class Ontology {
 	}
 
 	public static String[] range(String p) {
-		return new String[] { UNIV_BENCH_NS + "#" + propertiesRange.get(p) };
+		return new String[] { propertiesRange.get(p) };
 
 	}
 
 	public static String[] domain(String p) {
-		return new String[] { UNIV_BENCH_NS + "#" + propertiesDomain.get(p) };
+		return new String[] { propertiesDomain.get(p) };
 
 	}
 
-	public static final String TYPE_PROPERTY = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 }
