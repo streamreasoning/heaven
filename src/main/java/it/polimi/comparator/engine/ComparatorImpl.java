@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.jena.riot.RDFDataMgr;
+import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -48,14 +49,12 @@ public class ComparatorImpl extends EngineComparator {
 
 	public boolean isCorrect(String key) {
 		if (datasetList.size() > 2) {
-			_logger.info("Too much argumetns");
+			Logger.getRootLogger().info("Too much argumetns");
 			return false;
 		}
 		Dataset ref = datasetList.get(0);
 		boolean equals = ref.getNamedModel(key).isIsomorphicWith(
 				datasetList.get(1).getNamedModel(key));
-
-		System.out.println(equals);
 		return equals;
 	}
 
@@ -89,7 +88,6 @@ public class ComparatorImpl extends EngineComparator {
 	@Override
 	public boolean startProcessing(Experiment e) {
 		this.experiment = e;
-		initLogger();
 		return true;
 	}
 

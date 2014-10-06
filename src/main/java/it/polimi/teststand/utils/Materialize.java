@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.rdf.model.InfModel;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -58,7 +60,7 @@ public class Materialize {
 			e.printStackTrace();
 		}
 
-		System.out.println("Done");
+		Logger.getRootLogger().info("Done");
 	}
 
 }

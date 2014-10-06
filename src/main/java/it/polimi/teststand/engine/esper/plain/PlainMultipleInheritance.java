@@ -13,6 +13,8 @@ import it.polimi.teststand.events.TestResultEvent;
 
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.ConfigurationMethodRef;
 import com.espertech.esper.client.EPServiceProviderManager;
@@ -49,11 +51,16 @@ public class PlainMultipleInheritance extends RSPEngine {
 		this.name = "plain";
 	}
 
+	public PlainMultipleInheritance() {
+		super(null);
+		this.name = "plain";
+	}
+
 	protected void initQueries() {
 
-		_logger.debug(Queries.input);
-		_logger.debug(Queries.rdfs3);
-		_logger.debug(Queries.rdfs9);
+		Logger.getRootLogger().debug(Queries.input);
+		Logger.getRootLogger().debug(Queries.rdfs3);
+		Logger.getRootLogger().debug(Queries.rdfs9);
 
 		cepAdm.createEPL(Queries.input);
 		cepAdm.createEPL(Queries.rdfs3);
@@ -71,7 +78,7 @@ public class PlainMultipleInheritance extends RSPEngine {
 		TEvent esperEvent;
 		Set<String[]> eventTriples = e.getEventTriples();
 		for (String[] eventTriple : eventTriples) {
-			_logger.debug("Create New Esper Event");
+			Logger.getRootLogger().info("Create New Esper Event");
 			esperEvent = new TEvent(new String[] { eventTriple[0] },
 					eventTriple[1], new String[] { eventTriple[2] }, "Input",
 					cepRT.getCurrentTime());
@@ -111,13 +118,12 @@ public class PlainMultipleInheritance extends RSPEngine {
 
 	@Override
 	public void turnOn() {
-		initLogger();
 		initEsper();
 	}
 
 	@Override
 	public void turnOff() {
-		System.out.println("Nothing to do");
+		Logger.getRootLogger().info("Nothing to do...Turing Off");
 	}
 
 	private static void initEsper() {

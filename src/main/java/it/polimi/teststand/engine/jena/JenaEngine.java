@@ -31,6 +31,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.InfModel;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -51,6 +53,8 @@ import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.ReasonerVocabulary;
 
 public class JenaEngine extends RSPEngine {
+	private static final String RULE_SET = "src/main/resource/data/inference/rules.rules";
+	private static final String UNIV_BENCH_RDFS = "src/main/resource/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
 	private static Model tbox_star, abox;
 	private static InfModel abox_star;
 	int i = 0;
@@ -66,9 +70,10 @@ public class JenaEngine extends RSPEngine {
 		tbox_star = FileManager
 				.get()
 				.loadModel(
-						"src/main/resource/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs",
-						null, "RDF/XML"); // http://en.wikipedia.org/wiki/Tbox
+						UNIV_BENCH_RDFS,
+						null, "RDF/XML"); 
 
+	
 	}
 
 	@Override
@@ -79,8 +84,6 @@ public class JenaEngine extends RSPEngine {
 			Statement s = createStatement(eventTriple);
 			abox.add(s);
 		}
-
-		// abox_star = ModelFactory.createRDFSModel(tbox_star, abox);
 
 		Reasoner reasoner = getRDFSSimpleReasoner();
 		// Reasoner reasoner = getReducedReasoner();
@@ -113,7 +116,6 @@ public class JenaEngine extends RSPEngine {
 	}
 
 	// TODO discuss about what reasoner
-	@SuppressWarnings("unused")
 	private Reasoner getRDFSSimpleReasoner() {
 		Reasoner reasoner = ReasonerRegistry.getRDFSReasoner();
 		reasoner.setParameter(ReasonerVocabulary.PROPsetRDFSLevel,
@@ -142,12 +144,12 @@ public class JenaEngine extends RSPEngine {
 
 	@Override
 	public void turnOn() {
-		System.out.println("Nothing to do");
+		Logger.getRootLogger().info("Nothing to do");
 	}
 
 	@Override
 	public void turnOff() {
-		System.out.println("Nothing to do");
+		Logger.getRootLogger().info("Nothing to do");
 	}
 
 	private Statement createStatement(String[] eventTriple) {
@@ -158,7 +160,7 @@ public class JenaEngine extends RSPEngine {
 				object);
 		return s;
 	}
-
+	@SuppressWarnings("unused")
 	private Reasoner getReducedReasoner() {
 
 		// TODO puo' essere un modo intelligente per applicar e regole come fa
@@ -166,7 +168,7 @@ public class JenaEngine extends RSPEngine {
 		// utilizzando differenti reasoner
 
 		List<Rule> rules = Rule
-				.rulesFromURL("src/main/resource/data/inference/rules.rules");
+				.rulesFromURL(RULE_SET);
 
 		GenericRuleReasoner reasoner = new GenericRuleReasoner(rules);
 		reasoner.setOWLTranslation(true); // not needed in RDFS case

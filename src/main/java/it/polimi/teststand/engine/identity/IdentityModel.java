@@ -10,6 +10,8 @@ import it.polimi.teststand.events.StreamingEvent;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 public class IdentityModel extends RSPEngine {
 
 	public IdentityModel(ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector) {
@@ -19,7 +21,7 @@ public class IdentityModel extends RSPEngine {
 	@Override
 	public boolean sendEvent(StreamingEvent e) {
 		if (e.isIgnore()) {
-			System.out.println("Ignored");
+			Logger.getRootLogger().debug("Ignored");
 			return false;
 		}
 
@@ -59,12 +61,12 @@ public class IdentityModel extends RSPEngine {
 
 	@Override
 	public void turnOn() {
-		System.out.println("Nothing to do");
+		Logger.getRootLogger().info("Nothing to do");
 	}
 
 	@Override
 	public void turnOff() {
-		System.out.println("Nothing to do");
+		Logger.getRootLogger().info("Nothing to do");
 	}
 
 }

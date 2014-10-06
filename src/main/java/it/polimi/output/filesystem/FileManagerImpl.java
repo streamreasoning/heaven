@@ -4,17 +4,19 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 public class FileManagerImpl extends FileManager {
 
 
 	@Override
 	public void close() {
-		System.out.println("Noting to do");
+		Logger.getRootLogger().info("Nothing to do");
 	}
 
 	@Override
 	public void init() {
-		System.out.println("Noting to do");
+		Logger.getRootLogger().info("Nothing to do");
 	}
 
 	public void toFile(String filePath, String fileNameWithExtension,

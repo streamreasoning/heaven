@@ -10,12 +10,19 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
+/**
+ * @author Riccardo
+ * 
+ * @param <T>
+ *            The kind of class thar will received the streamed events in this
+ *            implementation it extends EventProcessor which offers sendEvent(E
+ *            e) method. This class is paramtric too, and the kind of event
+ *            processed at this time is StreamingEvent
+ */
 public class Streamer<T extends EventProcessor<StreamingEvent>> {
 
-	public static final boolean USEDATATYPEPROPERTIES = false;
-	public static final boolean USESHEMAPROPERTIES = false;
-
-	private static final boolean debug = true;
 
 	private T engine;
 
@@ -23,11 +30,15 @@ public class Streamer<T extends EventProcessor<StreamingEvent>> {
 		this.engine = model;
 	}
 
+
 	/**
-	 * Apro il file, apro una connesione al database e salvo il file di output e
-	 * l'inizio dell'esperimento
+	 * Open the buffer reader that incapsulate a csv form input file
+	 * 
 	 * 
 	 * @param status
+	 *            represent the execution state of the Envirorment which exploit
+	 *            the streamer the state transitions require a light to mantain
+	 *            the consequetially execution of phases
 	 **/
 	public void stream(ExecutionStates status, BufferedReader br)
 			throws IOException {
@@ -35,7 +46,7 @@ public class Streamer<T extends EventProcessor<StreamingEvent>> {
 		if (!ExecutionStates.READY.equals(status)) {
 			throw new WrongStatusTransitionException("Not Ready");
 		} else {
-			int count = 0, lineNumber = 0;
+			int streamedEvents = 0, lineNumber = 0;
 			String line;
 			Set<String[]> eventTriples;
 			while ((line = br.readLine()) != null) {
@@ -58,30 +69,25 @@ public class Streamer<T extends EventProcessor<StreamingEvent>> {
 				if (RDFSUtils.isDatatype(s[1]) || RDFSUtils.isType(s[1])) {
 					continue;
 				} else {
-					System.out.println(line);
+					Logger.getRootLogger().debug(line);
 					status = ExecutionStates.SENDING;
-					debug("SEND NEW EVENT");
+					Logger.getRootLogger().debug("SEND NEW EVENT");
 					eventTriples = new HashSet<String[]>();
 					eventTriples.add(s);
 					if (engine.sendEvent(new StreamingEvent(eventTriples,
 							lineNumber))) {
-						count++;
+						streamedEvents++;
 					} else {
-						debug("Not Saved");
+						Logger.getRootLogger().info("Not Saved");
 					}
 					status = ExecutionStates.READY;
 				}
 
 			}
-			debug("streamer count: " + count);
+			Logger.getRootLogger().info("Number of Events: " + streamedEvents);
 			br.close();
 
 		}
-	}
-
-	private void debug(String s) {
-		if (debug)
-			System.err.println(s);
 	}
 
 }

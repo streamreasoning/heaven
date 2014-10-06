@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.log4j.Logger;
+
 public class DatabaseManagerImpl extends DatabaseManager {
 
 	private static final String JDBC_SQLITE_OBQAATCEP_DB = "jdbc:sqlite:obqaatcep.db";
@@ -18,12 +20,12 @@ public class DatabaseManagerImpl extends DatabaseManager {
 		timestamp = System.currentTimeMillis();
 		Class.forName(ORG_SQLITE_JDBC);
 		c = DriverManager.getConnection(JDBC_SQLITE_OBQAATCEP_DB);
-		System.out.println("Opened database successfully");
+		Logger.getRootLogger().info("Opened database successfully");
 		stmt = c.createStatement();
 		stmt.executeUpdate(EXPERIMENT_TABLE);
 		stmt.executeUpdate(COMPARATION_TABLE);
 		stmt.close();
-		System.out.println("Table created successfully");
+		Logger.getRootLogger().info("Table created successfully");
 		return timestamp;
 	}
 
@@ -32,7 +34,7 @@ public class DatabaseManagerImpl extends DatabaseManager {
 		try {
 			stmt = c.createStatement();
 			if (sql != null && stmt != null && c != null && !c.isClosed()) {
-				System.out.println(sql);
+				Logger.getRootLogger().debug(sql);
 				stmt.executeUpdate(sql);
 				stmt.close();
 			} else {
@@ -47,7 +49,7 @@ public class DatabaseManagerImpl extends DatabaseManager {
 
 	@Override
 	public long close() throws ClassNotFoundException, SQLException {
-		System.out.println("Stop the Database System");
+		Logger.getRootLogger().info("Stop the Database System");
 //		stmt = c.createStatement();
 //		ResultSet rs = stmt.executeQuery("SELECT * FROM EXPERIMENT;");
 //		while (rs.next()) {
@@ -62,7 +64,7 @@ public class DatabaseManagerImpl extends DatabaseManager {
 //		rs.close();
 //		stmt.close();
 		c.close();
-		System.out.println("Closed database successfully");
+		Logger.getRootLogger().info("Closed database successfully");
 		return System.currentTimeMillis();
 	}
 
