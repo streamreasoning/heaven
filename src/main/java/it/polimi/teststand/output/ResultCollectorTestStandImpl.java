@@ -1,6 +1,7 @@
-package it.polimi.output.result;
+package it.polimi.teststand.output;
 
 import it.polimi.output.filesystem.FileManager;
+import it.polimi.output.result.ResultCollector;
 import it.polimi.output.sqllite.DatabaseManager;
 import it.polimi.teststand.events.TestResultEvent;
 import it.polimi.teststand.events.TestExperimentResultEvent;

@@ -1,8 +1,9 @@
-package it.polimi.output.result;
+package it.polimi.comparator.output;
 
 import it.polimi.comparator.events.ComparisonExperimentResult;
 import it.polimi.comparator.events.ComparisonResultEvent;
 import it.polimi.output.filesystem.FileManager;
+import it.polimi.output.result.ResultCollector;
 import it.polimi.output.sqllite.DatabaseManager;
 
 import java.io.IOException;

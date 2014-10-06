@@ -3,7 +3,6 @@ package it.polimi.teststand.core;
 import it.polimi.output.filesystem.FileManager;
 import it.polimi.output.filesystem.FileManagerImpl;
 import it.polimi.output.result.ResultCollector;
-import it.polimi.output.result.ResultCollectorTestStandImpl;
 import it.polimi.output.sqllite.DatabaseManagerImpl;
 import it.polimi.streamer.Streamer;
 import it.polimi.teststand.engine.RSPEngine;
@@ -12,6 +11,7 @@ import it.polimi.teststand.events.Experiment;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.TestResultEvent;
 import it.polimi.teststand.exceptions.WrongStatusTransitionException;
+import it.polimi.teststand.output.ResultCollectorTestStandImpl;
 
 import java.io.IOException;
 import java.sql.SQLException;
