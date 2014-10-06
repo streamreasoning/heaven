@@ -31,6 +31,7 @@ public class TestResultEvent extends ResultEvent implements Writable {
 
 		this.outputFileName = outputFileName;
 		this.all_triples = all_triples;
+		this.start_triples = start_triples;
 	}
 
 	@Override
@@ -54,7 +55,7 @@ public class TestResultEvent extends ResultEvent implements Writable {
 		}
 		key += "]";
 
-		String s = "<" + key + "> {";
+		String s = "<http://example.org/" + key.hashCode() + "> {";
 		for (String[] resource : all_triples) {
 			s += eol + "<" + resource[0] + ">" + "<" + resource[1] + ">" + "<"
 					+ resource[2] + "> .";

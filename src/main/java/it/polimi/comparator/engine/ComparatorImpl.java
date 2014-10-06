@@ -14,6 +14,7 @@ import java.util.Set;
 import org.apache.jena.riot.RDFDataMgr;
 
 import com.hp.hpl.jena.query.Dataset;
+import com.hp.hpl.jena.rdf.model.Model;
 
 public class ComparatorImpl extends EngineComparator {
 
@@ -37,7 +38,7 @@ public class ComparatorImpl extends EngineComparator {
 			resultCollector.storeEventResult(new ComparisonResultEvent(
 					experiment.getName(), e.getTripleToString(), e
 							.getEvent_timestamp(), experiment.getTimestamp(),
-					checkCompletenes(key), false, 0, 0));
+					isComplete(key), isSound(key), 0, 0));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -45,7 +46,7 @@ public class ComparatorImpl extends EngineComparator {
 		return true;
 	}
 
-	public boolean checkCompletenes(String key) {
+	public boolean isCorrect(String key) {
 		if (datasetList.size() > 2) {
 			_logger.info("Too much argumetns");
 			return false;
@@ -53,8 +54,21 @@ public class ComparatorImpl extends EngineComparator {
 		Dataset ref = datasetList.get(0);
 		boolean equals = ref.getNamedModel(key).isIsomorphicWith(
 				datasetList.get(1).getNamedModel(key));
+
 		System.out.println(equals);
 		return equals;
+	}
+
+	public boolean isComplete(String key) {
+		Model diff = datasetList.get(0).getNamedModel(key)
+				.difference(datasetList.get(1).getNamedModel(key));
+		return diff.isEmpty();
+	}
+
+	public boolean isSound(String key) {
+		Model diff = datasetList.get(1).getNamedModel(key)
+				.difference(datasetList.get(0).getNamedModel(key));
+		return diff.isEmpty();
 	}
 
 	private String getEventKey(Set<String[]> triples) {
