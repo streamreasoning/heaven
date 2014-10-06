@@ -1,7 +1,7 @@
 package it.polimi.output.result;
 
-import it.polimi.ExperimentEvent;
-import it.polimi.ResultEvent;
+import it.polimi.events.ExperimentEvent;
+import it.polimi.events.ResultEvent;
 
 import java.io.IOException;
 

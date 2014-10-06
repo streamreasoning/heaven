@@ -1,6 +1,6 @@
 package it.polimi.teststand.events;
 
-import it.polimi.ExperimentEvent;
+import it.polimi.events.ExperimentEvent;
 
 
 public class TestExperimentResultEvent extends ExperimentEvent  {

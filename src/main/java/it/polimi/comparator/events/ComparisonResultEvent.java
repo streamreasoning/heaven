@@ -1,6 +1,6 @@
 package it.polimi.comparator.events;
 
-import it.polimi.ResultEvent;
+import it.polimi.events.ResultEvent;
 import it.polimi.output.filesystem.Writable;
 
 public class ComparisonResultEvent extends ResultEvent implements Writable {

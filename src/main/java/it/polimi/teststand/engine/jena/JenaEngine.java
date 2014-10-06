@@ -105,7 +105,6 @@ public class JenaEngine extends RSPEngine {
 		try {
 			return resultCollector.storeEventResult(r);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return false;
 		}

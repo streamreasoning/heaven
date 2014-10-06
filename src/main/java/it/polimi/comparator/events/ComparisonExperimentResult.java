@@ -1,6 +1,6 @@
 package it.polimi.comparator.events;
 
-import it.polimi.ExperimentEvent;
+import it.polimi.events.ExperimentEvent;
 
 
 

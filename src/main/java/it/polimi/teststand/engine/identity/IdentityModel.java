@@ -31,7 +31,6 @@ public class IdentityModel extends RSPEngine {
 		try {
 			return getResultCollector().storeEventResult(r);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return false;
 		}

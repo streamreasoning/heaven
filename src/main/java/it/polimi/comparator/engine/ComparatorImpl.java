@@ -15,11 +15,11 @@ import org.apache.jena.riot.RDFDataMgr;
 
 import com.hp.hpl.jena.query.Dataset;
 
-public class ComparatorFirst extends EngineComparator {
+public class ComparatorImpl extends EngineComparator {
 
 	private List<Dataset> datasetList;
 
-	public ComparatorFirst(String[] comparing_files) {
+	public ComparatorImpl(String[] comparing_files) {
 		super(null, "Comparator First");
 		this.datasetList = new ArrayList<Dataset>();
 		for (String f : comparing_files) {
@@ -32,10 +32,12 @@ public class ComparatorFirst extends EngineComparator {
 	public boolean sendEvent(StreamingEvent e) {
 		String key = getEventKey(e.getEventTriples());
 		try {
+
+			// TODO mi vado a recuperare dal log memoria e latenza
 			resultCollector.storeEventResult(new ComparisonResultEvent(
 					experiment.getName(), e.getTripleToString(), e
 							.getEvent_timestamp(), experiment.getTimestamp(),
-					checkCompletenes(key), checkCompletenes(key), 0, 0));
+					checkCompletenes(key), false, 0, 0));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}

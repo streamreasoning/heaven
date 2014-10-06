@@ -1,6 +1,6 @@
 package it.polimi.teststand.events;
 
-import it.polimi.ResultEvent;
+import it.polimi.events.ResultEvent;
 import it.polimi.output.filesystem.Writable;
 
 import java.util.Arrays;
@@ -31,9 +31,6 @@ public class TestResultEvent extends ResultEvent implements Writable {
 
 		this.outputFileName = outputFileName;
 		this.all_triples = all_triples;
-		this.start_triples = start_triples;// TODO tenere separate le triple di
-											// input per
-		// accederle comodamente?
 	}
 
 	@Override

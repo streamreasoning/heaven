@@ -1,7 +1,7 @@
 package it.polimi.comparator;
 
 import it.polimi.comparator.core.CalibrationStand;
-import it.polimi.comparator.engine.ComparatorFirst;
+import it.polimi.comparator.engine.ComparatorImpl;
 import it.polimi.comparator.engine.EngineComparator;
 
 public class ComparatorMain {
@@ -13,7 +13,7 @@ public class ComparatorMain {
 		String[] files = new String[] { "file1.txt" };
 
 		CalibrationStand<EngineComparator> stand = new CalibrationStand<EngineComparator>(
-				comparing_files, files, new ComparatorFirst(comparing_files));
+				comparing_files, files, new ComparatorImpl(comparing_files));
 
 		stand.turnOn();
 		stand.run();

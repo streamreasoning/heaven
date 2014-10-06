@@ -71,7 +71,6 @@ public abstract class RSPEngine extends EventProcessor<StreamingEvent> {
 		_logger.setLevel((Level) Level.INFO);
 	}
 
-	// TODO can be used to execute a query in the last part
 	public abstract void turnOn();
 
 	public abstract void turnOff();
