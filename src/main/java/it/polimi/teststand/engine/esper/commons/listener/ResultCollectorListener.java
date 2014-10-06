@@ -45,6 +45,7 @@ public class ResultCollectorListener extends GenearlListener {
 			Storable storableEvent = (Storable) eventBean.getUnderlying();
 
 			statements.addAll(storableEvent.getTriples());
+			
 			if (eventBean.get("channel").equals("Input")) {
 				start_triples.addAll(storableEvent.getTriples());
 			}

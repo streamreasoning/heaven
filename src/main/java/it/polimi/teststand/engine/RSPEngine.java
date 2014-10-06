@@ -31,15 +31,14 @@ public abstract class RSPEngine extends EventProcessor<StreamingEvent> {
 	protected static Logger _logger;
 	protected static PatternLayout sl = new PatternLayout(
 			"%C{1}-%d{HH:mm:ss.SS} - %t-%x-%-5p-%-10c:%m%n");
-	protected ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector;
 
-	protected Experiment experiment;
+	protected ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector;
 	protected TestExperimentResultEvent er;
+	protected Experiment experiment;
 
 	protected String name;
 
 	protected static int time = 0;
-	protected static Boolean BUSY = false;
 
 	public RSPEngine(
 			ResultCollector<TestResultEvent, TestExperimentResultEvent> storeSystem) {
@@ -48,14 +47,6 @@ public abstract class RSPEngine extends EventProcessor<StreamingEvent> {
 
 	public String getName() {
 		return name;
-	}
-
-	public abstract boolean startProcessing(Experiment e);
-
-	public abstract Experiment stopProcessing();
-
-	public boolean isBusy() {
-		return BUSY;
 	}
 
 	protected void sendTimeEvent() {
@@ -70,6 +61,10 @@ public abstract class RSPEngine extends EventProcessor<StreamingEvent> {
 		_logger.addAppender(appender);
 		_logger.setLevel((Level) Level.INFO);
 	}
+
+	public abstract boolean startProcessing(Experiment e);
+
+	public abstract Experiment stopProcessing();
 
 	public abstract void turnOn();
 

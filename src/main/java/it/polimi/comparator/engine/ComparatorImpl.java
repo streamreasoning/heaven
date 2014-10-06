@@ -31,7 +31,7 @@ public class ComparatorImpl extends EngineComparator {
 
 	@Override
 	public boolean sendEvent(StreamingEvent e) {
-		String key = getEventKey(e.getEventTriples());
+		String key ="<http://example.com"+ getEventKey(e.getEventTriples()).hashCode()+">";
 		try {
 
 			// TODO mi vado a recuperare dal log memoria e latenza
@@ -60,14 +60,18 @@ public class ComparatorImpl extends EngineComparator {
 	}
 
 	public boolean isComplete(String key) {
-		Model diff = datasetList.get(0).getNamedModel(key)
-				.difference(datasetList.get(1).getNamedModel(key));
+		Dataset jena = datasetList.get(0);
+		Dataset engine =datasetList.get(1);
+		Model diff = jena.getNamedModel(key)
+				.difference(engine.getNamedModel(key));
 		return diff.isEmpty();
 	}
 
 	public boolean isSound(String key) {
-		Model diff = datasetList.get(1).getNamedModel(key)
-				.difference(datasetList.get(0).getNamedModel(key));
+		Dataset jena = datasetList.get(0);
+		Dataset engine =datasetList.get(1);
+		Model diff = engine.getNamedModel(key)
+				.difference(jena.getNamedModel(key));
 		return diff.isEmpty();
 	}
 

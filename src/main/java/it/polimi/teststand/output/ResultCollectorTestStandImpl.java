@@ -37,8 +37,8 @@ public class ResultCollectorTestStandImpl implements
 		fs.toFile(r.getOutputFileName(), r); // TrigFile
 		long queryLatency = r.getResultTimestamp() - r.getEvent_timestamp();
 		fs.toFile(FileManager.LOG_PATH + r.getFolder(),
-				"LOG_" + r.getExperiment_timestamp(), (r.getStartTripleEvent()
-						+ "," + r.getEvent_id() + ",Memory," + queryLatency)
+				"LOG_" + r.getExperiment_timestamp(), (r.getEvent_id()
+						+ "," + r.getEvent_timestamp() + ",Memory," + queryLatency)
 						.getBytes());
 		return true;
 	}

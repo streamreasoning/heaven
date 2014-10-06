@@ -36,13 +36,14 @@ public class Materialize {
 		// Streamer.stream(new ExampleONT_02());
 
 		Model m = FileManager.get().loadModel(
-				"/Jena-LUBM/src/main/resources/data/inference/univ-bench-rdfs.rdf", null, "RDF/XML");
+				"src/main/resource/data/inference/univ-bench-rdfs.rdf", null,
+				"RDF/XML");
 
 		reasoner = ReasonerRegistry.getRDFSReasoner();
 		InfModel infmodel = ModelFactory.createInfModel(reasoner, m);
 
 		File file = new File(
-				"/Jena-LUBM/src/main/resources/data/inference/univ-bench-rdfs-materialized.rdf");
+				"src/main/resource/data/inference/univ-bench-rdfs-materialized-total.rdf");
 
 		try (FileOutputStream fop = new FileOutputStream(file)) {
 			if (!file.exists()) {

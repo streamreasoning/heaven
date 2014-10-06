@@ -55,7 +55,8 @@ public class JenaEngine extends RSPEngine {
 	private static InfModel abox_star;
 	int i = 0;
 
-	public JenaEngine(ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector) {
+	public JenaEngine(
+			ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector) {
 		super(resultCollector);
 		this.name = "jena";
 		FileManager.get().addLocatorClassLoader(
@@ -81,8 +82,8 @@ public class JenaEngine extends RSPEngine {
 
 		// abox_star = ModelFactory.createRDFSModel(tbox_star, abox);
 
-		// Reasoner reasoner = getRDFSSimpleReasoner();
-		Reasoner reasoner = getReducedReasoner();
+		Reasoner reasoner = getRDFSSimpleReasoner();
+		// Reasoner reasoner = getReducedReasoner();
 
 		InfGraph graph = reasoner.bindSchema(tbox_star.getGraph()).bind(
 				abox.getGraph());
@@ -98,10 +99,10 @@ public class JenaEngine extends RSPEngine {
 					t.getPredicate().toString(), t.getObject().toString() });
 		}
 
-		TestResultEvent r = new TestResultEvent(statements, e.getEventTriples(),
-				e.getEvent_timestamp(), experiment.getOutputFileName(),
-				experiment.getName(), experiment.getTimestamp(),
-				e.getLineNumber());
+		TestResultEvent r = new TestResultEvent(statements,
+				e.getEventTriples(), e.getEvent_timestamp(),
+				experiment.getOutputFileName(), experiment.getName(),
+				experiment.getTimestamp(), e.getLineNumber());
 		try {
 			return resultCollector.storeEventResult(r);
 		} catch (IOException e1) {
@@ -111,7 +112,7 @@ public class JenaEngine extends RSPEngine {
 
 	}
 
-	//TODO discuss about what reasoner
+	// TODO discuss about what reasoner
 	@SuppressWarnings("unused")
 	private Reasoner getRDFSSimpleReasoner() {
 		Reasoner reasoner = ReasonerRegistry.getRDFSReasoner();
