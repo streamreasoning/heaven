@@ -2,7 +2,6 @@ package it.polimi.output.sqllite;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -21,7 +20,8 @@ public class DatabaseManagerImpl extends DatabaseManager {
 		c = DriverManager.getConnection(JDBC_SQLITE_OBQAATCEP_DB);
 		System.out.println("Opened database successfully");
 		stmt = c.createStatement();
-		stmt.executeUpdate(sql);
+		stmt.executeUpdate(EXPERIMENT_TABLE);
+		stmt.executeUpdate(COMPARATION_TABLE);
 		stmt.close();
 		System.out.println("Table created successfully");
 		return timestamp;

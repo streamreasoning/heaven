@@ -2,7 +2,7 @@ package it.polimi.teststand.engine.esper.commons.listener;
 
 import it.polimi.output.result.ResultCollector;
 import it.polimi.output.result.Storable;
-import it.polimi.teststand.events.EventResult;
+import it.polimi.teststand.events.TestResultEvent;
 import it.polimi.teststand.events.Experiment;
 
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class ResultCollectorListener extends GenearlListener {
 
 	public void update(EventBean[] newEvents, EventBean[] oldEvents) {
 
-		EventResult eventToSend;
+		TestResultEvent eventToSend;
 		Set<String[]> statements = new HashSet<String[]>();
 		Set<String[]> start_triples = new HashSet<String[]>();
 		for (EventBean eventBean : newEvents) {
@@ -49,7 +49,7 @@ public class ResultCollectorListener extends GenearlListener {
 			}
 		}
 
-		eventToSend = new EventResult(statements, start_triples,
+		eventToSend = new TestResultEvent(statements, start_triples,
 				(long) newEvents[0].get("app_timestamp"),
 				experiment.getOutputFileName(), experiment.getName(),
 				experiment.getTimestamp(),lineNumber);

@@ -1,7 +1,9 @@
 package it.polimi.teststand.events;
 
+import it.polimi.ExperimentEvent;
 
-public class ExperimentResult extends Event  {
+
+public class TestExperimentResultEvent extends ExperimentEvent  {
 
 	private String exp_id, inputFile, resultFile, logFolderPath;
 	private long timestamp_init;
@@ -19,7 +21,7 @@ public class ExperimentResult extends Event  {
 		return timestamp_init;
 	}
 
-	public ExperimentResult(String inputFile, String resultFile,
+	public TestExperimentResultEvent(String inputFile, String resultFile,
 			String logFolderPath) {
 		timestamp_init = System.currentTimeMillis();
 		this.inputFile = inputFile;

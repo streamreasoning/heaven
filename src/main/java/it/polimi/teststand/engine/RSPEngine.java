@@ -3,7 +3,7 @@ package it.polimi.teststand.engine;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.streamer.EventProcessor;
 import it.polimi.teststand.events.Experiment;
-import it.polimi.teststand.events.ExperimentResult;
+import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.StreamingEvent;
 
 import org.apache.log4j.ConsoleAppender;
@@ -33,7 +33,7 @@ public abstract class RSPEngine extends EventProcessor<StreamingEvent> {
 	protected ResultCollector resultCollector;
 
 	protected Experiment experiment;
-	protected ExperimentResult er;
+	protected TestExperimentResultEvent er;
 
 	protected String name;
 

@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Streamer<T extends EventProcessor> {
+public class Streamer<T extends EventProcessor<StreamingEvent>> {
 
 	public static final boolean USEDATATYPEPROPERTIES = false;
 	public static final boolean USESHEMAPROPERTIES = false;
@@ -58,6 +58,7 @@ public class Streamer<T extends EventProcessor> {
 				if (RDFSUtils.isDatatype(s[1]) || RDFSUtils.isType(s[1])) {
 					continue;
 				} else {
+					System.out.println(line);
 					status = ExecutionStates.SENDING;
 					debug("SEND NEW EVENT");
 					eventTriples = new HashSet<String[]>();

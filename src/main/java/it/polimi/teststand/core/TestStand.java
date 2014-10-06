@@ -3,7 +3,7 @@ package it.polimi.teststand.core;
 import it.polimi.output.filesystem.FileManager;
 import it.polimi.output.filesystem.FileManagerImpl;
 import it.polimi.output.result.ResultCollector;
-import it.polimi.output.result.ResultCollectorImpl;
+import it.polimi.output.result.ResultCollectorTestStandImpl;
 import it.polimi.output.sqllite.DatabaseManagerImpl;
 import it.polimi.streamer.Streamer;
 import it.polimi.teststand.engine.RSPEngine;
@@ -25,7 +25,7 @@ public class TestStand<T extends RSPEngine> {
 	public TestStand(String[] files, T rspEngine)
 			throws ClassNotFoundException, SQLException {
 		this.files = files;
-		resultCollector = new ResultCollectorImpl(new FileManagerImpl(),
+		resultCollector = new ResultCollectorTestStandImpl(new FileManagerImpl(),
 				new DatabaseManagerImpl());
 		this.rspEngine = rspEngine;
 		rspEngine.setResultCollector(resultCollector);

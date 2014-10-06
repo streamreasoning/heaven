@@ -1,9 +1,12 @@
-package it.polimi.comparator;
+package it.polimi.comparator.core;
 
+import it.polimi.comparator.engine.EngineComparator;
+import it.polimi.comparator.events.ComparisonExperimentResult;
+import it.polimi.comparator.events.ComparisonResultEvent;
 import it.polimi.output.filesystem.FileManager;
 import it.polimi.output.filesystem.FileManagerImpl;
 import it.polimi.output.result.ResultCollector;
-import it.polimi.output.result.ResultCollectorImpl;
+import it.polimi.output.result.ResultCollectorComparator;
 import it.polimi.output.sqllite.DatabaseManagerImpl;
 import it.polimi.streamer.Streamer;
 import it.polimi.teststand.enums.ExecutionStates;
@@ -16,8 +19,8 @@ import java.sql.SQLException;
 public class CalibrationStand<T extends EngineComparator> {
 
 	private ExecutionStates status = ExecutionStates.OFF;
-	private ResultCollector resultCollector;
-	private T rspEngine;
+	private ResultCollector<ComparisonResultEvent, ComparisonExperimentResult> resultCollector;
+	private T engine;
 	private Streamer<T> streamer;
 	private String[] files, comparing_files;
 
@@ -25,12 +28,11 @@ public class CalibrationStand<T extends EngineComparator> {
 			throws ClassNotFoundException, SQLException {
 		this.comparing_files = comparing_files;
 		this.files = files;
-
-		resultCollector = new ResultCollectorImpl(new FileManagerImpl(),
+		resultCollector = new ResultCollectorComparator(new FileManagerImpl(),
 				new DatabaseManagerImpl());
-		this.rspEngine = engine;
+		this.engine = engine;
+		engine.setResultCollector(resultCollector);
 		streamer = new Streamer<T>(engine);
-
 	}
 
 	public void run() {
@@ -42,24 +44,18 @@ public class CalibrationStand<T extends EngineComparator> {
 				comparing_fileName += "_" + s;
 
 			}
-			if (rspEngine
-					.startProcessing(new Experiment(rspEngine.getName(),
+			if (engine
+					.startProcessing(new Experiment(engine.getName(),
 							FileManager.DATA_FILE_PATH + "output/"
 									+ comparing_fileName,
-							FileManager.DATA_FILE_PATH
-									+ "output_comparator/"
-									+ rspEngine.getName()
-									+ "/_Result_"
-									+ comparing_fileName+".txt"))) {
+							FileManager.DATA_FILE_PATH + "output_comparator/"
+									+ engine.getName() + "/_Result_"
+									+ comparing_fileName + ".txt"))) {
 				status = ExecutionStates.READY;
 			}
+			
 			for (String fileName : files) {
 				try {
-					/*
-					 * TODO metodo statico per ottenre il bugger di lettura, ho
-					 * preferito lasciare tutto l'accesso al filesystem nella
-					 * stessa classe
-					 */
 					streamer.stream(
 							status,
 							FileManager.getBuffer(FileManager.DATA_FILE_PATH
@@ -69,7 +65,7 @@ public class CalibrationStand<T extends EngineComparator> {
 				}
 
 			}
-			rspEngine.stopProcessing();
+			engine.stopProcessing();
 			status = ExecutionStates.ON;
 		}
 
@@ -78,7 +74,7 @@ public class CalibrationStand<T extends EngineComparator> {
 	public ExecutionStates turnOff() {
 		if (isOn()) {
 			resultCollector.stop();
-			rspEngine.turnOff();
+			engine.turnOff();
 			this.status = ExecutionStates.OFF;
 			return status;
 		} else {
@@ -91,7 +87,7 @@ public class CalibrationStand<T extends EngineComparator> {
 	public ExecutionStates turnOn() {
 		if (isOFF()) {
 			resultCollector.start();
-			rspEngine.turnOn();
+			engine.turnOn();
 			this.status = ExecutionStates.ON;
 			return status;
 		} else {

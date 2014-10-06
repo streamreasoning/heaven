@@ -7,15 +7,19 @@ public class StreamingEvent extends Event {
 
 	@Override
 	public String toString() {
+		return "StreamingEvent [eventTriples=" + getTripleToString() + ", id="
+				+ id + ", event_timestamp=" + event_timestamp + ", ignore="
+				+ ignore + "]";
+	}
+
+	public String getTripleToString() {
 		String triples = "";
 		for (String[] triple : eventTriples) {
 			triples += Arrays.deepToString(triple)
 					+ System.getProperty("line.separator");
 
 		}
-		return "StreamingEvent [eventTriples=" + triples + ", id=" + id
-				+ ", event_timestamp=" + event_timestamp + ", ignore=" + ignore
-				+ "]";
+		return triples;
 	}
 
 	private Set<String[]> eventTriples;

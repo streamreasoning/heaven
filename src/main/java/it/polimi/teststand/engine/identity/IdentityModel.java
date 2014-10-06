@@ -3,9 +3,9 @@ package it.polimi.teststand.engine.identity;
 import it.polimi.output.filesystem.FileManagerImpl;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.teststand.engine.RSPEngine;
-import it.polimi.teststand.events.EventResult;
+import it.polimi.teststand.events.TestResultEvent;
 import it.polimi.teststand.events.Experiment;
-import it.polimi.teststand.events.ExperimentResult;
+import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.StreamingEvent;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class IdentityModel extends RSPEngine {
 			return false;
 		}
 
-		EventResult r = new EventResult(e.getEventTriples(),
+		TestResultEvent r = new TestResultEvent(e.getEventTriples(),
 				e.getEventTriples(), e.getEvent_timestamp(),
 				experiment.getOutputFileName(), experiment.getName(),
 				experiment.getTimestamp(), e.getLineNumber());
@@ -42,7 +42,7 @@ public class IdentityModel extends RSPEngine {
 	public boolean startProcessing(Experiment e) {
 		if (e != null) {
 			this.experiment = e;
-			er = new ExperimentResult(e.getInputFileName(),
+			er = new TestExperimentResultEvent(e.getInputFileName(),
 					e.getOutputFileName(), FileManagerImpl.LOG_PATH
 							+ e.getTimestamp());
 			return true;

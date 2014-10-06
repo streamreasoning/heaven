@@ -1,11 +1,12 @@
 package it.polimi.teststand.events;
 
+import it.polimi.ResultEvent;
 import it.polimi.output.filesystem.Writable;
 
 import java.util.Arrays;
 import java.util.Set;
 
-public class EventResult  extends Event implements Writable {
+public class TestResultEvent extends ResultEvent implements Writable {
 
 	private Set<String[]> all_triples;
 	private Set<String[]> start_triples;
@@ -15,9 +16,10 @@ public class EventResult  extends Event implements Writable {
 	private long event_timestamp;
 	private long experiment_timestamp;
 
-	public EventResult(Set<String[]> all_triples, Set<String[]> start_triples,
-			long event_timestamp, String outputFileName, String folder,
-			long experiment_timestamp, int lineNumber) {
+	public TestResultEvent(Set<String[]> all_triples,
+			Set<String[]> start_triples, long event_timestamp,
+			String outputFileName, String folder, long experiment_timestamp,
+			int lineNumber) {
 		this.folder = folder;
 		this.result_timestamp = System.currentTimeMillis();
 		this.event_timestamp = event_timestamp;
@@ -47,7 +49,15 @@ public class EventResult  extends Event implements Writable {
 	 * **/
 	public String toString() {
 		String eol = System.getProperty("line.separator");
-		String s = event_id + " {";
+		// TODO explain different in terms of keys
+		String key = "[";
+		for (String[] triple : start_triples) {
+			key += Arrays.deepToString(triple);
+
+		}
+		key += "]";
+
+		String s = "<" + key + "> {";
 		for (String[] resource : all_triples) {
 			s += eol + "<" + resource[0] + ">" + "<" + resource[1] + ">" + "<"
 					+ resource[2] + "> .";

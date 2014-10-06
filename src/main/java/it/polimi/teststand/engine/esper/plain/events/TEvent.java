@@ -1,7 +1,7 @@
 package it.polimi.teststand.engine.esper.plain.events;
 
 import it.polimi.output.result.Storable;
-import it.polimi.teststand.events.EventResult;
+import it.polimi.teststand.events.TestResultEvent;
 import it.polimi.teststand.events.Experiment;
 
 import java.util.Arrays;
@@ -78,7 +78,7 @@ public class TEvent  implements Storable{
 	}
 
 	@Override
-	public EventResult toEventResult(Experiment e) {
+	public TestResultEvent toEventResult(Experiment e) {
 		// TODO Auto-generated method stub
 		return null;
 	}

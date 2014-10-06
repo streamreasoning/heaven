@@ -6,10 +6,10 @@ import it.polimi.teststand.engine.RSPEngine;
 import it.polimi.teststand.engine.esper.commons.listener.ResultCollectorListener;
 import it.polimi.teststand.engine.esper.plain.events.Out;
 import it.polimi.teststand.engine.esper.plain.events.TEvent;
-import it.polimi.teststand.events.Event;
 import it.polimi.teststand.events.Experiment;
-import it.polimi.teststand.events.ExperimentResult;
 import it.polimi.teststand.events.StreamingEvent;
+import it.polimi.teststand.events.TestExperimentResultEvent;
+import it.polimi.teststand.events.TestResultEvent;
 
 import java.util.Set;
 
@@ -43,7 +43,8 @@ public class PlainMultipleInheritance extends RSPEngine {
 	public Integer iterationNumber = 0;
 	private ResultCollectorListener listener;
 
-	public PlainMultipleInheritance(ResultCollector storeSystem) {
+	public PlainMultipleInheritance(
+			ResultCollector<TestResultEvent, TestExperimentResultEvent> storeSystem) {
 		super(storeSystem);
 		this.name = "plain";
 	}
@@ -74,7 +75,6 @@ public class PlainMultipleInheritance extends RSPEngine {
 			esperEvent = new TEvent(new String[] { eventTriple[0] },
 					eventTriple[1], new String[] { eventTriple[2] }, "Input",
 					cepRT.getCurrentTime());
-			System.out.println("Esper Event " + esperEvent.toString());
 			cepRT.sendEvent(esperEvent);
 		}
 		sendTimeEvent();
@@ -93,7 +93,7 @@ public class PlainMultipleInheritance extends RSPEngine {
 			this.experiment = e;
 			cepRT.sendEvent(new CurrentTimeEvent(time));
 			initQueries();
-			er = new ExperimentResult(e.getInputFileName(),
+			er = new TestExperimentResultEvent(e.getInputFileName(),
 					e.getOutputFileName(), FileManagerImpl.LOG_PATH
 							+ e.getTimestamp());
 

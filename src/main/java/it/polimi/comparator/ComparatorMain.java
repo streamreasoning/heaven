@@ -1,5 +1,9 @@
 package it.polimi.comparator;
 
+import it.polimi.comparator.core.CalibrationStand;
+import it.polimi.comparator.engine.ComparatorFirst;
+import it.polimi.comparator.engine.EngineComparator;
+
 public class ComparatorMain {
 
 	public static void main(String[] args) throws Exception {

@@ -1,16 +1,16 @@
 package it.polimi.output.result;
 
+import it.polimi.ExperimentEvent;
+import it.polimi.ResultEvent;
+
 import java.io.IOException;
 
-import it.polimi.teststand.events.EventResult;
-import it.polimi.teststand.events.ExperimentResult;
 
+public interface ResultCollector<T extends ResultEvent, E extends ExperimentEvent> {
 
-public interface ResultCollector {
+	public boolean storeEventResult(T r) throws IOException; 
 
-	public boolean storeEventResult(EventResult r) throws IOException; 
-
-	public boolean storeExperimentResult(ExperimentResult r);
+	public boolean storeExperimentResult(E r);
 
 	public long stop();
 
