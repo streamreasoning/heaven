@@ -21,10 +21,10 @@ package it.polimi.teststand.engine.jena;
 import it.polimi.output.filesystem.FileManagerImpl;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.teststand.engine.RSPEngine;
-import it.polimi.teststand.events.TestResultEvent;
 import it.polimi.teststand.events.Experiment;
-import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.StreamingEvent;
+import it.polimi.teststand.events.TestExperimentResultEvent;
+import it.polimi.teststand.events.TestResultEvent;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -55,7 +55,7 @@ public class JenaEngine extends RSPEngine {
 	private static InfModel abox_star;
 	int i = 0;
 
-	public JenaEngine(ResultCollector resultCollector) {
+	public JenaEngine(ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector) {
 		super(resultCollector);
 		this.name = "jena";
 		FileManager.get().addLocatorClassLoader(
@@ -112,6 +112,8 @@ public class JenaEngine extends RSPEngine {
 
 	}
 
+	//TODO discuss about what reasoner
+	@SuppressWarnings("unused")
 	private Reasoner getRDFSSimpleReasoner() {
 		Reasoner reasoner = ReasonerRegistry.getRDFSReasoner();
 		reasoner.setParameter(ReasonerVocabulary.PROPsetRDFSLevel,

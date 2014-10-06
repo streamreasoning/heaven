@@ -9,6 +9,8 @@ import it.polimi.streamer.Streamer;
 import it.polimi.teststand.engine.RSPEngine;
 import it.polimi.teststand.enums.ExecutionStates;
 import it.polimi.teststand.events.Experiment;
+import it.polimi.teststand.events.TestExperimentResultEvent;
+import it.polimi.teststand.events.TestResultEvent;
 import it.polimi.teststand.exceptions.WrongStatusTransitionException;
 
 import java.io.IOException;
@@ -17,7 +19,7 @@ import java.sql.SQLException;
 public class TestStand<T extends RSPEngine> {
 
 	private ExecutionStates status = ExecutionStates.OFF;
-	private ResultCollector resultCollector;
+	private ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector;
 	private T rspEngine;
 	private Streamer<RSPEngine> streamer;
 	private String[] files;

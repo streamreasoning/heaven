@@ -2,6 +2,7 @@ package it.polimi.teststand.engine.esper.commons.listener;
 
 import it.polimi.output.result.ResultCollector;
 import it.polimi.output.result.Storable;
+import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.TestResultEvent;
 import it.polimi.teststand.events.Experiment;
 
@@ -15,7 +16,7 @@ import com.espertech.esper.client.EventBean;
 
 public class ResultCollectorListener extends GenearlListener {
 
-	ResultCollector resultCollector;
+	ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector;
 	Experiment experiment;
 	private Integer lineNumber;
 
@@ -27,7 +28,7 @@ public class ResultCollectorListener extends GenearlListener {
 		this.lineNumber = lineNumber;
 	}
 
-	public ResultCollectorListener(ResultCollector resultCollector, Experiment e) {
+	public ResultCollectorListener(ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector, Experiment e) {
 		super(Level.INFO);
 		this.resultCollector = resultCollector;
 		this.experiment = e;

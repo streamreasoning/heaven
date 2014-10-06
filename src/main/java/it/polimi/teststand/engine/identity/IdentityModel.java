@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class IdentityModel extends RSPEngine {
 
-	public IdentityModel(ResultCollector resultCollector) {
+	public IdentityModel(ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector) {
 		super(resultCollector);
 	}
 

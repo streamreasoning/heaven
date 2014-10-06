@@ -5,6 +5,7 @@ import it.polimi.streamer.EventProcessor;
 import it.polimi.teststand.events.Experiment;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.StreamingEvent;
+import it.polimi.teststand.events.TestResultEvent;
 
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
@@ -30,7 +31,7 @@ public abstract class RSPEngine extends EventProcessor<StreamingEvent> {
 	protected static Logger _logger;
 	protected static PatternLayout sl = new PatternLayout(
 			"%C{1}-%d{HH:mm:ss.SS} - %t-%x-%-5p-%-10c:%m%n");
-	protected ResultCollector resultCollector;
+	protected ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector;
 
 	protected Experiment experiment;
 	protected TestExperimentResultEvent er;
@@ -40,7 +41,8 @@ public abstract class RSPEngine extends EventProcessor<StreamingEvent> {
 	protected static int time = 0;
 	protected static Boolean BUSY = false;
 
-	public RSPEngine(ResultCollector storeSystem) {
+	public RSPEngine(
+			ResultCollector<TestResultEvent, TestExperimentResultEvent> storeSystem) {
 		this.setResultCollector(storeSystem);
 	}
 
@@ -74,11 +76,12 @@ public abstract class RSPEngine extends EventProcessor<StreamingEvent> {
 
 	public abstract void turnOff();
 
-	public ResultCollector getResultCollector() {
+	public ResultCollector<TestResultEvent, TestExperimentResultEvent> getResultCollector() {
 		return resultCollector;
 	}
 
-	public void setResultCollector(ResultCollector resultCollector) {
+	public void setResultCollector(
+			ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector) {
 		this.resultCollector = resultCollector;
 	}
 
