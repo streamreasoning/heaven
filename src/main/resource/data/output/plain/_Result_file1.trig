@@ -1,0 +1,14 @@
+<http://example.org/line=1/1412529451257/1412529451270> {
+<http://www.Department1.University0.edu><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://swat.cse.lehigh.edu/onto/univ-bench.owl#Organization> .
+<http://www.University0.edu><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://swat.cse.lehigh.edu/onto/univ-bench.owl#Organization> .
+<http://www.Department1.University0.edu><http://swat.cse.lehigh.edu/onto/univ-bench.owl#subOrganizationOf><http://www.University0.edu> .
+<http://www.University0.edu><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2000/01/rdf-schema#Resource> .
+<http://www.Department1.University0.edu><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2000/01/rdf-schema#Resource> .
+}
+<http://example.org/line=2/1412529451280/1412529451281> {
+<http://www.Department1.University0.edu/FullProfessor1><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2000/01/rdf-schema#Resource> .
+<http://www.Department1.University0.edu/GraduateCourse2><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://swat.cse.lehigh.edu/onto/univ-bench.owl#Course> .
+<http://www.Department1.University0.edu/FullProfessor1><http://swat.cse.lehigh.edu/onto/univ-bench.owl#teacherOf><http://www.Department1.University0.edu/GraduateCourse2> .
+<http://www.Department1.University0.edu/GraduateCourse2><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2000/01/rdf-schema#Resource> .
+<http://www.Department1.University0.edu/FullProfessor1><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://swat.cse.lehigh.edu/onto/univ-bench.owl#Faculty> .
+}

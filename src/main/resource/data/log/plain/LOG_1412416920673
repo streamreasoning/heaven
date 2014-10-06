@@ -1,0 +1,2 @@
+[[http://www.Department1.University0.edu, http://swat.cse.lehigh.edu/onto/univ-bench.owl#subOrganizationOf, http://www.University0.edu]],<http://example.org/line=1/1412416921301/1412416921313>,Memory,12
+[[http://www.Department1.University0.edu/FullProfessor1, http://swat.cse.lehigh.edu/onto/univ-bench.owl#teacherOf, http://www.Department1.University0.edu/GraduateCourse2]],<http://example.org/line=2/1412416921314/1412416921315>,Memory,1
