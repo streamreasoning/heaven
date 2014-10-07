@@ -27,8 +27,8 @@ public class TestStand<T extends RSPEngine> {
 	public TestStand(String[] files, T rspEngine)
 			throws ClassNotFoundException, SQLException {
 		this.files = files;
-		resultCollector = new ResultCollectorTestStandImpl(new FileManagerImpl(),
-				new DatabaseManagerImpl());
+		resultCollector = new ResultCollectorTestStandImpl(
+				new FileManagerImpl(), new DatabaseManagerImpl());
 		this.rspEngine = rspEngine;
 		rspEngine.setResultCollector(resultCollector);
 		streamer = new Streamer<RSPEngine>(rspEngine);
@@ -40,15 +40,13 @@ public class TestStand<T extends RSPEngine> {
 		} else {
 
 			for (String fileName : files) {
-				if (rspEngine
-						.startProcessing(new Experiment(rspEngine.getName(),
-								FileManager.DATA_FILE_PATH + "input/"
-										+ fileName, FileManager.DATA_FILE_PATH
-										+ "output/"
-										+ rspEngine.getName()
-										+ "/_Result_"
-										+ fileName.substring(0,
-												fileName.length() - 3) + "trig"))) {
+				if (rspEngine.startProcessing(new Experiment("EXPERIMENT_ON_"
+						+ fileName + "_WITH_ENGINE_" + rspEngine.getName(),
+						FileManager.DATA_FILE_PATH + "input/" + fileName,
+						FileManager.DATA_FILE_PATH + "output/"
+								+ rspEngine.getName() + "/_Result_"
+								+ fileName.substring(0, fileName.length() - 3)
+								+ "trig"))) {
 					status = ExecutionStates.READY;
 				}
 

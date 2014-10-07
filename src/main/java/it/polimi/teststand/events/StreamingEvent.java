@@ -1,5 +1,7 @@
 package it.polimi.teststand.events;
 
+import it.polimi.events.Event;
+
 import java.util.Arrays;
 import java.util.Set;
 

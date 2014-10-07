@@ -1,36 +1,20 @@
 package it.polimi.teststand.events;
 
+import it.polimi.events.Event;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class Experiment extends Event {
 
-	private String inputFileName, outputFileName, name;
+	private String inputFileName, outputFileName;
 	private Long timestamp;
 
 	public Experiment(String name, String inputFileName, String outputFileName) {
-		this.name = name;
+		setName(name);
 		this.inputFileName = inputFileName;
 		this.outputFileName = outputFileName;
 		this.timestamp = System.currentTimeMillis();
 	}
-
-	public Long getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(Long timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	public String getOutputFileName() {
-		return outputFileName;
-	}
-
-	public String getInputFileName() {
-		return inputFileName;
-	}
-
-	public String getName() {
-		return name;
-	}
-
 }
