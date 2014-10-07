@@ -4,13 +4,13 @@ import it.polimi.comparator.engine.EngineComparator;
 import it.polimi.comparator.events.ComparisonExperimentResult;
 import it.polimi.comparator.events.ComparisonResultEvent;
 import it.polimi.comparator.output.ResultCollectorComparator;
+import it.polimi.events.Experiment;
 import it.polimi.output.filesystem.FileManager;
 import it.polimi.output.filesystem.FileManagerImpl;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.output.sqllite.DatabaseManagerImpl;
 import it.polimi.streamer.Streamer;
 import it.polimi.teststand.enums.ExecutionStates;
-import it.polimi.teststand.events.Experiment;
 import it.polimi.teststand.exceptions.WrongStatusTransitionException;
 
 import java.io.IOException;

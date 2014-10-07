@@ -1,8 +1,8 @@
 package it.polimi.teststand.engine.esper.commons.listener;
 
+import it.polimi.events.Experiment;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.output.result.Storable;
-import it.polimi.teststand.events.Experiment;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.TestResultEvent;
 

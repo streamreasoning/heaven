@@ -1,9 +1,9 @@
 package it.polimi.comparator.engine;
 
 import it.polimi.comparator.events.ComparisonResultEvent;
+import it.polimi.events.Experiment;
+import it.polimi.events.StreamingEvent;
 import it.polimi.output.filesystem.FileManager;
-import it.polimi.teststand.events.Experiment;
-import it.polimi.teststand.events.StreamingEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;

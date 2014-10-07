@@ -1,7 +1,7 @@
 package it.polimi.streamer;
 
+import it.polimi.events.StreamingEvent;
 import it.polimi.teststand.enums.ExecutionStates;
-import it.polimi.teststand.events.StreamingEvent;
 import it.polimi.teststand.exceptions.WrongStatusTransitionException;
 import it.polimi.teststand.utils.RDFSUtils;
 

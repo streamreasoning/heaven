@@ -1,7 +1,7 @@
 package it.polimi.output.result;
 
+import it.polimi.events.Experiment;
 import it.polimi.teststand.events.TestResultEvent;
-import it.polimi.teststand.events.Experiment;
 
 import java.util.Set;
 

@@ -18,11 +18,11 @@
 
 package it.polimi.teststand.engine.jena;
 
+import it.polimi.events.Experiment;
+import it.polimi.events.StreamingEvent;
 import it.polimi.output.filesystem.FileManagerImpl;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.teststand.engine.RSPEngine;
-import it.polimi.teststand.events.Experiment;
-import it.polimi.teststand.events.StreamingEvent;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.TestResultEvent;
 

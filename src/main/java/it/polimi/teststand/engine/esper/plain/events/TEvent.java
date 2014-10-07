@@ -1,8 +1,8 @@
 package it.polimi.teststand.engine.esper.plain.events;
 
+import it.polimi.events.Experiment;
 import it.polimi.output.result.Storable;
 import it.polimi.teststand.events.TestResultEvent;
-import it.polimi.teststand.events.Experiment;
 
 import java.util.Arrays;
 import java.util.HashSet;

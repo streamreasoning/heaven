@@ -2,10 +2,10 @@ package it.polimi.comparator.engine;
 
 import it.polimi.comparator.events.ComparisonExperimentResult;
 import it.polimi.comparator.events.ComparisonResultEvent;
+import it.polimi.events.Experiment;
+import it.polimi.events.StreamingEvent;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.streamer.EventProcessor;
-import it.polimi.teststand.events.Experiment;
-import it.polimi.teststand.events.StreamingEvent;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 
 public abstract class EngineComparator extends EventProcessor<StreamingEvent> {

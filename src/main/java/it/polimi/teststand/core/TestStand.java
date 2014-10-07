@@ -1,5 +1,6 @@
 package it.polimi.teststand.core;
 
+import it.polimi.events.Experiment;
 import it.polimi.output.filesystem.FileManager;
 import it.polimi.output.filesystem.FileManagerImpl;
 import it.polimi.output.result.ResultCollector;
@@ -7,7 +8,6 @@ import it.polimi.output.sqllite.DatabaseManagerImpl;
 import it.polimi.streamer.Streamer;
 import it.polimi.teststand.engine.RSPEngine;
 import it.polimi.teststand.enums.ExecutionStates;
-import it.polimi.teststand.events.Experiment;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.TestResultEvent;
 import it.polimi.teststand.exceptions.WrongStatusTransitionException;

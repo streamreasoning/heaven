@@ -1,9 +1,9 @@
 package it.polimi.teststand.engine;
 
+import it.polimi.events.Experiment;
+import it.polimi.events.StreamingEvent;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.streamer.EventProcessor;
-import it.polimi.teststand.events.Experiment;
-import it.polimi.teststand.events.StreamingEvent;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.TestResultEvent;
 

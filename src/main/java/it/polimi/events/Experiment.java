@@ -1,6 +1,5 @@
-package it.polimi.teststand.events;
+package it.polimi.events;
 
-import it.polimi.events.Event;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

@@ -1,6 +1,4 @@
-package it.polimi.teststand.events;
-
-import it.polimi.events.Event;
+package it.polimi.events;
 
 import java.util.Arrays;
 import java.util.Set;
