@@ -4,7 +4,7 @@ import it.polimi.events.Experiment;
 import it.polimi.events.StreamingEvent;
 import it.polimi.output.filesystem.FileManagerImpl;
 import it.polimi.output.result.ResultCollector;
-import it.polimi.teststand.engine.RSPEngine;
+import it.polimi.teststand.engine.esper.RSPEsperEngine;
 import it.polimi.teststand.engine.esper.commons.listener.ResultCollectorListener;
 import it.polimi.teststand.engine.esper.plain.events.Out;
 import it.polimi.teststand.engine.esper.plain.events.TEvent;
@@ -35,7 +35,7 @@ import com.espertech.esper.core.service.EPServiceProviderSPI;
  * 
  * **/
 
-public class PlainMultipleInheritance extends RSPEngine {
+public class PlainMultipleInheritance extends RSPEsperEngine {
 
 	// TODO useless private static final Ontology ontology = new Ontology();
 

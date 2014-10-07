@@ -1,28 +1,48 @@
-package it.polimi.teststand.engine;
+package it.polimi.teststand.engine.esper;
 
 import it.polimi.events.Experiment;
-import it.polimi.events.StreamingEvent;
 import it.polimi.output.result.ResultCollector;
-import it.polimi.streamer.EventProcessor;
+import it.polimi.teststand.engine.RSPEngine;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.TestResultEvent;
 
-public abstract class RSPEngine extends EventProcessor<StreamingEvent> {
+import com.espertech.esper.client.Configuration;
+import com.espertech.esper.client.ConfigurationMethodRef;
+import com.espertech.esper.client.EPAdministrator;
+import com.espertech.esper.client.EPRuntime;
+import com.espertech.esper.client.EPServiceProvider;
+import com.espertech.esper.client.time.CurrentTimeEvent;
+
+public abstract class RSPEsperEngine extends RSPEngine {
+
+	protected static Configuration cepConfig;
+	protected static EPServiceProvider cep;
+	protected static EPRuntime cepRT;
+	protected static EPAdministrator cepAdm;
+	protected static ConfigurationMethodRef ref;
 
 	protected ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector;
 	protected TestExperimentResultEvent er;
 	protected Experiment experiment;
+
 	protected String name;
+
 	protected static int time = 0;
 
-	public RSPEngine(
+	public RSPEsperEngine(
 			ResultCollector<TestResultEvent, TestExperimentResultEvent> storeSystem) {
-		this.setResultCollector(storeSystem);
+		super(storeSystem);
 	}
 
 	public String getName() {
 		return name;
 	}
+
+	protected void sendTimeEvent() {
+		time += 1000;
+		cepRT.sendEvent(new CurrentTimeEvent(time));
+	}
+
 
 	public abstract boolean startProcessing(Experiment e);
 
