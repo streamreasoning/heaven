@@ -8,11 +8,6 @@ import it.polimi.teststand.events.Experiment;
 import it.polimi.teststand.events.StreamingEvent;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-
 public abstract class EngineComparator extends EventProcessor<StreamingEvent> {
 
 

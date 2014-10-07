@@ -14,7 +14,8 @@ import org.apache.log4j.Logger;
 
 public class IdentityModel extends RSPEngine {
 
-	public IdentityModel(ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector) {
+	public IdentityModel(
+			ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector) {
 		super(resultCollector);
 	}
 
@@ -27,7 +28,7 @@ public class IdentityModel extends RSPEngine {
 
 		TestResultEvent r = new TestResultEvent(e.getEventTriples(),
 				e.getEventTriples(), e.getEvent_timestamp(),
-				experiment.getOutputFileName(), experiment.getName(),
+				experiment.getOutputFileName(), "empty/", experiment.getName(),
 				experiment.getTimestamp(), e.getLineNumber());
 
 		try {
@@ -45,7 +46,7 @@ public class IdentityModel extends RSPEngine {
 			this.experiment = e;
 			er = new TestExperimentResultEvent(e.getInputFileName(),
 					e.getOutputFileName(), FileManagerImpl.LOG_PATH
-							+ e.getTimestamp());
+							+ e.getTimestamp(), e.getName());
 			return true;
 		} else
 			return false;

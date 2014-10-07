@@ -52,7 +52,7 @@ public class ResultCollectorListener extends GenearlListener {
 
 		eventToSend = new TestResultEvent(statements, start_triples,
 				(long) newEvents[0].get("app_timestamp"),
-				experiment.getOutputFileName(), experiment.getName(),
+				experiment.getOutputFileName(), "plain/",experiment.getName(),
 				experiment.getTimestamp(),lineNumber);
 
 		try {

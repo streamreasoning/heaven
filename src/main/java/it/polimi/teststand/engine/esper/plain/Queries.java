@@ -12,14 +12,14 @@ public class Queries {
 			+ "output all ";
 
 	public static final String rdfs3 = "on RDFS3Input(p!='"+RDFSUtils.TYPE_PROPERTY+"') "
-			+ "insert into QueryOut select o as s, '"+RDFSUtils.TYPE_PROPERTY+"' as p, it.polimi.teststand.engine.plain.RDFSUtils.range(p) as o, timestamp as timestamp , app_timestamp as app_timestamp, channel || 'RDSF3' as channel "
-			+ "insert into RDFS9Input select o as s, '"+RDFSUtils.TYPE_PROPERTY+"' as p, it.polimi.teststand.engine.plain.RDFSUtils.range(p) as o, timestamp as timestamp, app_timestamp as app_timestamp , channel || 'RDSF3' as channel "
-			+ "insert into QueryOut select s as s, '"+RDFSUtils.TYPE_PROPERTY+"' as p, it.polimi.teststand.engine.plain.RDFSUtils.domain(p) as o, timestamp as timestamp , app_timestamp as app_timestamp, channel || 'RDSF3' as channel "
-			+ "insert into RDFS9Input select s as s, '"+RDFSUtils.TYPE_PROPERTY+"' as p, it.polimi.teststand.engine.plain.RDFSUtils.domain(p) as o, timestamp as timestamp , app_timestamp as app_timestamp, channel || 'RDSF3' as channel "
+			+ "insert into QueryOut select o as s, '"+RDFSUtils.TYPE_PROPERTY+"' as p, it.polimi.teststand.engine.esper.plain.Ontology.range(p) as o, timestamp as timestamp , app_timestamp as app_timestamp, channel || 'RDSF3' as channel "
+			+ "insert into RDFS9Input select o as s, '"+RDFSUtils.TYPE_PROPERTY+"' as p, it.polimi.teststand.engine.esper.plain.Ontology.range(p) as o, timestamp as timestamp, app_timestamp as app_timestamp , channel || 'RDSF3' as channel "
+			+ "insert into QueryOut select s as s, '"+RDFSUtils.TYPE_PROPERTY+"' as p, it.polimi.teststand.engine.esper.plain.Ontology.domain(p) as o, timestamp as timestamp , app_timestamp as app_timestamp, channel || 'RDSF3' as channel "
+			+ "insert into RDFS9Input select s as s, '"+RDFSUtils.TYPE_PROPERTY+"' as p, it.polimi.teststand.engine.esper.plain.Ontology.domain(p) as o, timestamp as timestamp , app_timestamp as app_timestamp, channel || 'RDSF3' as channel "
 			+ "output all";
 
 	public static final String rdfs9 = "on RDFS9Input(p='"+RDFSUtils.TYPE_PROPERTY+"') "
-			+ "insert into QueryOut select s as s, p, it.polimi.teststand.engine.plain.RDFSUtils.subClassOf(o)  as o, timestamp as timestamp, app_timestamp as app_timestamp , channel || 'RDSF9' as channel ";
+			+ "insert into QueryOut select s as s, p, it.polimi.teststand.engine.esper.plain.Ontology.subClassOf(o)  as o, timestamp as timestamp, app_timestamp as app_timestamp , channel || 'RDSF9' as channel ";
 
 	public static final String queryOut = "insert into Out "
 			+ "select  s as s, p as p, o as o, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel from QueryOut.win:time_batch(1000 msec) ";

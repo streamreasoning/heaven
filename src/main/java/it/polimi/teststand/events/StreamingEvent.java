@@ -5,24 +5,12 @@ import it.polimi.events.Event;
 import java.util.Arrays;
 import java.util.Set;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+@Data
+@EqualsAndHashCode(callSuper=false)
 public class StreamingEvent extends Event {
 
-	@Override
-	public String toString() {
-		return "StreamingEvent [eventTriples=" + getTripleToString() + ", id="
-				+ id + ", event_timestamp=" + event_timestamp + ", ignore="
-				+ ignore + "]";
-	}
-
-	public String getTripleToString() {
-		String triples = "";
-		for (String[] triple : eventTriples) {
-			triples += Arrays.deepToString(triple)
-					+ System.getProperty("line.separator");
-
-		}
-		return triples;
-	}
 
 	private Set<String[]> eventTriples;
 	private String id;
@@ -46,28 +34,22 @@ public class StreamingEvent extends Event {
 		this.eventTriples = eventTriples;
 	}
 
-	public long getEvent_timestamp() {
-		return event_timestamp;
+	
+	@Override
+	public String toString() {
+		return "StreamingEvent [eventTriples=" + getTripleToString() + ", id="
+				+ id + ", event_timestamp=" + event_timestamp + ", ignore="
+				+ ignore + "]";
 	}
 
-	public void setEvent_timestamp(long event_timestamp) {
-		this.event_timestamp = event_timestamp;
-	}
+	public String getTripleToString() {
+		String triples = "";
+		for (String[] triple : eventTriples) {
+			triples += Arrays.deepToString(triple)
+					+ System.getProperty("line.separator");
 
-	public String getId() {
-		return id;
-	}
-
-	public Set<String[]> getEventTriples() {
-		return eventTriples;
-	}
-
-	public boolean isIgnore() {
-		return ignore;
-	}
-
-	public int getLineNumber() {
-		return lineNumber;
+		}
+		return triples;
 	}
 
 }

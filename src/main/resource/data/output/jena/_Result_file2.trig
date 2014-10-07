@@ -1,11 +1,11 @@
 <http://example.org/-2086910452> {
-<http://www.Department1.University0.edu/Course2><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://swat.cse.lehigh.edu/onto/univ-bench.owl#Course> .
-<http://www.Department1.University0.edu/FullProfessor1><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person> .
-<http://www.Department1.University0.edu/Course2><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2000/01/rdf-schema#Resource> .
-<http://www.Department1.University0.edu/FullProfessor1><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://swat.cse.lehigh.edu/onto/univ-bench.owl#Faculty> .
-<http://www.Department1.University0.edu/FullProfessor1><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://swat.cse.lehigh.edu/onto/univ-bench.owl#Employee> .
 <http://www.w3.org/2000/01/rdf-schema#Resource><http://www.w3.org/2000/01/rdf-schema#subClassOf><http://www.w3.org/2000/01/rdf-schema#Resource> .
-<http://www.Department1.University0.edu/FullProfessor1><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2000/01/rdf-schema#Resource> .
+<http://www.Department1.University0.edu/Course2><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2000/01/rdf-schema#Resource> .
+<http://www.Department1.University0.edu/Course2><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://swat.cse.lehigh.edu/onto/univ-bench.owl#Course> .
+<http://www.Department1.University0.edu/FullProfessor1><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://swat.cse.lehigh.edu/onto/univ-bench.owl#Employee> .
 <http://www.Department1.University0.edu/FullProfessor1><http://swat.cse.lehigh.edu/onto/univ-bench.owl#teacherOf><http://www.Department1.University0.edu/Course2> .
 <http://www.Department1.University0.edu/Course2><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://swat.cse.lehigh.edu/onto/univ-bench.owl#Work> .
+<http://www.Department1.University0.edu/FullProfessor1><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://swat.cse.lehigh.edu/onto/univ-bench.owl#Faculty> .
+<http://www.Department1.University0.edu/FullProfessor1><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person> .
+<http://www.Department1.University0.edu/FullProfessor1><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2000/01/rdf-schema#Resource> .
 }

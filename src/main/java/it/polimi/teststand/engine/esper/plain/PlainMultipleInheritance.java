@@ -33,9 +33,6 @@ import com.espertech.esper.core.service.EPServiceProviderSPI;
  * events are pushed, on incoming events, in 3 differents queue which are pulled
  * by refering statements
  * 
- * 
- * 
- * 
  * **/
 
 public class PlainMultipleInheritance extends RSPEngine {
@@ -85,12 +82,6 @@ public class PlainMultipleInheritance extends RSPEngine {
 			cepRT.sendEvent(esperEvent);
 		}
 		sendTimeEvent();
-		/*
-		 * Come dovrebbe essere il flusso: arriva una tripla rdf, la passo ad
-		 * esper esper procede con una query mando avanti il tempo, la query
-		 * scatta e il listener riceve l'output il listener manda al result
-		 * collector gli eventi relativi
-		 */
 		return true;
 	}
 
@@ -102,7 +93,7 @@ public class PlainMultipleInheritance extends RSPEngine {
 			initQueries();
 			er = new TestExperimentResultEvent(e.getInputFileName(),
 					e.getOutputFileName(), FileManagerImpl.LOG_PATH
-							+ e.getTimestamp());
+							+ e.getTimestamp(), e.getName());
 
 			return true;
 		} else

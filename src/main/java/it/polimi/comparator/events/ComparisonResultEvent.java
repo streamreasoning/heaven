@@ -1,9 +1,9 @@
 package it.polimi.comparator.events;
 
-import it.polimi.events.ResultEvent;
+import it.polimi.events.Event;
 import it.polimi.output.filesystem.Writable;
 
-public class ComparisonResultEvent extends ResultEvent implements Writable {
+public class ComparisonResultEvent extends Event implements Writable {
 
 	private String event_id, experiment_id;
 	private long result_timestamp;

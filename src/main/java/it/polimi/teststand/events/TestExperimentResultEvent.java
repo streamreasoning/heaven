@@ -1,49 +1,38 @@
 package it.polimi.teststand.events;
 
-import it.polimi.events.ExperimentEvent;
+import it.polimi.events.Event;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@Data
+@EqualsAndHashCode(callSuper = false)
+public class TestExperimentResultEvent extends Event {
 
-public class TestExperimentResultEvent extends ExperimentEvent  {
-
-	private String exp_id, inputFile, resultFile, logFolderPath;
+	private String inputFile, resultFile, logFolderPath;
 	private long timestamp_init;
 	private long timestamp_end;
 
-	public long getTimestamp_end() {
-		return timestamp_end;
-	}
-
-	public void setTimestamp_end(long timestamp_end) {
-		this.timestamp_end = timestamp_end;
-	}
-
-	public long getTimestamp_init() {
-		return timestamp_init;
-	}
-
 	public TestExperimentResultEvent(String inputFile, String resultFile,
-			String logFolderPath) {
+			String logFolderPath, String exp_id) {
 		timestamp_init = System.currentTimeMillis();
 		this.inputFile = inputFile;
 		this.resultFile = resultFile;
 		this.logFolderPath = logFolderPath;
-		this.exp_id = "EXPERIMENT_ON_"
-				+ inputFile.toUpperCase()
-						.substring(0, inputFile.length() - 4);
+		setName(exp_id);
 
 	}
 
 	@Override
 	/**
+	 *  This toString Element is used for database insertion
 	 * (EXP_ID, TS_INIT, TS_END, INPUT_FILE,RESULT_FILE, FILE_LOG_FOLDER)
 	 * 
 	 * **/
 	public String toString() {
-		return "VALUES (" + "'" + exp_id + "'" + "," + "'" + timestamp_init
+		return "VALUES (" + "'" + getName() + "'" + "," + "'" + timestamp_init
 				+ "'" + "," + "'" + timestamp_end + "'" + "," + "'" + inputFile
 				+ "'" + "," + "'" + resultFile + "'" + "," + "'"
 				+ logFolderPath + "'" + ");";
 	}
-
 
 }

@@ -1,10 +1,10 @@
 package it.polimi.comparator.events;
 
-import it.polimi.events.ExperimentEvent;
+import it.polimi.events.Event;
 
 
 
-public class ComparisonExperimentResult extends ExperimentEvent  {
+public class ComparisonExperimentResult extends Event  {
 
 	private String exp_id, inputFile, resultFile, logFolderPath;
 	private long timestamp_init;

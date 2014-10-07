@@ -25,9 +25,7 @@ public class ResultCollectorTestStandImpl implements
 
 	@Override
 	public boolean storeExperimentResult(TestExperimentResultEvent r) {
-		String q = "INSERT INTO EXPERIMENT (EXP_ID, TS_INIT, TS_END, INPUT_FILE,RESULT_FILE, FILE_LOG_FOLDER) "
-				+ r.toString();
-
+		String q = DatabaseManager.EXPERIMENT_INSERT + r.toString();
 		return db.executeSql(q);
 
 	}
@@ -35,10 +33,10 @@ public class ResultCollectorTestStandImpl implements
 	@Override
 	public boolean storeEventResult(TestResultEvent r) throws IOException {
 		fs.toFile(r.getOutputFileName(), r); // TrigFile
-		long queryLatency = r.getResultTimestamp() - r.getEvent_timestamp();
+		long queryLatency = r.getResult_timestamp() - r.getEvent_timestamp();
 		fs.toFile(FileManager.LOG_PATH + r.getFolder(),
-				"LOG_" + r.getExperiment_timestamp(), (r.getEvent_id()
-						+ "," + r.getEvent_timestamp() + ",Memory," + queryLatency)
+				"LOG_" + r.getExperiment_timestamp()+"_"+r.getExperiment_id(), (r.getEvent_id() + ","
+						+ r.getEvent_timestamp() + ",Memory," + queryLatency)
 						.getBytes());
 		return true;
 	}

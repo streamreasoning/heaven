@@ -67,13 +67,9 @@ public class JenaEngine extends RSPEngine {
 				JenaEngine.class.getClassLoader());
 
 		// CARICO LA TBOX CHIUSA
-		tbox_star = FileManager
-				.get()
-				.loadModel(
-						UNIV_BENCH_RDFS,
-						null, "RDF/XML"); 
+		tbox_star = FileManager.get().loadModel(UNIV_BENCH_RDFS, null,
+				"RDF/XML");
 
-	
 	}
 
 	@Override
@@ -104,7 +100,7 @@ public class JenaEngine extends RSPEngine {
 
 		TestResultEvent r = new TestResultEvent(statements,
 				e.getEventTriples(), e.getEvent_timestamp(),
-				experiment.getOutputFileName(), experiment.getName(),
+				experiment.getOutputFileName(), "jena/", experiment.getName(),
 				experiment.getTimestamp(), e.getLineNumber());
 		try {
 			return resultCollector.storeEventResult(r);
@@ -129,7 +125,7 @@ public class JenaEngine extends RSPEngine {
 			this.experiment = e;
 			er = new TestExperimentResultEvent(e.getInputFileName(),
 					e.getOutputFileName(), FileManagerImpl.LOG_PATH + "jena"
-							+ e.getTimestamp());
+							+ e.getTimestamp(), e.getName());
 			return true;
 		} else
 			return false;
@@ -160,6 +156,7 @@ public class JenaEngine extends RSPEngine {
 				object);
 		return s;
 	}
+
 	@SuppressWarnings("unused")
 	private Reasoner getReducedReasoner() {
 
@@ -167,8 +164,7 @@ public class JenaEngine extends RSPEngine {
 		// dynamite secondo parametri diversi a set di triple diversi,
 		// utilizzando differenti reasoner
 
-		List<Rule> rules = Rule
-				.rulesFromURL(RULE_SET);
+		List<Rule> rules = Rule.rulesFromURL(RULE_SET);
 
 		GenericRuleReasoner reasoner = new GenericRuleReasoner(rules);
 		reasoner.setOWLTranslation(true); // not needed in RDFS case
