@@ -1,11 +1,11 @@
 package it.polimi.teststand.core;
 
+import it.polimi.enums.ExecutionStates;
 import it.polimi.events.Experiment;
 import it.polimi.output.filesystem.FileManager;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.streamer.Streamer;
 import it.polimi.teststand.engine.RSPEngine;
-import it.polimi.teststand.enums.ExecutionStates;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.TestResultEvent;
 import it.polimi.teststand.exceptions.WrongStatusTransitionException;
@@ -80,7 +80,7 @@ public class TestStand {
 
 			engineStatus = rspEngine.stopProcessing(currentExperiment);
 
-			if (ExecutionStates.STOP.equals(engineStatus)) {
+			if (ExecutionStates.CLOSED.equals(engineStatus)) {
 				status = ExecutionStates.READY;
 			}
 
@@ -95,8 +95,8 @@ public class TestStand {
 							+ status);
 		} else {
 			ExecutionStates streamerStatus = streamer.close();
-			ExecutionStates collectorStatus = resultCollector.close();
 			ExecutionStates engineStatus = rspEngine.close();
+			ExecutionStates collectorStatus = resultCollector.close();
 
 			if (ExecutionStates.CLOSED.equals(streamerStatus)
 					&& ExecutionStates.CLOSED.equals(collectorStatus)
@@ -107,8 +107,7 @@ public class TestStand {
 						"streamerStatus: " + streamerStatus);
 				Logger.getLogger("obqa").error(
 						"collectorStatus: " + collectorStatus);
-				Logger.getLogger("obqa").error(
-						"engineStatus: " + engineStatus);
+				Logger.getLogger("obqa").error("engineStatus: " + engineStatus);
 				return status = ExecutionStates.ERROR;
 			}
 
@@ -116,10 +115,10 @@ public class TestStand {
 	}
 
 	public ExecutionStates turnOn() {
-		if (isOFF()) {
+		if (isStartable()) {
 			ExecutionStates streamerStatus = streamer.init();
-			ExecutionStates collectorStatus = resultCollector.init();
 			ExecutionStates engineStatus = rspEngine.init();
+			ExecutionStates collectorStatus = resultCollector.init();
 			if (ExecutionStates.READY.equals(streamerStatus)
 					&& ExecutionStates.READY.equals(collectorStatus)
 					&& ExecutionStates.READY.equals(engineStatus)) {
@@ -129,8 +128,7 @@ public class TestStand {
 						"streamerStatus: " + streamerStatus);
 				Logger.getLogger("obqa").error(
 						"collectorStatus: " + collectorStatus);
-				Logger.getLogger("obqa").error(
-						"engineStatus: " + engineStatus);
+				Logger.getLogger("obqa").error("engineStatus: " + engineStatus);
 				return status = ExecutionStates.ERROR;
 			}
 
@@ -142,7 +140,7 @@ public class TestStand {
 
 	}
 
-	public boolean isOFF() {
+	public boolean isStartable() {
 		return ExecutionStates.NOT_READY.equals(status)
 				|| ExecutionStates.CLOSED.equals(status);
 	}
@@ -162,6 +160,6 @@ public class TestStand {
 	 * @return
 	 */
 	public ExecutionStates stop() {
-		return status = ExecutionStates.STOP;
+		return status = ExecutionStates.OFF;
 	}
 }

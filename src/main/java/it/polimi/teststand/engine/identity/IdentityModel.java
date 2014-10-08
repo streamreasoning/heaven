@@ -1,11 +1,11 @@
 package it.polimi.teststand.engine.identity;
 
+import it.polimi.enums.ExecutionStates;
 import it.polimi.events.Experiment;
 import it.polimi.events.StreamingEvent;
 import it.polimi.output.filesystem.FileManagerImpl;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.teststand.engine.RSPEngine;
-import it.polimi.teststand.enums.ExecutionStates;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.TestResultEvent;
 
@@ -22,20 +22,20 @@ public class IdentityModel extends RSPEngine {
 
 	@Override
 	public boolean sendEvent(StreamingEvent e) {
-		if (e.isIgnore()) {
-			Logger.getRootLogger().debug("Ignored");
-			return false;
-		}
-
-		TestResultEvent r = new TestResultEvent(e.getEventTriples(),
-				e.getEventTriples(), e.getEvent_timestamp(),
-				experiment.getOutputFileName(), "empty/", experiment.getName(),
-				experiment.getTimestamp(), e.getLineNumber());
-
-		try {
-			return getResultCollector().storeEventResult(r);
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		if (experiment != null) {
+			TestResultEvent r = new TestResultEvent(e.getEventTriples(),
+					e.getEventTriples(), e.getEvent_timestamp(),
+					experiment.getOutputFileName(), "empty/",
+					experiment.getName(), experiment.getTimestamp(),
+					e.getLineNumber());
+			try {
+				return getResultCollector().storeEventResult(r);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+				return false;
+			}
+		} else {
+			Logger.getRootLogger().debug("An Experiment must be initialized");
 			return false;
 		}
 
@@ -58,7 +58,7 @@ public class IdentityModel extends RSPEngine {
 	public ExecutionStates stopProcessing(Experiment e) {
 		er.setTimestamp_end(System.currentTimeMillis());
 		resultCollector.storeExperimentResult(er);
-		return status = ExecutionStates.STOP;
+		return status = ExecutionStates.OFF;
 	}
 
 	@Override

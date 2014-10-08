@@ -1,10 +1,10 @@
 package it.polimi.teststand.output;
 
+import it.polimi.enums.ExecutionStates;
 import it.polimi.output.filesystem.FileManager;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.output.sqllite.DatabaseManager;
 import it.polimi.output.sqllite.DatabaseManagerImpl;
-import it.polimi.teststand.enums.ExecutionStates;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.TestResultEvent;
 

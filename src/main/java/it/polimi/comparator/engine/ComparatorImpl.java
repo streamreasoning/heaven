@@ -2,11 +2,11 @@ package it.polimi.comparator.engine;
 
 import it.polimi.comparator.events.ComparisonExperimentResult;
 import it.polimi.comparator.events.ComparisonResultEvent;
+import it.polimi.enums.ExecutionStates;
 import it.polimi.events.Experiment;
 import it.polimi.events.StreamingEvent;
 import it.polimi.output.filesystem.FileManager;
 import it.polimi.output.result.ResultCollector;
-import it.polimi.teststand.enums.ExecutionStates;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -114,7 +114,7 @@ public class ComparatorImpl extends EngineComparator {
 		if (e != null) {
 			Logger.getLogger("oobqa-comparison").info(
 					"Start Experiment :" + e.toString());
-			return status = ExecutionStates.STOP;
+			return status = ExecutionStates.OFF;
 		} else {
 			return status = ExecutionStates.ERROR;
 

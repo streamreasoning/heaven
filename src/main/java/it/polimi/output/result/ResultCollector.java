@@ -1,7 +1,7 @@
 package it.polimi.output.result;
 
+import it.polimi.enums.ExecutionStates;
 import it.polimi.events.Event;
-import it.polimi.teststand.enums.ExecutionStates;
 
 import java.io.IOException;
 

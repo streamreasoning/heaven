@@ -1,7 +1,7 @@
 package it.polimi.streamer;
 
+import it.polimi.enums.ExecutionStates;
 import it.polimi.events.StreamingEvent;
-import it.polimi.teststand.enums.ExecutionStates;
 import it.polimi.teststand.exceptions.WrongStatusTransitionException;
 import it.polimi.teststand.utils.RDFSUtils;
 
@@ -53,7 +53,7 @@ public class Streamer<T extends EventProcessor<StreamingEvent>> {
 	public void stream(BufferedReader br) throws IOException {
 
 		Logger.getRootLogger().debug("Start Streaming");
-		
+
 		if (!ExecutionStates.READY.equals(status)) {
 			throw new WrongStatusTransitionException("Not Ready");
 		} else {
@@ -101,7 +101,6 @@ public class Streamer<T extends EventProcessor<StreamingEvent>> {
 		}
 	}
 
-	
 	public ExecutionStates init() {
 		return status = ExecutionStates.READY;
 

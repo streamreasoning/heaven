@@ -52,8 +52,8 @@ public class Ontology {
 			if (RDFSUtils.isSchema(next.toString())) {
 				continue;
 			}
-			ExtendedIterator<? extends OntProperty> spl = next
-					.listSuperProperties();
+			// ExtendedIterator<? extends OntProperty> spl = next
+			// .listSuperProperties();
 			Set<String> supers = new HashSet<String>();
 			supers.add(next.toString());
 			supers.add("http://www.w3.org/1999/02/22-rdf-syntax-ns#Property");
@@ -62,22 +62,22 @@ public class Ontology {
 					.toString() : "";
 			String range = next.getRange() != null ? next.getRange().toString()
 					: "";
-
-			while (spl.hasNext()) {
-				OntProperty snext = spl.next();
-				if (RDFSUtils.isSchema(snext.toString())) {
-					continue;
-				}
-				supers.add(snext.toString());
-				if (domain.isEmpty()) {
-					domain = snext.getDomain() != null ? snext.getDomain()
-							.toString() : "";
-				}
-				if (range.isEmpty()) {
-					range = snext.getRange() != null ? snext.getRange()
-							.toString() : "";
-				}
-			}
+			// TODO P domain D S subpropertyOfP can't infer S domain D
+			// while (spl.hasNext()) {
+			// OntProperty snext = spl.next();
+			// if (RDFSUtils.isSchema(snext.toString())) {
+			// continue;
+			// }
+			// supers.add(snext.toString());
+			// if (domain.isEmpty()) {
+			// domain = snext.getDomain() != null ? snext.getDomain()
+			// .toString() : "";
+			// }
+			// if (range.isEmpty()) {
+			// range = snext.getRange() != null ? snext.getRange()
+			// .toString() : "";
+			// }
+			// }
 			if (domain.isEmpty()) {
 				domain = RDFSUtils.RDFRESOURCE;
 			}

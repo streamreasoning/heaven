@@ -18,12 +18,12 @@
 
 package it.polimi.teststand.engine.jena;
 
+import it.polimi.enums.ExecutionStates;
 import it.polimi.events.Experiment;
 import it.polimi.events.StreamingEvent;
 import it.polimi.output.filesystem.FileManagerImpl;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.teststand.engine.RSPEngine;
-import it.polimi.teststand.enums.ExecutionStates;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.TestResultEvent;
 
@@ -75,41 +75,48 @@ public class JenaEngine extends RSPEngine {
 
 	@Override
 	public boolean sendEvent(StreamingEvent e) {
-		abox = ModelFactory.createMemModelMaker().createDefaultModel();
-
-		for (String[] eventTriple : e.getEventTriples()) {
-			Statement s = createStatement(eventTriple);
-			abox.add(s);
-		}
-
-		Reasoner reasoner = getRDFSSimpleReasoner();
-		// Reasoner reasoner = getReducedReasoner();
-
-		InfGraph graph = reasoner.bindSchema(tbox_star.getGraph()).bind(
-				abox.getGraph());
-		abox_star = new InfModelImpl(graph);
-
-		Set<String[]> statements = new HashSet<String[]>();
-		StmtIterator iterator = abox_star.difference(tbox_star)
-				.listStatements();
-		while (iterator.hasNext()) {
-
-			Triple t = iterator.next().asTriple();
-			statements.add(new String[] { t.getSubject().toString(),
-					t.getPredicate().toString(), t.getObject().toString() });
-		}
-
-		TestResultEvent r = new TestResultEvent(statements,
-				e.getEventTriples(), e.getEvent_timestamp(),
-				experiment.getOutputFileName(), "jena/", experiment.getName(),
-				experiment.getTimestamp(), e.getLineNumber());
-		try {
-			return resultCollector.storeEventResult(r);
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		if (experiment == null) {
 			return false;
-		}
+		} else {
+			abox = ModelFactory.createMemModelMaker().createDefaultModel();
 
+			for (String[] eventTriple : e.getEventTriples()) {
+				Statement s = createStatement(eventTriple);
+				abox.add(s);
+			}
+
+			Reasoner reasoner = getRDFSSimpleReasoner();
+			// Reasoner reasoner = getReducedReasoner();
+
+			InfGraph graph = reasoner.bindSchema(tbox_star.getGraph()).bind(
+					abox.getGraph());
+			abox_star = new InfModelImpl(graph);
+
+			Set<String[]> statements = new HashSet<String[]>();
+			StmtIterator iterator = abox_star.difference(tbox_star)
+					.listStatements();
+			while (iterator.hasNext()) {
+
+				Triple t = iterator.next().asTriple();
+				statements
+						.add(new String[] { t.getSubject().toString(),
+								t.getPredicate().toString(),
+								t.getObject().toString() });
+			}
+
+			TestResultEvent r = new TestResultEvent(statements,
+					e.getEventTriples(), e.getEvent_timestamp(),
+					experiment.getOutputFileName(), "jena/",
+					experiment.getName(), experiment.getTimestamp(),
+					e.getLineNumber());
+			try {
+				return resultCollector.storeEventResult(r);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+				return false;
+			}
+
+		}
 	}
 
 	// TODO discuss about what reasoner
@@ -129,7 +136,7 @@ public class JenaEngine extends RSPEngine {
 							+ e.getTimestamp(), e.getName());
 			return status = ExecutionStates.READY;
 		} else
-			
+
 			return status = ExecutionStates.ERROR;
 	}
 
@@ -138,7 +145,7 @@ public class JenaEngine extends RSPEngine {
 		if (e != null) {
 			er.setTimestamp_end(System.currentTimeMillis());
 			resultCollector.storeExperimentResult(er);
-			return status = ExecutionStates.STOP;
+			return status = ExecutionStates.OFF;
 		} else
 			return status = ExecutionStates.ERROR;
 	}

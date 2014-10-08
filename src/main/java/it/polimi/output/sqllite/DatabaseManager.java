@@ -1,6 +1,6 @@
 package it.polimi.output.sqllite;
 
-import it.polimi.teststand.enums.ExecutionStates;
+import it.polimi.enums.ExecutionStates;
 
 import java.sql.SQLException;
 

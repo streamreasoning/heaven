@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Experiment {
+public class Experiment extends Event{
 
 	private String name, inputFileName, outputFileName;
 	private Long timestamp;

@@ -18,7 +18,7 @@ public class TSModelPlain {
 	public static void main(String[] args) throws ClassNotFoundException,
 			SQLException {
 
-		String[] files = new String[] { "file1.txt" };
+		String[] files = new String[] { "University0_0.nt" };
 
 		ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector = new ResultCollectorTestStandImpl(
 				new FileManagerImpl(), new DatabaseManagerImpl());

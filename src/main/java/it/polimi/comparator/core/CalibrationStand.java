@@ -3,11 +3,11 @@ package it.polimi.comparator.core;
 import it.polimi.comparator.engine.EngineComparator;
 import it.polimi.comparator.events.ComparisonExperimentResult;
 import it.polimi.comparator.events.ComparisonResultEvent;
+import it.polimi.enums.ExecutionStates;
 import it.polimi.events.Experiment;
 import it.polimi.output.filesystem.FileManager;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.streamer.Streamer;
-import it.polimi.teststand.enums.ExecutionStates;
 import it.polimi.teststand.exceptions.WrongStatusTransitionException;
 
 import java.io.IOException;
@@ -67,7 +67,7 @@ public class CalibrationStand<T extends EngineComparator> {
 
 			engineStatus = engine.stopProcessing(currentExperiment);
 
-			if (ExecutionStates.STOP.equals(engineStatus)) {
+			if (ExecutionStates.OFF.equals(engineStatus)) {
 				status = ExecutionStates.READY;
 			}
 		}

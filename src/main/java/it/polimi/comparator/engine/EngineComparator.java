@@ -2,11 +2,11 @@ package it.polimi.comparator.engine;
 
 import it.polimi.comparator.events.ComparisonExperimentResult;
 import it.polimi.comparator.events.ComparisonResultEvent;
+import it.polimi.enums.ExecutionStates;
 import it.polimi.events.Experiment;
 import it.polimi.events.StreamingEvent;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.streamer.EventProcessor;
-import it.polimi.teststand.enums.ExecutionStates;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 import lombok.Getter;
 

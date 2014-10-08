@@ -2,11 +2,11 @@ package it.polimi.comparator.output;
 
 import it.polimi.comparator.events.ComparisonExperimentResult;
 import it.polimi.comparator.events.ComparisonResultEvent;
+import it.polimi.enums.ExecutionStates;
 import it.polimi.output.filesystem.FileManager;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.output.sqllite.DatabaseManager;
 import it.polimi.output.sqllite.DatabaseManagerImpl;
-import it.polimi.teststand.enums.ExecutionStates;
 
 import java.io.IOException;
 import java.sql.SQLException;

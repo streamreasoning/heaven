@@ -1,5 +1,6 @@
 package it.polimi.teststand.engine.esper.plain;
 
+import it.polimi.enums.ExecutionStates;
 import it.polimi.events.Experiment;
 import it.polimi.events.StreamingEvent;
 import it.polimi.output.filesystem.FileManagerImpl;
@@ -8,7 +9,6 @@ import it.polimi.teststand.engine.esper.RSPEsperEngine;
 import it.polimi.teststand.engine.esper.commons.listener.ResultCollectorListener;
 import it.polimi.teststand.engine.esper.plain.events.Out;
 import it.polimi.teststand.engine.esper.plain.events.TEvent;
-import it.polimi.teststand.enums.ExecutionStates;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.TestResultEvent;
 
@@ -97,7 +97,7 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 
 	@Override
 	public ExecutionStates startProcessing(Experiment e) {
-		if (e != null) {
+		if (e != null && isStartable()) {
 			this.experiment = e;
 			cepRT.sendEvent(new CurrentTimeEvent(time));
 			initQueries();
@@ -112,26 +112,32 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 
 	@Override
 	public boolean sendEvent(StreamingEvent e) {
-		listener.setLineNumber(e.getLineNumber());
-		TEvent esperEvent;
-		Set<String[]> eventTriples = e.getEventTriples();
-		for (String[] eventTriple : eventTriples) {
-			Logger.getRootLogger().info("Create New Esper Event");
-			esperEvent = new TEvent(new String[] { eventTriple[0] },
-					eventTriple[1], new String[] { eventTriple[2] }, "Input",
-					cepRT.getCurrentTime());
-			cepRT.sendEvent(esperEvent);
+		if (experiment != null) {
+			status = ExecutionStates.RUNNING;
+			listener.setLineNumber(e.getLineNumber());
+			TEvent esperEvent;
+			Set<String[]> eventTriples = e.getEventTriples();
+			for (String[] eventTriple : eventTriples) {
+				Logger.getRootLogger().info("Create New Esper Event");
+				esperEvent = new TEvent(new String[] { eventTriple[0] },
+						eventTriple[1], new String[] { eventTriple[2] },
+						"Input", cepRT.getCurrentTime());
+				cepRT.sendEvent(esperEvent);
+			}
+			sendTimeEvent();
+			status = ExecutionStates.READY;
+			return true;
+		} else {
+			return false;
 		}
-		sendTimeEvent();
-		return true;
 	}
 
 	@Override
 	public ExecutionStates stopProcessing(Experiment e) {
-		if (e != null) {
+		if (e != null && isOn()) {
 			er.setTimestamp_end(System.currentTimeMillis());
 			resultCollector.storeExperimentResult(er);
-			return status = ExecutionStates.STOP;
+			return status = ExecutionStates.CLOSED;
 		} else
 			return status = ExecutionStates.ERROR;
 	}
@@ -140,5 +146,18 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 	public ExecutionStates close() {
 		Logger.getRootLogger().info("Nothing to do...Turing Off");
 		return status = ExecutionStates.CLOSED;
+	}
+
+	public boolean isStartable() {
+		return ExecutionStates.READY.equals(status)
+				|| ExecutionStates.CLOSED.equals(status);
+	}
+
+	public boolean isOn() {
+		return ExecutionStates.READY.equals(status);
+	}
+
+	public boolean isReady() {
+		return ExecutionStates.READY.equals(status);
 	}
 }
