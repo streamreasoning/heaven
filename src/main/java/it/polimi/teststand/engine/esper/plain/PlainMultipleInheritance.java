@@ -105,7 +105,7 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 					e.getOutputFileName(), FileManagerImpl.LOG_PATH
 							+ e.getTimestamp(), e.getName());
 
-			return status = ExecutionStates.RUNNING;
+			return status = ExecutionStates.READY;
 		} else
 			return status = ExecutionStates.ERROR;
 	}

@@ -22,14 +22,15 @@ public abstract class RSPEngine extends EventProcessor<StreamingEvent> {
 
 	public RSPEngine(
 			ResultCollector<TestResultEvent, TestExperimentResultEvent> storeSystem) {
-		this.resultCollector=storeSystem;
+		this.resultCollector = storeSystem;
 	}
 
 	public abstract ExecutionStates init();
+
 	public abstract ExecutionStates close();
+
 	public abstract ExecutionStates startProcessing(Experiment e);
+
 	public abstract ExecutionStates stopProcessing(Experiment e);
-	
-	
 
 }

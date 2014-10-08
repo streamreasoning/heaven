@@ -17,21 +17,27 @@ import org.apache.log4j.Logger;
 
 public class CalibrationStand<T extends EngineComparator> {
 
+	private T engine;
 	private ExecutionStates status;
 	private ResultCollector<ComparisonResultEvent, ComparisonExperimentResult> resultCollector;
-	private T engine;
 	private Streamer<T> streamer;
-	private String[] files, comparing_files;
+	private String[] comparing_files;
+	private Experiment currentExperiment;
 
-	public CalibrationStand(String[] comparing_files, String[] files, T engine,
-			Streamer<T> streamer) throws ClassNotFoundException, SQLException {
+	public CalibrationStand(
+			String[] comparing_files,
+			String[] files,
+			ResultCollector<ComparisonResultEvent, ComparisonExperimentResult> resultCollector,
+			T engine, Streamer<T> streamer) throws ClassNotFoundException,
+			SQLException {
 		status = ExecutionStates.NOT_READY;
-		this.comparing_files = comparing_files;
-		this.files = files;
+		this.resultCollector = resultCollector;
 		this.streamer = streamer;
+		this.engine = engine;
+		this.comparing_files = comparing_files;
 	}
 
-	public void run() {
+	public void run(String fileName) {
 		if (!isOn()) {
 			throw new WrongStatusTransitionException("Not ON");
 		} else {
@@ -40,17 +46,16 @@ public class CalibrationStand<T extends EngineComparator> {
 				comparing_fileName += "_" + s;
 
 			}
-			if (engine
-					.startProcessing(new Experiment(engine.getName(),
-							FileManager.DATA_FILE_PATH + "output/"
-									+ comparing_fileName,
-							FileManager.DATA_FILE_PATH + "output_comparator/"
-									+ engine.getName() + "/_Result_"
-									+ comparing_fileName + ".txt"))) {
-				status = ExecutionStates.READY;
-			}
+			currentExperiment = new Experiment(
+					engine.getName(),
+					FileManager.DATA_FILE_PATH + "output/" + comparing_fileName,
+					FileManager.DATA_FILE_PATH + "output_comparator/"
+							+ engine.getName() + "/_Result_"
+							+ comparing_fileName + ".txt");
 
-			for (String fileName : files) {
+			ExecutionStates engineStatus = engine
+					.startProcessing(currentExperiment);
+			if (ExecutionStates.READY.equals(engineStatus)) {
 				try {
 					streamer.stream(FileManager
 							.getBuffer(FileManager.DATA_FILE_PATH + "input/"
@@ -58,10 +63,13 @@ public class CalibrationStand<T extends EngineComparator> {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
 			}
-			engine.stopProcessing();
-			status = ExecutionStates.READY;
+
+			engineStatus = engine.stopProcessing(currentExperiment);
+
+			if (ExecutionStates.STOP.equals(engineStatus)) {
+				status = ExecutionStates.READY;
+			}
 		}
 
 	}
@@ -95,8 +103,8 @@ public class CalibrationStand<T extends EngineComparator> {
 	public ExecutionStates turnOn() {
 		if (isOFF()) {
 			ExecutionStates streamerStatus = streamer.init();
-			ExecutionStates collectorStatus = resultCollector.init();
 			ExecutionStates engineStatus = engine.init();
+			ExecutionStates collectorStatus = resultCollector.init();
 			if (ExecutionStates.READY.equals(streamerStatus)
 					&& ExecutionStates.READY.equals(collectorStatus)
 					&& ExecutionStates.READY.equals(engineStatus)) {

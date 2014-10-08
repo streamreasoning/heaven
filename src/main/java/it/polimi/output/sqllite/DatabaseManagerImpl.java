@@ -89,6 +89,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
 	@Override
 	public ExecutionStates close() throws ClassNotFoundException, SQLException {
 		Logger.getRootLogger().info("Stop the Database System");
+		queryAllComp();
 		c.close();
 		Logger.getRootLogger().info("Closed database successfully");
 		return this.status = ExecutionStates.CLOSED;
@@ -99,18 +100,41 @@ public class DatabaseManagerImpl implements DatabaseManager {
 		stmt = c.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT * FROM EXPERIMENT;");
 		while (rs.next()) {
-			Logger.getLogger("obqa.database").info(
+			Logger.getRootLogger().info(
 					"EXPERIMENT_ID = " + rs.getString("EXP_ID"));
-			Logger.getLogger("obqa.database").info(
+			Logger.getRootLogger().info(
 					"TS_INIT = " + Long.parseLong(rs.getString("TS_INIT")));
-			Logger.getLogger("obqa.database").info(
+			Logger.getRootLogger().info(
 					"TS_END = " + Long.parseLong(rs.getString("TS_END")));
-			Logger.getLogger("obqa.database").info(
+			Logger.getRootLogger().info(
 					"INPUT_FILE = " + rs.getString("INPUT_FILE"));
-			Logger.getLogger("obqa.database").info(
+			Logger.getRootLogger().info(
 					"RESULT_FILE = " + rs.getString("RESULT_FILE"));
-			Logger.getLogger("obqa.database").info(
+			Logger.getRootLogger().info(
 					"FILE_LOG_FOLDER" + rs.getString("FILE_LOG_FOLDER"));
+		}
+		rs.close();
+		stmt.close();
+	}
+
+	public void queryAllComp() throws SQLException {
+		Logger.getRootLogger().info("QUERY ALL");
+		stmt = c.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT * FROM COMPARATION;");
+		while (rs.next()) {
+			Logger.getRootLogger().debug(
+					"EXPERIMENT_ID = " + rs.getString("EXP_ID"));
+			Logger.getRootLogger().debug(
+					"EVENT_ID = " + rs.getString("EVENT_ID"));
+			Logger.getRootLogger().debug(
+					"SOUND = " + rs.getBoolean("SOUND"));
+			Logger.getRootLogger().debug(
+					"COMPLETE = " + rs.getBoolean("COMPLETE"));
+			Logger.getRootLogger().debug(
+					"MEMORY = " + rs.getDouble("MEMORY"));
+			Logger.getRootLogger().debug(
+					"LATENCY = " + rs.getLong("LATENCY"));
+
 		}
 		rs.close();
 		stmt.close();

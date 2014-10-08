@@ -18,7 +18,6 @@ import org.apache.jena.riot.RDFDataMgr;
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.query.Dataset;
-import com.hp.hpl.jena.rdf.model.Model;
 
 public class ComparatorImpl extends EngineComparator {
 
@@ -37,15 +36,16 @@ public class ComparatorImpl extends EngineComparator {
 
 	@Override
 	public boolean sendEvent(StreamingEvent e) {
-		String key = "<http://example.com"
-				+ getEventKey(e.getEventTriples()).hashCode() + ">";
+		String key = "http://example.org/"
+				+ getEventKey(e.getEventTriples()).hashCode() + "";
+		Logger.getRootLogger().debug(key);
 		try {
-
 			// TODO mi vado a recuperare dal log memoria e latenza
 			resultCollector.storeEventResult(new ComparisonResultEvent(
 					experiment.getName(), e.getTripleToString(), e
 							.getEvent_timestamp(), experiment.getTimestamp(),
 					isComplete(key), isSound(key), 0, 0));
+
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -65,19 +65,19 @@ public class ComparatorImpl extends EngineComparator {
 	}
 
 	public boolean isComplete(String key) {
-		Dataset jena = datasetList.get(0);
-		Dataset engine = datasetList.get(1);
-		Model diff = jena.getNamedModel(key).difference(
-				engine.getNamedModel(key));
-		return diff.isEmpty();
+		// Model jenaGraph = datasetList.get(0).getNamedModel(key);
+		// Model engineGraph = datasetList.get(1).getNamedModel(key);
+		// Model diff = jenaGraph.difference(engineGraph);
+		return datasetList.get(1).getNamedModel(key)
+				.difference(datasetList.get(0).getNamedModel(key)).isEmpty();
 	}
 
 	public boolean isSound(String key) {
-		Dataset jena = datasetList.get(0);
-		Dataset engine = datasetList.get(1);
-		Model diff = engine.getNamedModel(key).difference(
-				jena.getNamedModel(key));
-		return diff.isEmpty();
+		// Model jenaGraph = datasetList.get(0).getNamedModel(key);
+		// Model engineGraph = datasetList.get(1).getNamedModel(key);
+		// Model diff = engineGraph.difference(jenaGraph);
+		return datasetList.get(0).getNamedModel(key)
+				.difference(datasetList.get(1).getNamedModel(key)).isEmpty();
 	}
 
 	private String getEventKey(Set<String[]> triples) {
@@ -89,17 +89,6 @@ public class ComparatorImpl extends EngineComparator {
 		key += "]";
 
 		return key;
-	}
-
-	@Override
-	public boolean startProcessing(Experiment e) {
-		this.experiment = e;
-		return true;
-	}
-
-	@Override
-	public Experiment stopProcessing() {
-		return null;
 	}
 
 	@Override
@@ -118,6 +107,30 @@ public class ComparatorImpl extends EngineComparator {
 
 	public void setDatasetList(List<Dataset> datasetList) {
 		this.datasetList = datasetList;
+	}
+
+	@Override
+	public ExecutionStates stopProcessing(Experiment e) {
+		if (e != null) {
+			Logger.getLogger("oobqa-comparison").info(
+					"Start Experiment :" + e.toString());
+			return status = ExecutionStates.STOP;
+		} else {
+			return status = ExecutionStates.ERROR;
+
+		}
+	}
+
+	@Override
+	public ExecutionStates startProcessing(Experiment e) {
+		if (e != null) {
+			this.experiment = e;
+			Logger.getLogger("oobqa-comparison").info(
+					"Stop Experiment :" + e.toString());
+			return status = ExecutionStates.READY;
+		} else {
+			return status = ExecutionStates.ERROR;
+		}
 	}
 
 }

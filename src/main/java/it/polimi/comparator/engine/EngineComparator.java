@@ -17,7 +17,7 @@ public abstract class EngineComparator extends EventProcessor<StreamingEvent> {
 	protected TestExperimentResultEvent er;
 	protected ResultCollector<ComparisonResultEvent, ComparisonExperimentResult> resultCollector;
 	protected ExecutionStates status;
-	
+
 	public EngineComparator(
 			ResultCollector<ComparisonResultEvent, ComparisonExperimentResult> resultCollector,
 			String name) {
@@ -25,9 +25,9 @@ public abstract class EngineComparator extends EventProcessor<StreamingEvent> {
 		this.name = name;
 	}
 
-	public abstract boolean startProcessing(Experiment e);
+	public abstract ExecutionStates startProcessing(Experiment e);
 
-	public abstract Experiment stopProcessing();
+	public abstract ExecutionStates stopProcessing(Experiment e);
 
 	public abstract ExecutionStates init();
 

@@ -21,14 +21,17 @@ public class ComparatorMain {
 		ResultCollector<ComparisonResultEvent, ComparisonExperimentResult> resultCollector = new ResultCollectorComparator(
 				new FileManagerImpl(), new DatabaseManagerImpl());
 
-		ComparatorImpl engine = new ComparatorImpl(comparing_files, resultCollector);
-		
-		
+		ComparatorImpl engine = new ComparatorImpl(comparing_files,
+				resultCollector);
+
 		CalibrationStand<EngineComparator> stand = new CalibrationStand<EngineComparator>(
-				comparing_files, files, engine, new Streamer<EngineComparator>(engine));
+				comparing_files, files, resultCollector, engine,
+				new Streamer<EngineComparator>(engine));
 
 		stand.turnOn();
-		stand.run();
+		for (String f : files) {
+			stand.run(f);
+		}
 		stand.turnOff();
 
 	}
