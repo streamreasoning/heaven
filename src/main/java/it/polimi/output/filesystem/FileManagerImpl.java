@@ -1,5 +1,7 @@
 package it.polimi.output.filesystem;
 
+import it.polimi.teststand.enums.ExecutionStates;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,33 +10,38 @@ import org.apache.log4j.Logger;
 
 public class FileManagerImpl extends FileManager {
 
-
 	@Override
-	public void close() {
+	public ExecutionStates close() {
 		Logger.getRootLogger().info("Nothing to do");
+		return status = ExecutionStates.CLOSED;
 	}
 
 	@Override
-	public void init() {
+	public ExecutionStates init() {
 		Logger.getRootLogger().info("Nothing to do");
+		return status = ExecutionStates.READY;
 	}
 
 	public void toFile(String filePath, String fileNameWithExtension,
 			Writable content) throws IOException {
-		File file;
-		if (filePath == null || filePath.isEmpty())
-			file = new File(fileNameWithExtension);
-		else {
-			file = new File(filePath + fileNameWithExtension);
+		if (ExecutionStates.READY.equals(status)) {
+			File file;
+			if (filePath == null || filePath.isEmpty())
+				file = new File(fileNameWithExtension);
+			else {
+				file = new File(filePath + fileNameWithExtension);
+			}
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			FileOutputStream fop = new FileOutputStream(file, true);
+			fop.write(content.getBytes());
+			fop.write(System.getProperty("line.separator").getBytes());
+			fop.flush();
+			fop.close();
+		} else {
+			Logger.getRootLogger().warn("Not Ready to write file");
 		}
-		if (!file.exists()) {
-			file.createNewFile();
-		}
-		FileOutputStream fop = new FileOutputStream(file, true);
-		fop.write(content.getBytes());
-		fop.write(System.getProperty("line.separator").getBytes());
-		fop.flush();
-		fop.close();
 	}
 
 	@Override
@@ -52,20 +59,24 @@ public class FileManagerImpl extends FileManager {
 	@Override
 	public void toFile(String filePath, String fileNameWithExtension,
 			byte[] content) throws IOException {
-		File file;
-		if (filePath == null || filePath.isEmpty()) {
-			file = new File(fileNameWithExtension);
+		if (ExecutionStates.READY.equals(status)) {
+			File file;
+			if (filePath == null || filePath.isEmpty()) {
+				file = new File(fileNameWithExtension);
+			} else {
+				file = new File(filePath + fileNameWithExtension);
+			}
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			FileOutputStream fop = new FileOutputStream(file, true);
+			fop.write(content);
+			fop.write(System.getProperty("line.separator").getBytes());
+			fop.flush();
+			fop.close();
 		} else {
-			file = new File(filePath + fileNameWithExtension);
+			Logger.getRootLogger().warn("Not Ready to write file");
 		}
-		if (!file.exists()) {
-			file.createNewFile();
-		}
-		FileOutputStream fop = new FileOutputStream(file, true);
-		fop.write(content);
-		fop.write(System.getProperty("line.separator").getBytes());
-		fop.flush();
-		fop.close();
 	}
 
 }

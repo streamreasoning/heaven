@@ -3,12 +3,9 @@ package it.polimi.comparator.core;
 import it.polimi.comparator.engine.EngineComparator;
 import it.polimi.comparator.events.ComparisonExperimentResult;
 import it.polimi.comparator.events.ComparisonResultEvent;
-import it.polimi.comparator.output.ResultCollectorComparator;
 import it.polimi.events.Experiment;
 import it.polimi.output.filesystem.FileManager;
-import it.polimi.output.filesystem.FileManagerImpl;
 import it.polimi.output.result.ResultCollector;
-import it.polimi.output.sqllite.DatabaseManagerImpl;
 import it.polimi.streamer.Streamer;
 import it.polimi.teststand.enums.ExecutionStates;
 import it.polimi.teststand.exceptions.WrongStatusTransitionException;
@@ -16,23 +13,22 @@ import it.polimi.teststand.exceptions.WrongStatusTransitionException;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import org.apache.log4j.Logger;
+
 public class CalibrationStand<T extends EngineComparator> {
 
-	private ExecutionStates status = ExecutionStates.OFF;
+	private ExecutionStates status;
 	private ResultCollector<ComparisonResultEvent, ComparisonExperimentResult> resultCollector;
 	private T engine;
 	private Streamer<T> streamer;
 	private String[] files, comparing_files;
 
-	public CalibrationStand(String[] comparing_files, String[] files, T engine)
-			throws ClassNotFoundException, SQLException {
+	public CalibrationStand(String[] comparing_files, String[] files, T engine,
+			Streamer<T> streamer) throws ClassNotFoundException, SQLException {
+		status = ExecutionStates.NOT_READY;
 		this.comparing_files = comparing_files;
 		this.files = files;
-		resultCollector = new ResultCollectorComparator(new FileManagerImpl(),
-				new DatabaseManagerImpl());
-		this.engine = engine;
-		engine.setResultCollector(resultCollector);
-		streamer = new Streamer<T>(engine);
+		this.streamer = streamer;
 	}
 
 	public void run() {
@@ -53,43 +49,67 @@ public class CalibrationStand<T extends EngineComparator> {
 									+ comparing_fileName + ".txt"))) {
 				status = ExecutionStates.READY;
 			}
-			
+
 			for (String fileName : files) {
 				try {
-					streamer.stream(
-							status,
-							FileManager.getBuffer(FileManager.DATA_FILE_PATH
-									+ "input/" + fileName));
+					streamer.stream(FileManager
+							.getBuffer(FileManager.DATA_FILE_PATH + "input/"
+									+ fileName));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 
 			}
 			engine.stopProcessing();
-			status = ExecutionStates.ON;
+			status = ExecutionStates.READY;
 		}
 
 	}
 
 	public ExecutionStates turnOff() {
-		if (isOn()) {
-			resultCollector.stop();
-			engine.turnOff();
-			this.status = ExecutionStates.OFF;
-			return status;
-		} else {
+		if (!isOn()) {
 			throw new WrongStatusTransitionException(
 					"Can't move from a status different from ON Current: "
 							+ status);
+		} else {
+			ExecutionStates streamerStatus = streamer.close();
+			ExecutionStates collectorStatus = resultCollector.close();
+			ExecutionStates engineStatus = engine.close();
+
+			if (ExecutionStates.CLOSED.equals(streamerStatus)
+					&& ExecutionStates.CLOSED.equals(collectorStatus)
+					&& ExecutionStates.CLOSED.equals(engineStatus)) {
+				return status = ExecutionStates.CLOSED;
+			} else {
+				Logger.getLogger("obqa").error(
+						"streamerStatus: " + streamerStatus);
+				Logger.getLogger("obqa").error(
+						"collectorStatus: " + collectorStatus);
+				Logger.getLogger("obqa").error("engineStatus: " + engineStatus);
+				return status = ExecutionStates.ERROR;
+			}
+
 		}
 	}
 
 	public ExecutionStates turnOn() {
 		if (isOFF()) {
-			resultCollector.start();
-			engine.turnOn();
-			this.status = ExecutionStates.ON;
-			return status;
+			ExecutionStates streamerStatus = streamer.init();
+			ExecutionStates collectorStatus = resultCollector.init();
+			ExecutionStates engineStatus = engine.init();
+			if (ExecutionStates.READY.equals(streamerStatus)
+					&& ExecutionStates.READY.equals(collectorStatus)
+					&& ExecutionStates.READY.equals(engineStatus)) {
+				return status = ExecutionStates.READY;
+			} else {
+				Logger.getLogger("obqa").error(
+						"streamerStatus: " + streamerStatus);
+				Logger.getLogger("obqa").error(
+						"collectorStatus: " + collectorStatus);
+				Logger.getLogger("obqa").error("engineStatus: " + engineStatus);
+				return status = ExecutionStates.ERROR;
+			}
+
 		} else {
 			throw new WrongStatusTransitionException(
 					"Can't move from a status different from OFF Current: "
@@ -99,11 +119,12 @@ public class CalibrationStand<T extends EngineComparator> {
 	}
 
 	public boolean isOFF() {
-		return ExecutionStates.OFF.equals(status);
+		return ExecutionStates.NOT_READY.equals(status)
+				|| ExecutionStates.CLOSED.equals(status);
 	}
 
 	public boolean isOn() {
-		return ExecutionStates.ON.equals(status);
+		return ExecutionStates.READY.equals(status);
 	}
 
 	public boolean isReady() {

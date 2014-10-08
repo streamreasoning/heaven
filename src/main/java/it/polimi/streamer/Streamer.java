@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import lombok.Data;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -21,28 +23,37 @@ import org.apache.log4j.Logger;
  *            e) method. This class is paramtric too, and the kind of event
  *            processed at this time is StreamingEvent
  */
+
+@Data
 public class Streamer<T extends EventProcessor<StreamingEvent>> {
 
-
+	/**
+	 * Represents the core of the streaming procedure, is must publish the
+	 * sendEvent method through which is possibile to inject any kind of event
+	 * into the system
+	 */
 	private T engine;
+	private ExecutionStates status;
 
 	public Streamer(T model) {
 		this.engine = model;
+		this.status = ExecutionStates.NOT_READY;
 	}
-
 
 	/**
 	 * Open the buffer reader that incapsulate a csv form input file
 	 * 
 	 * 
 	 * @param status
-	 *            represent the execution state of the Envirorment which exploit
-	 *            the streamer the state transitions require a light to mantain
-	 *            the consequetially execution of phases
+	 *            represent the execution state of the Envirorment outside the
+	 *            Streamer. Is exploit the dependecy injection paradince since
+	 *            the streamer must be controlled by the outstanding application
+	 *            system
 	 **/
-	public void stream(ExecutionStates status, BufferedReader br)
-			throws IOException {
+	public void stream(BufferedReader br) throws IOException {
 
+		Logger.getRootLogger().debug("Start Streaming");
+		
 		if (!ExecutionStates.READY.equals(status)) {
 			throw new WrongStatusTransitionException("Not Ready");
 		} else {
@@ -70,7 +81,7 @@ public class Streamer<T extends EventProcessor<StreamingEvent>> {
 					continue;
 				} else {
 					Logger.getRootLogger().debug(line);
-					status = ExecutionStates.SENDING;
+					status = ExecutionStates.RUNNING;
 					Logger.getRootLogger().debug("SEND NEW EVENT");
 					eventTriples = new HashSet<String[]>();
 					eventTriples.add(s);
@@ -88,6 +99,16 @@ public class Streamer<T extends EventProcessor<StreamingEvent>> {
 			br.close();
 
 		}
+	}
+
+	
+	public ExecutionStates init() {
+		return status = ExecutionStates.READY;
+
+	}
+
+	public ExecutionStates close() {
+		return status = ExecutionStates.CLOSED;
 	}
 
 }

@@ -2,94 +2,138 @@ package it.polimi.teststand.core;
 
 import it.polimi.events.Experiment;
 import it.polimi.output.filesystem.FileManager;
-import it.polimi.output.filesystem.FileManagerImpl;
 import it.polimi.output.result.ResultCollector;
-import it.polimi.output.sqllite.DatabaseManagerImpl;
 import it.polimi.streamer.Streamer;
 import it.polimi.teststand.engine.RSPEngine;
 import it.polimi.teststand.enums.ExecutionStates;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.TestResultEvent;
 import it.polimi.teststand.exceptions.WrongStatusTransitionException;
-import it.polimi.teststand.output.ResultCollectorTestStandImpl;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
-public class TestStand<T extends RSPEngine> {
+import org.apache.log4j.Logger;
 
-	private ExecutionStates status = ExecutionStates.OFF;
+public class TestStand {
+
+	private ExecutionStates status;
 	private ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector;
-	private T rspEngine;
+	private RSPEngine rspEngine;
 	private Streamer<RSPEngine> streamer;
-	private String[] files;
+	private Experiment currentExperiment;
 
-	public TestStand(String[] files, T rspEngine)
-			throws ClassNotFoundException, SQLException {
-		this.files = files;
-		resultCollector = new ResultCollectorTestStandImpl(
-				new FileManagerImpl(), new DatabaseManagerImpl());
+	public TestStand(
+			ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector,
+			RSPEngine rspEngine, Streamer<RSPEngine> streamer) {
+		this.status = ExecutionStates.NOT_READY;
+		this.resultCollector = resultCollector;
 		this.rspEngine = rspEngine;
-		rspEngine.setResultCollector(resultCollector);
-		streamer = new Streamer<RSPEngine>(rspEngine);
+		this.streamer = streamer;
 	}
 
-	public void run() {
+	/**
+	 * 
+	 * Start the system execution Move the system state from ON to RUNNING
+	 * 
+	 * @throws Exception
+	 */
+	public void run(String fileName) throws Exception {
 		if (!isOn()) {
 			throw new WrongStatusTransitionException("Not ON");
 		} else {
 
-			for (String fileName : files) {
-				if (rspEngine.startProcessing(new Experiment("EXPERIMENT_ON_"
-						+ fileName + "_WITH_ENGINE_" + rspEngine.getName(),
-						FileManager.DATA_FILE_PATH + "input/" + fileName,
-						FileManager.DATA_FILE_PATH + "output/"
-								+ rspEngine.getName() + "/_Result_"
-								+ fileName.substring(0, fileName.length() - 3)
-								+ "trig"))) {
-					status = ExecutionStates.READY;
-				}
+			Logger.getLogger("obqa").debug("RUN");
+			// Start running
+			status = ExecutionStates.RUNNING;
+
+			// New Experiment
+			String experimentName = "EXPERIMENT_ON_" + fileName
+					+ "_WITH_ENGINE_" + rspEngine.getName();
+
+			String inputFileName = FileManager.DATA_FILE_PATH + "input/"
+					+ fileName;
+
+			String outputFileName = FileManager.DATA_FILE_PATH + "output/"
+					+ rspEngine.getName() + "/_Result_"
+					+ fileName.substring(0, fileName.length() - 3) + "trig";
+
+			currentExperiment = new Experiment(experimentName, inputFileName,
+					outputFileName);
+
+			// Stream experiment e
+
+			ExecutionStates engineStatus = rspEngine
+					.startProcessing(currentExperiment);
+
+			if (ExecutionStates.READY.equals(engineStatus)) {
 
 				try {
-					/*
-					 * TODO metodo statico per ottenre il bugger di lettura, ho
-					 * preferito lasciare tutto l'accesso al filesystem nella
-					 * stessa classe
-					 */
-					streamer.stream(
-							status,
-							FileManager.getBuffer(FileManager.DATA_FILE_PATH
-									+ "input/" + fileName));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				rspEngine.stopProcessing();
-				status = ExecutionStates.ON;
+					// Stream Data Events
+					streamer.stream(FileManager.getBuffer(inputFileName));
 
+				} catch (IOException ex) {
+					// TODO handle errors
+					status = ExecutionStates.ERROR;
+					ex.printStackTrace();
+				}
 			}
+
+			engineStatus = rspEngine.stopProcessing(currentExperiment);
+
+			if (ExecutionStates.STOP.equals(engineStatus)) {
+				status = ExecutionStates.READY;
+			}
+
 		}
 
 	}
 
 	public ExecutionStates turnOff() {
-		if (isOn()) {
-			resultCollector.stop();
-			rspEngine.turnOff();
-			this.status = ExecutionStates.OFF;
-			return status;
-		} else {
+		if (!isOn()) {
 			throw new WrongStatusTransitionException(
 					"Can't move from a status different from ON Current: "
 							+ status);
+		} else {
+			ExecutionStates streamerStatus = streamer.close();
+			ExecutionStates collectorStatus = resultCollector.close();
+			ExecutionStates engineStatus = rspEngine.close();
+
+			if (ExecutionStates.CLOSED.equals(streamerStatus)
+					&& ExecutionStates.CLOSED.equals(collectorStatus)
+					&& ExecutionStates.CLOSED.equals(engineStatus)) {
+				return status = ExecutionStates.CLOSED;
+			} else {
+				Logger.getLogger("obqa").error(
+						"streamerStatus: " + streamerStatus);
+				Logger.getLogger("obqa").error(
+						"collectorStatus: " + collectorStatus);
+				Logger.getLogger("obqa").error(
+						"engineStatus: " + engineStatus);
+				return status = ExecutionStates.ERROR;
+			}
+
 		}
 	}
 
 	public ExecutionStates turnOn() {
 		if (isOFF()) {
-			resultCollector.start();
-			rspEngine.turnOn();
-			this.status = ExecutionStates.ON;
-			return status;
+			ExecutionStates streamerStatus = streamer.init();
+			ExecutionStates collectorStatus = resultCollector.init();
+			ExecutionStates engineStatus = rspEngine.init();
+			if (ExecutionStates.READY.equals(streamerStatus)
+					&& ExecutionStates.READY.equals(collectorStatus)
+					&& ExecutionStates.READY.equals(engineStatus)) {
+				return status = ExecutionStates.READY;
+			} else {
+				Logger.getLogger("obqa").error(
+						"streamerStatus: " + streamerStatus);
+				Logger.getLogger("obqa").error(
+						"collectorStatus: " + collectorStatus);
+				Logger.getLogger("obqa").error(
+						"engineStatus: " + engineStatus);
+				return status = ExecutionStates.ERROR;
+			}
+
 		} else {
 			throw new WrongStatusTransitionException(
 					"Can't move from a status different from OFF Current: "
@@ -99,14 +143,25 @@ public class TestStand<T extends RSPEngine> {
 	}
 
 	public boolean isOFF() {
-		return ExecutionStates.OFF.equals(status);
+		return ExecutionStates.NOT_READY.equals(status)
+				|| ExecutionStates.CLOSED.equals(status);
 	}
 
 	public boolean isOn() {
-		return ExecutionStates.ON.equals(status);
+		return ExecutionStates.READY.equals(status);
 	}
 
 	public boolean isReady() {
 		return ExecutionStates.READY.equals(status);
+	}
+
+	/**
+	 * Save the current execution state to log an error Stop the execution
+	 * completely
+	 * 
+	 * @return
+	 */
+	public ExecutionStates stop() {
+		return status = ExecutionStates.STOP;
 	}
 }

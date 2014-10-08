@@ -1,6 +1,5 @@
 package it.polimi.teststand.engine.esper;
 
-import it.polimi.events.Experiment;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.teststand.engine.RSPEngine;
 import it.polimi.teststand.events.TestExperimentResultEvent;
@@ -21,44 +20,15 @@ public abstract class RSPEsperEngine extends RSPEngine {
 	protected static EPAdministrator cepAdm;
 	protected static ConfigurationMethodRef ref;
 
-	protected ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector;
-	protected TestExperimentResultEvent er;
-	protected Experiment experiment;
-
-	protected String name;
-
 	protected static int time = 0;
 
 	public RSPEsperEngine(
 			ResultCollector<TestResultEvent, TestExperimentResultEvent> storeSystem) {
-		super(storeSystem);
-	}
-
-	public String getName() {
-		return name;
-	}
+		super(storeSystem);}
 
 	protected void sendTimeEvent() {
 		time += 1000;
 		cepRT.sendEvent(new CurrentTimeEvent(time));
-	}
-
-
-	public abstract boolean startProcessing(Experiment e);
-
-	public abstract Experiment stopProcessing();
-
-	public abstract void turnOn();
-
-	public abstract void turnOff();
-
-	public ResultCollector<TestResultEvent, TestExperimentResultEvent> getResultCollector() {
-		return resultCollector;
-	}
-
-	public void setResultCollector(
-			ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector) {
-		this.resultCollector = resultCollector;
 	}
 
 }

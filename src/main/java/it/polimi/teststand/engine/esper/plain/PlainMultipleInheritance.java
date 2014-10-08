@@ -8,6 +8,7 @@ import it.polimi.teststand.engine.esper.RSPEsperEngine;
 import it.polimi.teststand.engine.esper.commons.listener.ResultCollectorListener;
 import it.polimi.teststand.engine.esper.plain.events.Out;
 import it.polimi.teststand.engine.esper.plain.events.TEvent;
+import it.polimi.teststand.enums.ExecutionStates;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.TestResultEvent;
 
@@ -69,54 +70,6 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 				experiment));
 	}
 
-	@Override
-	public boolean sendEvent(StreamingEvent e) {
-		listener.setLineNumber(e.getLineNumber());
-		TEvent esperEvent;
-		Set<String[]> eventTriples = e.getEventTriples();
-		for (String[] eventTriple : eventTriples) {
-			Logger.getRootLogger().info("Create New Esper Event");
-			esperEvent = new TEvent(new String[] { eventTriple[0] },
-					eventTriple[1], new String[] { eventTriple[2] }, "Input",
-					cepRT.getCurrentTime());
-			cepRT.sendEvent(esperEvent);
-		}
-		sendTimeEvent();
-		return true;
-	}
-
-	@Override
-	public boolean startProcessing(Experiment e) {
-		if (e != null) {
-			this.experiment = e;
-			cepRT.sendEvent(new CurrentTimeEvent(time));
-			initQueries();
-			er = new TestExperimentResultEvent(e.getInputFileName(),
-					e.getOutputFileName(), FileManagerImpl.LOG_PATH
-							+ e.getTimestamp(), e.getName());
-
-			return true;
-		} else
-			return false;
-	}
-
-	@Override
-	public Experiment stopProcessing() {
-		er.setTimestamp_end(System.currentTimeMillis());
-		resultCollector.storeExperimentResult(er);
-		return experiment;
-	}
-
-	@Override
-	public void turnOn() {
-		initEsper();
-	}
-
-	@Override
-	public void turnOff() {
-		Logger.getRootLogger().info("Nothing to do...Turing Off");
-	}
-
 	private static void initEsper() {
 
 		ref = new ConfigurationMethodRef();
@@ -136,4 +89,56 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 		cepRT = cep.getEPRuntime();
 	}
 
+	@Override
+	public ExecutionStates init() {
+		initEsper();
+		return status = ExecutionStates.READY;
+	}
+
+	@Override
+	public ExecutionStates startProcessing(Experiment e) {
+		if (e != null) {
+			this.experiment = e;
+			cepRT.sendEvent(new CurrentTimeEvent(time));
+			initQueries();
+			er = new TestExperimentResultEvent(e.getInputFileName(),
+					e.getOutputFileName(), FileManagerImpl.LOG_PATH
+							+ e.getTimestamp(), e.getName());
+
+			return status = ExecutionStates.RUNNING;
+		} else
+			return status = ExecutionStates.ERROR;
+	}
+
+	@Override
+	public boolean sendEvent(StreamingEvent e) {
+		listener.setLineNumber(e.getLineNumber());
+		TEvent esperEvent;
+		Set<String[]> eventTriples = e.getEventTriples();
+		for (String[] eventTriple : eventTriples) {
+			Logger.getRootLogger().info("Create New Esper Event");
+			esperEvent = new TEvent(new String[] { eventTriple[0] },
+					eventTriple[1], new String[] { eventTriple[2] }, "Input",
+					cepRT.getCurrentTime());
+			cepRT.sendEvent(esperEvent);
+		}
+		sendTimeEvent();
+		return true;
+	}
+
+	@Override
+	public ExecutionStates stopProcessing(Experiment e) {
+		if (e != null) {
+			er.setTimestamp_end(System.currentTimeMillis());
+			resultCollector.storeExperimentResult(er);
+			return status = ExecutionStates.STOP;
+		} else
+			return status = ExecutionStates.ERROR;
+	}
+
+	@Override
+	public ExecutionStates close() {
+		Logger.getRootLogger().info("Nothing to do...Turing Off");
+		return status = ExecutionStates.CLOSED;
+	}
 }

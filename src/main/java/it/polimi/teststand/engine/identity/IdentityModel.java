@@ -5,8 +5,9 @@ import it.polimi.events.StreamingEvent;
 import it.polimi.output.filesystem.FileManagerImpl;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.teststand.engine.RSPEngine;
-import it.polimi.teststand.events.TestResultEvent;
+import it.polimi.teststand.enums.ExecutionStates;
 import it.polimi.teststand.events.TestExperimentResultEvent;
+import it.polimi.teststand.events.TestResultEvent;
 
 import java.io.IOException;
 
@@ -41,33 +42,35 @@ public class IdentityModel extends RSPEngine {
 	}
 
 	@Override
-	public boolean startProcessing(Experiment e) {
+	public ExecutionStates startProcessing(Experiment e) {
 		if (e != null) {
 			this.experiment = e;
 			er = new TestExperimentResultEvent(e.getInputFileName(),
 					e.getOutputFileName(), FileManagerImpl.LOG_PATH
 							+ e.getTimestamp(), e.getName());
-			return true;
+			return status = ExecutionStates.READY;
 		} else
-			return false;
+			return status = ExecutionStates.ERROR;
 
 	}
 
 	@Override
-	public Experiment stopProcessing() {
+	public ExecutionStates stopProcessing(Experiment e) {
 		er.setTimestamp_end(System.currentTimeMillis());
 		resultCollector.storeExperimentResult(er);
-		return experiment;
+		return status = ExecutionStates.STOP;
 	}
 
 	@Override
-	public void turnOn() {
+	public ExecutionStates init() {
 		Logger.getRootLogger().info("Nothing to do");
+		return status = ExecutionStates.READY;
 	}
 
 	@Override
-	public void turnOff() {
+	public ExecutionStates close() {
 		Logger.getRootLogger().info("Nothing to do");
+		return status = ExecutionStates.CLOSED;
 	}
 
 }

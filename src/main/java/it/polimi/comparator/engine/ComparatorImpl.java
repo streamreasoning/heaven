@@ -1,9 +1,12 @@
 package it.polimi.comparator.engine;
 
+import it.polimi.comparator.events.ComparisonExperimentResult;
 import it.polimi.comparator.events.ComparisonResultEvent;
 import it.polimi.events.Experiment;
 import it.polimi.events.StreamingEvent;
 import it.polimi.output.filesystem.FileManager;
+import it.polimi.output.result.ResultCollector;
+import it.polimi.teststand.enums.ExecutionStates;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,8 +24,10 @@ public class ComparatorImpl extends EngineComparator {
 
 	private List<Dataset> datasetList;
 
-	public ComparatorImpl(String[] comparing_files) {
-		super(null, "Comparator First");
+	public ComparatorImpl(
+			String[] comparing_files,
+			ResultCollector<ComparisonResultEvent, ComparisonExperimentResult> resultCollector) {
+		super(resultCollector, "Comparator First");
 		this.datasetList = new ArrayList<Dataset>();
 		for (String f : comparing_files) {
 			datasetList.add(RDFDataMgr.loadDataset(FileManager.OUTPUT_FILE_PATH
@@ -32,7 +37,8 @@ public class ComparatorImpl extends EngineComparator {
 
 	@Override
 	public boolean sendEvent(StreamingEvent e) {
-		String key ="<http://example.com"+ getEventKey(e.getEventTriples()).hashCode()+">";
+		String key = "<http://example.com"
+				+ getEventKey(e.getEventTriples()).hashCode() + ">";
 		try {
 
 			// TODO mi vado a recuperare dal log memoria e latenza
@@ -49,7 +55,7 @@ public class ComparatorImpl extends EngineComparator {
 
 	public boolean isCorrect(String key) {
 		if (datasetList.size() > 2) {
-			Logger.getRootLogger().info("Too much argumetns");
+			Logger.getLogger("it.polimi.logger").info("Too much argumetns");
 			return false;
 		}
 		Dataset ref = datasetList.get(0);
@@ -60,17 +66,17 @@ public class ComparatorImpl extends EngineComparator {
 
 	public boolean isComplete(String key) {
 		Dataset jena = datasetList.get(0);
-		Dataset engine =datasetList.get(1);
-		Model diff = jena.getNamedModel(key)
-				.difference(engine.getNamedModel(key));
+		Dataset engine = datasetList.get(1);
+		Model diff = jena.getNamedModel(key).difference(
+				engine.getNamedModel(key));
 		return diff.isEmpty();
 	}
 
 	public boolean isSound(String key) {
 		Dataset jena = datasetList.get(0);
-		Dataset engine =datasetList.get(1);
-		Model diff = engine.getNamedModel(key)
-				.difference(jena.getNamedModel(key));
+		Dataset engine = datasetList.get(1);
+		Model diff = engine.getNamedModel(key).difference(
+				jena.getNamedModel(key));
 		return diff.isEmpty();
 	}
 
@@ -97,11 +103,13 @@ public class ComparatorImpl extends EngineComparator {
 	}
 
 	@Override
-	public void turnOn() {
+	public ExecutionStates init() {
+		return status = ExecutionStates.READY;
 	}
 
 	@Override
-	public void turnOff() {
+	public ExecutionStates close() {
+		return status = ExecutionStates.CLOSED;
 	}
 
 	public List<Dataset> getDatasetList() {

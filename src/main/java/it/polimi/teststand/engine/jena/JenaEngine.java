@@ -23,6 +23,7 @@ import it.polimi.events.StreamingEvent;
 import it.polimi.output.filesystem.FileManagerImpl;
 import it.polimi.output.result.ResultCollector;
 import it.polimi.teststand.engine.RSPEngine;
+import it.polimi.teststand.enums.ExecutionStates;
 import it.polimi.teststand.events.TestExperimentResultEvent;
 import it.polimi.teststand.events.TestResultEvent;
 
@@ -120,32 +121,38 @@ public class JenaEngine extends RSPEngine {
 	}
 
 	@Override
-	public boolean startProcessing(Experiment e) {
+	public ExecutionStates startProcessing(Experiment e) {
 		if (e != null) {
 			this.experiment = e;
 			er = new TestExperimentResultEvent(e.getInputFileName(),
 					e.getOutputFileName(), FileManagerImpl.LOG_PATH + "jena"
 							+ e.getTimestamp(), e.getName());
-			return true;
+			return status = ExecutionStates.READY;
 		} else
-			return false;
+			
+			return status = ExecutionStates.ERROR;
 	}
 
 	@Override
-	public Experiment stopProcessing() {
-		er.setTimestamp_end(System.currentTimeMillis());
-		resultCollector.storeExperimentResult(er);
-		return experiment;
+	public ExecutionStates stopProcessing(Experiment e) {
+		if (e != null) {
+			er.setTimestamp_end(System.currentTimeMillis());
+			resultCollector.storeExperimentResult(er);
+			return status = ExecutionStates.STOP;
+		} else
+			return status = ExecutionStates.ERROR;
 	}
 
 	@Override
-	public void turnOn() {
+	public ExecutionStates init() {
 		Logger.getRootLogger().info("Nothing to do");
+		return status = ExecutionStates.READY;
 	}
 
 	@Override
-	public void turnOff() {
+	public ExecutionStates close() {
 		Logger.getRootLogger().info("Nothing to do");
+		return status = ExecutionStates.CLOSED;
 	}
 
 	private Statement createStatement(String[] eventTriple) {

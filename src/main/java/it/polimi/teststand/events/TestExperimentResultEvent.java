@@ -4,6 +4,13 @@ import it.polimi.events.Event;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * 
+ * decorate Experiment Event with results
+ * 
+ * @author Riccardo
+ * 
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class TestExperimentResultEvent extends Event {

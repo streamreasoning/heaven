@@ -5,13 +5,13 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Experiment extends Event {
+public class Experiment {
 
-	private String inputFileName, outputFileName;
+	private String name, inputFileName, outputFileName;
 	private Long timestamp;
 
 	public Experiment(String name, String inputFileName, String outputFileName) {
-		setName(name);
+		this.name = name;
 		this.inputFileName = inputFileName;
 		this.outputFileName = outputFileName;
 		this.timestamp = System.currentTimeMillis();
