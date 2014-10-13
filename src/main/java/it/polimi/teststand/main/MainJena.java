@@ -8,10 +8,10 @@ import it.polimi.collector.saver.SQLLiteEventSaver;
 import it.polimi.collector.saver.TrigEventSaver;
 import it.polimi.events.result.ExperimentResultEvent;
 import it.polimi.events.result.StreamingEventResult;
+import it.polimi.rspengine.RSPEngine;
+import it.polimi.rspengine.jena.JenaEngine;
 import it.polimi.streamer.Streamer;
 import it.polimi.teststand.core.TestStand;
-import it.polimi.teststand.engine.RSPEngine;
-import it.polimi.teststand.engine.jena.JenaEngine;
 
 import java.sql.SQLException;
 

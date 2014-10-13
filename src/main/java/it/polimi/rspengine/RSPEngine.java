@@ -1,4 +1,4 @@
-package it.polimi.teststand.engine;
+package it.polimi.rspengine;
 
 import it.polimi.EventProcessor;
 import it.polimi.collector.ResultCollector;

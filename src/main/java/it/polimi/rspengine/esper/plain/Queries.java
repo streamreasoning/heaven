@@ -1,6 +1,6 @@
-package it.polimi.teststand.engine.esper.plain;
+package it.polimi.rspengine.esper.plain;
 
-import it.polimi.teststand.utils.RDFSUtils;
+import it.polimi.utils.RDFSUtils;
 
 public class Queries {
 

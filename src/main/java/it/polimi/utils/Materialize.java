@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package it.polimi.teststand.utils.copy;
+package it.polimi.utils;
 
 import java.io.File;
 import java.io.FileOutputStream;

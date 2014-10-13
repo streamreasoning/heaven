@@ -1,4 +1,4 @@
-package it.polimi.teststand.utils;
+package it.polimi.utils.copy;
 
 public class RDFSUtils {
 	

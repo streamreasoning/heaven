@@ -1,4 +1,4 @@
-package it.polimi.teststand.engine.esper.commons.listener;
+package it.polimi.rspengine.esper.commons.listener;
 
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;

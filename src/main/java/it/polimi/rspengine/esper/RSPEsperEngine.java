@@ -1,9 +1,9 @@
-package it.polimi.teststand.engine.esper;
+package it.polimi.rspengine.esper;
 
 import it.polimi.collector.ResultCollector;
 import it.polimi.events.Event;
 import it.polimi.events.result.StreamingEventResult;
-import it.polimi.teststand.engine.RSPEngine;
+import it.polimi.rspengine.RSPEngine;
 import lombok.Getter;
 
 import com.espertech.esper.client.Configuration;

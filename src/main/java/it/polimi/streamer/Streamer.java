@@ -4,7 +4,7 @@ import it.polimi.EventProcessor;
 import it.polimi.enums.ExecutionStates;
 import it.polimi.events.StreamingEvent;
 import it.polimi.teststand.exceptions.WrongStatusTransitionException;
-import it.polimi.teststand.utils.RDFSUtils;
+import it.polimi.utils.RDFSUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;

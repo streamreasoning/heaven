@@ -1,9 +1,9 @@
-package it.polimi.teststand.engine.esper.commons.listener;
+package it.polimi.rspengine.esper.commons.listener;
 
 import it.polimi.collector.Collectable;
 import it.polimi.collector.ResultCollector;
 import it.polimi.events.result.StreamingEventResult;
-import it.polimi.teststand.engine.esper.RSPEsperEngine;
+import it.polimi.rspengine.esper.RSPEsperEngine;
 
 import java.io.IOException;
 import java.util.HashSet;

@@ -8,8 +8,8 @@ import it.polimi.events.Experiment;
 import it.polimi.events.StreamingEvent;
 import it.polimi.events.result.ExperimentResultEvent;
 import it.polimi.events.result.StreamingEventResult;
+import it.polimi.rspengine.RSPEngine;
 import it.polimi.streamer.Streamer;
-import it.polimi.teststand.engine.RSPEngine;
 import it.polimi.teststand.exceptions.WrongStatusTransitionException;
 
 import java.io.BufferedReader;

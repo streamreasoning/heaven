@@ -1,11 +1,11 @@
-package it.polimi.teststand.engine.identity;
+package it.polimi.rspengine.identity;
 
 import it.polimi.enums.ExecutionStates;
 import it.polimi.events.Experiment;
 import it.polimi.events.StreamingEvent;
 import it.polimi.events.result.StreamingEventResult;
+import it.polimi.rspengine.RSPEngine;
 import it.polimi.teststand.core.TestStand;
-import it.polimi.teststand.engine.RSPEngine;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package it.polimi.teststand.engine.esper.plain.events;
+package it.polimi.rspengine.esper.plain.events;
 
 import it.polimi.collector.Collectable;
 

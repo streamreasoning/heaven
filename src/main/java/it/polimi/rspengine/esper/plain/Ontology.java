@@ -1,7 +1,7 @@
-package it.polimi.teststand.engine.esper.plain;
+package it.polimi.rspengine.esper.plain;
 
-import it.polimi.teststand.engine.jena.JenaEngine;
-import it.polimi.teststand.utils.RDFSUtils;
+import it.polimi.rspengine.jena.JenaEngine;
+import it.polimi.utils.RDFSUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
