@@ -1,42 +1,58 @@
 package it.polimi.teststand.main;
 
-import it.polimi.output.filesystem.FileManagerImpl;
-import it.polimi.output.result.ResultCollector;
-import it.polimi.output.sqllite.DatabaseManagerImpl;
+import it.polimi.collector.ResultCollector;
+import it.polimi.collector.impl.CollectorEventResult;
+import it.polimi.collector.impl.CollectorExperimentResult;
+import it.polimi.collector.saver.CSVEventSaver;
+import it.polimi.collector.saver.SQLLiteEventSaver;
+import it.polimi.collector.saver.TrigEventSaver;
+import it.polimi.events.result.ExperimentResultEvent;
+import it.polimi.events.result.StreamingEventResult;
 import it.polimi.streamer.Streamer;
 import it.polimi.teststand.core.TestStand;
 import it.polimi.teststand.engine.RSPEngine;
 import it.polimi.teststand.engine.jena.JenaEngine;
-import it.polimi.teststand.events.TestExperimentResultEvent;
-import it.polimi.teststand.events.TestResultEvent;
-import it.polimi.teststand.output.ResultCollectorTestStandImpl;
 
 import java.sql.SQLException;
 
 public class MainJena {
+	
+	public static final String INPUT_FILE_PATH = "src/main/resource/data/input/";
+	public static final String OUTPUT_FILE_PATH = "src/main/resource/data/output/";
 
 	public static void main(String[] args) throws ClassNotFoundException,
 			SQLException {
 
-		String[] files = new String[] { "file1.txt", "file2.txt", "file3.txt" };
-		
-		ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector = new ResultCollectorTestStandImpl(
-				new FileManagerImpl(), new DatabaseManagerImpl());
-		
-		JenaEngine engine = new JenaEngine(resultCollector);
+		String[] files = new String[] { "file1.txt" };
 
-		TestStand testStand = new TestStand(resultCollector, engine,
-				new Streamer<RSPEngine>(engine));
+		TestStand<RSPEngine> testStand = new TestStand<RSPEngine>();
+
+		ResultCollector<StreamingEventResult> streamingEventResultCollector = new CollectorEventResult(
+				testStand, new TrigEventSaver(), new CSVEventSaver());
+		ResultCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(
+				testStand, new SQLLiteEventSaver());
+		RSPEngine engine = new JenaEngine(testStand);
+		Streamer streamer = new Streamer(testStand);
+
+		testStand.build(streamingEventResultCollector,
+				experimentResultCollector, engine, streamer);
 
 		testStand.turnOn();
 		try {
 			for (String f : files) {
-				testStand.run(f);
+
+				testStand.run(
+						"EXPERIMENT_ON_" + f + "_WITH_ENGINE_"
+								+ engine.getName(),
+						INPUT_FILE_PATH + f,
+						engine.getName() + "/_Result_"
+								+ f.substring(0, f.length() - 3));
 			}
 		} catch (Exception e) {
-			testStand.stop();
 			e.printStackTrace();
+			testStand.stop();
 		}
+
 		testStand.turnOff();
 	}
 }

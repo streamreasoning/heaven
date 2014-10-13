@@ -1,5 +1,6 @@
 package it.polimi.streamer;
 
+import it.polimi.EventProcessor;
 import it.polimi.enums.ExecutionStates;
 import it.polimi.events.StreamingEvent;
 import it.polimi.teststand.exceptions.WrongStatusTransitionException;
@@ -10,7 +11,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import lombok.Data;
+import lombok.Getter;
 
 import org.apache.log4j.Logger;
 
@@ -24,20 +25,20 @@ import org.apache.log4j.Logger;
  *            processed at this time is StreamingEvent
  */
 
-@Data
-public class Streamer<T extends EventProcessor<StreamingEvent>> {
+@Getter
+public class Streamer {
 
 	/**
 	 * Represents the core of the streaming procedure, is must publish the
 	 * sendEvent method through which is possibile to inject any kind of event
 	 * into the system
 	 */
-	private T engine;
+	private EventProcessor<StreamingEvent> stand;
 	private ExecutionStates status;
 
-	public Streamer(T model) {
-		this.engine = model;
-		this.status = ExecutionStates.NOT_READY;
+	public Streamer(EventProcessor<StreamingEvent> stand) {
+		this.stand = stand;
+		this.status = ExecutionStates.CLOSED;
 	}
 
 	/**
@@ -50,7 +51,7 @@ public class Streamer<T extends EventProcessor<StreamingEvent>> {
 	 *            the streamer must be controlled by the outstanding application
 	 *            system
 	 **/
-	public void stream(BufferedReader br) throws IOException {
+	public void stream(String fileName, BufferedReader br) throws IOException {
 
 		Logger.getRootLogger().debug("Start Streaming");
 
@@ -78,18 +79,18 @@ public class Streamer<T extends EventProcessor<StreamingEvent>> {
 				s[2] = s[2].replace(">", "");
 
 				if (RDFSUtils.isDatatype(s[1]) || RDFSUtils.isType(s[1])) {
-					continue;
+					continue; // TODO spostare in fase di setup
 				} else {
-					Logger.getRootLogger().debug(line);
+					Logger.getRootLogger().debug("SEND NEW EVENT: " + line);
+
 					status = ExecutionStates.RUNNING;
-					Logger.getRootLogger().debug("SEND NEW EVENT");
 					eventTriples = new HashSet<String[]>();
 					eventTriples.add(s);
-					if (engine.sendEvent(new StreamingEvent(eventTriples,
-							lineNumber))) {
+					if (stand.sendEvent(new StreamingEvent(eventTriples,
+							lineNumber, fileName))) {
 						streamedEvents++;
 					} else {
-						Logger.getRootLogger().info("Not Saved");
+						Logger.getRootLogger().info("Not Saved " + line);
 					}
 					status = ExecutionStates.READY;
 				}

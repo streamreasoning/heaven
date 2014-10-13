@@ -1,36 +1,33 @@
 package it.polimi.teststand.engine;
 
+import it.polimi.EventProcessor;
+import it.polimi.collector.ResultCollector;
 import it.polimi.enums.ExecutionStates;
-import it.polimi.events.Experiment;
 import it.polimi.events.StreamingEvent;
-import it.polimi.output.result.ResultCollector;
-import it.polimi.streamer.EventProcessor;
-import it.polimi.teststand.events.TestExperimentResultEvent;
-import it.polimi.teststand.events.TestResultEvent;
+import it.polimi.events.result.StreamingEventResult;
+import it.polimi.teststand.core.Stand;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class RSPEngine extends EventProcessor<StreamingEvent> {
+public abstract class RSPEngine implements EventProcessor<StreamingEvent> {
 
-	protected ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector;
-	protected TestExperimentResultEvent er;
-	protected Experiment experiment;
-	protected String name;
 	protected ExecutionStates status;
+	protected ResultCollector<StreamingEventResult> collector;
+	protected String name;
+	protected Stand stand;
 
-	public RSPEngine(
-			ResultCollector<TestResultEvent, TestExperimentResultEvent> storeSystem) {
-		this.resultCollector = storeSystem;
+	public RSPEngine(ResultCollector<StreamingEventResult> stand) {
+		this.collector = stand;
 	}
 
 	public abstract ExecutionStates init();
 
 	public abstract ExecutionStates close();
 
-	public abstract ExecutionStates startProcessing(Experiment e);
+	public abstract ExecutionStates startProcessing();
 
-	public abstract ExecutionStates stopProcessing(Experiment e);
+	public abstract ExecutionStates stopProcessing();
 
 }

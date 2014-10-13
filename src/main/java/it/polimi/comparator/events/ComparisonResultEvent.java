@@ -15,8 +15,8 @@ public class ComparisonResultEvent extends Event implements Writable {
 	private long latency;
 
 	public ComparisonResultEvent(String experiment_id, String event_id,
-			long event_ts, long experiment_ts,
-			boolean complete, boolean sound, double memory, long latency) {
+			long event_ts, long experiment_ts, boolean complete, boolean sound,
+			double memory, long latency) {
 		this.event_id = event_id;
 		this.experiment_id = experiment_id;
 		this.result_timestamp = System.currentTimeMillis();
@@ -30,10 +30,11 @@ public class ComparisonResultEvent extends Event implements Writable {
 
 	// (EXP_ID, EVENT_ID, SOUND, COMPLETE,MEMORY, LATENCY)
 	public String toString() {
-		return "VALUES (" + "'" + experiment_id + "'" + "," + "'" + event_id
-				+ "'" + ","  + (sound ? 1 : 0) + "," + 
-				+ (complete ? 1 : 0) + "," +memory +  ","
-				+ latency +  ");";
+		return "VALUES (" + "'" + experiment_id + "'" + "," + "'"
+				+ "<http://example.org/" + event_id.hashCode() + "/"
+				+ System.currentTimeMillis() + ">" + "'" + ","
+				+ (sound ? 1 : 0) + "," + +(complete ? 1 : 0) + "," + memory
+				+ "," + latency + ");";
 	}
 
 	public long getEvent_timestamp() {

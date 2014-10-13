@@ -1,12 +1,12 @@
 package it.polimi.comparator.engine;
 
+import it.polimi.collector.ResultCollector;
 import it.polimi.comparator.events.ComparisonExperimentResult;
 import it.polimi.comparator.events.ComparisonResultEvent;
 import it.polimi.enums.ExecutionStates;
 import it.polimi.events.Experiment;
 import it.polimi.events.StreamingEvent;
 import it.polimi.output.filesystem.FileManager;
-import it.polimi.output.result.ResultCollector;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class ComparatorImpl extends EngineComparator {
 		Logger.getRootLogger().debug(key);
 		try {
 			// TODO mi vado a recuperare dal log memoria e latenza
-			resultCollector.storeEventResult(new ComparisonResultEvent(
+			resultCollector.store(new ComparisonResultEvent(
 					experiment.getName(), e.getTripleToString(), e
 							.getEvent_timestamp(), experiment.getTimestamp(),
 					isComplete(key), isSound(key), 0, 0));

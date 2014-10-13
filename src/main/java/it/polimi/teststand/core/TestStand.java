@@ -1,31 +1,46 @@
 package it.polimi.teststand.core;
 
+import it.polimi.EventProcessor;
+import it.polimi.collector.ResultCollector;
 import it.polimi.enums.ExecutionStates;
+import it.polimi.events.Event;
 import it.polimi.events.Experiment;
-import it.polimi.output.filesystem.FileManager;
-import it.polimi.output.result.ResultCollector;
+import it.polimi.events.StreamingEvent;
+import it.polimi.events.result.ExperimentResultEvent;
+import it.polimi.events.result.StreamingEventResult;
 import it.polimi.streamer.Streamer;
 import it.polimi.teststand.engine.RSPEngine;
-import it.polimi.teststand.events.TestExperimentResultEvent;
-import it.polimi.teststand.events.TestResultEvent;
 import it.polimi.teststand.exceptions.WrongStatusTransitionException;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.Set;
+
+import lombok.Getter;
 
 import org.apache.log4j.Logger;
 
-public class TestStand {
+@Getter
+public class TestStand<T extends RSPEngine> extends Stand implements
+		EventProcessor<StreamingEvent>, ResultCollector<StreamingEventResult> {
 
-	private ExecutionStates status;
-	private ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector;
-	private RSPEngine rspEngine;
-	private Streamer<RSPEngine> streamer;
-	private Experiment currentExperiment;
+	private ResultCollector<StreamingEventResult> resultCollector;
+	private ResultCollector<ExperimentResultEvent> experimentResultCollector;
 
-	public TestStand(
-			ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector,
-			RSPEngine rspEngine, Streamer<RSPEngine> streamer) {
-		this.status = ExecutionStates.NOT_READY;
+	private T rspEngine;
+	private Streamer streamer;
+
+	public TestStand() {
+		super(ExecutionStates.NOT_READY, null);
+	}
+
+	public void build(ResultCollector<StreamingEventResult> resultCollector,
+			ResultCollector<ExperimentResultEvent> experimentResultCollector,
+			T rspEngine, Streamer streamer) {
+		this.experimentResultCollector = experimentResultCollector;
 		this.resultCollector = resultCollector;
 		this.rspEngine = rspEngine;
 		this.streamer = streamer;
@@ -37,7 +52,8 @@ public class TestStand {
 	 * 
 	 * @throws Exception
 	 */
-	public void run(String fileName) throws Exception {
+	public void run(String experimentName, String inputFileName,
+			String outputFileName) throws Exception {
 		if (!isOn()) {
 			throw new WrongStatusTransitionException("Not ON");
 		} else {
@@ -46,39 +62,26 @@ public class TestStand {
 			// Start running
 			status = ExecutionStates.RUNNING;
 
-			// New Experiment
-			String experimentName = "EXPERIMENT_ON_" + fileName
-					+ "_WITH_ENGINE_" + rspEngine.getName();
-
-			String inputFileName = FileManager.DATA_FILE_PATH + "input/"
-					+ fileName;
-
-			String outputFileName = FileManager.DATA_FILE_PATH + "output/"
-					+ rspEngine.getName() + "/_Result_"
-					+ fileName.substring(0, fileName.length() - 3) + "trig";
-
 			currentExperiment = new Experiment(experimentName, inputFileName,
 					outputFileName);
 
-			// Stream experiment e
-
-			ExecutionStates engineStatus = rspEngine
-					.startProcessing(currentExperiment);
+			ExecutionStates engineStatus = rspEngine.startProcessing();
 
 			if (ExecutionStates.READY.equals(engineStatus)) {
 
 				try {
-					// Stream Data Events
-					streamer.stream(FileManager.getBuffer(inputFileName));
+					streamer.stream(inputFileName, getBuffer(inputFileName));
 
 				} catch (IOException ex) {
-					// TODO handle errors
 					status = ExecutionStates.ERROR;
 					ex.printStackTrace();
 				}
 			}
 
-			engineStatus = rspEngine.stopProcessing(currentExperiment);
+			engineStatus = rspEngine.stopProcessing();
+
+			experimentResultCollector.store(new ExperimentResultEvent(
+					currentExperiment));
 
 			if (ExecutionStates.CLOSED.equals(engineStatus)) {
 				status = ExecutionStates.READY;
@@ -97,8 +100,11 @@ public class TestStand {
 			ExecutionStates streamerStatus = streamer.close();
 			ExecutionStates engineStatus = rspEngine.close();
 			ExecutionStates collectorStatus = resultCollector.close();
+			ExecutionStates experimenTcollectorStatus = experimentResultCollector
+					.close();
 
 			if (ExecutionStates.CLOSED.equals(streamerStatus)
+					&& ExecutionStates.CLOSED.equals(experimenTcollectorStatus)
 					&& ExecutionStates.CLOSED.equals(collectorStatus)
 					&& ExecutionStates.CLOSED.equals(engineStatus)) {
 				return status = ExecutionStates.CLOSED;
@@ -107,6 +113,9 @@ public class TestStand {
 						"streamerStatus: " + streamerStatus);
 				Logger.getLogger("obqa").error(
 						"collectorStatus: " + collectorStatus);
+				Logger.getLogger("obqa").error(
+						"experimentCollectorStatus: "
+								+ experimenTcollectorStatus);
 				Logger.getLogger("obqa").error("engineStatus: " + engineStatus);
 				return status = ExecutionStates.ERROR;
 			}
@@ -119,15 +128,22 @@ public class TestStand {
 			ExecutionStates streamerStatus = streamer.init();
 			ExecutionStates engineStatus = rspEngine.init();
 			ExecutionStates collectorStatus = resultCollector.init();
+			ExecutionStates experimenTcollectorStatus = experimentResultCollector
+					.init();
+
 			if (ExecutionStates.READY.equals(streamerStatus)
 					&& ExecutionStates.READY.equals(collectorStatus)
-					&& ExecutionStates.READY.equals(engineStatus)) {
+					&& ExecutionStates.READY.equals(engineStatus)
+					&& ExecutionStates.READY.equals(experimenTcollectorStatus)) {
 				return status = ExecutionStates.READY;
 			} else {
 				Logger.getLogger("obqa").error(
 						"streamerStatus: " + streamerStatus);
 				Logger.getLogger("obqa").error(
 						"collectorStatus: " + collectorStatus);
+				Logger.getLogger("obqa").error(
+						"experimentCollectorStatus: "
+								+ experimenTcollectorStatus);
 				Logger.getLogger("obqa").error("engineStatus: " + engineStatus);
 				return status = ExecutionStates.ERROR;
 			}
@@ -162,4 +178,53 @@ public class TestStand {
 	public ExecutionStates stop() {
 		return status = ExecutionStates.OFF;
 	}
+
+	// TODO Unders
+	public boolean sendEvent(StreamingEvent e) {
+		return rspEngine.sendEvent(e);
+	}
+
+	public boolean store(StreamingEventResult r) {
+		try {
+			return resultCollector.store(r);
+		} catch (IOException e) {
+			return false;
+		}
+	}
+
+	@Override
+	public long getTimestamp() {
+		return resultCollector.getTimestamp();
+	}
+
+	@Override
+	public ExecutionStates init() {
+		return status = ExecutionStates.READY;
+	}
+
+	@Override
+	public ExecutionStates close() {
+		return status = ExecutionStates.CLOSED;
+	}
+
+	@Override
+	public StreamingEventResult newResultInstance(Set<String[]> all_triples,
+			Event e) {
+		// TODO folder
+		// return new StreamingEventResult(all_triples, start_triples,
+		// event_timestamp, stand.getCurrentExperiment()
+		// .getOutputFileName(), "plain/", stand
+		// .getCurrentExperiment().getName(), stand
+		// .getCurrentExperiment().getTimestamp(), lineNumber);
+
+		return new StreamingEventResult(all_triples, (StreamingEvent) e,
+				currentExperiment.getOutputFileName());
+	}
+
+	private BufferedReader getBuffer(String fileName)
+			throws FileNotFoundException {
+		File file = new File(fileName);
+		return new BufferedReader(new FileReader(file));
+	}
+
 }

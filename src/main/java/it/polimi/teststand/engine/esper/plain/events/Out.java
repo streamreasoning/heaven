@@ -1,8 +1,6 @@
 package it.polimi.teststand.engine.esper.plain.events;
 
-import it.polimi.events.Experiment;
-import it.polimi.output.result.Storable;
-import it.polimi.teststand.events.TestResultEvent;
+import it.polimi.collector.Collectable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Out implements Storable {
+public class Out implements Collectable {
 	private String[] o, s;
 	private String p, channel;
 	private long timestamp, app_timestamp;
@@ -76,10 +74,6 @@ public class Out implements Storable {
 				+ app_timestamp + ", channel=" + channel + "]";
 	}
 
-	@Override
-	public TestResultEvent toEventResult(Experiment e) {
-		return null;
-	}
 
 	@Override
 	public Set<String[]> getTriples() {
@@ -106,6 +100,36 @@ public class Out implements Storable {
 
 	public void setApp_timestamp(long app_timestamp) {
 		this.app_timestamp = app_timestamp;
+	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getTrig() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getCSV() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getSQL() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public byte[] getBytes() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

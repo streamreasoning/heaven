@@ -1,9 +1,10 @@
 package it.polimi.teststand.engine.esper;
 
-import it.polimi.output.result.ResultCollector;
+import it.polimi.collector.ResultCollector;
+import it.polimi.events.Event;
+import it.polimi.events.result.StreamingEventResult;
 import it.polimi.teststand.engine.RSPEngine;
-import it.polimi.teststand.events.TestExperimentResultEvent;
-import it.polimi.teststand.events.TestResultEvent;
+import lombok.Getter;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.ConfigurationMethodRef;
@@ -12,6 +13,7 @@ import com.espertech.esper.client.EPRuntime;
 import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.time.CurrentTimeEvent;
 
+@Getter
 public abstract class RSPEsperEngine extends RSPEngine {
 
 	protected static Configuration cepConfig;
@@ -19,12 +21,15 @@ public abstract class RSPEsperEngine extends RSPEngine {
 	protected static EPRuntime cepRT;
 	protected static EPAdministrator cepAdm;
 	protected static ConfigurationMethodRef ref;
-
+	protected Event currentStreamingEvent = null;
+	
 	protected static int time = 0;
+	
+	public RSPEsperEngine(ResultCollector<StreamingEventResult> stand) {
+		super(stand);
+		// TODO Auto-generated constructor stub
+	}
 
-	public RSPEsperEngine(
-			ResultCollector<TestResultEvent, TestExperimentResultEvent> storeSystem) {
-		super(storeSystem);}
 
 	protected void sendTimeEvent() {
 		time += 1000;

@@ -5,39 +5,36 @@ import java.util.Set;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class StreamingEvent extends Event {
 
-
 	private Set<String[]> eventTriples;
-	private String id;
-	private long event_timestamp;
-	private boolean ignore = false;
+	private String id, fileName;
+	private long timestamp;
 	private int lineNumber;
 
-	public StreamingEvent(Set<String[]> eventTriples, boolean ignore,
-			int lineNumber) {
-		event_timestamp = System.currentTimeMillis();
-		this.id = "<http://example.org/" + event_timestamp + ">";
-		this.ignore = ignore;
-		this.lineNumber = lineNumber;
+	public StreamingEvent(Set<String[]> eventTriples, int lineNumber,
+			String fileName) {
+		timestamp = System.currentTimeMillis();
 		this.eventTriples = eventTriples;
+		String key = "[";
+		for (String[] triple : eventTriples) {
+			key += Arrays.deepToString(triple);
+
+		}
+		key += "]";
+
+		this.id = "<http://example.org/" + key.hashCode() + ">";
+		this.lineNumber = lineNumber;
+		this.fileName = fileName;
 	}
 
-	public StreamingEvent(Set<String[]> eventTriples, int lineNumber) {
-		this.lineNumber = lineNumber;
-		event_timestamp = System.currentTimeMillis();
-		this.id = "<http://example.org/" + event_timestamp + ">";
-		this.eventTriples = eventTriples;
-	}
-
-	
 	@Override
 	public String toString() {
 		return "StreamingEvent [eventTriples=" + getTripleToString() + ", id="
-				+ id + ", event_timestamp=" + event_timestamp + ", ignore="
-				+ ignore + "]";
+				+ id + ", event_timestamp=" + timestamp + ", ignore=" + "]";
 	}
 
 	public String getTripleToString() {

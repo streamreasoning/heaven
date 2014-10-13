@@ -1,16 +1,13 @@
 package it.polimi.teststand.engine.esper.plain;
 
 import it.polimi.enums.ExecutionStates;
-import it.polimi.events.Experiment;
 import it.polimi.events.StreamingEvent;
-import it.polimi.output.filesystem.FileManagerImpl;
-import it.polimi.output.result.ResultCollector;
+import it.polimi.teststand.core.TestStand;
+import it.polimi.teststand.engine.RSPEngine;
 import it.polimi.teststand.engine.esper.RSPEsperEngine;
 import it.polimi.teststand.engine.esper.commons.listener.ResultCollectorListener;
 import it.polimi.teststand.engine.esper.plain.events.Out;
 import it.polimi.teststand.engine.esper.plain.events.TEvent;
-import it.polimi.teststand.events.TestExperimentResultEvent;
-import it.polimi.teststand.events.TestResultEvent;
 
 import java.util.Set;
 
@@ -40,17 +37,9 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 
 	// TODO useless private static final Ontology ontology = new Ontology();
 
-	public Integer iterationNumber = 0;
-	private ResultCollectorListener listener;
-
-	public PlainMultipleInheritance(
-			ResultCollector<TestResultEvent, TestExperimentResultEvent> storeSystem) {
-		super(storeSystem);
-		this.name = "plain";
-	}
-
-	public PlainMultipleInheritance() {
-		super(null);
+	public PlainMultipleInheritance(TestStand<RSPEngine> stand) {
+		super(stand);
+		super.stand = stand;
 		this.name = "plain";
 	}
 
@@ -66,12 +55,11 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 
 		EPStatement out = cepAdm
 				.createEPL("insert into Out select * from QueryOut.win:time_batch(1000 msec)");
-		out.addListener(listener = new ResultCollectorListener(resultCollector,
-				experiment));
+		out.addListener(new ResultCollectorListener(collector, this));
 	}
 
-	private static void initEsper() {
-
+	@Override
+	public ExecutionStates init() {
 		ref = new ConfigurationMethodRef();
 		cepConfig = new Configuration();
 		cepConfig.addMethodRef(Ontology.class, ref);
@@ -87,56 +75,48 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 		// We register an EPL statement
 		cepAdm = cep.getEPAdministrator();
 		cepRT = cep.getEPRuntime();
-	}
 
-	@Override
-	public ExecutionStates init() {
-		initEsper();
+		initQueries();
+
 		return status = ExecutionStates.READY;
 	}
 
 	@Override
-	public ExecutionStates startProcessing(Experiment e) {
-		if (e != null && isStartable()) {
-			this.experiment = e;
+	public ExecutionStates startProcessing() {
+		if (isStartable()) {
+			resetTime();
 			cepRT.sendEvent(new CurrentTimeEvent(time));
-			initQueries();
-			er = new TestExperimentResultEvent(e.getInputFileName(),
-					e.getOutputFileName(), FileManagerImpl.LOG_PATH
-							+ e.getTimestamp(), e.getName());
-
 			return status = ExecutionStates.READY;
 		} else
 			return status = ExecutionStates.ERROR;
 	}
 
-	@Override
-	public boolean sendEvent(StreamingEvent e) {
-		if (experiment != null) {
-			status = ExecutionStates.RUNNING;
-			listener.setLineNumber(e.getLineNumber());
-			TEvent esperEvent;
-			Set<String[]> eventTriples = e.getEventTriples();
-			for (String[] eventTriple : eventTriples) {
-				Logger.getRootLogger().info("Create New Esper Event");
-				esperEvent = new TEvent(new String[] { eventTriple[0] },
-						eventTriple[1], new String[] { eventTriple[2] },
-						"Input", cepRT.getCurrentTime());
-				cepRT.sendEvent(esperEvent);
-			}
-			sendTimeEvent();
-			status = ExecutionStates.READY;
-			return true;
-		} else {
-			return false;
-		}
+	private void resetTime() {
+		time = 0;
 	}
 
 	@Override
-	public ExecutionStates stopProcessing(Experiment e) {
-		if (e != null && isOn()) {
-			er.setTimestamp_end(System.currentTimeMillis());
-			resultCollector.storeExperimentResult(er);
+	public boolean sendEvent(StreamingEvent e) {
+		// TODO if can send
+		this.currentStreamingEvent = e;
+		status = ExecutionStates.RUNNING;
+		TEvent esperEvent;
+		Set<String[]> eventTriples = e.getEventTriples();
+		for (String[] eventTriple : eventTriples) {
+			Logger.getRootLogger().info("Create New Esper Event");
+			esperEvent = new TEvent(new String[] { eventTriple[0] },
+					eventTriple[1], new String[] { eventTriple[2] }, "Input",
+					cepRT.getCurrentTime());
+			cepRT.sendEvent(esperEvent);
+		}
+		sendTimeEvent();
+		status = ExecutionStates.READY;
+		return true;
+	}
+
+	@Override
+	public ExecutionStates stopProcessing() {
+		if (isOn()) {
 			return status = ExecutionStates.CLOSED;
 		} else
 			return status = ExecutionStates.ERROR;

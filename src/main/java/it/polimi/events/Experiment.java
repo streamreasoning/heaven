@@ -16,4 +16,5 @@ public class Experiment extends Event{
 		this.outputFileName = outputFileName;
 		this.timestamp = System.currentTimeMillis();
 	}
+
 }

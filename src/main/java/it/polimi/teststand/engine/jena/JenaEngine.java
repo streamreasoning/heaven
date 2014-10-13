@@ -21,11 +21,9 @@ package it.polimi.teststand.engine.jena;
 import it.polimi.enums.ExecutionStates;
 import it.polimi.events.Experiment;
 import it.polimi.events.StreamingEvent;
-import it.polimi.output.filesystem.FileManagerImpl;
-import it.polimi.output.result.ResultCollector;
+import it.polimi.events.result.StreamingEventResult;
+import it.polimi.teststand.core.TestStand;
 import it.polimi.teststand.engine.RSPEngine;
-import it.polimi.teststand.events.TestExperimentResultEvent;
-import it.polimi.teststand.events.TestResultEvent;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -54,15 +52,17 @@ import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.ReasonerVocabulary;
 
 public class JenaEngine extends RSPEngine {
+
 	private static final String RULE_SET = "src/main/resource/data/inference/rules.rules";
 	private static final String UNIV_BENCH_RDFS = "src/main/resource/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
 	private static Model tbox_star, abox;
 	private static InfModel abox_star;
 	int i = 0;
+	private Experiment currentExperiment;
 
-	public JenaEngine(
-			ResultCollector<TestResultEvent, TestExperimentResultEvent> resultCollector) {
-		super(resultCollector);
+	public JenaEngine(TestStand<RSPEngine> stand) {
+		super(stand);
+		super.stand = stand;
 		this.name = "jena";
 		FileManager.get().addLocatorClassLoader(
 				JenaEngine.class.getClassLoader());
@@ -70,12 +70,12 @@ public class JenaEngine extends RSPEngine {
 		// CARICO LA TBOX CHIUSA
 		tbox_star = FileManager.get().loadModel(UNIV_BENCH_RDFS, null,
 				"RDF/XML");
-
 	}
 
 	@Override
 	public boolean sendEvent(StreamingEvent e) {
-		if (experiment == null) {
+		this.currentExperiment = stand.getCurrentExperiment();
+		if (currentExperiment == null) {
 			return false;
 		} else {
 			abox = ModelFactory.createMemModelMaker().createDefaultModel();
@@ -104,13 +104,9 @@ public class JenaEngine extends RSPEngine {
 								t.getObject().toString() });
 			}
 
-			TestResultEvent r = new TestResultEvent(statements,
-					e.getEventTriples(), e.getEvent_timestamp(),
-					experiment.getOutputFileName(), "jena/",
-					experiment.getName(), experiment.getTimestamp(),
-					e.getLineNumber());
 			try {
-				return resultCollector.storeEventResult(r);
+				return collector.store(new StreamingEventResult(statements, e,
+						currentExperiment.getOutputFileName()));
 			} catch (IOException e1) {
 				e1.printStackTrace();
 				return false;
@@ -128,12 +124,8 @@ public class JenaEngine extends RSPEngine {
 	}
 
 	@Override
-	public ExecutionStates startProcessing(Experiment e) {
-		if (e != null) {
-			this.experiment = e;
-			er = new TestExperimentResultEvent(e.getInputFileName(),
-					e.getOutputFileName(), FileManagerImpl.LOG_PATH + "jena"
-							+ e.getTimestamp(), e.getName());
+	public ExecutionStates startProcessing() {
+		if (isStartable()) {
 			return status = ExecutionStates.READY;
 		} else
 
@@ -141,11 +133,9 @@ public class JenaEngine extends RSPEngine {
 	}
 
 	@Override
-	public ExecutionStates stopProcessing(Experiment e) {
-		if (e != null) {
-			er.setTimestamp_end(System.currentTimeMillis());
-			resultCollector.storeExperimentResult(er);
-			return status = ExecutionStates.OFF;
+	public ExecutionStates stopProcessing() {
+		if (isOn()) {
+			return status = ExecutionStates.CLOSED;
 		} else
 			return status = ExecutionStates.ERROR;
 	}
@@ -186,4 +176,16 @@ public class JenaEngine extends RSPEngine {
 		return reasoner;
 	}
 
+	public boolean isStartable() {
+		return ExecutionStates.READY.equals(status)
+				|| ExecutionStates.CLOSED.equals(status);
+	}
+
+	public boolean isOn() {
+		return ExecutionStates.READY.equals(status);
+	}
+
+	public boolean isReady() {
+		return ExecutionStates.READY.equals(status);
+	}
 }
