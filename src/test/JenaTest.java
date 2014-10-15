@@ -1,5 +1,5 @@
 import static org.junit.Assert.*;
-import it.polimi.streamer.Parser;
+import it.polimi.processing.streamer.Parser;
 import it.polimi.utils.FileUtils;
 
 import java.io.BufferedReader;
