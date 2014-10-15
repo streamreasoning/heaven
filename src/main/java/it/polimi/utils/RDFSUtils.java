@@ -1,7 +1,7 @@
 package it.polimi.utils;
 
 public class RDFSUtils {
-	
+
 	public static final String UNIV_BENCH_RDFS = "src/main/resource/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
 	public static final String RDFRESOURCE = "http://www.w3.org/2000/01/rdf-schema#Resource";
 	public static final String TYPE_PROPERTY = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
@@ -12,9 +12,13 @@ public class RDFSUtils {
 			"http://swat.cse.lehigh.edu/onto/univ-bench.owl#name",
 			"http://swat.cse.lehigh.edu/onto/univ-bench.owl#emailAddress",
 			"http://swat.cse.lehigh.edu/onto/univ-bench.owl#officeNumber",
-			"http://swat.cse.lehigh.edu/onto/univ-bench.owl#researchInterest",
 			"http://swat.cse.lehigh.edu/onto/univ-bench.owl#title",
 			"http://swat.cse.lehigh.edu/onto/univ-bench.owl#telephone" };
+
+	public static final String[] EXCLUDED_PROPERTIES = {
+			"http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#tenured",
+			"http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#softwareVersion",
+			"http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#publicationDate", };
 
 	public static final String[] SCHEMAPROPERTIES = {
 			"http://www.w3.org/1999/02/22-rdf-syntax-ns#first",

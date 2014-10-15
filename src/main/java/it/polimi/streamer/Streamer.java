@@ -1,6 +1,7 @@
 package it.polimi.streamer;
 
 import it.polimi.EventProcessor;
+import it.polimi.Startable;
 import it.polimi.enums.ExecutionStates;
 import it.polimi.events.StreamingEvent;
 import it.polimi.teststand.exceptions.WrongStatusTransitionException;
@@ -26,7 +27,7 @@ import org.apache.log4j.Logger;
  */
 
 @Getter
-public class Streamer {
+public class Streamer implements Startable<ExecutionStates> {
 
 	/**
 	 * Represents the core of the streaming procedure, is must publish the
@@ -102,11 +103,13 @@ public class Streamer {
 		}
 	}
 
+	@Override
 	public ExecutionStates init() {
 		return status = ExecutionStates.READY;
 
 	}
 
+	@Override
 	public ExecutionStates close() {
 		return status = ExecutionStates.CLOSED;
 	}

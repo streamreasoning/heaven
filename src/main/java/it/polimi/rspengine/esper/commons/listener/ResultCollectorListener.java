@@ -45,7 +45,7 @@ public class ResultCollectorListener extends GenearlListener {
 			}
 		}
 
-		eventToSend = resultCollector.newResultInstance(statements,
+		eventToSend = resultCollector.newEventInstance(statements,
 				engine.getCurrentStreamingEvent());
 
 		try {

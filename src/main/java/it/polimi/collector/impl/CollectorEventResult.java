@@ -1,6 +1,7 @@
 package it.polimi.collector.impl;
 
-import it.polimi.collector.ResultCollector;
+import it.polimi.Startable;
+import it.polimi.collector.StartableCollector;
 import it.polimi.collector.saver.EventSaver;
 import it.polimi.enums.ExecutionStates;
 import it.polimi.events.Event;
@@ -18,7 +19,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CollectorEventResult implements
-		ResultCollector<StreamingEventResult> {
+		StartableCollector<StreamingEventResult>, Startable<ExecutionStates> {
 
 	private long timestamp;
 	private EventSaver trigSaver;
@@ -28,9 +29,8 @@ public class CollectorEventResult implements
 
 	private TestStand<RSPEngine> stand;
 
-	public CollectorEventResult(TestStand<RSPEngine> stand,
-			EventSaver trig, EventSaver csv) throws SQLException,
-			ClassNotFoundException {
+	public CollectorEventResult(TestStand<RSPEngine> stand, EventSaver trig,
+			EventSaver csv) throws SQLException, ClassNotFoundException {
 		this.stand = stand;
 		this.trigSaver = trig;
 		this.csvSaver = csv;
@@ -85,9 +85,9 @@ public class CollectorEventResult implements
 	}
 
 	@Override
-	public StreamingEventResult newResultInstance(Set<String[]> all_triples,
+	public StreamingEventResult newEventInstance(Set<String[]> all_triples,
 			Event e) {
-		return stand.newResultInstance(all_triples, e);
+		return stand.newEventInstance(all_triples, e);
 	}
 
 }

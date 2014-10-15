@@ -1,6 +1,6 @@
 package it.polimi.teststand.main;
 
-import it.polimi.collector.ResultCollector;
+import it.polimi.collector.StartableCollector;
 import it.polimi.collector.impl.CollectorEventResult;
 import it.polimi.collector.impl.CollectorExperimentResult;
 import it.polimi.collector.saver.CSVEventSaver;
@@ -27,9 +27,9 @@ public class TSModelPlain {
 
 		TestStand<RSPEngine> testStand = new TestStand<RSPEngine>();
 
-		ResultCollector<StreamingEventResult> streamingEventResultCollector = new CollectorEventResult(
+		StartableCollector<StreamingEventResult> streamingEventResultCollector = new CollectorEventResult(
 				testStand, new TrigEventSaver(), new CSVEventSaver());
-		ResultCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(
+		StartableCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(
 				testStand, new SQLLiteEventSaver());
 		RSPEngine engine = new PlainMultipleInheritance(testStand);
 		Streamer streamer = new Streamer(testStand);
@@ -37,7 +37,7 @@ public class TSModelPlain {
 		testStand.build(streamingEventResultCollector,
 				experimentResultCollector, engine, streamer);
 
-		testStand.turnOn();
+		testStand.init();
 		try {
 			for (String f : files) {
 
@@ -53,7 +53,7 @@ public class TSModelPlain {
 			testStand.stop();
 		}
 
-		testStand.turnOff();
+		testStand.close();
 
 	}
 }

@@ -1,6 +1,6 @@
 package it.polimi.collector.impl;
 
-import it.polimi.collector.ResultCollector;
+import it.polimi.collector.StartableCollector;
 import it.polimi.collector.saver.EventSaver;
 import it.polimi.enums.ExecutionStates;
 import it.polimi.events.Event;
@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CollectorExperimentResult implements
-		ResultCollector<ExperimentResultEvent> {
+		StartableCollector<ExperimentResultEvent>{
 
 	private long timestamp;
 	private EventSaver sqlLiteSaver;
@@ -26,8 +26,7 @@ public class CollectorExperimentResult implements
 	private ExecutionStates status;
 
 	public CollectorExperimentResult(TestStand<RSPEngine> stand,
-			EventSaver saver) throws SQLException,
-			ClassNotFoundException {
+			EventSaver saver) throws SQLException, ClassNotFoundException {
 		this.stand = stand;
 		this.sqlLiteSaver = saver;
 		this.timestamp = System.currentTimeMillis();
@@ -77,11 +76,10 @@ public class CollectorExperimentResult implements
 	}
 
 	@Override
-	public ExperimentResultEvent newResultInstance(Set<String[]> all_triples,
+	public ExperimentResultEvent newEventInstance(Set<String[]> all_triples,
 			Event e) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 }

@@ -1,7 +1,9 @@
 package it.polimi.teststand.core;
 
 import it.polimi.EventProcessor;
+import it.polimi.Startable;
 import it.polimi.collector.ResultCollector;
+import it.polimi.collector.StartableCollector;
 import it.polimi.enums.ExecutionStates;
 import it.polimi.events.Event;
 import it.polimi.events.Experiment;
@@ -25,10 +27,11 @@ import org.apache.log4j.Logger;
 
 @Getter
 public class TestStand<T extends RSPEngine> extends Stand implements
-		EventProcessor<StreamingEvent>, ResultCollector<StreamingEventResult> {
+		EventProcessor<StreamingEvent>, ResultCollector<StreamingEventResult>,
+		Startable<ExecutionStates> {
 
-	private ResultCollector<StreamingEventResult> resultCollector;
-	private ResultCollector<ExperimentResultEvent> experimentResultCollector;
+	private StartableCollector<StreamingEventResult> resultCollector;
+	private StartableCollector<ExperimentResultEvent> experimentResultCollector;
 
 	private T rspEngine;
 	private Streamer streamer;
@@ -37,8 +40,9 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 		super(ExecutionStates.NOT_READY, null);
 	}
 
-	public void build(ResultCollector<StreamingEventResult> resultCollector,
-			ResultCollector<ExperimentResultEvent> experimentResultCollector,
+	public void build(
+			StartableCollector<StreamingEventResult> resultCollector,
+			StartableCollector<ExperimentResultEvent> experimentResultCollector,
 			T rspEngine, Streamer streamer) {
 		this.experimentResultCollector = experimentResultCollector;
 		this.resultCollector = resultCollector;
@@ -91,7 +95,8 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 
 	}
 
-	public ExecutionStates turnOff() {
+	@Override
+	public ExecutionStates close() {
 		if (!isOn()) {
 			throw new WrongStatusTransitionException(
 					"Can't move from a status different from ON Current: "
@@ -123,7 +128,8 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 		}
 	}
 
-	public ExecutionStates turnOn() {
+	@Override
+	public ExecutionStates init() {
 		if (isStartable()) {
 			ExecutionStates streamerStatus = streamer.init();
 			ExecutionStates engineStatus = rspEngine.init();
@@ -198,17 +204,7 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 	}
 
 	@Override
-	public ExecutionStates init() {
-		return status = ExecutionStates.READY;
-	}
-
-	@Override
-	public ExecutionStates close() {
-		return status = ExecutionStates.CLOSED;
-	}
-
-	@Override
-	public StreamingEventResult newResultInstance(Set<String[]> all_triples,
+	public StreamingEventResult newEventInstance(Set<String[]> all_triples,
 			Event e) {
 		// TODO folder
 		// return new StreamingEventResult(all_triples, start_triples,

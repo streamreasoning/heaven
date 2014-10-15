@@ -11,4 +11,5 @@ public abstract class Stand {
 	protected ExecutionStates status;
 	protected Experiment currentExperiment;
 
+
 }
