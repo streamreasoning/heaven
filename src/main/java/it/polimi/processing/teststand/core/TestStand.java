@@ -21,10 +21,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Set;
 
 import lombok.Getter;
 
+import org.apache.http.impl.cookie.DateUtils;
 import org.apache.log4j.Logger;
 
 @Getter
@@ -59,11 +61,13 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 	 * @throws Exception
 	 */
 	public void run(String f) throws Exception {
-		Logger.getRootLogger().info("START STREAMING "+System.currentTimeMillis());
+		Logger.getRootLogger().info(
+				"START STREAMING " + System.currentTimeMillis());
 		String experimentName = "EXPERIMENT_ON_" + f + "_WITH_ENGINE_"
 				+ rspEngine.getName();
 		String inputFileName = FileUtils.INPUT_FILE_PATH + f;
-		String outputFileName = "_Result_" + f.split("\\.")[0];
+		Date d = new Date();
+		String outputFileName = "_Result_" + 	DateUtils.formatDate(d,"YYYY_MM_DD__HH_mm_SS") +"_"+ f.split("\\.")[0];
 		String logFileName = "LOG_" + f.split("\\.")[0];
 
 		if (!isOn()) {
@@ -101,7 +105,8 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 				status = ExecutionStates.READY;
 			}
 
-			Logger.getRootLogger().info("STOP STREAMING "+System.currentTimeMillis());
+			Logger.getRootLogger().info(
+					"STOP STREAMING " + System.currentTimeMillis());
 
 		}
 

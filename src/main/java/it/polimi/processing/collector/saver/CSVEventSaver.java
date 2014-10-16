@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 
+import org.apache.http.impl.cookie.DateUtils;
 import org.apache.log4j.Logger;
 
 import it.polimi.processing.collector.Collectable;
@@ -14,12 +16,18 @@ import it.polimi.utils.FileUtils;
 public class CSVEventSaver implements EventSaver {
 
 	private ExecutionStates status;
-
+	Date d = new Date();
 	@Override
 	public boolean save(Collectable e) {
 		try {
 			if (ExecutionStates.READY.equals(status)) {
-				String path = FileUtils.CSV_OUTPUT_FILE_PATH + e.getName()+FileUtils.CSV;
+				String path = FileUtils.CSV_OUTPUT_FILE_PATH
+						+ e.getName().replace(
+								"_Result_",
+								"LOG_"
+										+ DateUtils.formatDate(d,
+												"YYYY_MM_dd__HH_mm_SS"))
+						+ FileUtils.CSV;
 				File file = new File(path);
 				if (!file.exists()) {
 					file.createNewFile();
