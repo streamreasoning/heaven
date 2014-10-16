@@ -104,15 +104,11 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 		TEvent esperEvent;
 		Set<String[]> eventTriples = e.getEventTriples();
 		for (String[] eventTriple : eventTriples) {
-			if (!RDFSUtils.TYPE_PROPERTY.equals(eventTriple[1])) { // Discart
-																	// typeof
-																	// triples
-				Logger.getRootLogger().info("Create New Esper Event");
+				Logger.getRootLogger().debug("Create New Esper Event");
 				esperEvent = new TEvent(new String[] { eventTriple[0] },
 						eventTriple[1], new String[] { eventTriple[2] },
 						"Input", cepRT.getCurrentTime());
 				cepRT.sendEvent(esperEvent);
-			}
 		}
 		sendTimeEvent();
 		status = ExecutionStates.READY;

@@ -14,6 +14,7 @@ import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.streamer.Streamer;
 import it.polimi.processing.teststand.exceptions.WrongStatusTransitionException;
 import it.polimi.utils.FileUtils;
+import it.polimi.utils.TripleGraphTypes;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -58,6 +59,7 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 	 * @throws Exception
 	 */
 	public void run(String f) throws Exception {
+		Logger.getRootLogger().info("START STREAMING "+System.currentTimeMillis());
 		String experimentName = "EXPERIMENT_ON_" + f + "_WITH_ENGINE_"
 				+ rspEngine.getName();
 		String inputFileName = FileUtils.INPUT_FILE_PATH + f;
@@ -80,7 +82,8 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 			if (ExecutionStates.READY.equals(engineStatus)) {
 
 				try {
-					streamer.stream(rspEngine.getName(), inputFileName,
+					streamer.stream(TripleGraphTypes.UTRIPLES,
+							rspEngine.getName(), inputFileName,
 							getBuffer(inputFileName));
 
 				} catch (IOException ex) {
@@ -97,6 +100,8 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 			if (ExecutionStates.CLOSED.equals(engineStatus)) {
 				status = ExecutionStates.READY;
 			}
+
+			Logger.getRootLogger().info("STOP STREAMING "+System.currentTimeMillis());
 
 		}
 
