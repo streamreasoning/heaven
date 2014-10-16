@@ -2,6 +2,7 @@ package it.polimi.processing.collector.saver;
 
 import it.polimi.processing.collector.Collectable;
 import it.polimi.processing.enums.ExecutionStates;
+import it.polimi.utils.DatabaseUtils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,30 +17,6 @@ import org.apache.log4j.Logger;
 @Getter
 public class SQLLiteEventSaver implements EventSaver {
 
-	public static final String OUTPUT_FILE_PATH = "src/main/resource/data/output/csv/";
-	public static final String INPUT_FILE_PATH = "src/main/resource/data/input/";
-	public static final String FILE_EXTENSION = ".db";
-	public static final String EXPERIMENT_TABLE = "CREATE TABLE IF NOT EXISTS EXPERIMENT "
-			+ "("
-			+ " EXP_ID       TEXT                 NOT NULL,"
-			+ "	TS_INIT     TEXT                 NOT NULL,"
-			+ "	TS_END     TEXT                 NOT NULL,"
-			+ " INPUT_FILE    TEXT   			     NOT NULL,"
-			+ " RESULT_FILE    TEXT                 NOT NULL, "
-			+ " FILE_LOG_FOLDER    TEXT                 NOT NULL, "
-			+ " PRIMARY KEY(EXP_ID,TS_INIT)  )";
-	public static final String EXPERIMENT_INSERT = "INSERT INTO EXPERIMENT (EXP_ID, TS_INIT, TS_END, INPUT_FILE,RESULT_FILE, FILE_LOG_FOLDER) ";
-	public static final String COMPARATION_TABLE = "CREATE TABLE IF NOT EXISTS COMPARATION "
-			+ "("
-			+ " EXP_ID       TEXT                 NOT NULL,"
-			+ "	EVENT_ID      TEXT                 NOT NULL,"
-			+ "	SOUND         INTEGER              NOT NULL,"
-			+ " COMPLETE      INTEGER   	       NOT NULL,"
-			+ " MEMORY        REAL                         ,"
-			+ " LATENCY       INTEGER                      ,"
-			+ " PRIMARY KEY(EXP_ID,EVENT_ID)  )";
-	public static final String COMPARATION_INSERT = "INSERT INTO COMPARATION (EXP_ID, EVENT_ID, SOUND, COMPLETE,MEMORY, LATENCY) ";
-
 	private static final String JDBC_SQLITE_OBQAATCEP_DB = "jdbc:sqlite:obqaatcep.db";
 	private static final String ORG_SQLITE_JDBC = "org.sqlite.JDBC";
 	private long timestamp;
@@ -50,7 +27,7 @@ public class SQLLiteEventSaver implements EventSaver {
 	@Override
 	public boolean save(Collectable e) {
 		if (ExecutionStates.READY.equals(status) && e != null) {
-			String sql = EXPERIMENT_INSERT + e.getSQL();
+			String sql = DatabaseUtils.EXPERIMENT_INSERT + e.getSQL();
 			Logger.getRootLogger().debug("EXPERIMENT EVENT SQL VALUE " + sql);
 			try {
 				stmt = c.createStatement();
@@ -84,8 +61,8 @@ public class SQLLiteEventSaver implements EventSaver {
 		c = DriverManager.getConnection(JDBC_SQLITE_OBQAATCEP_DB);
 		Logger.getRootLogger().info("Opened database successfully");
 		stmt = c.createStatement();
-		stmt.executeUpdate(EXPERIMENT_TABLE);
-		stmt.executeUpdate(COMPARATION_TABLE);
+		stmt.executeUpdate(DatabaseUtils.EXPERIMENT_TABLE);
+		stmt.executeUpdate(DatabaseUtils.COMPARATION_TABLE);
 		stmt.close();
 		Logger.getRootLogger().info("Table created successfully");
 		return this.status = ExecutionStates.READY;

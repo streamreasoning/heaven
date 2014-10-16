@@ -42,11 +42,7 @@ public class TSModelPlain {
 			for (String f : files) {
 
 				testStand.run(
-						"EXPERIMENT_ON_" + f + "_WITH_ENGINE_"
-								+ engine.getName(),
-						INPUT_FILE_PATH + f,
-						engine.getName() + "/_Result_"
-								+ f.substring(0, f.length() - 3));
+						f);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

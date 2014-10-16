@@ -1,7 +1,6 @@
 package it.polimi.processing.events.result;
 
 import it.polimi.processing.collector.Collectable;
-import it.polimi.processing.collector.saver.CSVEventSaver;
 import it.polimi.processing.events.Event;
 import it.polimi.processing.events.Experiment;
 
@@ -21,7 +20,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class ExperimentResultEvent extends Event implements Collectable {
 
-	private String inputFile, resultFile, logFolderPath;
 	private long timestamp_end;
 	private String name;
 	private Experiment experiment;
@@ -29,7 +27,6 @@ public class ExperimentResultEvent extends Event implements Collectable {
 	public ExperimentResultEvent(Experiment e) {
 		this.experiment = e;
 		this.timestamp_end = System.currentTimeMillis();
-		logFolderPath = CSVEventSaver.OUTPUT_FILE_PATH + e.getTimestamp();
 		this.name = "result_" + e.getName();
 
 	}
@@ -58,10 +55,11 @@ public class ExperimentResultEvent extends Event implements Collectable {
 	 * **/
 	@Override
 	public String getSQL() {
-		return "VALUES (" + "'" + getName() + "'" + "," + "'"
+		return "VALUES (" + "'" + experiment.getName() + "'" + "," + "'"
 				+ experiment.getTimestamp() + "'" + "," + "'" + timestamp_end
-				+ "'" + "," + "'" + inputFile + "'" + "," + "'" + resultFile
-				+ "'" + "," + "'" + logFolderPath + "'" + ");";
+				+ "'" + "," + "'" + experiment.getInputFileName() + "'" + ","
+				+ "'" + experiment.getOutputFileName() + "'" + "," + "'"
+				+ experiment.getLogFileName() + "'" + ");";
 	}
 
 	@Override
@@ -69,4 +67,8 @@ public class ExperimentResultEvent extends Event implements Collectable {
 		return toString().getBytes();
 	}
 
+	@Override
+	public String getName() {
+		return "/" + experiment.getEngine() + "/";
+	}
 }

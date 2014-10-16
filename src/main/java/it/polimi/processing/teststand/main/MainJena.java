@@ -17,13 +17,10 @@ import java.sql.SQLException;
 
 public class MainJena {
 	
-	public static final String INPUT_FILE_PATH = "src/main/resource/data/input/";
-	public static final String OUTPUT_FILE_PATH = "src/main/resource/data/output/";
 
 	public static void main(String[] args) throws ClassNotFoundException,
 			SQLException {
-
-		String[] files = new String[] { "file1.txt" };
+		String[] files = new String[] {"University0_0_clean.nt" };
 
 		TestStand<RSPEngine> testStand = new TestStand<RSPEngine>();
 
@@ -41,12 +38,7 @@ public class MainJena {
 		try {
 			for (String f : files) {
 
-				testStand.run(
-						"EXPERIMENT_ON_" + f + "_WITH_ENGINE_"
-								+ engine.getName(),
-						INPUT_FILE_PATH + f,
-						engine.getName() + "/_Result_"
-								+ f.substring(0, f.length() - 3));
+				testStand.run(f);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

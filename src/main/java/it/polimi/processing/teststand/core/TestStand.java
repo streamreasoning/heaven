@@ -13,6 +13,7 @@ import it.polimi.processing.events.result.StreamingEventResult;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.streamer.Streamer;
 import it.polimi.processing.teststand.exceptions.WrongStatusTransitionException;
+import it.polimi.utils.FileUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -56,8 +57,13 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 	 * 
 	 * @throws Exception
 	 */
-	public void run(String experimentName, String inputFileName,
-			String outputFileName) throws Exception {
+	public void run(String f) throws Exception {
+		String experimentName = "EXPERIMENT_ON_" + f + "_WITH_ENGINE_"
+				+ rspEngine.getName();
+		String inputFileName = FileUtils.INPUT_FILE_PATH + f;
+		String outputFileName = "_Result_" + f.split("\\.")[0];
+		String logFileName = "LOG_" + f.split("\\.")[0];
+
 		if (!isOn()) {
 			throw new WrongStatusTransitionException("Not ON");
 		} else {
@@ -66,15 +72,16 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 			// Start running
 			status = ExecutionStates.RUNNING;
 
-			currentExperiment = new Experiment(experimentName, inputFileName,
-					outputFileName);
+			currentExperiment = new Experiment(rspEngine.getName(),
+					experimentName, inputFileName, outputFileName, logFileName);
 
 			ExecutionStates engineStatus = rspEngine.startProcessing();
 
 			if (ExecutionStates.READY.equals(engineStatus)) {
 
 				try {
-					streamer.stream(inputFileName, getBuffer(inputFileName));
+					streamer.stream(rspEngine.getName(), inputFileName,
+							getBuffer(inputFileName));
 
 				} catch (IOException ex) {
 					status = ExecutionStates.ERROR;

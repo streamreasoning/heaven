@@ -9,6 +9,7 @@ import it.polimi.utils.RDFSUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -52,7 +53,8 @@ public class Streamer implements Startable<ExecutionStates> {
 	 *            the streamer must be controlled by the outstanding application
 	 *            system
 	 **/
-	public void stream(String fileName, BufferedReader br) throws IOException {
+	public void stream(String engineName, String fileName, BufferedReader br)
+			throws IOException {
 
 		Logger.getRootLogger().debug("Start Streaming");
 
@@ -69,7 +71,7 @@ public class Streamer implements Startable<ExecutionStates> {
 				if (s.length > 3) {
 					throw new IllegalArgumentException("Too much arguments");
 				}
-
+				Logger.getRootLogger().debug("S: " + Arrays.deepToString(s));
 				s[0] = s[0].replace("<", "");
 				s[0] = s[0].replace(">", "");
 
@@ -79,22 +81,18 @@ public class Streamer implements Startable<ExecutionStates> {
 				s[2] = s[2].replace("<", "");
 				s[2] = s[2].replace(">", "");
 
-				if (RDFSUtils.isDatatype(s[1]) || RDFSUtils.isType(s[1])) {
-					continue; // TODO spostare in fase di setup
+				Logger.getRootLogger().debug("SEND NEW EVENT: " + line);
+				Logger.getRootLogger().debug("S: " + Arrays.deepToString(s));
+				status = ExecutionStates.RUNNING;
+				eventTriples = new HashSet<String[]>();
+				eventTriples.add(s);
+				if (stand.sendEvent(new StreamingEvent(eventTriples,
+						lineNumber, fileName, engineName))) {
+					streamedEvents++;
 				} else {
-					Logger.getRootLogger().debug("SEND NEW EVENT: " + line);
-
-					status = ExecutionStates.RUNNING;
-					eventTriples = new HashSet<String[]>();
-					eventTriples.add(s);
-					if (stand.sendEvent(new StreamingEvent(eventTriples,
-							lineNumber, fileName))) {
-						streamedEvents++;
-					} else {
-						Logger.getRootLogger().info("Not Saved " + line);
-					}
-					status = ExecutionStates.READY;
+					Logger.getRootLogger().info("Not Saved " + line);
 				}
+				status = ExecutionStates.READY;
 
 			}
 			Logger.getRootLogger().info("Number of Events: " + streamedEvents);

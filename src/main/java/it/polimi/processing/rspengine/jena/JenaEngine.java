@@ -24,8 +24,10 @@ import it.polimi.processing.events.StreamingEvent;
 import it.polimi.processing.events.result.StreamingEventResult;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.teststand.core.TestStand;
+import it.polimi.utils.RDFSUtils;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,6 +51,7 @@ import com.hp.hpl.jena.reasoner.ReasonerRegistry;
 import com.hp.hpl.jena.reasoner.rulesys.GenericRuleReasoner;
 import com.hp.hpl.jena.reasoner.rulesys.Rule;
 import com.hp.hpl.jena.util.FileManager;
+import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.ReasonerVocabulary;
 
 public class JenaEngine extends RSPEngine {
@@ -81,6 +84,7 @@ public class JenaEngine extends RSPEngine {
 			abox = ModelFactory.createMemModelMaker().createDefaultModel();
 
 			for (String[] eventTriple : e.getEventTriples()) {
+				Logger.getRootLogger().debug(Arrays.deepToString(eventTriple));
 				Statement s = createStatement(eventTriple);
 				abox.add(s);
 			}
@@ -154,7 +158,9 @@ public class JenaEngine extends RSPEngine {
 
 	private Statement createStatement(String[] eventTriple) {
 		Resource subject = ResourceFactory.createResource(eventTriple[0]);
-		Property predicate = ResourceFactory.createProperty(eventTriple[1]);
+		System.out.println(eventTriple[1]);
+		Property predicate = (eventTriple[1] != RDFSUtils.TYPE_PROPERTY) ? ResourceFactory
+				.createProperty(eventTriple[1]) : RDF.type;
 		RDFNode object = ResourceFactory.createResource(eventTriple[2]);
 		Statement s = ResourceFactory.createStatement(subject, predicate,
 				object);

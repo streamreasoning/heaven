@@ -13,12 +13,14 @@ public class StreamingEvent extends Event {
 	private Set<String[]> eventTriples;
 	private String id, fileName;
 	private long timestamp;
+	private String engine;
 	private int lineNumber;
 
 	public StreamingEvent(Set<String[]> eventTriples, int lineNumber,
-			String fileName) {
+			String fileName, String engine) {
 		timestamp = System.currentTimeMillis();
 		this.eventTriples = eventTriples;
+		this.engine = engine;
 		String key = "[";
 		for (String[] triple : eventTriples) {
 			key += Arrays.deepToString(triple);
@@ -29,12 +31,6 @@ public class StreamingEvent extends Event {
 		this.id = "<http://example.org/" + key.hashCode() + ">";
 		this.lineNumber = lineNumber;
 		this.fileName = fileName;
-	}
-
-	@Override
-	public String toString() {
-		return "StreamingEvent [eventTriples=" + getTripleToString() + ", id="
-				+ id + ", event_timestamp=" + timestamp + ", ignore=" + "]";
 	}
 
 	public String getTripleToString() {

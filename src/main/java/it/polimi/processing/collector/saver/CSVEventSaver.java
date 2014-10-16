@@ -9,12 +9,9 @@ import org.apache.log4j.Logger;
 
 import it.polimi.processing.collector.Collectable;
 import it.polimi.processing.enums.ExecutionStates;
+import it.polimi.utils.FileUtils;
 
 public class CSVEventSaver implements EventSaver {
-
-	public static final String OUTPUT_FILE_PATH = "src/main/resource/data/output/csv/";
-	public static final String INPUT_FILE_PATH = "src/main/resource/data/input/";
-	public static final String FILE_EXTENSION = ".csv";
 
 	private ExecutionStates status;
 
@@ -22,8 +19,7 @@ public class CSVEventSaver implements EventSaver {
 	public boolean save(Collectable e) {
 		try {
 			if (ExecutionStates.READY.equals(status)) {
-				String path = OUTPUT_FILE_PATH + e.getName().substring(0, e.getName().length()-1)+"_LOG" + FILE_EXTENSION;
-				Logger.getRootLogger().debug("TRIG FILE PATH " + path);
+				String path = FileUtils.CSV_OUTPUT_FILE_PATH + e.getName()+FileUtils.CSV;
 				File file = new File(path);
 				if (!file.exists()) {
 					file.createNewFile();

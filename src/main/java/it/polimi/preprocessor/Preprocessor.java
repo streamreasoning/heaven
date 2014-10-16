@@ -39,7 +39,8 @@ public class Preprocessor {
 
 			input = input.difference(temp);
 
-			write(FileUtils.PREPROCESSING_DATATYPE_FILE_PATH+dp.split("#")[1] + ".nt", temp);
+			write(FileUtils.PREPROCESSING_DATATYPE_FILE_PATH + dp.split("#")[1]
+					+ ".nt", temp);
 
 		}
 
@@ -50,11 +51,13 @@ public class Preprocessor {
 
 			input = input.difference(temp);
 
-			write(FileUtils.PREPROCESSING_EXCLUDED_FILE_PATH+dp.split("#")[1] + ".nt", temp);
+			write(FileUtils.PREPROCESSING_EXCLUDED_FILE_PATH + dp.split("#")[1]
+					+ ".nt", temp);
 
 		}
 
-		File file = new File(FileUtils.PREPROCESSING_FILE_PATH + "University0_0_clean.nt");
+		File file = new File(FileUtils.PREPROCESSING_FILE_PATH
+				+ "University0_0_clean.nt");
 		if (!file.exists()) {
 			file.createNewFile();
 		}
@@ -64,14 +67,20 @@ public class Preprocessor {
 		StmtIterator inputIterator = input.listStatements();
 		while (inputIterator.hasNext()) {
 			Statement nextStatement = inputIterator.next();
-			fop.write(nextStatement.toString().getBytes());
+			fop.write(("<" + nextStatement.getSubject() + "> <"
+					+ nextStatement.getPredicate() + "> <"
+					+ nextStatement.getObject() + "> .").getBytes());
 			fop.write(System.getProperty("line.separator").getBytes());
 
+			Statement typeStatment;
 			if (!nextStatement.getSubject().isLiteral()) {
 				StmtIterator typeIter = typeOf.listStatements(
 						nextStatement.getSubject(), RDF.type, (RDFNode) null);
 				while (typeIter.hasNext()) {
-					fop.write(typeIter.nextStatement().toString().getBytes());
+					typeStatment = typeIter.nextStatement();
+					fop.write(("<" + typeStatment.getSubject() + "> <"
+							+ typeStatment.getPredicate() + "> <"
+							+ typeStatment.getObject() + "> .").getBytes());
 					fop.write(System.getProperty("line.separator").getBytes());
 				}
 			}
@@ -80,7 +89,10 @@ public class Preprocessor {
 				StmtIterator typeIterObj = typeOf.listStatements(nextStatement
 						.getObject().asResource(), RDF.type, (RDFNode) null);
 				while (typeIterObj.hasNext()) {
-					fop.write(typeIterObj.nextStatement().toString().getBytes());
+					typeStatment = typeIterObj.nextStatement();
+					fop.write(("<" + typeStatment.getSubject() + "> <"
+							+ typeStatment.getPredicate() + "> <"
+							+ typeStatment.getObject() + "> .").getBytes());
 					fop.write(System.getProperty("line.separator").getBytes());
 				}
 			}

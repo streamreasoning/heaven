@@ -34,33 +34,6 @@ public class StreamingEventResult extends Event implements Collectable {
 		this.outputFileName = outputFileName;
 	}
 
-	/**
-	 * <http://example.org/bob> { _:a foaf:name "Bob" . _:a foaf:mbox
-	 * <mailto:bob@oldcorp.example.org> . _:a foaf:knows _:b . }
-	 * 
-	 * 
-	 * **/
-	@Override
-	public String toString() {
-		String eol = System.getProperty("line.separator");
-		// TODO explain different in terms of keys
-		String key = "[";
-		for (String[] triple : inputEvent.getEventTriples()) {
-			key += Arrays.deepToString(triple);
-
-		}
-		key += "]";
-
-		String s = "<http://example.org/" + key.hashCode() + "> {";
-		for (String[] resource : all_triples) {
-			s += eol + "<" + resource[0] + ">" + "<" + resource[1] + ">" + "<"
-					+ resource[2] + "> .";
-		}
-
-		s += eol + "}";
-		return s;
-	}
-
 	public String getStartTripleEvent() {
 		String starttriples = "[";
 		for (String[] startTriple : inputEvent.getEventTriples()) {
@@ -84,6 +57,12 @@ public class StreamingEventResult extends Event implements Collectable {
 	}
 
 	@Override
+	/**
+	 * <http://example.org/bob> { _:a foaf:name "Bob" . _:a foaf:mbox
+	 * <mailto:bob@oldcorp.example.org> . _:a foaf:knows _:b . }
+	 * 
+	 * 
+	 * **/
 	public String getTrig() {
 		String eol = System.getProperty("line.separator");
 		// TODO explain different in terms of keys
@@ -124,7 +103,7 @@ public class StreamingEventResult extends Event implements Collectable {
 
 	@Override
 	public String getName() {
-		return getOutputFileName();
+		return inputEvent.getEngine() + "/" + getOutputFileName();
 	}
 
 }
