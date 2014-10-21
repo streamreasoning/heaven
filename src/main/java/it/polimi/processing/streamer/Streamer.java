@@ -4,7 +4,7 @@ import it.polimi.processing.EventProcessor;
 import it.polimi.processing.Startable;
 import it.polimi.processing.enums.ExecutionStates;
 import it.polimi.processing.events.StreamingEvent;
-import it.polimi.processing.teststand.exceptions.WrongStatusTransitionException;
+import it.polimi.processing.exceptions.WrongStatusTransitionException;
 
 import java.io.BufferedReader;
 import java.io.IOException;

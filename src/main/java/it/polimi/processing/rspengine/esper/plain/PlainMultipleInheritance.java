@@ -1,5 +1,6 @@
 package it.polimi.processing.rspengine.esper.plain;
 
+import it.polimi.processing.core.TestStand;
 import it.polimi.processing.enums.ExecutionStates;
 import it.polimi.processing.events.StreamingEvent;
 import it.polimi.processing.rspengine.RSPEngine;
@@ -7,8 +8,6 @@ import it.polimi.processing.rspengine.esper.RSPEsperEngine;
 import it.polimi.processing.rspengine.esper.commons.listener.ResultCollectorListener;
 import it.polimi.processing.rspengine.esper.plain.events.Out;
 import it.polimi.processing.rspengine.esper.plain.events.TEvent;
-import it.polimi.processing.teststand.core.TestStand;
-import it.polimi.utils.RDFSUtils;
 
 import java.util.Set;
 
@@ -19,7 +18,6 @@ import com.espertech.esper.client.ConfigurationMethodRef;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
 import com.espertech.esper.client.time.CurrentTimeEvent;
-import com.espertech.esper.core.service.EPServiceProviderSPI;
 
 /**
  * In this example rdfs property of subclass of is exploited by external static
@@ -71,7 +69,7 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 		cepConfig.getEngineDefaults().getThreading()
 				.setInternalTimerEnabled(false);
 
-		cep = (EPServiceProviderSPI) EPServiceProviderManager.getProvider(
+		cep = EPServiceProviderManager.getProvider(
 				PlainMultipleInheritance.class.getName(), cepConfig);
 		// We register an EPL statement
 		cepAdm = cep.getEPAdministrator();
@@ -103,12 +101,13 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 		status = ExecutionStates.RUNNING;
 		TEvent esperEvent;
 		Set<String[]> eventTriples = e.getEventTriples();
+		Logger.getLogger("obqa").debug(eventTriples);
 		for (String[] eventTriple : eventTriples) {
-				Logger.getRootLogger().debug("Create New Esper Event");
-				esperEvent = new TEvent(new String[] { eventTriple[0] },
-						eventTriple[1], new String[] { eventTriple[2] },
-						"Input", cepRT.getCurrentTime());
-				cepRT.sendEvent(esperEvent);
+			Logger.getRootLogger().debug("Create New Esper Event");
+			esperEvent = new TEvent(new String[] { eventTriple[0] },
+					eventTriple[1], new String[] { eventTriple[2] }, "Input",
+					cepRT.getCurrentTime());
+			cepRT.sendEvent(esperEvent);
 		}
 		sendTimeEvent();
 		status = ExecutionStates.READY;

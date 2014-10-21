@@ -10,6 +10,8 @@ import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import org.apache.log4j.Logger;
+
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class StreamingEventResult extends Event implements Collectable {
@@ -65,15 +67,17 @@ public class StreamingEventResult extends Event implements Collectable {
 	 * **/
 	public String getTrig() {
 		String eol = System.getProperty("line.separator");
-		// TODO explain different in terms of keys
-		String key = "[";
+		// TODO keys is the sum of each statments to string hashcode, since the
+		// order in not guaranteed
+		long key = 0;
 		for (String[] triple : inputEvent.getEventTriples()) {
-			key += Arrays.deepToString(triple);
+			key += Arrays.deepToString(triple).hashCode();
 
 		}
-		key += "]";
 
-		String s = "<http://example.org/" + key.hashCode() + "> {";
+		Logger.getLogger("obqa").debug("Event KEY :" + key);
+
+		String s = "<http://example.org/" + key + "> {";
 		for (String[] resource : all_triples) {
 			s += eol + "<" + resource[0] + ">" + "<" + resource[1] + ">" + "<"
 					+ resource[2] + "> .";

@@ -1,6 +1,7 @@
 package it.polimi.processing.collector.saver;
 
 import it.polimi.processing.collector.Collectable;
+import it.polimi.processing.collector.CollectableData;
 import it.polimi.processing.enums.ExecutionStates;
 import it.polimi.utils.DatabaseUtils;
 
@@ -118,6 +119,31 @@ public class SQLLiteEventSaver implements EventSaver {
 		}
 		rs.close();
 		stmt.close();
+	}
+
+	@Override
+	public boolean save(CollectableData d) {
+		if (ExecutionStates.READY.equals(status) && d != null) {
+			String sql = DatabaseUtils.EXPERIMENT_INSERT + d.getData();
+			Logger.getRootLogger().debug("EXPERIMENT EVENT SQL VALUE " + sql);
+			try {
+				stmt = c.createStatement();
+				if (sql != null && stmt != null && c != null && !c.isClosed()) {
+
+					stmt.executeUpdate(sql);
+					stmt.close();
+				} else {
+					return false;
+				}
+				return true;
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+				return false;
+			}
+		} else {
+			Logger.getRootLogger().warn("Not ready to write db");
+			return false;
+		}
 	}
 
 }

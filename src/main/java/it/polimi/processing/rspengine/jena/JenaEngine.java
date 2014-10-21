@@ -18,12 +18,12 @@
 
 package it.polimi.processing.rspengine.jena;
 
+import it.polimi.processing.core.TestStand;
 import it.polimi.processing.enums.ExecutionStates;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.StreamingEvent;
 import it.polimi.processing.events.result.StreamingEventResult;
 import it.polimi.processing.rspengine.RSPEngine;
-import it.polimi.processing.teststand.core.TestStand;
 import it.polimi.utils.RDFSUtils;
 
 import java.io.IOException;
@@ -58,6 +58,8 @@ public class JenaEngine extends RSPEngine {
 
 	private static final String RULE_SET = "src/main/resource/data/inference/rules.rules";
 	private static final String UNIV_BENCH_RDFS = "src/main/resource/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
+	private static final String UNIV_BENCH_RDFS_MODIFIED = "src/main/resource/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
+
 	private static Model tbox_star, abox;
 	private static InfModel abox_star;
 	int i = 0;
@@ -71,7 +73,7 @@ public class JenaEngine extends RSPEngine {
 				JenaEngine.class.getClassLoader());
 
 		// CARICO LA TBOX CHIUSA
-		tbox_star = FileManager.get().loadModel(UNIV_BENCH_RDFS, null,
+		tbox_star = FileManager.get().loadModel(UNIV_BENCH_RDFS_MODIFIED, null,
 				"RDF/XML");
 	}
 
@@ -102,10 +104,12 @@ public class JenaEngine extends RSPEngine {
 			while (iterator.hasNext()) {
 
 				Triple t = iterator.next().asTriple();
-				statements
-						.add(new String[] { t.getSubject().toString(),
-								t.getPredicate().toString(),
-								t.getObject().toString() });
+				String[] statementStrings = new String[] {
+						t.getSubject().toString(), t.getPredicate().toString(),
+						t.getObject().toString() };
+				statements.add(statementStrings);
+				Logger.getLogger("obqa").debug(
+						Arrays.deepToString(statementStrings));
 			}
 
 			try {
