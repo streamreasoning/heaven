@@ -1,6 +1,7 @@
 package it.polimi.processing.rspengine.esper;
 
 import it.polimi.processing.collector.ResultCollector;
+import it.polimi.processing.enums.ExecutionStates;
 import it.polimi.processing.events.Event;
 import it.polimi.processing.events.result.StreamingEventResult;
 import it.polimi.processing.rspengine.RSPEngine;
@@ -22,18 +23,34 @@ public abstract class RSPEsperEngine extends RSPEngine {
 	protected static EPAdministrator cepAdm;
 	protected static ConfigurationMethodRef ref;
 	protected Event currentStreamingEvent = null;
-	
+
 	protected static int time = 0;
-	
+
 	public RSPEsperEngine(ResultCollector<StreamingEventResult> stand) {
 		super(stand);
 		// TODO Auto-generated constructor stub
 	}
 
-
 	protected void sendTimeEvent() {
 		time += 1000;
 		cepRT.sendEvent(new CurrentTimeEvent(time));
+	}
+
+	protected void resetTime() {
+		time = 0;
+	}
+
+	protected boolean isStartable() {
+		return ExecutionStates.READY.equals(status)
+				|| ExecutionStates.CLOSED.equals(status);
+	}
+
+	protected boolean isOn() {
+		return ExecutionStates.READY.equals(status);
+	}
+
+	protected boolean isReady() {
+		return ExecutionStates.READY.equals(status);
 	}
 
 }

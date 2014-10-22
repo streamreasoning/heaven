@@ -1,6 +1,6 @@
 package it.polimi.processing.rspengine.esper.plain.events;
 
-import it.polimi.processing.collector.Collectable;
+import it.polimi.processing.rspengine.esper.TripleEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +8,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Out implements Collectable {
+import lombok.Data;
+
+@Data
+public class Out implements TripleEvent {
 	private String[] o, s;
 	private String p, channel;
 	private long timestamp, app_timestamp;
@@ -27,53 +30,12 @@ public class Out implements Collectable {
 		this.timestamp = timestamp;
 	}
 
-	public String[] getS() {
-		return s;
-	}
-
-	public void setS(String[] s) {
-		this.s = s;
-	}
-
-	public String getP() {
-		return p;
-	}
-
-	public void setP(String p) {
-		this.p = p;
-	}
-
-	public String[] getO() {
-		return o;
-	}
-
-	public void setO(String[] c) {
-		this.o = c;
-	}
-
-	public long getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	public String getChannel() {
-		return channel;
-	}
-
-	public void setChannel(String channel) {
-		this.channel = channel;
-	}
-
 	@Override
 	public String toString() {
 		return "Out [o=" + Arrays.toString(o) + ", s=" + Arrays.toString(s)
 				+ ", p=" + p + ", timestamp=" + timestamp + ", app_timestamp="
 				+ app_timestamp + ", channel=" + channel + "]";
 	}
-
 
 	@Override
 	public Set<String[]> getTriples() {
@@ -92,44 +54,6 @@ public class Out implements Collectable {
 		}
 
 		return triples;
-	}
-
-	public long getApp_timestamp() {
-		return app_timestamp;
-	}
-
-	public void setApp_timestamp(long app_timestamp) {
-		this.app_timestamp = app_timestamp;
-	}
-
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getTrig() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getCSV() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getSQL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public byte[] getBytes() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

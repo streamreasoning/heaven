@@ -12,10 +12,15 @@ public class FileUtils {
 			+ "datatype/";
 	public static final String CSV_OUTPUT_FILE_PATH = OUTPUT_FILE_PATH + "csv/";
 	public static final String CSV = ".csv";
-	public static final String SQLLITE_OUTPUT_FILE_PATH = OUTPUT_FILE_PATH + "database/";
+	public static final String SQLLITE_OUTPUT_FILE_PATH = OUTPUT_FILE_PATH
+			+ "database/";
 	public static final String SQLLITE_FILE_EXTENSION = ".db";
 	public static final String TRIG_OUTPUT_FILE_PATH = OUTPUT_FILE_PATH
 			+ "trig/";
 	public static final String TRIG_FILE_EXTENSION = ".trig";
+
+	public static final String RULE_SET = "src/main/resource/data/inference/rules.rules";
+	public static final String UNIV_BENCH_RDFS = "src/main/resource/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
+	public static final String UNIV_BENCH_RDFS_MODIFIED = "src/main/resource/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
 
 }

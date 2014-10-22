@@ -24,6 +24,7 @@ import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.StreamingEvent;
 import it.polimi.processing.events.result.StreamingEventResult;
 import it.polimi.processing.rspengine.RSPEngine;
+import it.polimi.utils.FileUtils;
 import it.polimi.utils.RDFSUtils;
 
 import java.io.IOException;
@@ -56,10 +57,6 @@ import com.hp.hpl.jena.vocabulary.ReasonerVocabulary;
 
 public class JenaEngine extends RSPEngine {
 
-	private static final String RULE_SET = "src/main/resource/data/inference/rules.rules";
-	private static final String UNIV_BENCH_RDFS = "src/main/resource/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
-	private static final String UNIV_BENCH_RDFS_MODIFIED = "src/main/resource/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
-
 	private static Model tbox_star, abox;
 	private static InfModel abox_star;
 	int i = 0;
@@ -73,8 +70,8 @@ public class JenaEngine extends RSPEngine {
 				JenaEngine.class.getClassLoader());
 
 		// CARICO LA TBOX CHIUSA
-		tbox_star = FileManager.get().loadModel(UNIV_BENCH_RDFS_MODIFIED, null,
-				"RDF/XML");
+		tbox_star = FileManager.get().loadModel(
+				FileUtils.UNIV_BENCH_RDFS_MODIFIED, null, "RDF/XML");
 	}
 
 	@Override
@@ -177,7 +174,7 @@ public class JenaEngine extends RSPEngine {
 		// dynamite secondo parametri diversi a set di triple diversi,
 		// utilizzando differenti reasoner
 
-		List<Rule> rules = Rule.rulesFromURL(RULE_SET);
+		List<Rule> rules = Rule.rulesFromURL(FileUtils.RULE_SET);
 
 		GenericRuleReasoner reasoner = new GenericRuleReasoner(rules);
 		reasoner.setOWLTranslation(true); // not needed in RDFS case

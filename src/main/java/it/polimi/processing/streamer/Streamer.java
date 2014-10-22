@@ -3,6 +3,7 @@ package it.polimi.processing.streamer;
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.Startable;
 import it.polimi.processing.enums.ExecutionStates;
+import it.polimi.processing.events.Event;
 import it.polimi.processing.events.StreamingEvent;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 
@@ -27,14 +28,14 @@ import org.apache.log4j.Logger;
  */
 
 @Getter
-public class Streamer implements Startable<ExecutionStates> {
+public class Streamer<T extends Event> implements Startable<ExecutionStates> {
 
 	/**
 	 * Represents the core of the streaming procedure, is must publish the
 	 * sendEvent method through which is possibile to inject any kind of event
 	 * into the system
 	 */
-	private EventProcessor<StreamingEvent> stand;
+	private final EventProcessor<StreamingEvent> stand;
 	private ExecutionStates status;
 
 	public Streamer(EventProcessor<StreamingEvent> stand) {

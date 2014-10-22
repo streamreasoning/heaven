@@ -21,14 +21,12 @@ public class StreamingEvent extends Event {
 		timestamp = System.currentTimeMillis();
 		this.eventTriples = eventTriples;
 		this.engine = engine;
-		String key = "[";
+		long key = 0;
 		for (String[] triple : eventTriples) {
-			key += Arrays.deepToString(triple);
+			key += Arrays.deepToString(triple).hashCode();
 
 		}
-		key += "]";
-
-		this.id = "<http://example.org/" + key.hashCode() + ">";
+		this.id = "<http://example.org/" + key + ">";
 		this.lineNumber = lineNumber;
 		this.fileName = fileName;
 	}

@@ -1,9 +1,9 @@
 package it.polimi.processing.rspengine.esper.commons.listener;
 
-import it.polimi.processing.collector.Collectable;
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.events.result.StreamingEventResult;
 import it.polimi.processing.rspengine.esper.RSPEsperEngine;
+import it.polimi.processing.rspengine.esper.TripleEvent;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -18,8 +18,8 @@ import com.espertech.esper.client.EventBean;
 @Getter
 public class ResultCollectorListener extends GenearlListener {
 
-	private ResultCollector<StreamingEventResult> resultCollector;
-	private RSPEsperEngine engine;
+	private final ResultCollector<StreamingEventResult> resultCollector;
+	private final RSPEsperEngine engine;
 
 	public ResultCollectorListener(
 			ResultCollector<StreamingEventResult> resultCollector,
@@ -28,6 +28,7 @@ public class ResultCollectorListener extends GenearlListener {
 		this.engine = e;
 	}
 
+	@Override
 	public void update(EventBean[] newEvents, EventBean[] oldEvents) {
 
 		StreamingEventResult eventToSend;
@@ -36,7 +37,7 @@ public class ResultCollectorListener extends GenearlListener {
 		for (EventBean eventBean : newEvents) {
 			Logger.getRootLogger().debug(eventBean.getUnderlying());
 
-			Collectable storableEvent = (Collectable) eventBean.getUnderlying();
+			TripleEvent storableEvent = (TripleEvent) eventBean.getUnderlying();
 
 			statements.addAll(storableEvent.getTriples());
 

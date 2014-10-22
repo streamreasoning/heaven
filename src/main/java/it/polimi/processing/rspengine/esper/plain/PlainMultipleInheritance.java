@@ -90,10 +90,6 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 			return status = ExecutionStates.ERROR;
 	}
 
-	private void resetTime() {
-		time = 0;
-	}
-
 	@Override
 	public boolean sendEvent(StreamingEvent e) {
 		// TODO if can send
@@ -128,16 +124,4 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 		return status = ExecutionStates.CLOSED;
 	}
 
-	public boolean isStartable() {
-		return ExecutionStates.READY.equals(status)
-				|| ExecutionStates.CLOSED.equals(status);
-	}
-
-	public boolean isOn() {
-		return ExecutionStates.READY.equals(status);
-	}
-
-	public boolean isReady() {
-		return ExecutionStates.READY.equals(status);
-	}
 }
