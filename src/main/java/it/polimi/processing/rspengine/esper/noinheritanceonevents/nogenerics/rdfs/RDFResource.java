@@ -2,27 +2,29 @@ package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.rd
 
 import java.io.Serializable;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@SuppressWarnings("serial")
+@Data
+@AllArgsConstructor
 public class RDFResource implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private String value;
+	protected String value;
 
-	public RDFResource(String object) {
-		this.setValue(object);
+	public RDFResource() {
+		this.value = "http://www.w3.org/2000/01/rdf-schema#Resource";
 	}
 
 	@Override
 	public String toString() {
-		return "RDFResource [value=" + value + "]";
+		return value;
 	}
 
 	// TODO perche' non e' possibile inserire il parametro?
 	public RDFClass getSuper() {
-		System.out.println("Res " + this.getClass().getSuperclass());
-		return new RDFClass(this.getClass());
+		return new RDFClass(this.getClass(),
+				"http://www.w3.org/2000/01/rdf-schema#Resource");// TODO
 	};
 
 	@Override
@@ -42,11 +44,4 @@ public class RDFResource implements Serializable {
 		}
 	}
 
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
 }

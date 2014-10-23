@@ -1,5 +1,6 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes.publication;
 
+
 public class Software extends Publication {
 
 	/**
@@ -9,7 +10,9 @@ public class Software extends Publication {
 
 	public Software(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
+	public Software() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#Software");
+	}
 }

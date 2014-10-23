@@ -11,7 +11,9 @@ public class Work extends RDFResource {
 
 	public Work(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
+	public Work() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#Work");
+	}
 }

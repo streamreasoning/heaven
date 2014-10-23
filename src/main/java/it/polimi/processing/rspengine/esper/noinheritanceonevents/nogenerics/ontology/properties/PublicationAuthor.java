@@ -1,5 +1,6 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.properties;
 
+import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes.person.Person;
 import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes.publication.Publication;
 import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.rdfs.RDFProperty;
 import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.rdfs.RDFResource;
@@ -13,13 +14,15 @@ public class PublicationAuthor extends RDFProperty {
 
 	public PublicationAuthor() {
 		super(
-				Publication.class,
-				it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes.person.Person.class,
-				"was written by");
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Publication",
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person",
+				Publication.class, Person.class);
 	}
 
-	public PublicationAuthor(Class<? extends RDFResource> domain,
-			Class<? extends RDFResource> range, String property) {
-		super(domain, range, property);
+	public PublicationAuthor(String property, String domainValue,
+			String rangeValue, Class<? extends RDFResource> domain,
+			Class<? extends RDFResource> range) {
+		super(property, domainValue, rangeValue, domain, range);
 	}
 }

@@ -1,5 +1,6 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes.person;
 
+
 public class Chair extends Person {
 
 	/**
@@ -9,7 +10,9 @@ public class Chair extends Person {
 
 	public Chair(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
+	public Chair() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#Chair");
+	}
 }

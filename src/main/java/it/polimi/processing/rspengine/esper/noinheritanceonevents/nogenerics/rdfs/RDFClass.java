@@ -8,25 +8,25 @@ public final class RDFClass extends RDFResource {
 	private static final long serialVersionUID = 1L;
 	protected Class<?> clazz;
 
-	public RDFClass(Class<?> class1) {
-		super("");
+	public RDFClass(Class<?> class1, String value) {
+		super(value);
 		this.clazz = class1;
 	}
 
 	@Override
 	public RDFClass getSuper() {
-		if (!clazz.getSuperclass().equals(Object.class))
-			return new RDFClass(clazz.getSuperclass());
-		else
-			return new RDFClass(clazz);
-	}
-
-	@Override
-	public String toString() {
-		if (clazz != null)
-			return clazz.getSimpleName();
-		else
-			return this.getClass().getCanonicalName();
+		try {
+			if (!clazz.getSuperclass().equals(Object.class)) {
+				Class<?> sc = clazz.getSuperclass();
+				RDFResource r;
+				r = (RDFResource) sc.newInstance();
+				RDFClass rdfClass = new RDFClass(clazz.getSuperclass(), r.getValue());
+				return rdfClass;
+			} else
+				return new RDFClass(clazz, value);
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new WrongSuperMethodCall(e);
+		}
 	}
 
 	@Override

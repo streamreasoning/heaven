@@ -1,5 +1,6 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes.work;
 
+
 public class Research extends Work {
 
 	/**
@@ -12,4 +13,7 @@ public class Research extends Work {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Research() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#Research");
+	}
 }

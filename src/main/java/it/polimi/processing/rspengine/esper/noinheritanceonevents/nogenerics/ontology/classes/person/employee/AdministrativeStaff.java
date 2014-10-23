@@ -11,7 +11,10 @@ public class AdministrativeStaff extends Employee {
 
 	public AdministrativeStaff(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
+	public AdministrativeStaff() {
+		super(
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#AdministrativeStaff");
+	}
 }

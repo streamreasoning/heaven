@@ -1,5 +1,6 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes.organization;
 
+
 public class University extends Organization {
 
 	/**
@@ -11,4 +12,7 @@ public class University extends Organization {
 		super(object);
 	}
 
+	public University() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#University");
+	}
 }

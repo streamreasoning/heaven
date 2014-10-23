@@ -11,7 +11,10 @@ public class Professor extends Faculty {
 
 	public Professor(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
+	}
+
+	public Professor() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#Professor");
 	}
 
 }

@@ -13,12 +13,16 @@ public class TeachingAssistantOf extends RDFProperty {
 	private static final long serialVersionUID = 1L;
 
 	public TeachingAssistantOf() {
-		super(TeachingAssistant.class, Course.class,
-				"is a teaching assistant for");
+		super(
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#teachingAssistantOf",
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#TeachingAssistant",
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Course",
+				TeachingAssistant.class, Course.class);
 	}
 
-	public TeachingAssistantOf(Class<? extends RDFResource> domain,
-			Class<? extends RDFResource> range, String property) {
-		super(domain, range, property);
+	public TeachingAssistantOf(String property, String domainValue,
+			String rangeValue, Class<? extends RDFResource> domain,
+			Class<? extends RDFResource> range) {
+		super(property, domainValue, rangeValue, domain, range);
 	}
 }

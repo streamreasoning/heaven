@@ -11,7 +11,9 @@ public class Publication extends RDFResource {
 
 	public Publication(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
+	public Publication() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#Publication");
+	}
 }

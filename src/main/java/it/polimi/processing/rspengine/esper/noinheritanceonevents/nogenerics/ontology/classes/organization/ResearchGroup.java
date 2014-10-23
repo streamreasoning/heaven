@@ -9,7 +9,9 @@ public class ResearchGroup extends Organization {
 
 	public ResearchGroup(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
+	public ResearchGroup() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#ResearchGroup");
+	}
 }

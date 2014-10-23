@@ -11,7 +11,9 @@ public class Person extends RDFResource {
 
 	public Person(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
+	public Person() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person");
+	}
 }

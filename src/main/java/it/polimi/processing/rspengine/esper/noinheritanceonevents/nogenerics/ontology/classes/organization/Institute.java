@@ -9,7 +9,10 @@ public class Institute extends Organization {
 
 	public Institute(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
+	}
+
+	public Institute() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#Institute");
 	}
 
 }

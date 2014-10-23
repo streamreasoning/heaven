@@ -21,7 +21,7 @@ public class NoGenerics {
 	public static void main(String[] args) throws ClassNotFoundException,
 			SQLException, InterruptedException {
 
-		String[] files = new String[] { "University0_0_clean.nt" };
+		String[] files = new String[] { "file1.txt" };
 
 		TestStand<RSPEngine> testStand = new TestStand<RSPEngine>();
 

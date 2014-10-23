@@ -10,7 +10,10 @@ public class TeachingAssistant extends Person {
 
 	public TeachingAssistant(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
+	public TeachingAssistant() {
+		super(
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#TeachingAssistant");
+	}
 }

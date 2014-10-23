@@ -14,4 +14,8 @@ public class Faculty extends Employee {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Faculty() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#Faculty");
+	}
+
 }

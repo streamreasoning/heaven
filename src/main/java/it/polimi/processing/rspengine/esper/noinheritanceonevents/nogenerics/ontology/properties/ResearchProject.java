@@ -13,11 +13,15 @@ public class ResearchProject extends RDFProperty {
 	private static final long serialVersionUID = 1L;
 
 	public ResearchProject() {
-		super(ResearchGroup.class, Research.class, "has as a research project");
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#researchProject",
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#ResearchGroup",
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Research",
+				ResearchGroup.class, Research.class);
 	}
 
-	public ResearchProject(Class<? extends RDFResource> domain,
-			Class<? extends RDFResource> range, String property) {
-		super(domain, range, property);
+	public ResearchProject(String property, String domainValue,
+			String rangeValue, Class<? extends RDFResource> domain,
+			Class<? extends RDFResource> range) {
+		super(property, domainValue, rangeValue, domain, range);
 	}
 }

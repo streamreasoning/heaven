@@ -11,7 +11,11 @@ public class AssociateProfessor extends Professor {
 
 	public AssociateProfessor(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
+	}
+
+	public AssociateProfessor() {
+		super(
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#AssociateProfessor");
 	}
 
 }

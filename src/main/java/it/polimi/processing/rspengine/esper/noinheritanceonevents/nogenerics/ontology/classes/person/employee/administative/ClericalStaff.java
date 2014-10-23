@@ -11,7 +11,9 @@ public class ClericalStaff extends AdministrativeStaff {
 
 	public ClericalStaff(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
+	public ClericalStaff() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#ClericalStaff");
+	}
 }

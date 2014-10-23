@@ -4,9 +4,6 @@ import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ont
 
 public class Lecturer extends Faculty {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public Lecturer(String object) {
@@ -14,4 +11,7 @@ public class Lecturer extends Faculty {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Lecturer() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#Lecturer");
+	}
 }

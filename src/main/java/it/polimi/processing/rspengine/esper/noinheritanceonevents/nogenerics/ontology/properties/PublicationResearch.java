@@ -13,11 +13,16 @@ public class PublicationResearch extends RDFProperty {
 	private static final long serialVersionUID = 1L;
 
 	public PublicationResearch() {
-		super(Publication.class, Research.class, "is being advised by");
+		super(
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationResearch",
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Publication",
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Research",
+				Publication.class, Research.class);
 	}
 
-	public PublicationResearch(Class<? extends RDFResource> domain,
-			Class<? extends RDFResource> range, String property) {
-		super(domain, range, property);
+	public PublicationResearch(String property, String domainValue,
+			String rangeValue, Class<? extends RDFResource> domain,
+			Class<? extends RDFResource> range) {
+		super(property, domainValue, rangeValue, domain, range);
 	}
 }

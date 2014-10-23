@@ -4,14 +4,16 @@ import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ont
 
 public class VisitingProfessor extends Professor {
 
+	private static final long serialVersionUID = 2845788598546041966L;
+
 	public VisitingProfessor(String object) {
 		super(object);
 		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2845788598546041966L;
+	public VisitingProfessor() {
+		super(
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#VisitingProfessor");
+	}
 
 }

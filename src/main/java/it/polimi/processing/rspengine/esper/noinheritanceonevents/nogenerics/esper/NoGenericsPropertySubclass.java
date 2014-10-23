@@ -15,7 +15,9 @@ import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.rdf
 import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.rdfs.RDFResource;
 import it.polimi.processing.rspengine.esper.plain.Queries;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,6 +47,7 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
  * **/
 
 public class NoGenericsPropertySubclass extends RSPEsperEngine {
+	private static final Map<String, Class<? extends RDFResource>> classes = new HashMap<String, Class<? extends RDFResource>>();
 	private final Map<String, RDFProperty> props = new HashMap<String, RDFProperty>();
 
 	public NoGenericsPropertySubclass(TestStand<RSPEngine> stand) {
@@ -67,18 +70,51 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 	@Override
 	public boolean sendEvent(StreamingEvent e) {
 		this.currentStreamingEvent = e;
-		RDFSInput event;
+		RDFSInput event = new RDFSInput();
+		RDFResource s, o;
+		String[] coreT = new String[3];
+		List<String[]> types = new ArrayList<String[]>();
 		for (String[] eventTriple : e.getEventTriples()) {
 			String prop = eventTriple[1].replace("<", "").replace(">", "")
 					.toLowerCase().split("#")[1];
-			event = new RDFSInput(new RDFResource(eventTriple[0]),
-					props.get(prop), new RDFResource(eventTriple[2]),
-					cepRT.getCurrentTime());
-
-			cepRT.sendEvent(event);
+			if (!"type".equals(prop)) {
+				event.setP(props.get(prop));
+				coreT = eventTriple;
+			} else {
+				types.add(eventTriple);
+			}
 		}
-		sendTimeEvent();
-		return true;
+
+		try {
+			for (String[] ett : types) {
+				Class<? extends RDFResource> domainOrRange = classes.get(ett[2]
+						.replace("<", "").replace(">", "").toLowerCase()
+						.split("#")[1]);
+				if (ett[0].equals(coreT[0])) {
+					s = domainOrRange.newInstance();
+					s.setValue(coreT[0]);
+					event.setS(domainOrRange.cast(s));
+				} else if (ett[0].equals(coreT[2])) {
+					o = domainOrRange.newInstance();
+					o.setValue(coreT[0]);
+					event.setO(domainOrRange.cast(o));
+				}
+			}
+			event.setChannel("Input");
+			event.setTimestamp(cepRT.getCurrentTime());
+			cepRT.sendEvent(event);
+			sendTimeEvent();
+			return true;
+		} catch (InstantiationException e1) {
+
+			e1.printStackTrace();
+			return false;
+		} catch (IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return false;
+		}
+
 	}
 
 	@Override
@@ -120,10 +156,10 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 		Reflections reflections = new Reflections(
 				"it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.properties");
 
-		Set<Class<? extends RDFProperty>> allClasses = reflections
+		Set<Class<? extends RDFProperty>> allpropClasses = reflections
 				.getSubTypesOf(RDFProperty.class);
 
-		for (Class<? extends RDFProperty> class1 : allClasses) {
+		for (Class<? extends RDFProperty> class1 : allpropClasses) {
 			RDFProperty c = class1.newInstance();
 			cepConfig.addVariable(class1.getSimpleName().toLowerCase(), class1,
 					class1.cast(c), true);
@@ -132,6 +168,15 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 		}
 		cepConfig.addVariable("typeOf", TypeOf.class, new TypeOf(), true);
 		props.put("type", new TypeOf());
+
+		reflections = new Reflections(
+				"it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes");
+		Set<Class<? extends RDFResource>> allClasses = reflections
+				.getSubTypesOf(RDFResource.class);
+
+		for (Class<? extends RDFResource> class1 : allClasses) {
+			classes.put(class1.getSimpleName().toLowerCase(), class1);
+		}
 	}
 
 	@Override

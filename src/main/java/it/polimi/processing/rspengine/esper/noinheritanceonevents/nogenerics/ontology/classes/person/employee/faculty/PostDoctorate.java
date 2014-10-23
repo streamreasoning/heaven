@@ -11,7 +11,9 @@ public class PostDoctorate extends Faculty {
 
 	public PostDoctorate(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
+	public PostDoctorate() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#PostDoc");
+	}
 }

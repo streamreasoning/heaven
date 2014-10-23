@@ -11,7 +11,9 @@ public class Dean extends Professor {
 
 	public Dean(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
+	public Dean() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#Dean");
+	}
 }

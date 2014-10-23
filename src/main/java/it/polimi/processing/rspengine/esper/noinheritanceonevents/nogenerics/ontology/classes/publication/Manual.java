@@ -9,7 +9,9 @@ public class Manual extends Publication {
 
 	public Manual(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
+	public Manual() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#Manual");
+	}
 }

@@ -1,5 +1,6 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes.work;
 
+
 public class GraduateCourse extends Course {
 
 	/**
@@ -9,7 +10,9 @@ public class GraduateCourse extends Course {
 
 	public GraduateCourse(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
+	public GraduateCourse() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#GraduateCourse");
+	}
 }

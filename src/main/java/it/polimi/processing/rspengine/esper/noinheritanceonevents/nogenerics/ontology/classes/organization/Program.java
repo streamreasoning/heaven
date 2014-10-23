@@ -9,7 +9,9 @@ public class Program extends Organization {
 
 	public Program(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
+	public Program() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#Program");
+	}
 }

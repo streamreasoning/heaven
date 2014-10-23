@@ -11,7 +11,10 @@ public class AssistantProfessor extends Professor {
 
 	public AssistantProfessor(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
+	public AssistantProfessor() {
+		super(
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#AssistantProfessor");
+	}
 }

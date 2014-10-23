@@ -1,5 +1,6 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes.publication;
 
+
 public class TechnicalReport extends Article {
 
 	/**
@@ -9,7 +10,9 @@ public class TechnicalReport extends Article {
 
 	public TechnicalReport(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
+	public TechnicalReport() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#TechnicalReport");
+	}
 }

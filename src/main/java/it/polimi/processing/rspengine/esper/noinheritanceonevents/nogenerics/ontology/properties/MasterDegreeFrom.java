@@ -12,11 +12,16 @@ public class MasterDegreeFrom extends DegreeFrom {
 	private static final long serialVersionUID = 1L;
 
 	public MasterDegreeFrom() {
-		super(Person.class, University.class, "has a master degree from");
+		super(
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#mastersDegreeFrom",
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person",
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person",
+				Person.class, University.class);
 	}
 
-	public MasterDegreeFrom(Class<? extends RDFResource> domain,
-			Class<? extends RDFResource> range, String property) {
-		super(domain, range, property);
+	public MasterDegreeFrom(String property, String domainValue,
+			String rangeValue, Class<? extends RDFResource> domain,
+			Class<? extends RDFResource> range) {
+		super(property, domainValue, rangeValue, domain, range);
 	}
 }

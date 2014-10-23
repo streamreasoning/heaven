@@ -1,6 +1,5 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes.person.student;
 
-import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes.person.Student;
 
 public class UndergraduateStudent extends Student {
 
@@ -11,7 +10,10 @@ public class UndergraduateStudent extends Student {
 
 	public UndergraduateStudent(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
+	public UndergraduateStudent() {
+		super(
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#UndergraduateStudent");
+	}
 }

@@ -13,4 +13,7 @@ public class Schedule extends RDFResource {
 		super(object);
 	}
 
+	public Schedule() {
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#Schedule");
+	}
 }
