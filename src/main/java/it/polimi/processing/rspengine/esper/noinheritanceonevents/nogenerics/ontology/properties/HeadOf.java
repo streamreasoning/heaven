@@ -2,7 +2,7 @@ package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.on
 
 import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.rdfs.RDFResource;
 
-public class HeadOf extends WorkFor {
+public class HeadOf extends WorksFor {
 
 	/**
 	 * 

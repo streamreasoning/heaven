@@ -75,10 +75,15 @@ public class Streamer<T extends Event> implements Startable<ExecutionStates> {
 					i++;
 				} else {
 					eventTriples.add(s);
-					streamedEvents = sendEvent(engineName, fileName,
-							streamedEvents, lineNumber, line, eventTriples);
-					i = 1;
+					streamedEvents += sendEvent(engineName, fileName,
+							lineNumber, line, eventTriples, tripleGraph);
+					if (streamedEvents % 1000 == 0) {
+						Logger.getRootLogger().info(
+								"STREAMED " + streamedEvents + "EVENTS");
+					}
+					i = 0;
 					eventTriples = new HashSet<String[]>();
+
 				}
 
 			}
@@ -107,26 +112,25 @@ public class Streamer<T extends Event> implements Startable<ExecutionStates> {
 		return s;
 	}
 
-	private int sendEvent(String engineName, String fileName,
-			int streamedEvents, int lineNumber, String line,
-			Set<String[]> eventTriples) {
+	private int sendEvent(String engineName, String fileName, int lineNumber,
+			String line, Set<String[]> eventTriples, int triplesModel) {
 		for (String[] s : eventTriples) {
 			Logger.getRootLogger()
 					.debug("tripleSet: " + Arrays.deepToString(s));
 		}
-		if (stand.sendEvent(new StreamingEvent(eventTriples, lineNumber,
-				fileName, engineName))) {
-			streamedEvents++;
+		StreamingEvent streamingEvent = new StreamingEvent(eventTriples,
+				lineNumber, fileName, engineName);
+		streamingEvent.setGraphTriples(triplesModel);
+		if (stand.sendEvent(streamingEvent)) {
+			Logger.getRootLogger().debug("SEND NEW EVENT: " + line);
+			status = ExecutionStates.READY;
+			return 1;
 		} else {
+			status = ExecutionStates.READY;
 			Logger.getRootLogger().info("Not Saved " + line);
+			return 0;
 		}
-		status = ExecutionStates.READY;
-		if (streamedEvents % 1000 == 0) {
-			Logger.getRootLogger()
-					.info("STREAMED " + streamedEvents + "EVENTS");
-		}
-		Logger.getRootLogger().debug("SEND NEW EVENT: " + line);
-		return streamedEvents;
+
 	}
 
 	@Override

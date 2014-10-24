@@ -15,6 +15,7 @@ public class StreamingEvent extends Event {
 	private long timestamp;
 	private String engine;
 	private int lineNumber;
+	private int graphTriples;
 
 	public StreamingEvent(Set<String[]> eventTriples, int lineNumber,
 			String fileName, String engine) {
@@ -41,4 +42,16 @@ public class StreamingEvent extends Event {
 		return triples;
 	}
 
+	@Override
+	public String toString() {
+		String triples = "[";
+		for (String[] t : eventTriples) {
+			triples += ", " + Arrays.deepToString(t);
+		}
+		triples += "]";
+		return "StreamingEvent [eventTriples=" + triples + ", id=" + id
+				+ ", fileName=" + fileName + ", timestamp=" + timestamp
+				+ ", engine=" + engine + ", lineNumber=" + lineNumber
+				+ ", graphTriples=" + graphTriples + "]";
+	}
 }

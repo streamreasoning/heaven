@@ -7,6 +7,7 @@ import it.polimi.processing.collector.saver.CSVEventSaver;
 import it.polimi.processing.collector.saver.SQLLiteEventSaver;
 import it.polimi.processing.collector.saver.TrigEventSaver;
 import it.polimi.processing.core.TestStand;
+import it.polimi.processing.events.StreamingEvent;
 import it.polimi.processing.events.result.ExperimentResultEvent;
 import it.polimi.processing.events.result.StreamingEventResult;
 import it.polimi.processing.rspengine.RSPEngine;
@@ -31,8 +32,9 @@ public class EmptyMain {
 				testStand, new TrigEventSaver(), new CSVEventSaver());
 		StartableCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(
 				testStand, new SQLLiteEventSaver());
-		RSPEngine engine = new IdentityEngine(testStand);
-		Streamer streamer = new Streamer(testStand);
+		RSPEngine engine = new IdentityEngine("identity", testStand);
+		Streamer<StreamingEvent> streamer = new Streamer<StreamingEvent>(
+				testStand);
 
 		testStand.build(streamingEventResultCollector,
 				experimentResultCollector, engine, streamer);

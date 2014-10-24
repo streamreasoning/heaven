@@ -62,10 +62,9 @@ public class JenaEngine extends RSPEngine {
 	int i = 0;
 	private Experiment currentExperiment;
 
-	public JenaEngine(TestStand<RSPEngine> stand) {
-		super(stand);
+	public JenaEngine(String name, TestStand<RSPEngine> stand) {
+		super(name, stand);
 		super.stand = stand;
-		this.name = "jena";
 		FileManager.get().addLocatorClassLoader(
 				JenaEngine.class.getClassLoader());
 

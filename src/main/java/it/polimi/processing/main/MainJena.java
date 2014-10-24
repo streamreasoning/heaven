@@ -28,7 +28,7 @@ public class MainJena {
 				testStand, new TrigEventSaver(), new CSVEventSaver());
 		StartableCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(
 				testStand, new SQLLiteEventSaver());
-		RSPEngine engine = new JenaEngine(testStand);
+		RSPEngine engine = new JenaEngine("jena", testStand);
 		Streamer<StreamingEvent> streamer = new Streamer<StreamingEvent>(
 				testStand);
 

@@ -13,10 +13,10 @@ import org.apache.log4j.Logger;
 
 public class IdentityEngine extends RSPEngine {
 
-	private Experiment currentExperiment;
+	private final Experiment currentExperiment;
 
-	public IdentityEngine(TestStand<RSPEngine> stand) {
-		super(stand);
+	public IdentityEngine(String name, TestStand<RSPEngine> stand) {
+		super(name, stand);
 		currentExperiment = stand.getCurrentExperiment();
 	}
 
@@ -24,9 +24,9 @@ public class IdentityEngine extends RSPEngine {
 	public boolean sendEvent(StreamingEvent e) {
 		try {
 			if (currentExperiment != null) {
-				return collector.store(new StreamingEventResult(
-						e.getEventTriples(), e, currentExperiment
-								.getOutputFileName()));
+				return collector.store(new StreamingEventResult(e
+						.getEventTriples(), e, currentExperiment
+						.getOutputFileName()));
 			} else {
 				Logger.getRootLogger().debug(
 						"An Experiment must be initialized");

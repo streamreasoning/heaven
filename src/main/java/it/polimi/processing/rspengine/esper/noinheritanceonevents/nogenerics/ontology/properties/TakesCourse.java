@@ -11,8 +11,7 @@ public class TakesCourse extends RDFProperty {
 	private static final long serialVersionUID = 1L;
 
 	public TakesCourse() {
-		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#takesCourse", "",
-				"", null, null);
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#takesCourse");
 	}
 
 	public TakesCourse(String property, String domainValue, String rangeValue,

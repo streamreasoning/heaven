@@ -36,10 +36,9 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 
 	// TODO useless private static final Ontology ontology = new Ontology();
 
-	public PlainMultipleInheritance(TestStand<RSPEngine> stand) {
-		super(stand);
+	public PlainMultipleInheritance(String name, TestStand<RSPEngine> stand) {
+		super(name, stand);
 		super.stand = stand;
-		this.name = "plain";
 	}
 
 	protected void initQueries() {

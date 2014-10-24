@@ -21,7 +21,7 @@ public class NoGenerics {
 	public static void main(String[] args) throws ClassNotFoundException,
 			SQLException, InterruptedException {
 
-		String[] files = new String[] { "file1.txt" };
+		String[] files = new String[] { "University0_0_clean.nt" };
 
 		TestStand<RSPEngine> testStand = new TestStand<RSPEngine>();
 
@@ -29,7 +29,8 @@ public class NoGenerics {
 				testStand, new TrigEventSaver(), new CSVEventSaver());
 		StartableCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(
 				testStand, new SQLLiteEventSaver());
-		RSPEngine engine = new NoGenericsPropertySubclass(testStand);
+		RSPEngine engine = new NoGenericsPropertySubclass("Nogenerics",
+				testStand);
 
 		Streamer<StreamingEvent> streamer = new Streamer<StreamingEvent>(
 				testStand);

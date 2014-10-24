@@ -18,8 +18,9 @@ public abstract class RSPEngine implements EventProcessor<StreamingEvent> {
 	protected String name;
 	protected Stand stand;
 
-	public RSPEngine(ResultCollector<StreamingEventResult> stand) {
+	public RSPEngine(String name, ResultCollector<StreamingEventResult> stand) {
 		this.collector = stand;
+		this.name = name;
 	}
 
 	public abstract ExecutionStates init();

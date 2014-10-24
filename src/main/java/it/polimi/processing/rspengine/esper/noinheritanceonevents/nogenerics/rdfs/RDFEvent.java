@@ -28,7 +28,7 @@ public abstract class RDFEvent implements TripleEvent {
 	@Override
 	public Set<String[]> getTriples() {
 		Set<String[]> set = new HashSet<String[]>();
-		String[] triple = new String[] { s.toString(), p + "", o.toString() };
+		String[] triple = new String[] { s + "", p + "", o + "" };
 		set.add(triple);
 		return set;
 

@@ -29,7 +29,7 @@ public class TSModelPlain {
 				testStand, new TrigEventSaver(), new CSVEventSaver());
 		StartableCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(
 				testStand, new SQLLiteEventSaver());
-		RSPEngine engine = new PlainMultipleInheritance(testStand);
+		RSPEngine engine = new PlainMultipleInheritance("plain", testStand);
 		Streamer<StreamingEvent> streamer = new Streamer<StreamingEvent>(
 				testStand);
 

@@ -24,11 +24,11 @@ public abstract class RSPEsperEngine extends RSPEngine {
 	protected static ConfigurationMethodRef ref;
 	protected Event currentStreamingEvent = null;
 
-	protected static int time = 0;
+	protected int time = 0;
 
-	public RSPEsperEngine(ResultCollector<StreamingEventResult> stand) {
-		super(stand);
-		// TODO Auto-generated constructor stub
+	public RSPEsperEngine(String name,
+			ResultCollector<StreamingEventResult> stand) {
+		super(name, stand);
 	}
 
 	protected void sendTimeEvent() {

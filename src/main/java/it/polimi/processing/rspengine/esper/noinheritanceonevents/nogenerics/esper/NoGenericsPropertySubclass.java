@@ -47,13 +47,12 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
  * **/
 
 public class NoGenericsPropertySubclass extends RSPEsperEngine {
-	private static final Map<String, Class<? extends RDFResource>> classes = new HashMap<String, Class<? extends RDFResource>>();
+	private final Map<String, Class<? extends RDFResource>> classes = new HashMap<String, Class<? extends RDFResource>>();
 	private final Map<String, RDFProperty> props = new HashMap<String, RDFProperty>();
 
-	public NoGenericsPropertySubclass(TestStand<RSPEngine> stand) {
-		super(stand);
+	public NoGenericsPropertySubclass(String name, TestStand<RSPEngine> stand) {
+		super(name, stand);
 		super.stand = stand;
-		this.name = "Nogenerics";
 	}
 
 	protected void initQueries() {
@@ -74,6 +73,10 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 		RDFResource s, o;
 		String[] coreT = new String[3];
 		List<String[]> types = new ArrayList<String[]>();
+		if (e.getEventTriples().size() != e.getGraphTriples()) {
+			throw new RuntimeException(
+					"mismatch on triple graph are not allowed");
+		}
 		for (String[] eventTriple : e.getEventTriples()) {
 			String prop = eventTriple[1].replace("<", "").replace(">", "")
 					.toLowerCase().split("#")[1];
@@ -90,17 +93,24 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 				Class<? extends RDFResource> domainOrRange = classes.get(ett[2]
 						.replace("<", "").replace(">", "").toLowerCase()
 						.split("#")[1]);
-				if (ett[0].equals(coreT[0])) {
+				if (domainOrRange == null) {
+					throw new PropertyNotFoundException(ett[2]
+							+ "+is not present in system properties map");
+				} else if (ett[0].equals(coreT[0])) {
 					s = domainOrRange.newInstance();
 					s.setValue(coreT[0]);
 					event.setS(domainOrRange.cast(s));
 				} else if (ett[0].equals(coreT[2])) {
 					o = domainOrRange.newInstance();
-					o.setValue(coreT[0]);
+					o.setValue(coreT[2]);
 					event.setO(domainOrRange.cast(o));
+				} else {
+					throw new RuntimeException("statements are not allined "
+							+ e.getLineNumber());
 				}
 			}
 			event.setChannel("Input");
+			check(event, e);
 			event.setTimestamp(cepRT.getCurrentTime());
 			cepRT.sendEvent(event);
 			sendTimeEvent();
@@ -113,6 +123,17 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return false;
+		}
+
+	}
+
+	private void check(RDFSInput event, StreamingEvent se) {
+		if (event.getO() == null || event.getS() == null
+				|| event.getP() == null) {
+			Logger.getRootLogger().info(event.toString());
+			Logger.getRootLogger().info(se.toString());
+			throw new RuntimeException("Resources must be not null, line "
+					+ se.getLineNumber());
 		}
 
 	}

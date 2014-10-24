@@ -1,5 +1,9 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.rdfs;
 
+import lombok.NonNull;
+
+import org.apache.log4j.Logger;
+
 public final class RDFClass extends RDFResource {
 
 	/**
@@ -8,22 +12,28 @@ public final class RDFClass extends RDFResource {
 	private static final long serialVersionUID = 1L;
 	protected Class<?> clazz;
 
-	public RDFClass(Class<?> class1, String value) {
+	public RDFClass(@NonNull Class<?> class1, @NonNull String value) {
 		super(value);
 		this.clazz = class1;
 	}
 
 	@Override
 	public RDFClass getSuper() {
+		if (clazz == null) {
+			Logger.getRootLogger().debug(value);
+			return null;
+		}
 		try {
-			if (!clazz.getSuperclass().equals(Object.class)) {
+			if (!Object.class.equals(clazz.getSuperclass())) {
 				Class<?> sc = clazz.getSuperclass();
 				RDFResource r;
 				r = (RDFResource) sc.newInstance();
-				RDFClass rdfClass = new RDFClass(clazz.getSuperclass(), r.getValue());
+				RDFClass rdfClass = new RDFClass(clazz.getSuperclass(),
+						r.getValue());
 				return rdfClass;
 			} else
-				return new RDFClass(clazz, value);
+				Logger.getRootLogger().debug("root reached " + value);
+			return new RDFClass(clazz, value);
 		} catch (InstantiationException | IllegalAccessException e) {
 			throw new WrongSuperMethodCall(e);
 		}
