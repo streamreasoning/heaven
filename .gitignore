@@ -21,6 +21,8 @@ target
 #data
 *.csv
 *.DS_Store
+*.trig
+*.db
 
 =======
 >>>>>>> 24dfe85b47fb6282342097b3f16afad45de31675
