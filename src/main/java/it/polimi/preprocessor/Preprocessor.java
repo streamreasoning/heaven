@@ -24,7 +24,7 @@ public class Preprocessor {
 
 	public static void main(String[] args) throws IOException {
 		Model inputOriginal = FileManager.get().loadModel(
-				"src/main/resource/data/input/University0_1.nt", null,
+				"src/main/resources/data/input/University0_1.nt", null,
 				"RDF/XML");
 
 		Model typeOf = inputOriginal.query(new SimpleSelector(null, RDF.type,

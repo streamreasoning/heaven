@@ -153,8 +153,8 @@ public class Ontology {
 		return arr;
 	}
 
-	public static String[] subPropertyOf(String s) {
-		return properties.get(s);
+	public static String subPropertyOf(String s) {
+		return properties.get(s)[0];
 	}
 
 	public static String[] range(String p) {

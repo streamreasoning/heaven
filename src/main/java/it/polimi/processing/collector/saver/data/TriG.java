@@ -16,7 +16,7 @@ public class TriG implements CollectableData {
 	@Override
 	public String getData() {
 		String eol = System.getProperty("line.separator");
-		String s = "<http://example.org/" + e_id.hashCode() + " {";
+		String s = e_id + " {";
 		StmtIterator iterator = m.listStatements();
 		while (iterator.hasNext()) {
 

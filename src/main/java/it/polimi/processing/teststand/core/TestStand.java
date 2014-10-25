@@ -68,7 +68,7 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 		String inputFileName = FileUtils.INPUT_FILE_PATH + f;
 		Date d = new Date();
 		String outputFileName = "_Result_"
-				+ DateUtils.formatDate(d, "YYYY_MM_DD__HH_mm_SS") + "_"
+				+ DateUtils.formatDate(d, "YYYY_MM_dd_HH_mm_SS") + "_"
 				+ f.split("\\.")[0];
 		String logFileName = "LOG_" + f.split("\\.")[0];
 

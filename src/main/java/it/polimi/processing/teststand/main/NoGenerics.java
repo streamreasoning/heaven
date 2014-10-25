@@ -29,7 +29,7 @@ public class NoGenerics {
 				testStand, new TrigEventSaver(), new CSVEventSaver());
 		StartableCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(
 				testStand, new SQLLiteEventSaver());
-		RSPEngine engine = new NoGenericsPropertySubclass("Nogenerics",
+		RSPEngine engine = new NoGenericsPropertySubclass("java/nogenerics",
 				testStand);
 
 		NTStreamer<StreamingEvent> streamer = new NTStreamer<StreamingEvent>(

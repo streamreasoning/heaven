@@ -4,6 +4,7 @@ import it.polimi.processing.collector.Collectable;
 import it.polimi.processing.collector.saver.data.CollectableData;
 import it.polimi.processing.enums.ExecutionStates;
 import it.polimi.utils.DatabaseUtils;
+import it.polimi.utils.FileUtils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,7 +19,8 @@ import org.apache.log4j.Logger;
 @Getter
 public class SQLLiteEventSaver implements EventSaver {
 
-	private static final String JDBC_SQLITE_OBQAATCEP_DB = "jdbc:sqlite:obqaatcep.db";
+	private static final String JDBC_SQLITE_OBQAATCEP_DB = "jdbc:sqlite:"
+			+ FileUtils.DATABASEPATH + "obqaatcep.db";
 	private static final String ORG_SQLITE_JDBC = "org.sqlite.JDBC";
 	private long timestamp;
 	private Connection c;

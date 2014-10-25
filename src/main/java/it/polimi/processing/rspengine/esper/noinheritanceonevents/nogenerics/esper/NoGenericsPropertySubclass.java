@@ -106,7 +106,7 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 					event.setO(domainOrRange.cast(o));
 				} else {
 					throw new RuntimeException("statements are not allined "
-							+ e.getLineNumber());
+							+ e.getLineNumbers());
 				}
 			}
 			event.setChannel("Input");
@@ -133,7 +133,7 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 			Logger.getRootLogger().info(event.toString());
 			Logger.getRootLogger().info(se.toString());
 			throw new RuntimeException("Resources must be not null, line "
-					+ se.getLineNumber());
+					+ se.getLineNumbers());
 		}
 
 	}

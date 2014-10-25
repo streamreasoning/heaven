@@ -1,6 +1,5 @@
 package it.polimi.processing.events;
 
-import java.util.Arrays;
 import java.util.Set;
 
 import lombok.Data;
@@ -11,47 +10,19 @@ import lombok.EqualsAndHashCode;
 public class StreamingEvent extends Event {
 
 	private Set<String[]> eventTriples;
-	private String id, fileName;
+	private String id, fileName, engine;
 	private long timestamp;
-	private String engine;
-	private int lineNumber;
-	private int graphTriples;
+	private int eventNumber, graphTriples;
+	private int[] lineNumbers;
 
-	public StreamingEvent(Set<String[]> eventTriples, int lineNumber,
-			String fileName, String engine) {
+	public StreamingEvent(Set<String[]> eventTriples, int[] lineNumbers,
+			int eventNumber, String fileName, String engine) {
 		timestamp = System.currentTimeMillis();
 		this.eventTriples = eventTriples;
 		this.engine = engine;
-		long key = 0;
-		for (String[] triple : eventTriples) {
-			key += Arrays.deepToString(triple).hashCode();
-
-		}
-		this.id = "<http://example.org/" + key + ">";
-		this.lineNumber = lineNumber;
+		this.id = "<http://example.org/" + eventNumber + ">";
+		this.lineNumbers = lineNumbers;
 		this.fileName = fileName;
 	}
 
-	public String getTripleToString() {
-		String triples = "";
-		for (String[] triple : eventTriples) {
-			triples += Arrays.deepToString(triple)
-					+ System.getProperty("line.separator");
-
-		}
-		return triples;
-	}
-
-	@Override
-	public String toString() {
-		String triples = "[";
-		for (String[] t : eventTriples) {
-			triples += ", " + Arrays.deepToString(t);
-		}
-		triples += "]";
-		return "StreamingEvent [eventTriples=" + triples + ", id=" + id
-				+ ", fileName=" + fileName + ", timestamp=" + timestamp
-				+ ", engine=" + engine + ", lineNumber=" + lineNumber
-				+ ", graphTriples=" + graphTriples + "]";
-	}
 }

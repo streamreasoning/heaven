@@ -66,6 +66,7 @@ public class NTStreamer<T extends Event> implements Streamer {
 			throw new WrongStatusTransitionException("Not Ready " + status);
 		} else {
 			int streamedEvents = 0, lineNumber = 0, tripleCount = 0;
+			int[] lineNumbers = new int[tripleGraph];
 			String line;
 			Set<String[]> eventTriples = new HashSet<String[]>();
 
@@ -74,16 +75,16 @@ public class NTStreamer<T extends Event> implements Streamer {
 				status = ExecutionStates.RUNNING;
 				String[] s = parse(line); // new line parsing
 				Logger.getRootLogger().debug("S: " + Arrays.deepToString(s));
-
 				if (tripleCount < tripleGraph - 1) {
 					eventTriples.add(s);
+					lineNumbers[tripleCount] = lineNumber;
 					tripleCount++;
 				} else {
 					eventTriples.add(s);
-
+					lineNumbers[tripleCount] = lineNumber;
 					streamedEvents += sendEvent(engineName, fileName,
-							lineNumber, line, eventTriples, tripleGraph,
-							factory);
+							lineNumbers, streamedEvents, line, eventTriples,
+							tripleGraph, factory);
 
 					if (streamedEvents % 1000 == 0) {
 						Logger.getRootLogger().info(
@@ -120,15 +121,16 @@ public class NTStreamer<T extends Event> implements Streamer {
 		return s;
 	}
 
-	private int sendEvent(String engineName, String fileName, int lineNumber,
-			String line, Set<String[]> eventTriples, int triplesModel,
+	private int sendEvent(String engineName, String fileName,
+			int[] lineNumbers, int eventNumber, String line,
+			Set<String[]> eventTriples, int triplesModel,
 			EventFactory<T> factory) {
 		for (String[] s : eventTriples) {
 			Logger.getRootLogger()
 					.debug("tripleSet: " + Arrays.deepToString(s));
 		}
 		StreamingEvent streamingEvent = new StreamingEvent(eventTriples,
-				lineNumber, fileName, engineName);
+				lineNumbers, eventNumber, fileName, engineName);
 		streamingEvent.setGraphTriples(triplesModel);
 		if (stand.sendEvent(streamingEvent)) {
 			Logger.getRootLogger().debug("SEND NEW EVENT: " + line);

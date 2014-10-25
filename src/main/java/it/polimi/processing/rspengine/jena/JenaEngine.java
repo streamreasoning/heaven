@@ -82,7 +82,7 @@ public class JenaEngine extends RSPEngine {
 			abox = ModelFactory.createMemModelMaker().createDefaultModel();
 
 			for (String[] eventTriple : e.getEventTriples()) {
-				Logger.getRootLogger().debug(Arrays.deepToString(eventTriple));
+				Logger.getRootLogger().info(Arrays.deepToString(eventTriple));
 				Statement s = createStatement(eventTriple);
 				abox.add(s);
 			}

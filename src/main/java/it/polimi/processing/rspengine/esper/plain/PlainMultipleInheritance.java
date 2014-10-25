@@ -99,9 +99,9 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 		Logger.getLogger("obqa").debug(eventTriples);
 		for (String[] eventTriple : eventTriples) {
 			Logger.getRootLogger().debug("Create New Esper Event");
-			esperEvent = new TEvent(new String[] { eventTriple[0] },
-					eventTriple[1], new String[] { eventTriple[2] }, "Input",
-					cepRT.getCurrentTime());
+			esperEvent = new TEvent(eventTriple[0], eventTriple[1],
+					eventTriple[2], cepRT.getCurrentTime(),
+					System.currentTimeMillis(), "Input");
 			cepRT.sendEvent(esperEvent);
 		}
 		sendTimeEvent();

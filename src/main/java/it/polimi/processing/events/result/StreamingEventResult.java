@@ -17,21 +17,16 @@ import org.apache.log4j.Logger;
 public class StreamingEventResult extends Event implements Collectable {
 
 	private StreamingEvent inputEvent;
-
 	private Set<String[]> all_triples;
-
-	private String result_event_id;
+	private String result_event_id, outputFileName;
 	private long result_timestamp;
-
-	private String outputFileName;
 
 	public StreamingEventResult(Set<String[]> all_triples,
 			StreamingEvent inputEvent, String outputFileName) {
 		this.inputEvent = inputEvent;
 		this.result_timestamp = System.currentTimeMillis();
-		// <http://example.org/StreamEventTS/ResultEventTS>
-		this.result_event_id = "<http://example.org/"
-				+ inputEvent.getTimestamp() + "/" + result_timestamp + ">";
+		this.result_event_id = "<http://example.org/resutof/"
+				+ inputEvent.getEventNumber() + ">";
 		this.all_triples = all_triples;
 		this.outputFileName = outputFileName;
 	}
@@ -45,8 +40,8 @@ public class StreamingEventResult extends Event implements Collectable {
 		return starttriples;
 	}
 
-	public int getLineNumber() {
-		return inputEvent.getLineNumber();
+	public int[] getLineNumbers() {
+		return inputEvent.getLineNumbers();
 	}
 
 	public Set<String[]> getStartTriples() {
@@ -67,17 +62,10 @@ public class StreamingEventResult extends Event implements Collectable {
 	 * **/
 	public String getTrig() {
 		String eol = System.getProperty("line.separator");
-		// TODO keys is the sum of each statments to string hashcode, since the
-		// order in not guaranteed
-		long key = 0;
-		for (String[] triple : inputEvent.getEventTriples()) {
-			key += Arrays.deepToString(triple).hashCode();
+		Logger.getLogger("obqa").debug(
+				"Event KEY :" + inputEvent.getEventNumber());
 
-		}
-
-		Logger.getLogger("obqa").debug("Event KEY :" + key);
-
-		String s = "<http://example.org/" + key + "> {";
+		String s = inputEvent.getId() + " {";
 		for (String[] resource : all_triples) {
 			s += eol + "<" + resource[0] + ">" + "<" + resource[1] + ">" + "<"
 					+ resource[2] + "> .";
@@ -89,9 +77,14 @@ public class StreamingEventResult extends Event implements Collectable {
 
 	@Override
 	public String getCSV() {
+		String lines = ",";
+		for (int p : inputEvent.getLineNumbers()) {
+			lines += p + ",";
+		}
+
 		long queryLatency = result_timestamp - inputEvent.getTimestamp();
-		return inputEvent.getId() + "," + inputEvent.getTimestamp()
-				+ ",Memory," + queryLatency;
+		return inputEvent.getId() + lines + inputEvent.getTimestamp() + ",0,"
+				+ queryLatency;
 	}
 
 	@Override
@@ -107,7 +100,7 @@ public class StreamingEventResult extends Event implements Collectable {
 
 	@Override
 	public String getName() {
-		return inputEvent.getEngine() + "/" + getOutputFileName();
+		return inputEvent.getEngine() + "/" + outputFileName;
 	}
 
 }
