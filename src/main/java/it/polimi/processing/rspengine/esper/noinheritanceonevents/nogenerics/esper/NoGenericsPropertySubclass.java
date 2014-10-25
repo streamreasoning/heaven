@@ -1,6 +1,5 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.esper;
 
-import it.polimi.processing.core.TestStand;
 import it.polimi.processing.enums.ExecutionStates;
 import it.polimi.processing.events.StreamingEvent;
 import it.polimi.processing.rspengine.RSPEngine;
@@ -14,6 +13,7 @@ import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ont
 import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.rdfs.RDFProperty;
 import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.rdfs.RDFResource;
 import it.polimi.processing.rspengine.esper.plain.Queries;
+import it.polimi.processing.teststand.core.TestStand;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -20,6 +20,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class ExperimentResultEvent extends Event implements Collectable {
 
+	private String inputFile, resultFile, logFileName;
 	private long timestamp_end;
 	private String name;
 	private Experiment experiment;
@@ -59,7 +60,7 @@ public class ExperimentResultEvent extends Event implements Collectable {
 				+ experiment.getTimestamp() + "'" + "," + "'" + timestamp_end
 				+ "'" + "," + "'" + experiment.getInputFileName() + "'" + ","
 				+ "'" + experiment.getOutputFileName() + "'" + "," + "'"
-				+ experiment.getLogFileName() + "'" + ");";
+				+ logFileName + "'" + ");";
 	}
 
 	@Override

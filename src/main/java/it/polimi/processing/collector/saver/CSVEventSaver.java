@@ -1,7 +1,7 @@
 package it.polimi.processing.collector.saver;
 
 import it.polimi.processing.collector.Collectable;
-import it.polimi.processing.collector.CollectableData;
+import it.polimi.processing.collector.saver.data.CollectableData;
 import it.polimi.processing.enums.ExecutionStates;
 import it.polimi.utils.FileUtils;
 
@@ -53,14 +53,14 @@ public class CSVEventSaver implements EventSaver {
 
 	@Override
 	public ExecutionStates init() throws ClassNotFoundException, SQLException {
-		Logger.getRootLogger().info("Nothing to do");
+		Logger.getRootLogger().info("Initialising CSVSaver... Nothing to do");
 		// TODO write csv header
 		return status = ExecutionStates.READY;
 	}
 
 	@Override
 	public ExecutionStates close() throws ClassNotFoundException, SQLException {
-		Logger.getRootLogger().info("Nothing to do");
+		Logger.getRootLogger().info("Closing CSVSaver... Nothing to do");
 		return status = ExecutionStates.CLOSED;
 	}
 

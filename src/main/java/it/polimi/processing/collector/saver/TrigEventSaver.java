@@ -1,7 +1,7 @@
 package it.polimi.processing.collector.saver;
 
 import it.polimi.processing.collector.Collectable;
-import it.polimi.processing.collector.CollectableData;
+import it.polimi.processing.collector.saver.data.CollectableData;
 import it.polimi.processing.enums.ExecutionStates;
 import it.polimi.utils.FileUtils;
 
@@ -45,18 +45,6 @@ public class TrigEventSaver implements EventSaver {
 	}
 
 	@Override
-	public ExecutionStates init() throws ClassNotFoundException, SQLException {
-		Logger.getRootLogger().info("Nothing to do");
-		return status = ExecutionStates.READY;
-	}
-
-	@Override
-	public ExecutionStates close() throws ClassNotFoundException, SQLException {
-		Logger.getRootLogger().info("Nothing to do");
-		return status = ExecutionStates.CLOSED;
-	}
-
-	@Override
 	public boolean save(CollectableData d) {
 		try {
 			if (ExecutionStates.READY.equals(status)) {
@@ -81,6 +69,18 @@ public class TrigEventSaver implements EventSaver {
 			e1.printStackTrace();
 			return false;
 		}
+	}
+
+	@Override
+	public ExecutionStates init() throws ClassNotFoundException, SQLException {
+		Logger.getRootLogger().info("Initialising TrigSaver... Nothing to do");
+		return status = ExecutionStates.READY;
+	}
+
+	@Override
+	public ExecutionStates close() throws ClassNotFoundException, SQLException {
+		Logger.getRootLogger().info("Closing TrigSaver... Nothing to do");
+		return status = ExecutionStates.CLOSED;
 	}
 
 }

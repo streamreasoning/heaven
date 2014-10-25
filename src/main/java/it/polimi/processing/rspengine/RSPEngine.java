@@ -2,10 +2,10 @@ package it.polimi.processing.rspengine;
 
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.collector.ResultCollector;
-import it.polimi.processing.core.Stand;
 import it.polimi.processing.enums.ExecutionStates;
 import it.polimi.processing.events.StreamingEvent;
 import it.polimi.processing.events.result.StreamingEventResult;
+import it.polimi.processing.teststand.core.Stand;
 import lombok.Getter;
 import lombok.Setter;
 

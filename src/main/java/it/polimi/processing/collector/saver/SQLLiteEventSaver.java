@@ -1,7 +1,7 @@
 package it.polimi.processing.collector.saver;
 
 import it.polimi.processing.collector.Collectable;
-import it.polimi.processing.collector.CollectableData;
+import it.polimi.processing.collector.saver.data.CollectableData;
 import it.polimi.processing.enums.ExecutionStates;
 import it.polimi.utils.DatabaseUtils;
 

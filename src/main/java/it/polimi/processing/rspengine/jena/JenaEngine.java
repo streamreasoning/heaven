@@ -18,12 +18,12 @@
 
 package it.polimi.processing.rspengine.jena;
 
-import it.polimi.processing.core.TestStand;
 import it.polimi.processing.enums.ExecutionStates;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.StreamingEvent;
 import it.polimi.processing.events.result.StreamingEventResult;
 import it.polimi.processing.rspengine.RSPEngine;
+import it.polimi.processing.teststand.core.TestStand;
 import it.polimi.utils.FileUtils;
 import it.polimi.utils.RDFSUtils;
 

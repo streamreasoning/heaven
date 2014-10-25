@@ -1,6 +1,5 @@
 package it.polimi.processing.rspengine.esper.plain;
 
-import it.polimi.processing.core.TestStand;
 import it.polimi.processing.enums.ExecutionStates;
 import it.polimi.processing.events.StreamingEvent;
 import it.polimi.processing.rspengine.RSPEngine;
@@ -8,6 +7,7 @@ import it.polimi.processing.rspengine.esper.RSPEsperEngine;
 import it.polimi.processing.rspengine.esper.commons.listener.ResultCollectorListener;
 import it.polimi.processing.rspengine.esper.plain.events.Out;
 import it.polimi.processing.rspengine.esper.plain.events.TEvent;
+import it.polimi.processing.teststand.core.TestStand;
 
 import java.util.Set;
 
