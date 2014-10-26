@@ -16,10 +16,10 @@ public class TrigEventSaver implements EventSaver {
 	private ExecutionStates status;
 
 	@Override
-	public boolean save(CollectableData d) {
+	public boolean save(CollectableData d, String where) {
 		try {
 			if (ExecutionStates.READY.equals(status)) {
-				String path = FileUtils.TRIG_OUTPUT_FILE_PATH + d.getName()
+				String path = FileUtils.TRIG_OUTPUT_FILE_PATH + where
 						+ FileUtils.TRIG_FILE_EXTENSION;
 				Logger.getRootLogger().debug("TRIG FILE PATH " + path);
 				File file = new File(path);

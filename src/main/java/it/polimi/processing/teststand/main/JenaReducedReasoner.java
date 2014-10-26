@@ -21,7 +21,7 @@ public class JenaReducedReasoner {
 	public static void main(String[] args) throws ClassNotFoundException,
 			SQLException {
 		String[] files = new String[] { "University0_0_clean.nt" };
-
+		int experimentNumber = 0;
 		TestStand<RSPEngine> testStand = new TestStand<RSPEngine>();
 
 		StartableCollector<StreamingEventResult> streamingEventResultCollector = new CollectorEventResult(
@@ -39,7 +39,7 @@ public class JenaReducedReasoner {
 		try {
 			for (String f : files) {
 
-				testStand.run(f);
+				experimentNumber += testStand.run(f, experimentNumber);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

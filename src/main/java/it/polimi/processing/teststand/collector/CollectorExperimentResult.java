@@ -34,11 +34,12 @@ public class CollectorExperimentResult implements
 	}
 
 	@Override
-	public boolean store(ExperimentResultEvent r) throws IOException {
+	public boolean store(ExperimentResultEvent r, String where)
+			throws IOException {
 		if (!ExecutionStates.READY.equals(status)) {
 			return false;
 		} else {
-			return sqlLiteSaver.save(r.getSQL());
+			return sqlLiteSaver.save(r.getSQL(), where);
 		}
 	}
 

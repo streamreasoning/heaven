@@ -22,6 +22,8 @@ public class FileUtils {
 	public static final String RULE_SET = "src/main/resources/data/inference/rules.rules";
 	public static final String UNIV_BENCH_RDFS = "src/main/resources/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
 	public static final String UNIV_BENCH_RDFS_MODIFIED = "src/main/resources/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
+
+	public static final String UNIV_BENCH_RHODF_MODIFIED = "src/main/resources/data/inference/univ-bench-rdfs-without-datatype-materialized-rhodf-modified.rdf";
 	public static final String DATABASEPATH = "src/main/resources/data/output/database/";
 
 }

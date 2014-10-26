@@ -8,29 +8,18 @@ import it.polimi.processing.events.StreamingEvent;
 import java.util.Arrays;
 import java.util.Set;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import org.apache.log4j.Logger;
-
 @Data
 @EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
 public class StreamingEventResult extends Event {
 
 	private StreamingEvent inputEvent;
 	private Set<String[]> all_triples;
-	private String result_event_id, outputFileName;
-	private long result_timestamp;
-
-	public StreamingEventResult(Set<String[]> all_triples,
-			StreamingEvent inputEvent, String outputFileName) {
-		this.inputEvent = inputEvent;
-		this.result_timestamp = System.currentTimeMillis();
-		this.result_event_id = "<http://example.org/resutof/"
-				+ inputEvent.getEventNumber() + ">";
-		this.all_triples = all_triples;
-		this.outputFileName = outputFileName;
-	}
+	private long resultTimestamp;
 
 	public String getStartTripleEvent() {
 		String starttriples = "[";
@@ -61,8 +50,6 @@ public class StreamingEventResult extends Event {
 	 * **/
 	public TriG getTrig() {
 		String eol = System.getProperty("line.separator");
-		Logger.getLogger("obqa").debug(
-				"Event KEY :" + inputEvent.getEventNumber());
 
 		String s = inputEvent.getId() + " {";
 		for (String[] resource : all_triples) {
@@ -71,19 +58,20 @@ public class StreamingEventResult extends Event {
 		}
 
 		s += eol + "}";
-		return new TriG(s, inputEvent.getEngine() + "/" + outputFileName);
+		return new TriG(s);
 	}
 
 	public CSV getCSV() {
+
 		String lines = ",";
 		for (int p : inputEvent.getLineNumbers()) {
 			lines += p + ",";
 		}
 
-		long queryLatency = result_timestamp - inputEvent.getTimestamp();
+		long queryLatency = resultTimestamp - inputEvent.getTimestamp();
 		String s = inputEvent.getId() + lines + inputEvent.getTimestamp()
 				+ ",0," + queryLatency;
-		return new CSV(s, inputEvent.getEngine() + "/" + outputFileName);
+		return new CSV(s);
 	}
 
 }

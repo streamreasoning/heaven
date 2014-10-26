@@ -7,16 +7,11 @@ import lombok.Data;
 @AllArgsConstructor
 public class CSV implements CollectableData {
 
-	private String s, name;
+	private String s;
 
 	@Override
 	public String getData() {
 		return s;
-	}
-
-	@Override
-	public String getName() {
-		return name;
 	}
 
 }

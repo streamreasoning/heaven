@@ -4,6 +4,4 @@ public interface CollectableData {
 
 	public String getData();
 
-	public String getName();
-
 }

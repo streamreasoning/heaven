@@ -24,9 +24,10 @@ public class IdentityEngine extends RSPEngine {
 	public boolean sendEvent(StreamingEvent e) {
 		try {
 			if (currentExperiment != null) {
-				return collector.store(new StreamingEventResult(e
-						.getEventTriples(), e, currentExperiment
-						.getOutputFileName()));
+				return collector.store(
+						new StreamingEventResult(e, e.getEventTriples(), System
+								.currentTimeMillis()), name + "/"
+								+ currentExperiment.getOutputFileName());
 			} else {
 				Logger.getRootLogger().debug(
 						"An Experiment must be initialized");

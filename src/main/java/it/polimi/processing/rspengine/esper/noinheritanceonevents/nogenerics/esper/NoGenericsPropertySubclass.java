@@ -49,6 +49,7 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
 public class NoGenericsPropertySubclass extends RSPEsperEngine {
 	private final Map<String, Class<? extends RDFResource>> classes = new HashMap<String, Class<? extends RDFResource>>();
 	private final Map<String, RDFProperty> props = new HashMap<String, RDFProperty>();
+	private ResultCollectorListener listener = null;
 
 	public NoGenericsPropertySubclass(String name, TestStand<RSPEngine> stand) {
 		super(name, stand);
@@ -62,8 +63,10 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 		cepAdm.createEPL(Queries.queryOut_nogenerics);// TODO queries packages
 		EPStatement out = cepAdm
 				.createEPL("insert into Out select * from QueryOut.win:time_batch(1000 msec)");
-		out.addListener(new ResultCollectorListener(collector, this)); // and
-																		// listener;
+		listener = new ResultCollectorListener(collector, this,
+				stand.getCurrentExperiment());
+		out.addListener(listener); // and
+		// listener;
 	}
 
 	@Override
@@ -73,7 +76,7 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 		RDFResource s, o;
 		String[] coreT = new String[3];
 		List<String[]> types = new ArrayList<String[]>();
-		if (e.getEventTriples().size() != e.getGraphTriples()) {
+		if (e.getEventTriples().size() != e.getTripleGraph()) {
 			throw new RuntimeException(
 					"mismatch on triple graph are not allowed");
 		}
@@ -204,6 +207,7 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 	public ExecutionStates startProcessing() {
 		if (isStartable()) {
 			resetTime();
+			listener.setExperiment(stand.getCurrentExperiment());
 			cepRT.sendEvent(new CurrentTimeEvent(time));
 			return status = ExecutionStates.READY;
 		} else

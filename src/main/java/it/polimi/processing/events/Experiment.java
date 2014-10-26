@@ -1,31 +1,15 @@
 package it.polimi.processing.events;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
 public class Experiment extends Event {
-
-	private String name, engine, inputFileName, outputFileName, logFileName;
+	private int experimentNumber;
+	private String descr, engine, inputFileName, outputFileName;
 	private Long timestamp;
-
-	public Experiment(String engine, String name, String inputFileName,
-			String outputFileName) {
-		this.name = name;
-		this.engine = engine;
-		this.inputFileName = inputFileName;
-		this.outputFileName = outputFileName;
-		this.timestamp = System.currentTimeMillis();
-	}
-
-	public Experiment(String engine, String experimentName,
-			String inputFileName, String outputFileName, String logFileName) {
-		this.name = experimentName;
-		this.engine = engine;
-		this.inputFileName = inputFileName;
-		this.outputFileName = outputFileName;
-		this.timestamp = System.currentTimeMillis();
-	}
 
 }

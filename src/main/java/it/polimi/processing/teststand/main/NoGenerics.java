@@ -20,7 +20,7 @@ public class NoGenerics {
 
 	public static void main(String[] args) throws ClassNotFoundException,
 			SQLException, InterruptedException {
-
+		int experimentNumber = 0;
 		String[] files = new String[] { "University0_0_clean.nt" };
 
 		TestStand<RSPEngine> testStand = new TestStand<RSPEngine>();
@@ -42,7 +42,7 @@ public class NoGenerics {
 		try {
 			for (String f : files) {
 
-				testStand.run(f);
+				experimentNumber += testStand.run(f, experimentNumber);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

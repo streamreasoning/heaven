@@ -18,12 +18,10 @@ import java.sql.SQLException;
 
 public class EmptyMain {
 
-	public static final String INPUT_FILE_PATH = "src/main/resource/data/input/";
-	public static final String OUTPUT_FILE_PATH = "src/main/resource/data/output/";
-
 	public static void main(String[] args) throws ClassNotFoundException,
 			SQLException, InterruptedException {
 
+		int experimentNumber = 0;
 		String[] files = new String[] { "file1.txt" };
 
 		TestStand<RSPEngine> testStand = new TestStand<RSPEngine>();
@@ -42,8 +40,7 @@ public class EmptyMain {
 		testStand.init();
 		try {
 			for (String f : files) {
-
-				testStand.run(f);
+				experimentNumber += testStand.run(f, experimentNumber);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

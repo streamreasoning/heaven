@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package it.polimi.utils;
+package it.polimi.preprocessor;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,14 +38,14 @@ public class Materialize {
 		// Streamer.stream(new ExampleONT_02());
 
 		Model m = FileManager.get().loadModel(
-				"src/main/resource/data/inference/univ-bench-rdfs.rdf", null,
+				"src/main/resources/data/inference/univ-bench-rdfs.rdf", null,
 				"RDF/XML");
 
 		reasoner = ReasonerRegistry.getRDFSReasoner();
 		InfModel infmodel = ModelFactory.createInfModel(reasoner, m);
 
 		File file = new File(
-				"src/main/resource/data/inference/univ-bench-rdfs-materialized-total.rdf");
+				"src/main/resources/data/inference/univ-bench-rdfs-materialized-rhodf.rdf");
 
 		try (FileOutputStream fop = new FileOutputStream(file)) {
 			if (!file.exists()) {

@@ -35,11 +35,12 @@ public class MainJena {
 		testStand.build(streamingEventResultCollector,
 				experimentResultCollector, engine, streamer);
 
+		int experimentNumber = 0;
 		testStand.init();
 		try {
 			for (String f : files) {
+				experimentNumber += testStand.run(f, experimentNumber);
 
-				testStand.run(f);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -56,8 +56,8 @@ public class NTStreamer<T extends Event> implements Streamer {
 	 *            system
 	 **/
 	@Override
-	public void stream(int tripleGraph, String engineName, String fileName,
-			String inputfileName, BufferedReader br) throws IOException {
+	public void stream(BufferedReader br, int experimentNumber,
+			String engineName, int tripleGraph) throws IOException {
 
 		Logger.getRootLogger().debug("Start Streaming");
 		// TODO
@@ -82,14 +82,24 @@ public class NTStreamer<T extends Event> implements Streamer {
 				} else {
 					eventTriples.add(s);
 					lineNumbers[tripleCount] = lineNumber;
-					streamedEvents += sendEvent(engineName, fileName,
-							lineNumbers, streamedEvents, line, eventTriples,
-							tripleGraph, factory);
+					if (sendEvent(eventTriples, tripleGraph, streamedEvents,
+							experimentNumber, engineName, lineNumbers, line,
+							factory)) {
 
-					if (streamedEvents % 1000 == 0) {
-						Logger.getRootLogger().info(
-								"STREAMED " + streamedEvents + "EVENTS");
+						Logger.getRootLogger().debug("SEND NEW EVENT: " + line);
+						status = ExecutionStates.READY;
+						streamedEvents++;
+
+						if (streamedEvents % 1000 == 0) {
+							Logger.getRootLogger().info(
+									"STREAMED " + streamedEvents + "EVENTS");
+						}
+					} else {
+						status = ExecutionStates.READY;
+						Logger.getRootLogger().info("Not Saved " + line);
+
 					}
+
 					tripleCount = 0;
 					eventTriples = new HashSet<String[]>();
 
@@ -121,27 +131,22 @@ public class NTStreamer<T extends Event> implements Streamer {
 		return s;
 	}
 
-	private int sendEvent(String engineName, String fileName,
-			int[] lineNumbers, int eventNumber, String line,
-			Set<String[]> eventTriples, int triplesModel,
-			EventFactory<T> factory) {
+	private boolean sendEvent(Set<String[]> eventTriples, int tripleGraph,
+			int eventNumber, int experimentNumber, String engineName,
+			int[] lineNumbers, String line, EventFactory<T> factory) {
 		for (String[] s : eventTriples) {
 			Logger.getRootLogger()
 					.debug("tripleSet: " + Arrays.deepToString(s));
 		}
-		StreamingEvent streamingEvent = new StreamingEvent(eventTriples,
-				lineNumbers, eventNumber, fileName, engineName);
-		streamingEvent.setGraphTriples(triplesModel);
-		if (stand.sendEvent(streamingEvent)) {
-			Logger.getRootLogger().debug("SEND NEW EVENT: " + line);
-			status = ExecutionStates.READY;
-			return 1;
-		} else {
-			status = ExecutionStates.READY;
-			Logger.getRootLogger().info("Not Saved " + line);
-			return 0;
-		}
 
+		String id = "<http://example.org/" + experimentNumber + "/"
+				+ eventNumber + ">";
+
+		StreamingEvent streamingEvent = new StreamingEvent(eventTriples, id,
+				eventNumber, experimentNumber, tripleGraph, lineNumbers,
+				System.currentTimeMillis());
+
+		return stand.sendEvent(streamingEvent);
 	}
 
 	@Override

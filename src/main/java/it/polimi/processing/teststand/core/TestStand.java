@@ -58,19 +58,20 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 	 * 
 	 * Start the system execution Move the system state from ON to RUNNING
 	 * 
+	 * @param experimentNumber
+	 * 
 	 * @throws Exception
 	 */
-	public void run(String f) throws Exception {
+	public int run(String f, int experimentNumber) throws Exception {
 		Logger.getRootLogger().info(
 				"START STREAMING " + System.currentTimeMillis());
-		String experimentName = "EXPERIMENT_ON_" + f + "_WITH_ENGINE_"
+		String experimentDescription = "EXPERIMENT_ON_" + f + "_WITH_ENGINE_"
 				+ rspEngine.getName();
 		String inputFileName = FileUtils.INPUT_FILE_PATH + f;
 		Date d = new Date();
-		String outputFileName = "_Result_"
+		String outputFileName = "Result_"
 				+ DateUtils.formatDate(d, "YYYY_MM_dd_HH_mm_SS") + "_"
 				+ f.split("\\.")[0];
-		String logFileName = "LOG_" + f.split("\\.")[0];
 
 		if (!isOn()) {
 			throw new WrongStatusTransitionException("Not ON");
@@ -80,28 +81,30 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 			// Start running
 			status = ExecutionStates.RUNNING;
 
-			currentExperiment = new Experiment(rspEngine.getName(),
-					experimentName, inputFileName, outputFileName, logFileName);
+			currentExperiment = new Experiment(experimentNumber,
+					experimentDescription, rspEngine.getName(), inputFileName,
+					outputFileName, System.currentTimeMillis());
 
 			ExecutionStates engineStatus = rspEngine.startProcessing();
 
 			if (ExecutionStates.READY.equals(engineStatus)) {
 
 				try {
-					streamer.stream(TripleGraphTypes.UTRIPLES,
-							rspEngine.getName(), inputFileName, inputFileName,
-							getBuffer(inputFileName));
+					streamer.stream(getBuffer(inputFileName), experimentNumber,
+							rspEngine.getName(), TripleGraphTypes.UTRIPLES);
 
 				} catch (IOException ex) {
 					status = ExecutionStates.ERROR;
 					ex.printStackTrace();
+					return 0;
 				}
 			}
 
 			engineStatus = rspEngine.stopProcessing();
 
+			String where = "";
 			experimentResultCollector.store(new ExperimentResultEvent(
-					currentExperiment));
+					currentExperiment, System.currentTimeMillis()), where);
 
 			if (ExecutionStates.CLOSED.equals(engineStatus)) {
 				status = ExecutionStates.READY;
@@ -111,6 +114,7 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 					"STOP STREAMING " + System.currentTimeMillis());
 
 		}
+		return 1;
 
 	}
 
@@ -211,9 +215,10 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 	}
 
 	@Override
-	public boolean store(StreamingEventResult r) {
+	public boolean store(StreamingEventResult r, String where) {
 		try {
-			return resultCollector.store(r);
+			return resultCollector.store(r, rspEngine.getName() + "/"
+					+ currentExperiment.getOutputFileName());
 		} catch (IOException e) {
 			return false;
 		}
@@ -227,15 +232,8 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 	@Override
 	public StreamingEventResult newEventInstance(Set<String[]> all_triples,
 			Event e) {
-		// TODO folder
-		// return new StreamingEventResult(all_triples, start_triples,
-		// event_timestamp, stand.getCurrentExperiment()
-		// .getOutputFileName(), "plain/", stand
-		// .getCurrentExperiment().getName(), stand
-		// .getCurrentExperiment().getTimestamp(), lineNumber);
-
-		return new StreamingEventResult(all_triples, (StreamingEvent) e,
-				currentExperiment.getOutputFileName());
+		return new StreamingEventResult((StreamingEvent) e, all_triples,
+				System.currentTimeMillis());
 	}
 
 	private BufferedReader getBuffer(String fileName)

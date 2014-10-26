@@ -8,7 +8,6 @@ import java.io.IOException;
 
 public interface Streamer extends Startable<ExecutionStates> {
 
-	public void stream(int tripleGraph, String engineName, String fileName,
-			String inputFileName, BufferedReader br) throws IOException;
-
+	public void stream(BufferedReader br, int experimentNumber,
+			String engineName, int tripleGraph) throws IOException;
 }

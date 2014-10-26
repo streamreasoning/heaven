@@ -98,10 +98,10 @@ public class SQLLiteEventSaver implements EventSaver {
 	}
 
 	@Override
-	public boolean save(CollectableData d) {
+	public boolean save(CollectableData d, String where) {
 		if (ExecutionStates.READY.equals(status) && d != null) {
 			String sql = DatabaseUtils.EXPERIMENT_INSERT + d.getData();
-			Logger.getRootLogger().debug("EXPERIMENT EVENT SQL VALUE " + sql);
+			Logger.getRootLogger().debug(" EVENT SQL VALUE " + sql);
 			try {
 				stmt = c.createStatement();
 				if (sql != null && stmt != null && c != null && !c.isClosed()) {

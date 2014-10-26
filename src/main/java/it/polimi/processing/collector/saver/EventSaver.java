@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public interface EventSaver {
 
-	public boolean save(CollectableData d);
+	public boolean save(CollectableData d, String where);
 
 	/**
 	 * @return Timestamp of the execution

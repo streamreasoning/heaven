@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 
-import org.apache.http.impl.cookie.DateUtils;
 import org.apache.log4j.Logger;
 
 public class CSVEventSaver implements EventSaver {
@@ -32,16 +31,11 @@ public class CSVEventSaver implements EventSaver {
 	}
 
 	@Override
-	public boolean save(CollectableData dt) {
+	public boolean save(CollectableData dt, String where) {
 		try {
 			if (ExecutionStates.READY.equals(status)) {
 				String path = FileUtils.CSV_OUTPUT_FILE_PATH
-						+ dt.getName().replace(
-								"_Result_",
-								"LOG_"
-										+ DateUtils.formatDate(d,
-												"YYYY_MM_dd__HH_mm_SS"))
-						+ FileUtils.CSV;
+						+ where.replace("Result", "LOG") + FileUtils.CSV;
 				File file = new File(path);
 				if (!file.exists()) {
 					file.createNewFile();
@@ -62,5 +56,4 @@ public class CSVEventSaver implements EventSaver {
 		}
 
 	}
-
 }

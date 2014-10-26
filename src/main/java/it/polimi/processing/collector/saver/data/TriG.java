@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class TriG implements CollectableData {
-	private String s, name;
+	private String s;
 
 	@Override
 	public String getData() {
@@ -14,8 +14,4 @@ public class TriG implements CollectableData {
 
 	}
 
-	@Override
-	public String getName() {
-		return name;
-	}
 }

@@ -35,7 +35,7 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
 
 public class PlainMultipleInheritance extends RSPEsperEngine {
 
-	// TODO useless private static final Ontology ontology = new Ontology();
+	private ResultCollectorListener listener = null;
 
 	public PlainMultipleInheritance(String name, TestStand<RSPEngine> stand) {
 		super(name, stand);
@@ -54,7 +54,9 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 
 		EPStatement out = cepAdm
 				.createEPL("insert into Out select * from QueryOut.win:time_batch(1000 msec)");
-		out.addListener(new ResultCollectorListener(collector, this));
+		listener = new ResultCollectorListener(collector, this,
+				stand.getCurrentExperiment());
+		out.addListener(listener);
 	}
 
 	@Override
@@ -84,6 +86,7 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 	public ExecutionStates startProcessing() {
 		if (isStartable()) {
 			resetTime();
+			listener.setExperiment(stand.getCurrentExperiment());
 			cepRT.sendEvent(new CurrentTimeEvent(time));
 			return status = ExecutionStates.READY;
 		} else

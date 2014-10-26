@@ -68,7 +68,7 @@ public class JenaEngineReducedRules extends RSPEngine {
 
 		// CARICO LA TBOX CHIUSA
 		tbox_star = FileManager.get().loadModel(
-				FileUtils.UNIV_BENCH_RDFS_MODIFIED, null, "RDF/XML");
+				FileUtils.UNIV_BENCH_RHODF_MODIFIED, null, "RDF/XML");
 	}
 
 	@Override
@@ -106,8 +106,9 @@ public class JenaEngineReducedRules extends RSPEngine {
 			}
 
 			try {
-				return collector.store(new StreamingEventResult(statements, e,
-						currentExperiment.getOutputFileName()));
+				return collector.store(new StreamingEventResult(e, statements,
+						System.currentTimeMillis()), name + "/"
+						+ currentExperiment.getOutputFileName());
 			} catch (IOException e1) {
 				e1.printStackTrace();
 				return false;

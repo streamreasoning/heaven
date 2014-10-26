@@ -12,10 +12,4 @@ public class SQL implements CollectableData {
 		return s;
 	}
 
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

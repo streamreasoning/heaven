@@ -1,6 +1,7 @@
 package it.polimi.processing.rspengine.esper.commons.listener;
 
 import it.polimi.processing.collector.ResultCollector;
+import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.result.StreamingEventResult;
 import it.polimi.processing.rspengine.esper.RSPEsperEngine;
 import it.polimi.processing.rspengine.esper.TripleEvent;
@@ -9,24 +10,22 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import org.apache.log4j.Logger;
 
 import com.espertech.esper.client.EventBean;
 
-@Getter
+@Data
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class ResultCollectorListener extends GenearlListener {
 
 	private final ResultCollector<StreamingEventResult> resultCollector;
 	private final RSPEsperEngine engine;
-
-	public ResultCollectorListener(
-			ResultCollector<StreamingEventResult> resultCollector,
-			RSPEsperEngine e) {
-		this.resultCollector = resultCollector;
-		this.engine = e;
-	}
+	private Experiment experiment;
 
 	@Override
 	public void update(EventBean[] newEvents, EventBean[] oldEvents) {
@@ -51,7 +50,8 @@ public class ResultCollectorListener extends GenearlListener {
 
 		try {
 			Logger.getRootLogger().debug("SEND STORE EVENT");
-			resultCollector.store(eventToSend);
+			resultCollector.store(eventToSend, engine.getName() + "/"
+					+ experiment.getOutputFileName());
 			Logger.getRootLogger().debug("SENT STORE EVENT");
 		} catch (IOException e) {
 			Logger.getRootLogger().debug("SEND NOt STORE EVENT");

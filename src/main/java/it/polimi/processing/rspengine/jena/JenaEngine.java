@@ -82,7 +82,7 @@ public class JenaEngine extends RSPEngine {
 			abox = ModelFactory.createMemModelMaker().createDefaultModel();
 
 			for (String[] eventTriple : e.getEventTriples()) {
-				Logger.getRootLogger().info(Arrays.deepToString(eventTriple));
+				Logger.getRootLogger().debug(Arrays.deepToString(eventTriple));
 				Statement s = createStatement(eventTriple);
 				abox.add(s);
 			}
@@ -109,8 +109,9 @@ public class JenaEngine extends RSPEngine {
 			}
 
 			try {
-				return collector.store(new StreamingEventResult(statements, e,
-						currentExperiment.getOutputFileName()));
+				return collector.store(new StreamingEventResult(e, statements,
+						System.currentTimeMillis()), name + "/"
+						+ currentExperiment.getOutputFileName());
 			} catch (IOException e1) {
 				e1.printStackTrace();
 				return false;

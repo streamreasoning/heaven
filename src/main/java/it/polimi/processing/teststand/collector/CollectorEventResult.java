@@ -39,11 +39,13 @@ public class CollectorEventResult implements
 	}
 
 	@Override
-	public boolean store(StreamingEventResult r) throws IOException {
+	public boolean store(StreamingEventResult r, String where)
+			throws IOException {
 		if (!ExecutionStates.READY.equals(status)) {
 			return false;
 		} else {
-			return trigSaver.save(r.getTrig()) && csvSaver.save(r.getCSV());
+			return trigSaver.save(r.getTrig(), where)
+					&& csvSaver.save(r.getCSV(), where);
 		}
 	}
 
