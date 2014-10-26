@@ -43,7 +43,7 @@ public class CollectorEventResult implements
 		if (!ExecutionStates.READY.equals(status)) {
 			return false;
 		} else {
-			return trigSaver.save(r) && csvSaver.save(r);
+			return trigSaver.save(r.getTrig()) && csvSaver.save(r.getCSV());
 		}
 	}
 

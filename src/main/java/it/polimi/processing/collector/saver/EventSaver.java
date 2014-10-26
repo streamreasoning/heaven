@@ -1,14 +1,11 @@
 package it.polimi.processing.collector.saver;
 
-import it.polimi.processing.collector.Collectable;
 import it.polimi.processing.collector.saver.data.CollectableData;
 import it.polimi.processing.enums.ExecutionStates;
 
 import java.sql.SQLException;
 
 public interface EventSaver {
-
-	public boolean save(Collectable e);
 
 	public boolean save(CollectableData d);
 

@@ -1,6 +1,7 @@
 package it.polimi.processing.events.result;
 
-import it.polimi.processing.collector.Collectable;
+import it.polimi.processing.collector.saver.data.CSV;
+import it.polimi.processing.collector.saver.data.TriG;
 import it.polimi.processing.events.Event;
 import it.polimi.processing.events.StreamingEvent;
 
@@ -14,7 +15,7 @@ import org.apache.log4j.Logger;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class StreamingEventResult extends Event implements Collectable {
+public class StreamingEventResult extends Event {
 
 	private StreamingEvent inputEvent;
 	private Set<String[]> all_triples;
@@ -48,19 +49,17 @@ public class StreamingEventResult extends Event implements Collectable {
 		return inputEvent.getEventTriples();
 	}
 
-	@Override
 	public Set<String[]> getTriples() {
 		return all_triples;
 	}
 
-	@Override
 	/**
 	 * <http://example.org/bob> { _:a foaf:name "Bob" . _:a foaf:mbox
 	 * <mailto:bob@oldcorp.example.org> . _:a foaf:knows _:b . }
 	 * 
 	 * 
 	 * **/
-	public String getTrig() {
+	public TriG getTrig() {
 		String eol = System.getProperty("line.separator");
 		Logger.getLogger("obqa").debug(
 				"Event KEY :" + inputEvent.getEventNumber());
@@ -72,35 +71,19 @@ public class StreamingEventResult extends Event implements Collectable {
 		}
 
 		s += eol + "}";
-		return s;
+		return new TriG(s, inputEvent.getEngine() + "/" + outputFileName);
 	}
 
-	@Override
-	public String getCSV() {
+	public CSV getCSV() {
 		String lines = ",";
 		for (int p : inputEvent.getLineNumbers()) {
 			lines += p + ",";
 		}
 
 		long queryLatency = result_timestamp - inputEvent.getTimestamp();
-		return inputEvent.getId() + lines + inputEvent.getTimestamp() + ",0,"
-				+ queryLatency;
-	}
-
-	@Override
-	public String getSQL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public byte[] getBytes() {
-		return toString().getBytes();
-	}
-
-	@Override
-	public String getName() {
-		return inputEvent.getEngine() + "/" + outputFileName;
+		String s = inputEvent.getId() + lines + inputEvent.getTimestamp()
+				+ ",0," + queryLatency;
+		return new CSV(s, inputEvent.getEngine() + "/" + outputFileName);
 	}
 
 }

@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CollectorExperimentResult implements
-		StartableCollector<ExperimentResultEvent>{
+		StartableCollector<ExperimentResultEvent> {
 
 	private long timestamp;
 	private EventSaver sqlLiteSaver;
@@ -38,7 +38,7 @@ public class CollectorExperimentResult implements
 		if (!ExecutionStates.READY.equals(status)) {
 			return false;
 		} else {
-			return sqlLiteSaver.save(r);
+			return sqlLiteSaver.save(r.getSQL());
 		}
 	}
 
