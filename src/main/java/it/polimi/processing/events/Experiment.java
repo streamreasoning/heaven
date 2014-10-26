@@ -11,5 +11,6 @@ public class Experiment extends Event {
 	private int experimentNumber;
 	private String descr, engine, inputFileName, outputFileName;
 	private Long timestamp;
+	private String comment;
 
 }

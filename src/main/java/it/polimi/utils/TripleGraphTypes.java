@@ -21,13 +21,13 @@ public class TripleGraphTypes {
 	 * S an object O and a generic non-schema property P and a triple of the
 	 * form O typeOf C
 	 */
-	public static final int LTRIPLES = 2;// TODO
+	public static final int LTRIPLES = 2;
 	/**
 	 * A graph of two rdf triples were we have a simple rdf triple un a subject
 	 * S an object O and a generic non-schema property P and a triple of the
 	 * form S typeOf C
 	 */
-	public static final int JTRIPLES = 2;// TODO
+	public static final int JTRIPLES = 2;
 	/**
 	 * A simple rdf triple un a subject S an object O and a generic non-schema
 	 * property P

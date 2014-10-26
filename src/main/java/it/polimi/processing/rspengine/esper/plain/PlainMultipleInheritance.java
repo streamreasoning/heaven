@@ -8,7 +8,6 @@ import it.polimi.processing.rspengine.esper.commons.listener.ResultCollectorList
 import it.polimi.processing.rspengine.esper.plain.events.Out;
 import it.polimi.processing.rspengine.esper.plain.events.TEvent;
 import it.polimi.processing.teststand.core.TestStand;
-import it.polimi.utils.RDFSUtils;
 
 import java.util.Set;
 
@@ -95,22 +94,21 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 
 	@Override
 	public boolean sendEvent(StreamingEvent e) {
-		// TODO if can send
 		this.currentStreamingEvent = e;
 		status = ExecutionStates.RUNNING;
 		TEvent esperEvent;
 		Set<String[]> eventTriples = e.getEventTriples();
 		Logger.getLogger("obqa").debug(eventTriples);
 		for (String[] eventTriple : eventTriples) {
-			if (!RDFSUtils.TYPE_PROPERTY.equals(eventTriple[1])) {
-				// TODO
-				Logger.getRootLogger().debug("Create New Esper Event");
-				Logger.getRootLogger().debug(eventTriple[1]);
-				esperEvent = new TEvent(eventTriple[0], eventTriple[1],
-						eventTriple[2], cepRT.getCurrentTime(),
-						System.currentTimeMillis(), "Input");
-				cepRT.sendEvent(esperEvent);
-			}
+			// if (!RDFSUtils.TYPE_PROPERTY.equals(eventTriple[1])) {
+			// TODO discarted type property?
+			Logger.getRootLogger().debug("Create New Esper Event");
+			Logger.getRootLogger().debug(eventTriple[1]);
+			esperEvent = new TEvent(eventTriple[0], eventTriple[1],
+					eventTriple[2], cepRT.getCurrentTime(),
+					System.currentTimeMillis(), "Input");
+			cepRT.sendEvent(esperEvent);
+			// }
 		}
 		sendTimeEvent();
 		status = ExecutionStates.READY;

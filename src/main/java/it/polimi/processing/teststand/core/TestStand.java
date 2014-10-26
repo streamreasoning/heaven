@@ -16,10 +16,6 @@ import it.polimi.processing.teststand.streamer.NTStreamer;
 import it.polimi.utils.FileUtils;
 import it.polimi.utils.TripleGraphTypes;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Set;
@@ -54,15 +50,8 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 		this.streamer = streamer;
 	}
 
-	/**
-	 * 
-	 * Start the system execution Move the system state from ON to RUNNING
-	 * 
-	 * @param experimentNumber
-	 * 
-	 * @throws Exception
-	 */
-	public int run(String f, int experimentNumber) throws Exception {
+	public int run(String f, int experimentNumber, String comment)
+			throws Exception {
 		Logger.getRootLogger().info(
 				"START STREAMING " + System.currentTimeMillis());
 		String experimentDescription = "EXPERIMENT_ON_" + f + "_WITH_ENGINE_"
@@ -83,7 +72,7 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 
 			currentExperiment = new Experiment(experimentNumber,
 					experimentDescription, rspEngine.getName(), inputFileName,
-					outputFileName, System.currentTimeMillis());
+					outputFileName, System.currentTimeMillis(), comment);
 
 			ExecutionStates engineStatus = rspEngine.startProcessing();
 
@@ -115,7 +104,18 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 
 		}
 		return 1;
+	}
 
+	/**
+	 * 
+	 * Start the system execution Move the system state from ON to RUNNING
+	 * 
+	 * @param experimentNumber
+	 * 
+	 * @throws Exception
+	 */
+	public int run(String f, int experimentNumber) throws Exception {
+		return run(f, experimentNumber, "");
 	}
 
 	@Override
@@ -208,7 +208,6 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 		return status = ExecutionStates.OFF;
 	}
 
-	// TODO Unders
 	@Override
 	public boolean sendEvent(StreamingEvent e) {
 		return rspEngine.sendEvent(e);
@@ -234,12 +233,6 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 			Event e) {
 		return new StreamingEventResult((StreamingEvent) e, all_triples,
 				System.currentTimeMillis());
-	}
-
-	private BufferedReader getBuffer(String fileName)
-			throws FileNotFoundException {
-		File file = new File(fileName);
-		return new BufferedReader(new FileReader(file));
 	}
 
 }

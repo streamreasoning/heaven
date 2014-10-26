@@ -21,10 +21,9 @@ public class RDFResource implements Serializable {
 		return value;
 	}
 
-	// TODO perche' non e' possibile inserire il parametro?
 	public RDFClass getSuper() {
 		return new RDFClass(this.getClass(),
-				"http://www.w3.org/2000/01/rdf-schema#Resource");// TODO
+				"http://www.w3.org/2000/01/rdf-schema#Resource");
 	};
 
 	@Override

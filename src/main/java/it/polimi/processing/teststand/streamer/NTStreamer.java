@@ -60,7 +60,6 @@ public class NTStreamer<T extends Event> implements Streamer {
 			String engineName, int tripleGraph) throws IOException {
 
 		Logger.getRootLogger().debug("Start Streaming");
-		// TODO
 		EventFactory<T> factory = null;
 		if (!ExecutionStates.READY.equals(status)) {
 			throw new WrongStatusTransitionException("Not Ready " + status);

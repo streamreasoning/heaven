@@ -1,6 +1,5 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes.work;
 
-
 public class Research extends Work {
 
 	/**
@@ -10,7 +9,6 @@ public class Research extends Work {
 
 	public Research(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
 	public Research() {

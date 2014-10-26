@@ -11,7 +11,6 @@ public class Faculty extends Employee {
 
 	public Faculty(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
 	public Faculty() {

@@ -20,7 +20,6 @@ public class CSVEventSaver implements EventSaver {
 	@Override
 	public ExecutionStates init() throws ClassNotFoundException, SQLException {
 		Logger.getRootLogger().info("Initialising CSVSaver... Nothing to do");
-		// TODO write csv header
 		return status = ExecutionStates.READY;
 	}
 
@@ -37,6 +36,7 @@ public class CSVEventSaver implements EventSaver {
 				String path = FileUtils.CSV_OUTPUT_FILE_PATH
 						+ where.replace("Result", "LOG") + FileUtils.CSV;
 				File file = new File(path);
+
 				if (!file.exists()) {
 					file.createNewFile();
 				}

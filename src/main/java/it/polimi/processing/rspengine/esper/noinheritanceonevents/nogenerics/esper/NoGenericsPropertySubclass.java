@@ -60,7 +60,7 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 		cepAdm.createEPL(Queries.input_nogenerics);
 		cepAdm.createEPL(Queries.rdfs3_nogenerics);
 		cepAdm.createEPL(Queries.rdfs9_nogenerics);
-		cepAdm.createEPL(Queries.queryOut_nogenerics);// TODO queries packages
+		cepAdm.createEPL(Queries.queryOut_nogenerics);
 		EPStatement out = cepAdm
 				.createEPL("insert into Out select * from QueryOut.win:time_batch(1000 msec)");
 		listener = new ResultCollectorListener(collector, this,
@@ -123,7 +123,6 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 			e1.printStackTrace();
 			return false;
 		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return false;
 		}
@@ -150,10 +149,8 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 		try {
 			classRegistration();
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

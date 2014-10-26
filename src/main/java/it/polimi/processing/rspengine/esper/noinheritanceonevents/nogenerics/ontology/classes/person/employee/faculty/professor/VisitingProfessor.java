@@ -8,7 +8,6 @@ public class VisitingProfessor extends Professor {
 
 	public VisitingProfessor(String object) {
 		super(object);
-		// TODO Auto-generated constructor stub
 	}
 
 	public VisitingProfessor() {

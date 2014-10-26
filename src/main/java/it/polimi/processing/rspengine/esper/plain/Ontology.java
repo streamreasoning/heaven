@@ -62,7 +62,7 @@ public class Ontology {
 					.toString() : "";
 			String range = next.getRange() != null ? next.getRange().toString()
 					: "";
-			// TODO P domain D S subpropertyOfP can't infer S domain D
+			// P domain D S subpropertyOfP can't infer S domain D
 			// while (spl.hasNext()) {
 			// OntProperty snext = spl.next();
 			// if (RDFSUtils.isSchema(snext.toString())) {

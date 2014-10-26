@@ -9,8 +9,7 @@ public class HeadOf extends WorksFor {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public HeadOf() { // TODO come devono essere domain e range se non
-						// specificati?
+	public HeadOf() {
 		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#headOf", "", "",
 				null, null);
 	}

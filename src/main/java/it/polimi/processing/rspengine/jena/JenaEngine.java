@@ -120,7 +120,6 @@ public class JenaEngine extends RSPEngine {
 		}
 	}
 
-	// TODO discuss about what reasoner
 	private Reasoner getRDFSSimpleReasoner() {
 		Reasoner reasoner = ReasonerRegistry.getRDFSReasoner();
 		reasoner.setParameter(ReasonerVocabulary.PROPsetRDFSLevel,
@@ -167,12 +166,7 @@ public class JenaEngine extends RSPEngine {
 		return s;
 	}
 
-	@SuppressWarnings("unused")
 	private Reasoner getReducedReasoner() {
-
-		// TODO puo' essere un modo intelligente per applicar e regole come fa
-		// dynamite secondo parametri diversi a set di triple diversi,
-		// utilizzando differenti reasoner
 
 		List<Rule> rules = Rule.rulesFromURL(FileUtils.RULE_SET);
 

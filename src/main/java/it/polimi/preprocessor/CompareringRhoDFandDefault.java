@@ -85,10 +85,6 @@ public class CompareringRhoDFandDefault {
 
 	private static Reasoner getReducedReasoner() {
 
-		// TODO puo' essere un modo intelligente per applicar e regole come fa
-		// dynamite secondo parametri diversi a set di triple diversi,
-		// utilizzando differenti reasoner
-
 		List<Rule> rules = Rule.rulesFromURL(FileUtils.RULE_SET);
 
 		GenericRuleReasoner reasoner = new GenericRuleReasoner(rules);

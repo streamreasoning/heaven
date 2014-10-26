@@ -79,7 +79,6 @@ public class CollectorExperimentResult implements
 	@Override
 	public ExperimentResultEvent newEventInstance(Set<String[]> all_triples,
 			Event e) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

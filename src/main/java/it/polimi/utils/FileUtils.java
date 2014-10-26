@@ -11,6 +11,8 @@ public class FileUtils {
 	public static final String PREPROCESSING_DATATYPE_FILE_PATH = PREPROCESSING_FILE_PATH
 			+ "datatype/";
 	public static final String CSV_OUTPUT_FILE_PATH = OUTPUT_FILE_PATH + "csv/";
+	public static final String COMMENT_OUTPUT_FILE_PATH = "src/main/resources/data/output/comment/";
+
 	public static final String CSV = ".csv";
 	public static final String SQLLITE_OUTPUT_FILE_PATH = OUTPUT_FILE_PATH
 			+ "database/";
