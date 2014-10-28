@@ -14,13 +14,21 @@ import org.apache.log4j.Logger;
 public class TrigEventSaver implements EventSaver {
 
 	private ExecutionStates status;
+	private final String trigpath;
+
+	public TrigEventSaver() {
+		trigpath = FileUtils.TRIG_OUTPUT_FILE_PATH;
+	}
+
+	public TrigEventSaver(String path) {
+		this.trigpath = path;
+	}
 
 	@Override
 	public boolean save(CollectableData d, String where) {
 		try {
 			if (ExecutionStates.READY.equals(status)) {
-				String path = FileUtils.TRIG_OUTPUT_FILE_PATH + where
-						+ FileUtils.TRIG_FILE_EXTENSION;
+				String path = trigpath + where + FileUtils.TRIG_FILE_EXTENSION;
 				Logger.getRootLogger().debug("TRIG FILE PATH " + path);
 				File file = new File(path);
 				if (!file.exists()) {

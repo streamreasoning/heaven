@@ -1,6 +1,5 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes.publication;
 
-
 public class UnofficialPublication extends Publication {
 
 	/**
@@ -13,7 +12,6 @@ public class UnofficialPublication extends Publication {
 	}
 
 	public UnofficialPublication() {
-		super(
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#UnofficialPublication");
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#UnofficialPublication");
 	}
 }

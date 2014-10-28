@@ -1,6 +1,5 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes.publication;
 
-
 public class Article extends Publication {
 
 	/**

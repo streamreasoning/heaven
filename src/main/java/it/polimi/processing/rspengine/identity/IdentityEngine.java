@@ -24,13 +24,10 @@ public class IdentityEngine extends RSPEngine {
 	public boolean sendEvent(StreamingEvent e) {
 		try {
 			if (currentExperiment != null) {
-				return collector.store(
-						new StreamingEventResult(e, e.getEventTriples(), System
-								.currentTimeMillis()), name + "/"
-								+ currentExperiment.getOutputFileName());
+				return collector.store(new StreamingEventResult(e, e.getEventTriples(), System.currentTimeMillis()),
+						name + "/" + currentExperiment.getOutputFileName());
 			} else {
-				Logger.getRootLogger().debug(
-						"An Experiment must be initialized");
+				Logger.getRootLogger().debug("An Experiment must be initialized");
 				return false;
 			}
 		} catch (IOException e1) {
@@ -69,8 +66,7 @@ public class IdentityEngine extends RSPEngine {
 	}
 
 	public boolean isStartable() {
-		return ExecutionStates.READY.equals(status)
-				|| ExecutionStates.CLOSED.equals(status);
+		return ExecutionStates.READY.equals(status) || ExecutionStates.CLOSED.equals(status);
 	}
 
 	public boolean isOn() {

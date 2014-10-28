@@ -20,8 +20,7 @@ public class Out implements TripleEvent {
 
 	}
 
-	public Out(String[] s, String p, String[] o, String ch, long timestamp,
-			long app_timestamp) {
+	public Out(String[] s, String p, String[] o, String ch, long timestamp, long app_timestamp) {
 		this.s = s;
 		this.p = p;
 		this.o = o;
@@ -32,8 +31,7 @@ public class Out implements TripleEvent {
 
 	@Override
 	public String toString() {
-		return "Out [o=" + Arrays.toString(o) + ", s=" + Arrays.toString(s)
-				+ ", p=" + p + ", timestamp=" + timestamp + ", app_timestamp="
+		return "Out [o=" + Arrays.toString(o) + ", s=" + Arrays.toString(s) + ", p=" + p + ", timestamp=" + timestamp + ", app_timestamp="
 				+ app_timestamp + ", channel=" + channel + "]";
 	}
 

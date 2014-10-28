@@ -45,13 +45,11 @@ public class ResultCollectorListener extends GenearlListener {
 			}
 		}
 
-		eventToSend = resultCollector.newEventInstance(statements,
-				engine.getCurrentStreamingEvent());
+		eventToSend = resultCollector.newEventInstance(statements, engine.getCurrentStreamingEvent());
 
 		try {
 			Logger.getRootLogger().debug("SEND STORE EVENT");
-			resultCollector.store(eventToSend, engine.getName() + "/"
-					+ experiment.getOutputFileName());
+			resultCollector.store(eventToSend, engine.getName() + "/" + experiment.getOutputFileName());
 			Logger.getRootLogger().debug("SENT STORE EVENT");
 		} catch (IOException e) {
 			Logger.getRootLogger().debug("SEND NOt STORE EVENT");

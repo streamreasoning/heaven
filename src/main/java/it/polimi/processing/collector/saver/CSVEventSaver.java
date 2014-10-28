@@ -16,6 +16,15 @@ public class CSVEventSaver implements EventSaver {
 
 	private ExecutionStates status;
 	Date d = new Date();
+	private final String outputPath;
+
+	public CSVEventSaver(String path) {
+		this.outputPath = path;
+	}
+
+	public CSVEventSaver() {
+		this.outputPath = FileUtils.CSV_OUTPUT_FILE_PATH;
+	}
 
 	@Override
 	public ExecutionStates init() throws ClassNotFoundException, SQLException {
@@ -33,8 +42,7 @@ public class CSVEventSaver implements EventSaver {
 	public boolean save(CollectableData dt, String where) {
 		try {
 			if (ExecutionStates.READY.equals(status)) {
-				String path = FileUtils.CSV_OUTPUT_FILE_PATH
-						+ where.replace("Result", "LOG") + FileUtils.CSV;
+				String path = outputPath + where.replace("Result", "LOG") + FileUtils.CSV;
 				File file = new File(path);
 
 				if (!file.exists()) {

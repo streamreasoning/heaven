@@ -33,8 +33,7 @@ public class TXTEventSaver implements EventSaver {
 	public boolean save(CollectableData dt, String where) {
 		try {
 			if (ExecutionStates.READY.equals(status)) {
-				String path = FileUtils.CSV_OUTPUT_FILE_PATH
-						+ where.replace("Result", "LOG") + FileUtils.CSV;
+				String path = FileUtils.CSV_OUTPUT_FILE_PATH + where.replace("Result", "LOG") + FileUtils.CSV;
 				File file = new File(path);
 
 				if (!file.exists()) {

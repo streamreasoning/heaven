@@ -28,8 +28,7 @@ public final class RDFClass extends RDFResource {
 				Class<?> sc = clazz.getSuperclass();
 				RDFResource r;
 				r = (RDFResource) sc.newInstance();
-				RDFClass rdfClass = new RDFClass(clazz.getSuperclass(),
-						r.getValue());
+				RDFClass rdfClass = new RDFClass(clazz.getSuperclass(), r.getValue());
 				return rdfClass;
 			} else
 				Logger.getRootLogger().debug("root reached " + value);

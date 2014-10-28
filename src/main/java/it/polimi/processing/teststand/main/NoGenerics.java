@@ -18,25 +18,20 @@ import java.sql.SQLException;
 
 public class NoGenerics {
 
-	public static void main(String[] args) throws ClassNotFoundException,
-			SQLException, InterruptedException {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, InterruptedException {
 		int experimentNumber = 0;
 		String[] files = new String[] { "University0_0_clean.nt" };
 
 		TestStand<RSPEngine> testStand = new TestStand<RSPEngine>();
 
-		StartableCollector<StreamingEventResult> streamingEventResultCollector = new CollectorEventResult(
-				testStand, new TrigEventSaver(), new CSVEventSaver());
-		StartableCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(
-				testStand, new SQLLiteEventSaver());
-		RSPEngine engine = new NoGenericsPropertySubclass("java/nogenerics",
-				testStand);
+		StartableCollector<StreamingEventResult> streamingEventResultCollector = new CollectorEventResult(testStand, new TrigEventSaver(),
+				new CSVEventSaver());
+		StartableCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
+		RSPEngine engine = new NoGenericsPropertySubclass("java/nogenerics", testStand);
 
-		NTStreamer<StreamingEvent> streamer = new NTStreamer<StreamingEvent>(
-				testStand);
+		NTStreamer<StreamingEvent> streamer = new NTStreamer<StreamingEvent>(testStand);
 
-		testStand.build(streamingEventResultCollector,
-				experimentResultCollector, engine, streamer);
+		testStand.build(streamingEventResultCollector, experimentResultCollector, engine, streamer);
 
 		testStand.init();
 		try {

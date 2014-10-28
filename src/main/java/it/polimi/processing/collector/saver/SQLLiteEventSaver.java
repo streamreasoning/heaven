@@ -18,8 +18,8 @@ import org.apache.log4j.Logger;
 @Getter
 public class SQLLiteEventSaver implements EventSaver {
 
-	private static final String JDBC_SQLITE_OBQAATCEP_DB = "jdbc:sqlite:"
-			+ FileUtils.DATABASEPATH + "obqaatcep.db";
+	private final String name;
+	private final String JDBC_SQLITE_OBQAATCEP_DB;
 	private static final String ORG_SQLITE_JDBC = "org.sqlite.JDBC";
 	private long timestamp;
 	private Connection c;
@@ -31,6 +31,17 @@ public class SQLLiteEventSaver implements EventSaver {
 	 * 
 	 * @see it.polimi.output.filesystem.DatabaseManager#init()
 	 **/
+
+	public SQLLiteEventSaver(String name) {
+		this.name = name;
+		this.JDBC_SQLITE_OBQAATCEP_DB = "jdbc:sqlite:" + FileUtils.DATABASEPATH + name;
+	}
+
+	public SQLLiteEventSaver() {
+		this.name = "obqaatcep.db";
+		this.JDBC_SQLITE_OBQAATCEP_DB = "jdbc:sqlite:" + FileUtils.DATABASEPATH + name;
+	}
+
 	@Override
 	public ExecutionStates init() throws ClassNotFoundException, SQLException {
 		timestamp = System.currentTimeMillis();
@@ -60,18 +71,12 @@ public class SQLLiteEventSaver implements EventSaver {
 		stmt = c.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT * FROM EXPERIMENT;");
 		while (rs.next()) {
-			Logger.getRootLogger().info(
-					"EXPERIMENT_ID = " + rs.getString("EXP_ID"));
-			Logger.getRootLogger().info(
-					"TS_INIT = " + Long.parseLong(rs.getString("TS_INIT")));
-			Logger.getRootLogger().info(
-					"TS_END = " + Long.parseLong(rs.getString("TS_END")));
-			Logger.getRootLogger().info(
-					"INPUT_FILE = " + rs.getString("INPUT_FILE"));
-			Logger.getRootLogger().info(
-					"RESULT_FILE = " + rs.getString("RESULT_FILE"));
-			Logger.getRootLogger().info(
-					"FILE_LOG_FOLDER" + rs.getString("FILE_LOG_FOLDER"));
+			Logger.getRootLogger().info("EXPERIMENT_ID = " + rs.getString("EXP_ID"));
+			Logger.getRootLogger().info("TS_INIT = " + Long.parseLong(rs.getString("TS_INIT")));
+			Logger.getRootLogger().info("TS_END = " + Long.parseLong(rs.getString("TS_END")));
+			Logger.getRootLogger().info("INPUT_FILE = " + rs.getString("INPUT_FILE"));
+			Logger.getRootLogger().info("RESULT_FILE = " + rs.getString("RESULT_FILE"));
+			Logger.getRootLogger().info("FILE_LOG_FOLDER" + rs.getString("FILE_LOG_FOLDER"));
 		}
 		rs.close();
 		stmt.close();
@@ -82,13 +87,10 @@ public class SQLLiteEventSaver implements EventSaver {
 		stmt = c.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT * FROM COMPARATION;");
 		while (rs.next()) {
-			Logger.getRootLogger().debug(
-					"EXPERIMENT_ID = " + rs.getString("EXP_ID"));
-			Logger.getRootLogger().debug(
-					"EVENT_ID = " + rs.getString("EVENT_ID"));
+			Logger.getRootLogger().debug("EXPERIMENT_ID = " + rs.getString("EXP_ID"));
+			Logger.getRootLogger().debug("EVENT_ID = " + rs.getString("EVENT_ID"));
 			Logger.getRootLogger().debug("SOUND = " + rs.getBoolean("SOUND"));
-			Logger.getRootLogger().debug(
-					"COMPLETE = " + rs.getBoolean("COMPLETE"));
+			Logger.getRootLogger().debug("COMPLETE = " + rs.getBoolean("COMPLETE"));
 			Logger.getRootLogger().debug("MEMORY = " + rs.getDouble("MEMORY"));
 			Logger.getRootLogger().debug("LATENCY = " + rs.getLong("LATENCY"));
 

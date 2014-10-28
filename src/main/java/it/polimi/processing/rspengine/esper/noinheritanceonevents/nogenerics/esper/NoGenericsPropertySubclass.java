@@ -61,10 +61,8 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 		cepAdm.createEPL(Queries.rdfs3_nogenerics);
 		cepAdm.createEPL(Queries.rdfs9_nogenerics);
 		cepAdm.createEPL(Queries.queryOut_nogenerics);
-		EPStatement out = cepAdm
-				.createEPL("insert into Out select * from QueryOut.win:time_batch(1000 msec)");
-		listener = new ResultCollectorListener(collector, this,
-				stand.getCurrentExperiment());
+		EPStatement out = cepAdm.createEPL("insert into Out select * from QueryOut.win:time_batch(1000 msec)");
+		listener = new ResultCollectorListener(collector, this, stand.getCurrentExperiment());
 		out.addListener(listener); // and
 		// listener;
 	}
@@ -77,12 +75,10 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 		String[] coreT = new String[3];
 		List<String[]> types = new ArrayList<String[]>();
 		if (e.getEventTriples().size() != e.getTripleGraph()) {
-			throw new RuntimeException(
-					"mismatch on triple graph are not allowed");
+			throw new RuntimeException("mismatch on triple graph are not allowed");
 		}
 		for (String[] eventTriple : e.getEventTriples()) {
-			String prop = eventTriple[1].replace("<", "").replace(">", "")
-					.toLowerCase().split("#")[1];
+			String prop = eventTriple[1].replace("<", "").replace(">", "").toLowerCase().split("#")[1];
 			if (!"type".equals(prop)) {
 				event.setP(props.get(prop));
 				coreT = eventTriple;
@@ -93,12 +89,9 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 
 		try {
 			for (String[] ett : types) {
-				Class<? extends RDFResource> domainOrRange = classes.get(ett[2]
-						.replace("<", "").replace(">", "").toLowerCase()
-						.split("#")[1]);
+				Class<? extends RDFResource> domainOrRange = classes.get(ett[2].replace("<", "").replace(">", "").toLowerCase().split("#")[1]);
 				if (domainOrRange == null) {
-					throw new PropertyNotFoundException(ett[2]
-							+ "+is not present in system properties map");
+					throw new PropertyNotFoundException(ett[2] + "+is not present in system properties map");
 				} else if (ett[0].equals(coreT[0])) {
 					s = domainOrRange.newInstance();
 					s.setValue(coreT[0]);
@@ -108,8 +101,7 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 					o.setValue(coreT[2]);
 					event.setO(domainOrRange.cast(o));
 				} else {
-					throw new RuntimeException("statements are not allined "
-							+ e.getLineNumbers());
+					throw new RuntimeException("statements are not allined " + e.getLineNumbers());
 				}
 			}
 			event.setChannel("Input");
@@ -130,12 +122,10 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 	}
 
 	private void check(RDFSInput event, StreamingEvent se) {
-		if (event.getO() == null || event.getS() == null
-				|| event.getP() == null) {
+		if (event.getO() == null || event.getS() == null || event.getP() == null) {
 			Logger.getRootLogger().info(event.toString());
 			Logger.getRootLogger().info(se.toString());
-			throw new RuntimeException("Resources must be not null, line "
-					+ se.getLineNumbers());
+			throw new RuntimeException("Resources must be not null, line " + se.getLineNumbers());
 		}
 
 	}
@@ -155,16 +145,14 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 		}
 
 		cepConfig.getEngineDefaults().getViewResources().setShareViews(false);
-		cepConfig.getEngineDefaults().getThreading()
-				.setInternalTimerEnabled(false);
+		cepConfig.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
 
 		cepConfig.addEventType("RDFSInput", RDFSInput.class.getName());
 		cepConfig.addEventType("RDFS3Input", RDFS3.class.getName());
 		cepConfig.addEventType("RDFS9Input", RDFS9.class.getName());
 		cepConfig.addEventType("QueryOut", RDFSOut.class.getName());
 
-		cep = EPServiceProviderManager.getProvider(
-				NoGenericsPropertySubclass.class.getName(), cepConfig);
+		cep = EPServiceProviderManager.getProvider(NoGenericsPropertySubclass.class.getName(), cepConfig);
 		cepAdm = cep.getEPAdministrator();
 		cepRT = cep.getEPRuntime();
 
@@ -172,28 +160,22 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 		return status = ExecutionStates.READY;
 	}
 
-	private void classRegistration() throws InstantiationException,
-			IllegalAccessException {
-		Reflections reflections = new Reflections(
-				"it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.properties");
+	private void classRegistration() throws InstantiationException, IllegalAccessException {
+		Reflections reflections = new Reflections("it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.properties");
 
-		Set<Class<? extends RDFProperty>> allpropClasses = reflections
-				.getSubTypesOf(RDFProperty.class);
+		Set<Class<? extends RDFProperty>> allpropClasses = reflections.getSubTypesOf(RDFProperty.class);
 
 		for (Class<? extends RDFProperty> class1 : allpropClasses) {
 			RDFProperty c = class1.newInstance();
-			cepConfig.addVariable(class1.getSimpleName().toLowerCase(), class1,
-					class1.cast(c), true);
+			cepConfig.addVariable(class1.getSimpleName().toLowerCase(), class1, class1.cast(c), true);
 			props.put(class1.getSimpleName().toLowerCase(), class1.cast(c));
 
 		}
 		cepConfig.addVariable("typeOf", TypeOf.class, new TypeOf(), true);
 		props.put("type", new TypeOf());
 
-		reflections = new Reflections(
-				"it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes");
-		Set<Class<? extends RDFResource>> allClasses = reflections
-				.getSubTypesOf(RDFResource.class);
+		reflections = new Reflections("it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes");
+		Set<Class<? extends RDFResource>> allClasses = reflections.getSubTypesOf(RDFResource.class);
 
 		for (Class<? extends RDFResource> class1 : allClasses) {
 			classes.put(class1.getSimpleName().toLowerCase(), class1);

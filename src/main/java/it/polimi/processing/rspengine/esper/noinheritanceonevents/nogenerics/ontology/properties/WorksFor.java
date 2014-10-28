@@ -12,15 +12,11 @@ public class WorksFor extends MemberOf {
 	private static final long serialVersionUID = 1L;
 
 	public WorksFor() {
-		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#worksFor",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Organization",
-				University.class, Person.class);
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#worksFor", "http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person",
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Organization", University.class, Person.class);
 	}
 
-	public WorksFor(String property, String domainValue, String rangeValue,
-			Class<? extends RDFResource> domain,
-			Class<? extends RDFResource> range) {
+	public WorksFor(String property, String domainValue, String rangeValue, Class<? extends RDFResource> domain, Class<? extends RDFResource> range) {
 		super(property, domainValue, rangeValue, domain, range);
 	}
 }

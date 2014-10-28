@@ -14,9 +14,7 @@ public class TakesCourse extends RDFProperty {
 		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#takesCourse");
 	}
 
-	public TakesCourse(String property, String domainValue, String rangeValue,
-			Class<? extends RDFResource> domain,
-			Class<? extends RDFResource> range) {
+	public TakesCourse(String property, String domainValue, String rangeValue, Class<? extends RDFResource> domain, Class<? extends RDFResource> range) {
 		super(property, domainValue, rangeValue, domain, range);
 	}
 }

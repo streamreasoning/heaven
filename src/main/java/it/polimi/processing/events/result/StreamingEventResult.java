@@ -1,6 +1,7 @@
 package it.polimi.processing.events.result;
 
 import it.polimi.processing.collector.saver.data.CSV;
+import it.polimi.processing.collector.saver.data.CollectableData;
 import it.polimi.processing.collector.saver.data.TriG;
 import it.polimi.processing.events.Event;
 import it.polimi.processing.events.StreamingEvent;
@@ -48,20 +49,18 @@ public class StreamingEventResult extends Event {
 	 * 
 	 * 
 	 * **/
-	public TriG getTrig() {
+	public CollectableData getTrig() {
 		String eol = System.getProperty("line.separator");
-
 		String s = inputEvent.getId() + " {";
 		for (String[] resource : all_triples) {
-			s += eol + "<" + resource[0] + ">" + "<" + resource[1] + ">" + "<"
-					+ resource[2] + "> .";
+			s += eol + "<" + resource[0] + ">" + "<" + resource[1] + ">" + "<" + resource[2] + "> .";
 		}
 
 		s += eol + "}";
 		return new TriG(s);
 	}
 
-	public CSV getCSV() {
+	public CollectableData getCSV() {
 
 		String lines = ",";
 		for (int p : inputEvent.getLineNumbers()) {
@@ -69,8 +68,7 @@ public class StreamingEventResult extends Event {
 		}
 
 		long queryLatency = resultTimestamp - inputEvent.getTimestamp();
-		String s = inputEvent.getId() + lines + inputEvent.getTimestamp()
-				+ ",0," + queryLatency;
+		String s = inputEvent.getId() + lines + inputEvent.getTimestamp() + ",0," + queryLatency;
 		return new CSV(s);
 	}
 

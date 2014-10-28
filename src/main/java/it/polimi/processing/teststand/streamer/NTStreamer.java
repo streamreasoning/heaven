@@ -56,8 +56,7 @@ public class NTStreamer<T extends Event> implements Streamer {
 	 *            system
 	 **/
 	@Override
-	public void stream(BufferedReader br, int experimentNumber,
-			String engineName, int tripleGraph) throws IOException {
+	public void stream(BufferedReader br, int experimentNumber, String engineName, int tripleGraph) throws IOException {
 
 		Logger.getRootLogger().debug("Start Streaming");
 		EventFactory<T> factory = null;
@@ -81,17 +80,14 @@ public class NTStreamer<T extends Event> implements Streamer {
 				} else {
 					eventTriples.add(s);
 					lineNumbers[tripleCount] = lineNumber;
-					if (sendEvent(eventTriples, tripleGraph, streamedEvents,
-							experimentNumber, engineName, lineNumbers, line,
-							factory)) {
+					if (sendEvent(eventTriples, tripleGraph, streamedEvents, experimentNumber, engineName, lineNumbers, line, factory)) {
 
 						Logger.getRootLogger().debug("SEND NEW EVENT: " + line);
 						status = ExecutionStates.READY;
 						streamedEvents++;
 
 						if (streamedEvents % 1000 == 0) {
-							Logger.getRootLogger().info(
-									"STREAMED " + streamedEvents + "EVENTS");
+							Logger.getRootLogger().info("STREAMED " + streamedEvents + "EVENTS");
 						}
 					} else {
 						status = ExecutionStates.READY;
@@ -112,8 +108,7 @@ public class NTStreamer<T extends Event> implements Streamer {
 	}
 
 	private String[] parse(String line) {
-		String[] s = Parser
-				.parseTriple(line, "src/main/resources/data/", false);
+		String[] s = Parser.parseTriple(line, "src/main/resources/data/", false);
 		if (s.length > 3) {
 			throw new IllegalArgumentException("Too much arguments");
 		}
@@ -130,19 +125,15 @@ public class NTStreamer<T extends Event> implements Streamer {
 		return s;
 	}
 
-	private boolean sendEvent(Set<String[]> eventTriples, int tripleGraph,
-			int eventNumber, int experimentNumber, String engineName,
+	private boolean sendEvent(Set<String[]> eventTriples, int tripleGraph, int eventNumber, int experimentNumber, String engineName,
 			int[] lineNumbers, String line, EventFactory<T> factory) {
 		for (String[] s : eventTriples) {
-			Logger.getRootLogger()
-					.debug("tripleSet: " + Arrays.deepToString(s));
+			Logger.getRootLogger().debug("tripleSet: " + Arrays.deepToString(s));
 		}
 
-		String id = "<http://example.org/" + experimentNumber + "/"
-				+ eventNumber + ">";
+		String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + ">";
 
-		StreamingEvent streamingEvent = new StreamingEvent(eventTriples, id,
-				eventNumber, experimentNumber, tripleGraph, lineNumbers,
+		StreamingEvent streamingEvent = new StreamingEvent(eventTriples, id, eventNumber, experimentNumber, tripleGraph, lineNumbers,
 				System.currentTimeMillis());
 
 		return stand.sendEvent(streamingEvent);

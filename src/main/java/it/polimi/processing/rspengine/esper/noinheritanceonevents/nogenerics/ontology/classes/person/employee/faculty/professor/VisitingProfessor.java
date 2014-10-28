@@ -11,8 +11,7 @@ public class VisitingProfessor extends Professor {
 	}
 
 	public VisitingProfessor() {
-		super(
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#VisitingProfessor");
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#VisitingProfessor");
 	}
 
 }

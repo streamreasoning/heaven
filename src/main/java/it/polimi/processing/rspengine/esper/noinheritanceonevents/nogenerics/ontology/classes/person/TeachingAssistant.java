@@ -1,6 +1,5 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes.person;
 
-
 public class TeachingAssistant extends Person {
 
 	/**
@@ -13,7 +12,6 @@ public class TeachingAssistant extends Person {
 	}
 
 	public TeachingAssistant() {
-		super(
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#TeachingAssistant");
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#TeachingAssistant");
 	}
 }

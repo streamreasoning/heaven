@@ -2,8 +2,7 @@ package it.polimi.processing.streamer;
 
 public class Parser {
 
-	public static String[] parseTriple(String triple, String fileId,
-			boolean rewriteBlankNodes) {
+	public static String[] parseTriple(String triple, String fileId, boolean rewriteBlankNodes) {
 		String[] values = new String[3];
 
 		// Parse subject
@@ -11,8 +10,7 @@ public class Parser {
 			values[0] = triple.substring(0, triple.indexOf('>') + 1);
 		} else { // Is a bnode
 			if (rewriteBlankNodes) {
-				values[0] = "_:" + sanitizeBlankNodeName(fileId)
-						+ triple.substring(2, triple.indexOf(' '));
+				values[0] = "_:" + sanitizeBlankNodeName(fileId) + triple.substring(2, triple.indexOf(' '));
 			} else {
 				values[0] = triple.substring(0, triple.indexOf(' '));
 			}
@@ -27,14 +25,12 @@ public class Parser {
 		if (triple.startsWith("<")) { // URI
 			values[2] = triple.substring(0, triple.indexOf('>') + 1);
 		} else if (triple.charAt(0) == '"') { // Literal
-			values[2] = triple.substring(0,
-					triple.substring(1).indexOf('"') + 2);
+			values[2] = triple.substring(0, triple.substring(1).indexOf('"') + 2);
 			triple = triple.substring(values[2].length(), triple.length());
 			values[2] += triple.substring(0, triple.indexOf(' '));
 		} else { // Bnode
 			if (rewriteBlankNodes) {
-				values[2] = "_:" + sanitizeBlankNodeName(fileId)
-						+ triple.substring(2, triple.indexOf(' '));
+				values[2] = "_:" + sanitizeBlankNodeName(fileId) + triple.substring(2, triple.indexOf(' '));
 			} else {
 				values[2] = triple.substring(0, triple.indexOf(' '));
 			}

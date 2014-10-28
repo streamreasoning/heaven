@@ -12,15 +12,11 @@ public class SubOrganizationOf extends RDFProperty {
 	private static final long serialVersionUID = 1L;
 
 	public SubOrganizationOf() {
-		super(
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#subOrganizationOf",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Organization",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Organization",
-				Organization.class, Organization.class);
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#subOrganizationOf", "http://swat.cse.lehigh.edu/onto/univ-bench.owl#Organization",
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Organization", Organization.class, Organization.class);
 	}
 
-	public SubOrganizationOf(String property, String domainValue,
-			String rangeValue, Class<? extends RDFResource> domain,
+	public SubOrganizationOf(String property, String domainValue, String rangeValue, Class<? extends RDFResource> domain,
 			Class<? extends RDFResource> range) {
 		super(property, domainValue, rangeValue, domain, range);
 	}

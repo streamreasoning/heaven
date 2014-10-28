@@ -6,8 +6,7 @@ import it.polimi.processing.events.Event;
 
 import java.io.IOException;
 
-public interface StartableCollector<T extends Event> extends
-		ResultCollector<T>, Startable<ExecutionStates> {
+public interface StartableCollector<T extends Event> extends ResultCollector<T>, Startable<ExecutionStates> {
 
 	public boolean store(T r, String where) throws IOException;
 

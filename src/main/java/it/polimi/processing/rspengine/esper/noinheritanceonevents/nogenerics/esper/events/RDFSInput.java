@@ -18,7 +18,6 @@ public class RDFSInput extends RDFEvent {
 
 	@Override
 	public String toString() {
-		return "RDFInput [s=" + getS() + ", p=" + getP() + ", o=" + getO()
-				+ " ts= " + getTimestamp() + "]";
+		return "RDFInput [s=" + getS() + ", p=" + getP() + ", o=" + getO() + " ts= " + getTimestamp() + "]";
 	}
 }

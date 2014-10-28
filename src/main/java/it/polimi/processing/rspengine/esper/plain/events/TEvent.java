@@ -17,8 +17,7 @@ public class TEvent implements TripleEvent {
 
 	@Override
 	public String toString() {
-		return "TEvent [s=" + s + ", p=" + p + ", o=" + o + "ts=" + timestamp
-				+ "app_ts=" + app_timestamp + "]";
+		return "TEvent [s=" + s + ", p=" + p + ", o=" + o + "ts=" + timestamp + "app_ts=" + app_timestamp + "]";
 	}
 
 	@Override

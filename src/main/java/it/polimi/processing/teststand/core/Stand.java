@@ -17,8 +17,7 @@ public abstract class Stand {
 	protected ExecutionStates status;
 	protected Experiment currentExperiment;
 
-	public BufferedReader getBuffer(String fileName)
-			throws FileNotFoundException {
+	public BufferedReader getBuffer(String fileName) throws FileNotFoundException {
 		File file = new File(fileName);
 		return new BufferedReader(new FileReader(file));
 	}

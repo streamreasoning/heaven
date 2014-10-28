@@ -14,7 +14,6 @@ public class AdministrativeStaff extends Employee {
 	}
 
 	public AdministrativeStaff() {
-		super(
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#AdministrativeStaff");
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#AdministrativeStaff");
 	}
 }

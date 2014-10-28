@@ -18,8 +18,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CollectorEventResult implements
-		StartableCollector<StreamingEventResult>, Startable<ExecutionStates> {
+public class CollectorEventResult implements StartableCollector<StreamingEventResult>, Startable<ExecutionStates> {
 
 	private long timestamp;
 	private EventSaver trigSaver;
@@ -29,8 +28,7 @@ public class CollectorEventResult implements
 
 	private TestStand<RSPEngine> stand;
 
-	public CollectorEventResult(TestStand<RSPEngine> stand, EventSaver trig,
-			EventSaver csv) throws SQLException, ClassNotFoundException {
+	public CollectorEventResult(TestStand<RSPEngine> stand, EventSaver trig, EventSaver csv) throws SQLException, ClassNotFoundException {
 		this.stand = stand;
 		this.trigSaver = trig;
 		this.csvSaver = csv;
@@ -39,13 +37,11 @@ public class CollectorEventResult implements
 	}
 
 	@Override
-	public boolean store(StreamingEventResult r, String where)
-			throws IOException {
+	public boolean store(StreamingEventResult r, String where) throws IOException {
 		if (!ExecutionStates.READY.equals(status)) {
 			return false;
 		} else {
-			return trigSaver.save(r.getTrig(), where)
-					&& csvSaver.save(r.getCSV(), where);
+			return trigSaver.save(r.getTrig(), where) && csvSaver.save(r.getCSV(), where);
 		}
 	}
 
@@ -57,8 +53,7 @@ public class CollectorEventResult implements
 	@Override
 	public ExecutionStates init() {
 		try {
-			if (ExecutionStates.READY.equals(trigSaver.init())
-					&& ExecutionStates.READY.equals(csvSaver.init())) {
+			if (ExecutionStates.READY.equals(trigSaver.init()) && ExecutionStates.READY.equals(csvSaver.init())) {
 				return status = ExecutionStates.READY;
 			} else {
 				return status = ExecutionStates.ERROR;
@@ -73,8 +68,7 @@ public class CollectorEventResult implements
 	@Override
 	public ExecutionStates close() {
 		try {
-			if (ExecutionStates.CLOSED.equals(trigSaver.close())
-					&& ExecutionStates.CLOSED.equals(csvSaver.close())) {
+			if (ExecutionStates.CLOSED.equals(trigSaver.close()) && ExecutionStates.CLOSED.equals(csvSaver.close())) {
 				return status = ExecutionStates.CLOSED;
 			} else {
 				return status = ExecutionStates.ERROR;
@@ -87,8 +81,7 @@ public class CollectorEventResult implements
 	}
 
 	@Override
-	public StreamingEventResult newEventInstance(Set<String[]> all_triples,
-			Event e) {
+	public StreamingEventResult newEventInstance(Set<String[]> all_triples, Event e) {
 		return stand.newEventInstance(all_triples, e);
 	}
 

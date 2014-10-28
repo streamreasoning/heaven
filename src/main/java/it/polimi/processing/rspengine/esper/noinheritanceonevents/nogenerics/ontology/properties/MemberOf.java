@@ -13,15 +13,11 @@ public class MemberOf extends RDFProperty {
 	private static final long serialVersionUID = 1L;
 
 	public MemberOf() {
-		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#memberOf",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person",
-				Person.class, Organization.class);
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#memberOf", "http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person",
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person", Person.class, Organization.class);
 	}
 
-	public MemberOf(String property, String domainValue, String rangeValue,
-			Class<? extends RDFResource> domain,
-			Class<? extends RDFResource> range) {
+	public MemberOf(String property, String domainValue, String rangeValue, Class<? extends RDFResource> domain, Class<? extends RDFResource> range) {
 		super(property, domainValue, rangeValue, domain, range);
 	}
 }

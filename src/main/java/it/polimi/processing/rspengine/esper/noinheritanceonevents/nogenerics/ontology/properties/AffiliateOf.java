@@ -13,15 +13,11 @@ public class AffiliateOf extends RDFProperty {
 	private static final long serialVersionUID = 1L;
 
 	public AffiliateOf() {
-		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#affiliateOf",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Organization",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person",
-				Organization.class, Person.class);
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#affiliateOf", "http://swat.cse.lehigh.edu/onto/univ-bench.owl#Organization",
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person", Organization.class, Person.class);
 	}
 
-	public AffiliateOf(String property, String domainValue, String rangeValue,
-			Class<? extends RDFResource> domain,
-			Class<? extends RDFResource> range) {
+	public AffiliateOf(String property, String domainValue, String rangeValue, Class<? extends RDFResource> domain, Class<? extends RDFResource> range) {
 		super(property, domainValue, rangeValue, domain, range);
 	}
 }

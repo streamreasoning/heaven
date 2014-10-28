@@ -18,22 +18,18 @@ import java.sql.SQLException;
 
 public class MainJena {
 
-	public static void main(String[] args) throws ClassNotFoundException,
-			SQLException {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		String[] files = new String[] { "University0_0_clean.nt" };
 
 		TestStand<RSPEngine> testStand = new TestStand<RSPEngine>();
 
-		StartableCollector<StreamingEventResult> streamingEventResultCollector = new CollectorEventResult(
-				testStand, new TrigEventSaver(), new CSVEventSaver());
-		StartableCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(
-				testStand, new SQLLiteEventSaver());
+		StartableCollector<StreamingEventResult> streamingEventResultCollector = new CollectorEventResult(testStand, new TrigEventSaver(),
+				new CSVEventSaver());
+		StartableCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
 		RSPEngine engine = new JenaEngine("jena", testStand);
-		NTStreamer<StreamingEvent> streamer = new NTStreamer<StreamingEvent>(
-				testStand);
+		NTStreamer<StreamingEvent> streamer = new NTStreamer<StreamingEvent>(testStand);
 
-		testStand.build(streamingEventResultCollector,
-				experimentResultCollector, engine, streamer);
+		testStand.build(streamingEventResultCollector, experimentResultCollector, engine, streamer);
 
 		int experimentNumber = 0;
 		testStand.init();

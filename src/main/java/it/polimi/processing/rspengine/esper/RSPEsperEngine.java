@@ -26,8 +26,7 @@ public abstract class RSPEsperEngine extends RSPEngine {
 
 	protected int time = 0;
 
-	public RSPEsperEngine(String name,
-			ResultCollector<StreamingEventResult> stand) {
+	public RSPEsperEngine(String name, ResultCollector<StreamingEventResult> stand) {
 		super(name, stand);
 	}
 
@@ -41,8 +40,7 @@ public abstract class RSPEsperEngine extends RSPEngine {
 	}
 
 	protected boolean isStartable() {
-		return ExecutionStates.READY.equals(status)
-				|| ExecutionStates.CLOSED.equals(status);
+		return ExecutionStates.READY.equals(status) || ExecutionStates.CLOSED.equals(status);
 	}
 
 	protected boolean isOn() {

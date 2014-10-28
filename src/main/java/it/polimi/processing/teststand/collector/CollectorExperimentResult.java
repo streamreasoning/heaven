@@ -17,16 +17,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CollectorExperimentResult implements
-		StartableCollector<ExperimentResultEvent> {
+public class CollectorExperimentResult implements StartableCollector<ExperimentResultEvent> {
 
 	private long timestamp;
 	private EventSaver sqlLiteSaver;
 	private TestStand<RSPEngine> stand;
 	private ExecutionStates status;
 
-	public CollectorExperimentResult(TestStand<RSPEngine> stand,
-			EventSaver saver) throws SQLException, ClassNotFoundException {
+	public CollectorExperimentResult(TestStand<RSPEngine> stand, EventSaver saver) throws SQLException, ClassNotFoundException {
 		this.stand = stand;
 		this.sqlLiteSaver = saver;
 		this.timestamp = System.currentTimeMillis();
@@ -34,8 +32,7 @@ public class CollectorExperimentResult implements
 	}
 
 	@Override
-	public boolean store(ExperimentResultEvent r, String where)
-			throws IOException {
+	public boolean store(ExperimentResultEvent r, String where) throws IOException {
 		if (!ExecutionStates.READY.equals(status)) {
 			return false;
 		} else {
@@ -78,8 +75,7 @@ public class CollectorExperimentResult implements
 	}
 
 	@Override
-	public ExperimentResultEvent newEventInstance(Set<String[]> all_triples,
-			Event e) {
+	public ExperimentResultEvent newEventInstance(Set<String[]> all_triples, Event e) {
 		return null;
 	}
 

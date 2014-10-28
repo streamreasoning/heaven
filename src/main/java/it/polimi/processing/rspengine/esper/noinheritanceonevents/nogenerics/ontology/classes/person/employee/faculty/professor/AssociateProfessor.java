@@ -14,8 +14,7 @@ public class AssociateProfessor extends Professor {
 	}
 
 	public AssociateProfessor() {
-		super(
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#AssociateProfessor");
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#AssociateProfessor");
 	}
 
 }

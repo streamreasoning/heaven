@@ -13,15 +13,11 @@ public class PublicationAuthor extends RDFProperty {
 	private static final long serialVersionUID = 1L;
 
 	public PublicationAuthor() {
-		super(
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Publication",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person",
-				Publication.class, Person.class);
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://swat.cse.lehigh.edu/onto/univ-bench.owl#Publication",
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person", Publication.class, Person.class);
 	}
 
-	public PublicationAuthor(String property, String domainValue,
-			String rangeValue, Class<? extends RDFResource> domain,
+	public PublicationAuthor(String property, String domainValue, String rangeValue, Class<? extends RDFResource> domain,
 			Class<? extends RDFResource> range) {
 		super(property, domainValue, rangeValue, domain, range);
 	}

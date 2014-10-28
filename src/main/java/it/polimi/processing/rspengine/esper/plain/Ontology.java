@@ -38,14 +38,11 @@ public class Ontology {
 
 	private static void initializeObjectProperties() {
 
-		FileManager.get().addLocatorClassLoader(
-				JenaEngine.class.getClassLoader());
+		FileManager.get().addLocatorClassLoader(JenaEngine.class.getClassLoader());
 
-		Model tbox_star = FileManager.get().loadModel(
-				RDFSUtils.UNIV_BENCH_RDFS, null, "RDF/XML"); // http://en.wikipedia.org/wiki/Tbox
+		Model tbox_star = FileManager.get().loadModel(RDFSUtils.UNIV_BENCH_RDFS, null, "RDF/XML"); // http://en.wikipedia.org/wiki/Tbox
 
-		OntModel om = ModelFactory.createOntologyModel(
-				OntModelSpec.RDFS_MEM_RDFS_INF, tbox_star);
+		OntModel om = ModelFactory.createOntologyModel(OntModelSpec.RDFS_MEM_RDFS_INF, tbox_star);
 		ExtendedIterator<OntProperty> pl = om.listOntProperties();
 		while (pl.hasNext()) {
 			OntProperty next = pl.next();
@@ -58,10 +55,8 @@ public class Ontology {
 			supers.add(next.toString());
 			supers.add("http://www.w3.org/1999/02/22-rdf-syntax-ns#Property");
 
-			String domain = next.getDomain() != null ? next.getDomain()
-					.toString() : "";
-			String range = next.getRange() != null ? next.getRange().toString()
-					: "";
+			String domain = next.getDomain() != null ? next.getDomain().toString() : "";
+			String range = next.getRange() != null ? next.getRange().toString() : "";
 			// P domain D S subpropertyOfP can't infer S domain D
 			// while (spl.hasNext()) {
 			// OntProperty snext = spl.next();
@@ -93,9 +88,7 @@ public class Ontology {
 
 		for (String k : properties.keySet()) {
 			Logger.getRootLogger().debug(
-					k + "   " + Arrays.deepToString(properties.get(k))
-							+ " DOMAIN " + propertiesDomain.get(k) + " RANGE "
-							+ propertiesRange.get(k));
+					k + "   " + Arrays.deepToString(properties.get(k)) + " DOMAIN " + propertiesDomain.get(k) + " RANGE " + propertiesRange.get(k));
 
 		}
 		Logger.getRootLogger().debug("NUM PROPERTIES :" + numProperties);
@@ -104,14 +97,11 @@ public class Ontology {
 	private static void inizializeOntology() {
 		ontology = new HashMap<String, String[]>();
 
-		FileManager.get().addLocatorClassLoader(
-				JenaEngine.class.getClassLoader());
+		FileManager.get().addLocatorClassLoader(JenaEngine.class.getClassLoader());
 
-		Model tbox_star = FileManager.get().loadModel(
-				RDFSUtils.UNIV_BENCH_RDFS, null, "RDF/XML"); // http://en.wikipedia.org/wiki/Tbox
+		Model tbox_star = FileManager.get().loadModel(RDFSUtils.UNIV_BENCH_RDFS, null, "RDF/XML"); // http://en.wikipedia.org/wiki/Tbox
 
-		OntModel om = ModelFactory.createOntologyModel(
-				OntModelSpec.RDFS_MEM_RDFS_INF, tbox_star);
+		OntModel om = ModelFactory.createOntologyModel(OntModelSpec.RDFS_MEM_RDFS_INF, tbox_star);
 		ExtendedIterator<OntClass> cl = om.listClasses();
 		while (cl.hasNext()) {
 			OntClass next = cl.next();
@@ -133,8 +123,7 @@ public class Ontology {
 		}
 
 		for (String k : ontology.keySet()) {
-			Logger.getRootLogger().debug(
-					k + "   " + Arrays.deepToString(ontology.get(k)));
+			Logger.getRootLogger().debug(k + "   " + Arrays.deepToString(ontology.get(k)));
 		}
 
 		Logger.getRootLogger().debug("NUM CLASSES " + numClasses);

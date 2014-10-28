@@ -12,15 +12,11 @@ public class DoctoralDegreeFrom extends DegreeFrom {
 	private static final long serialVersionUID = 1L;
 
 	public DoctoralDegreeFrom() {
-		super(
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#doctoralDegreeFrom",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#University",
-				Person.class, University.class);
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#doctoralDegreeFrom", "http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person",
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#University", Person.class, University.class);
 	}
 
-	public DoctoralDegreeFrom(String property, String domainValue,
-			String rangeValue, Class<? extends RDFResource> domain,
+	public DoctoralDegreeFrom(String property, String domainValue, String rangeValue, Class<? extends RDFResource> domain,
 			Class<? extends RDFResource> range) {
 		super(property, domainValue, rangeValue, domain, range);
 	}

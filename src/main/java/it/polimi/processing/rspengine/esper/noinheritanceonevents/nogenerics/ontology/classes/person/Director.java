@@ -1,6 +1,5 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes.person;
 
-
 public class Director extends Person {
 
 	private static final long serialVersionUID = 1L;

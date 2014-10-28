@@ -13,15 +13,11 @@ public class DegreeFrom extends RDFProperty {
 	private static final long serialVersionUID = 1L;
 
 	public DegreeFrom() {
-		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#degreeFrom",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#University",
-				Person.class, University.class);
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#degreeFrom", "http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person",
+				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#University", Person.class, University.class);
 	}
 
-	public DegreeFrom(String property, String domainValue, String rangeValue,
-			Class<? extends RDFResource> domain,
-			Class<? extends RDFResource> range) {
+	public DegreeFrom(String property, String domainValue, String rangeValue, Class<? extends RDFResource> domain, Class<? extends RDFResource> range) {
 		super(property, domainValue, rangeValue, domain, range);
 	}
 }

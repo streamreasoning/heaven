@@ -1,6 +1,5 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.classes.person.student;
 
-
 public class UndergraduateStudent extends Student {
 
 	/**
@@ -13,7 +12,6 @@ public class UndergraduateStudent extends Student {
 	}
 
 	public UndergraduateStudent() {
-		super(
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#UndergraduateStudent");
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#UndergraduateStudent");
 	}
 }

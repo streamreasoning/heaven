@@ -26,8 +26,7 @@ import org.apache.http.impl.cookie.DateUtils;
 import org.apache.log4j.Logger;
 
 @Getter
-public class TestStand<T extends RSPEngine> extends Stand implements
-		EventProcessor<StreamingEvent>, ResultCollector<StreamingEventResult>,
+public class TestStand<T extends RSPEngine> extends Stand implements EventProcessor<StreamingEvent>, ResultCollector<StreamingEventResult>,
 		Startable<ExecutionStates> {
 
 	private StartableCollector<StreamingEventResult> resultCollector;
@@ -40,9 +39,7 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 		super(ExecutionStates.NOT_READY, null);
 	}
 
-	public void build(
-			StartableCollector<StreamingEventResult> resultCollector,
-			StartableCollector<ExperimentResultEvent> experimentResultCollector,
+	public void build(StartableCollector<StreamingEventResult> resultCollector, StartableCollector<ExperimentResultEvent> experimentResultCollector,
 			T rspEngine, NTStreamer<StreamingEvent> streamer) {
 		this.experimentResultCollector = experimentResultCollector;
 		this.resultCollector = resultCollector;
@@ -50,17 +47,12 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 		this.streamer = streamer;
 	}
 
-	public int run(String f, int experimentNumber, String comment)
-			throws Exception {
-		Logger.getRootLogger().info(
-				"START STREAMING " + System.currentTimeMillis());
-		String experimentDescription = "EXPERIMENT_ON_" + f + "_WITH_ENGINE_"
-				+ rspEngine.getName();
+	public int run(String f, int experimentNumber, String comment) throws Exception {
+		Logger.getRootLogger().info("START STREAMING " + System.currentTimeMillis());
+		String experimentDescription = "EXPERIMENT_ON_" + f + "_WITH_ENGINE_" + rspEngine.getName();
 		String inputFileName = FileUtils.INPUT_FILE_PATH + f;
 		Date d = new Date();
-		String outputFileName = "Result_"
-				+ DateUtils.formatDate(d, "YYYY_MM_dd_HH_mm_SS") + "_"
-				+ f.split("\\.")[0];
+		String outputFileName = "Result_" + DateUtils.formatDate(d, "YYYY_MM_dd_HH_mm_SS") + "_" + f.split("\\.")[0];
 
 		if (!isOn()) {
 			throw new WrongStatusTransitionException("Not ON");
@@ -70,17 +62,15 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 			// Start running
 			status = ExecutionStates.RUNNING;
 
-			currentExperiment = new Experiment(experimentNumber,
-					experimentDescription, rspEngine.getName(), inputFileName,
-					outputFileName, System.currentTimeMillis(), comment);
+			currentExperiment = new Experiment(experimentNumber, experimentDescription, rspEngine.getName(), inputFileName, outputFileName,
+					System.currentTimeMillis(), comment);
 
 			ExecutionStates engineStatus = rspEngine.startProcessing();
 
 			if (ExecutionStates.READY.equals(engineStatus)) {
 
 				try {
-					streamer.stream(getBuffer(inputFileName), experimentNumber,
-							rspEngine.getName(), TripleGraphTypes.UTRIPLES);
+					streamer.stream(getBuffer(inputFileName), experimentNumber, rspEngine.getName(), TripleGraphTypes.UTRIPLES);
 
 				} catch (IOException ex) {
 					status = ExecutionStates.ERROR;
@@ -92,15 +82,13 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 			engineStatus = rspEngine.stopProcessing();
 
 			String where = "";
-			experimentResultCollector.store(new ExperimentResultEvent(
-					currentExperiment, System.currentTimeMillis()), where);
+			experimentResultCollector.store(new ExperimentResultEvent(currentExperiment, System.currentTimeMillis()), where);
 
 			if (ExecutionStates.CLOSED.equals(engineStatus)) {
 				status = ExecutionStates.READY;
 			}
 
-			Logger.getRootLogger().info(
-					"STOP STREAMING " + System.currentTimeMillis());
+			Logger.getRootLogger().info("STOP STREAMING " + System.currentTimeMillis());
 
 		}
 		return 1;
@@ -121,29 +109,20 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 	@Override
 	public ExecutionStates close() {
 		if (!isOn()) {
-			throw new WrongStatusTransitionException(
-					"Can't move from a status different from ON Current: "
-							+ status);
+			throw new WrongStatusTransitionException("Can't move from a status different from ON Current: " + status);
 		} else {
 			ExecutionStates streamerStatus = streamer.close();
 			ExecutionStates engineStatus = rspEngine.close();
 			ExecutionStates collectorStatus = resultCollector.close();
-			ExecutionStates experimenTcollectorStatus = experimentResultCollector
-					.close();
+			ExecutionStates experimenTcollectorStatus = experimentResultCollector.close();
 
-			if (ExecutionStates.CLOSED.equals(streamerStatus)
-					&& ExecutionStates.CLOSED.equals(experimenTcollectorStatus)
-					&& ExecutionStates.CLOSED.equals(collectorStatus)
-					&& ExecutionStates.CLOSED.equals(engineStatus)) {
+			if (ExecutionStates.CLOSED.equals(streamerStatus) && ExecutionStates.CLOSED.equals(experimenTcollectorStatus)
+					&& ExecutionStates.CLOSED.equals(collectorStatus) && ExecutionStates.CLOSED.equals(engineStatus)) {
 				return status = ExecutionStates.CLOSED;
 			} else {
-				Logger.getLogger("obqa").error(
-						"streamerStatus: " + streamerStatus);
-				Logger.getLogger("obqa").error(
-						"collectorStatus: " + collectorStatus);
-				Logger.getLogger("obqa").error(
-						"experimentCollectorStatus: "
-								+ experimenTcollectorStatus);
+				Logger.getLogger("obqa").error("streamerStatus: " + streamerStatus);
+				Logger.getLogger("obqa").error("collectorStatus: " + collectorStatus);
+				Logger.getLogger("obqa").error("experimentCollectorStatus: " + experimenTcollectorStatus);
 				Logger.getLogger("obqa").error("engineStatus: " + engineStatus);
 				return status = ExecutionStates.ERROR;
 			}
@@ -157,37 +136,27 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 			ExecutionStates streamerStatus = streamer.init();
 			ExecutionStates engineStatus = rspEngine.init();
 			ExecutionStates collectorStatus = resultCollector.init();
-			ExecutionStates experimenTcollectorStatus = experimentResultCollector
-					.init();
+			ExecutionStates experimenTcollectorStatus = experimentResultCollector.init();
 
-			if (ExecutionStates.READY.equals(streamerStatus)
-					&& ExecutionStates.READY.equals(collectorStatus)
-					&& ExecutionStates.READY.equals(engineStatus)
-					&& ExecutionStates.READY.equals(experimenTcollectorStatus)) {
+			if (ExecutionStates.READY.equals(streamerStatus) && ExecutionStates.READY.equals(collectorStatus)
+					&& ExecutionStates.READY.equals(engineStatus) && ExecutionStates.READY.equals(experimenTcollectorStatus)) {
 				return status = ExecutionStates.READY;
 			} else {
-				Logger.getLogger("obqa").error(
-						"streamerStatus: " + streamerStatus);
-				Logger.getLogger("obqa").error(
-						"collectorStatus: " + collectorStatus);
-				Logger.getLogger("obqa").error(
-						"experimentCollectorStatus: "
-								+ experimenTcollectorStatus);
+				Logger.getLogger("obqa").error("streamerStatus: " + streamerStatus);
+				Logger.getLogger("obqa").error("collectorStatus: " + collectorStatus);
+				Logger.getLogger("obqa").error("experimentCollectorStatus: " + experimenTcollectorStatus);
 				Logger.getLogger("obqa").error("engineStatus: " + engineStatus);
 				return status = ExecutionStates.ERROR;
 			}
 
 		} else {
-			throw new WrongStatusTransitionException(
-					"Can't move from a status different from OFF Current: "
-							+ status);
+			throw new WrongStatusTransitionException("Can't move from a status different from OFF Current: " + status);
 		}
 
 	}
 
 	public boolean isStartable() {
-		return ExecutionStates.NOT_READY.equals(status)
-				|| ExecutionStates.CLOSED.equals(status);
+		return ExecutionStates.NOT_READY.equals(status) || ExecutionStates.CLOSED.equals(status);
 	}
 
 	public boolean isOn() {
@@ -216,8 +185,7 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 	@Override
 	public boolean store(StreamingEventResult r, String where) {
 		try {
-			return resultCollector.store(r, rspEngine.getName() + "/"
-					+ currentExperiment.getOutputFileName());
+			return resultCollector.store(r, rspEngine.getName() + "/" + currentExperiment.getOutputFileName());
 		} catch (IOException e) {
 			return false;
 		}
@@ -229,10 +197,8 @@ public class TestStand<T extends RSPEngine> extends Stand implements
 	}
 
 	@Override
-	public StreamingEventResult newEventInstance(Set<String[]> all_triples,
-			Event e) {
-		return new StreamingEventResult((StreamingEvent) e, all_triples,
-				System.currentTimeMillis());
+	public StreamingEventResult newEventInstance(Set<String[]> all_triples, Event e) {
+		return new StreamingEventResult((StreamingEvent) e, all_triples, System.currentTimeMillis());
 	}
 
 }

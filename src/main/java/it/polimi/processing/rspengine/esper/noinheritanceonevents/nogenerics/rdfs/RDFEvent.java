@@ -21,8 +21,7 @@ public abstract class RDFEvent implements TripleEvent {
 
 	@Override
 	public String toString() {
-		return "RDFEvent " + channel + " [s=" + s + ", p=" + p + ", o=" + o
-				+ " ts= " + timestamp + "]";
+		return "RDFEvent " + channel + " [s=" + s + ", p=" + p + ", o=" + o + " ts= " + timestamp + "]";
 	}
 
 	@Override

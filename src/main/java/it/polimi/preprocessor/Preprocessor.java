@@ -23,42 +23,34 @@ public class Preprocessor {
 	static FileOutputStream fop;
 
 	public static void main(String[] args) throws IOException {
-		Model inputOriginal = FileManager.get().loadModel(
-				"src/main/resources/data/input/University0_1.nt", null,
-				"RDF/XML");
+		Model inputOriginal = FileManager.get().loadModel("src/main/resources/data/input/University0_1.nt", null, "RDF/XML");
 
-		Model typeOf = inputOriginal.query(new SimpleSelector(null, RDF.type,
-				(RDFNode) null));
+		Model typeOf = inputOriginal.query(new SimpleSelector(null, RDF.type, (RDFNode) null));
 		Model input = inputOriginal.difference(typeOf);
 
 		write("type.nt", typeOf);
 
 		Model temp;
 		for (String dp : RDFSUtils.DATATYPEPROPERTIES) {
-			temp = inputOriginal.query(new SimpleSelector(null, ResourceFactory
-					.createProperty(dp), (RDFNode) null));
+			temp = inputOriginal.query(new SimpleSelector(null, ResourceFactory.createProperty(dp), (RDFNode) null));
 
 			input = input.difference(temp);
 
-			write(FileUtils.PREPROCESSING_DATATYPE_FILE_PATH + dp.split("#")[1]
-					+ ".nt", temp);
+			write(FileUtils.PREPROCESSING_DATATYPE_FILE_PATH + dp.split("#")[1] + ".nt", temp);
 
 		}
 
 		for (String dp : RDFSUtils.EXCLUDED_PROPERTIES) {
 
-			temp = inputOriginal.query(new SimpleSelector(null, ResourceFactory
-					.createProperty(dp), (RDFNode) null));
+			temp = inputOriginal.query(new SimpleSelector(null, ResourceFactory.createProperty(dp), (RDFNode) null));
 
 			input = input.difference(temp);
 
-			write(FileUtils.PREPROCESSING_EXCLUDED_FILE_PATH + dp.split("#")[1]
-					+ ".nt", temp);
+			write(FileUtils.PREPROCESSING_EXCLUDED_FILE_PATH + dp.split("#")[1] + ".nt", temp);
 
 		}
 
-		File file = new File(FileUtils.PREPROCESSING_FILE_PATH
-				+ "University0_0_clean.nt");
+		File file = new File(FileUtils.PREPROCESSING_FILE_PATH + "University0_0_clean.nt");
 		if (!file.exists()) {
 			file.createNewFile();
 		}
@@ -69,36 +61,23 @@ public class Preprocessor {
 		while (inputIterator.hasNext()) {
 			Statement nextStatement = inputIterator.next();
 			Statement typeStatmentSubj = null, typeStatmentObj = null;
-			if (!nextStatement.getSubject().isLiteral()
-					&& !nextStatement.getObject().isLiteral()) {
-				StmtIterator typeIterSubj = typeOf.listStatements(
-						nextStatement.getSubject(), RDF.type, (RDFNode) null);
-				StmtIterator typeIterObj = typeOf.listStatements(nextStatement
-						.getObject().asResource(), RDF.type, (RDFNode) null);
+			if (!nextStatement.getSubject().isLiteral() && !nextStatement.getObject().isLiteral()) {
+				StmtIterator typeIterSubj = typeOf.listStatements(nextStatement.getSubject(), RDF.type, (RDFNode) null);
+				StmtIterator typeIterObj = typeOf.listStatements(nextStatement.getObject().asResource(), RDF.type, (RDFNode) null);
 				while (typeIterSubj.hasNext() || typeIterObj.hasNext()) {
-					typeStatmentSubj = (typeIterSubj.hasNext()) ? typeIterSubj
-							.nextStatement() : typeStatmentSubj;
-					typeStatmentObj = (typeIterObj.hasNext()) ? typeIterObj
-							.nextStatement() : typeStatmentObj;
+					typeStatmentSubj = (typeIterSubj.hasNext()) ? typeIterSubj.nextStatement() : typeStatmentSubj;
+					typeStatmentObj = (typeIterObj.hasNext()) ? typeIterObj.nextStatement() : typeStatmentObj;
 
 					if (typeStatmentObj != null && typeIterSubj != null) {
-						fop.write(("<" + typeStatmentSubj.getSubject() + "> <"
-								+ typeStatmentSubj.getPredicate() + "> <"
-								+ typeStatmentSubj.getObject() + "> .")
+						fop.write(("<" + typeStatmentSubj.getSubject() + "> <" + typeStatmentSubj.getPredicate() + "> <"
+								+ typeStatmentSubj.getObject() + "> .").getBytes());
+						fop.write(System.getProperty("line.separator").getBytes());
+						fop.write(("<" + typeStatmentObj.getSubject() + "> <" + typeStatmentObj.getPredicate() + "> <" + typeStatmentObj.getObject() + "> .")
 								.getBytes());
-						fop.write(System.getProperty("line.separator")
+						fop.write(System.getProperty("line.separator").getBytes());
+						fop.write(("<" + nextStatement.getSubject() + "> <" + nextStatement.getPredicate() + "> <" + nextStatement.getObject() + "> .")
 								.getBytes());
-						fop.write(("<" + typeStatmentObj.getSubject() + "> <"
-								+ typeStatmentObj.getPredicate() + "> <"
-								+ typeStatmentObj.getObject() + "> .")
-								.getBytes());
-						fop.write(System.getProperty("line.separator")
-								.getBytes());
-						fop.write(("<" + nextStatement.getSubject() + "> <"
-								+ nextStatement.getPredicate() + "> <"
-								+ nextStatement.getObject() + "> .").getBytes());
-						fop.write(System.getProperty("line.separator")
-								.getBytes());
+						fop.write(System.getProperty("line.separator").getBytes());
 						count += 1;
 					}
 				}
@@ -112,8 +91,7 @@ public class Preprocessor {
 		// RDFDataMgr.write(fop, input, RDFFormat.NT) ;
 	}
 
-	public static FileOutputStream write(String fileName, Model m)
-			throws IOException {
+	public static FileOutputStream write(String fileName, Model m) throws IOException {
 		File file = new File(fileName);
 		if (!file.exists()) {
 			file.createNewFile();

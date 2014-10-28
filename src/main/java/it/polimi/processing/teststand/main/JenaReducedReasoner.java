@@ -19,7 +19,7 @@ import java.sql.SQLException;
 public class JenaReducedReasoner {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		String[] files = new String[] { "File1.txt" };
+		String[] files = new String[] { "University0_0_clean.nt" };
 		int experimentNumber = 0;
 		TestStand<RSPEngine> testStand = new TestStand<RSPEngine>();
 

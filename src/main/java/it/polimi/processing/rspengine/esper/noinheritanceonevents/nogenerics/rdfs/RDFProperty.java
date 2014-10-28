@@ -39,14 +39,10 @@ public class RDFProperty implements Serializable {
 		return property;
 	}
 
-	public RDFProperty(String property, String rangeValue, String domainValue,
-			Class<? extends RDFResource> domain,
-			Class<? extends RDFResource> range) {
+	public RDFProperty(String property, String rangeValue, String domainValue, Class<? extends RDFResource> domain, Class<? extends RDFResource> range) {
 		this.property = property;
-		this.rangeValue = (rangeValue == null || rangeValue.isEmpty()) ? "http://www.w3.org/2000/01/rdf-schema#Resource"
-				: rangeValue;
-		this.domainValue = (domainValue == null || domainValue.isEmpty()) ? "http://www.w3.org/2000/01/rdf-schema#Resource"
-				: domainValue;
+		this.rangeValue = (rangeValue == null || rangeValue.isEmpty()) ? "http://www.w3.org/2000/01/rdf-schema#Resource" : rangeValue;
+		this.domainValue = (domainValue == null || domainValue.isEmpty()) ? "http://www.w3.org/2000/01/rdf-schema#Resource" : domainValue;
 		this.domain = (domain != null) ? domain : RDFResource.class;
 		this.range = (range != null) ? range : RDFResource.class;
 	}

@@ -1,5 +1,6 @@
 package it.polimi.processing.events.result;
 
+import it.polimi.processing.collector.saver.data.CollectableData;
 import it.polimi.processing.collector.saver.data.SQL;
 import it.polimi.processing.events.Event;
 import it.polimi.processing.events.Experiment;
@@ -27,15 +28,10 @@ public class ExperimentResultEvent extends Event {
 	 * TS_END, ENGINE, INPUT_FILE,RESULT_FILE, FILE_LOG_FOLDER)
 	 * 
 	 * **/
-	public SQL getSQL() {
-		return new SQL("VALUES (" + "'" + "EXP_"
-				+ experiment.getExperimentNumber() + "'" + "," + "'"
-				+ experiment.getTimestamp() + "'" + "," + "'"
-				+ timestamp_result + "'" + "," + "'" + experiment.getEngine()
-				+ "'" + "," + "'" + experiment.getInputFileName() + "'" + ","
-				+ "'" + experiment.getOutputFileName() + "'" + "," + "'"
-				+ experiment.getOutputFileName().replace("Result", "LOG") + "'"
-				+ ");");
+	public CollectableData getSQL() {
+		return new SQL("VALUES (" + "'" + "EXP_" + experiment.getExperimentNumber() + "'" + "," + "'" + experiment.getTimestamp() + "'" + "," + "'"
+				+ timestamp_result + "'" + "," + "'" + experiment.getEngine() + "'" + "," + "'" + experiment.getInputFileName() + "'" + "," + "'"
+				+ experiment.getOutputFileName() + "'" + "," + "'" + experiment.getOutputFileName().replace("Result", "LOG") + "'" + ");");
 	}
 
 }

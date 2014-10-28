@@ -14,7 +14,6 @@ public class AssistantProfessor extends Professor {
 	}
 
 	public AssistantProfessor() {
-		super(
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#AssistantProfessor");
+		super("http://swat.cse.lehigh.edu/onto/univ-bench.owl#AssistantProfessor");
 	}
 }
