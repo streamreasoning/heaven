@@ -51,10 +51,8 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 		cepAdm.createEPL(Queries.rdfs3);
 		cepAdm.createEPL(Queries.rdfs9);
 
-		EPStatement out = cepAdm
-				.createEPL("insert into Out select * from QueryOut.win:time_batch(1000 msec)");
-		listener = new ResultCollectorListener(collector, this,
-				stand.getCurrentExperiment());
+		EPStatement out = cepAdm.createEPL("insert into Out select * from QueryOut.win:time_batch(1000 msec)");
+		listener = new ResultCollectorListener(collector, this, stand.getCurrentExperiment());
 		out.addListener(listener);
 	}
 
@@ -67,11 +65,9 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 		cepConfig.addEventType("TEvent", TEvent.class.getName());
 		cepConfig.addEventType("Out", Out.class.getName());
 
-		cepConfig.getEngineDefaults().getThreading()
-				.setInternalTimerEnabled(false);
+		cepConfig.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
 
-		cep = EPServiceProviderManager.getProvider(
-				PlainMultipleInheritance.class.getName(), cepConfig);
+		cep = EPServiceProviderManager.getProvider(PlainMultipleInheritance.class.getName(), cepConfig);
 		// We register an EPL statement
 		cepAdm = cep.getEPAdministrator();
 		cepRT = cep.getEPRuntime();
@@ -104,9 +100,7 @@ public class PlainMultipleInheritance extends RSPEsperEngine {
 			// TODO discarted type property?
 			Logger.getRootLogger().debug("Create New Esper Event");
 			Logger.getRootLogger().debug(eventTriple[1]);
-			esperEvent = new TEvent(eventTriple[0], eventTriple[1],
-					eventTriple[2], cepRT.getCurrentTime(),
-					System.currentTimeMillis(), "Input");
+			esperEvent = new TEvent(eventTriple[0], eventTriple[1], eventTriple[2], cepRT.getCurrentTime(), System.currentTimeMillis(), "Input");
 			cepRT.sendEvent(esperEvent);
 			// }
 		}

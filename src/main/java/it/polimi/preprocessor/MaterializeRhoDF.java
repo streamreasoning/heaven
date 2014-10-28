@@ -41,15 +41,12 @@ public class MaterializeRhoDF {
 	public static void main(String[] args) throws Exception {
 		// Streamer.stream(new ExampleONT_02());
 
-		Model m = FileManager.get().loadModel(
-				"src/main/resources/data/inference/univ-bench-rdfs.rdf", null,
-				"RDF/XML");
+		Model m = FileManager.get().loadModel("src/main/resources/data/inference/univ-bench-rdfs.rdf", null, "RDF/XML");
 
 		reasoner = getReducedReasoner();
 		InfModel infmodel = ModelFactory.createInfModel(reasoner, m);
 
-		File file = new File(
-				"src/main/resources/data/inference/univ-bench-rdfs-materialized-rhodf.rdf");
+		File file = new File("src/main/resources/data/inference/univ-bench-rdfs-materialized-rhodf.rdf");
 
 		try (FileOutputStream fop = new FileOutputStream(file)) {
 			if (!file.exists()) {
@@ -68,13 +65,7 @@ public class MaterializeRhoDF {
 	}
 
 	private static Reasoner getReducedReasoner() {
-
-		List<Rule> rules = Rule.rulesFromURL(FileUtils.RULE_SET);
-
-		GenericRuleReasoner reasoner = new GenericRuleReasoner(rules);
-		reasoner.setOWLTranslation(true); // not needed in RDFS case
-		reasoner.setTransitiveClosureCaching(true);
-		return reasoner;
+		List<Rule> rules = Rule.rulesFromURL(FileUtils.RHODF_RULE_SET);
+		return new GenericRuleReasoner(rules);
 	}
-
 }

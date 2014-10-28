@@ -37,15 +37,12 @@ public class Materialize {
 	public static void main(String[] args) throws Exception {
 		// Streamer.stream(new ExampleONT_02());
 
-		Model m = FileManager.get().loadModel(
-				"src/main/resources/data/inference/univ-bench-rdfs.rdf", null,
-				"RDF/XML");
+		Model m = FileManager.get().loadModel("src/main/resources/data/inference/univ-bench-rdfs.rdf", null, "RDF/XML");
 
 		reasoner = ReasonerRegistry.getRDFSReasoner();
 		InfModel infmodel = ModelFactory.createInfModel(reasoner, m);
 
-		File file = new File(
-				"src/main/resources/data/inference/univ-bench-rdfs-materialized-rhodf.rdf");
+		File file = new File("src/main/resources/data/inference/univ-bench-rdfs-materialized.rdf");
 
 		try (FileOutputStream fop = new FileOutputStream(file)) {
 			if (!file.exists()) {

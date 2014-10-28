@@ -30,8 +30,9 @@ import it.polimi.utils.RDFSUtils;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+
+import lombok.extern.log4j.Log4j;
 
 import org.apache.log4j.Logger;
 
@@ -53,22 +54,29 @@ import com.hp.hpl.jena.reasoner.rulesys.Rule;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
 
+@Log4j
 public class JenaEngineReducedRules extends RSPEngine {
 
-	private static Model tbox_star, abox;
-	private static InfModel abox_star;
+	private final Model tbox_star;
+	private Model abox;
+	private InfModel abox_star;
 	int i = 0;
 	private Experiment currentExperiment;
+	private final String TBOX, RULESET_ABOX;
 
-	public JenaEngineReducedRules(String name, TestStand<RSPEngine> stand) {
+	public JenaEngineReducedRules(String name, String tbox, String ruleset_abox, TestStand<RSPEngine> stand) {
 		super(name, stand);
 		super.stand = stand;
-		FileManager.get().addLocatorClassLoader(
-				JenaEngineReducedRules.class.getClassLoader());
+		this.TBOX = (tbox != null && !tbox.isEmpty()) ? tbox : FileUtils.UNIV_BENCH_RHODF_MODIFIED;
+		this.RULESET_ABOX = (ruleset_abox != null && !ruleset_abox.isEmpty()) ? ruleset_abox : FileUtils.RHODF_RULE_SET_RUNTIME;
+		FileManager.get().addLocatorClassLoader(JenaEngineReducedRules.class.getClassLoader());
 
 		// CARICO LA TBOX CHIUSA
-		tbox_star = FileManager.get().loadModel(
-				FileUtils.UNIV_BENCH_RHODF_MODIFIED, null, "RDF/XML");
+		tbox_star = FileManager.get().loadModel(TBOX, null, "RDF/XML");
+	}
+
+	public JenaEngineReducedRules(String name, TestStand<RSPEngine> stand) {
+		this(name, "", "", stand);
 	}
 
 	@Override
@@ -80,35 +88,30 @@ public class JenaEngineReducedRules extends RSPEngine {
 			abox = ModelFactory.createMemModelMaker().createDefaultModel();
 
 			for (String[] eventTriple : e.getEventTriples()) {
-				Logger.getRootLogger().debug(Arrays.deepToString(eventTriple));
+				log.debug(Arrays.deepToString(eventTriple));
 				Statement s = createStatement(eventTriple);
 				abox.add(s);
 			}
 
-			Reasoner reasoner = getReducedReasoner();
+			Reasoner reasoner = getRHODFReasoner();
 
-			InfGraph graph = reasoner.bindSchema(tbox_star.getGraph()).bind(
-					abox.getGraph());
+			InfGraph graph = reasoner.bindSchema(tbox_star.getGraph()).bind(abox.getGraph());
 			abox_star = new InfModelImpl(graph);
 
 			Set<String[]> statements = new HashSet<String[]>();
-			StmtIterator iterator = abox_star.difference(tbox_star)
-					.listStatements();
-			while (iterator.hasNext()) {
+			Model difference = abox_star.difference(tbox_star);
+			StmtIterator iterator = difference.listStatements();
 
+			while (iterator.hasNext()) {
 				Triple t = iterator.next().asTriple();
-				String[] statementStrings = new String[] {
-						t.getSubject().toString(), t.getPredicate().toString(),
-						t.getObject().toString() };
+				String[] statementStrings = new String[] { t.getSubject().toString(), t.getPredicate().toString(), t.getObject().toString() };
 				statements.add(statementStrings);
-				Logger.getLogger("obqa").debug(
-						Arrays.deepToString(statementStrings));
+				Logger.getLogger("obqa").debug(Arrays.deepToString(statementStrings));
 			}
 
 			try {
-				return collector.store(new StreamingEventResult(e, statements,
-						System.currentTimeMillis()), name + "/"
-						+ currentExperiment.getOutputFileName());
+				return collector.store(new StreamingEventResult(e, statements, System.currentTimeMillis()),
+						name + "/" + currentExperiment.getOutputFileName());
 			} catch (IOException e1) {
 				e1.printStackTrace();
 				return false;
@@ -136,39 +139,30 @@ public class JenaEngineReducedRules extends RSPEngine {
 
 	@Override
 	public ExecutionStates init() {
-		Logger.getRootLogger().info("Nothing to do");
+		log.info("Initializing " + name + "..Nothing to do");
 		return status = ExecutionStates.READY;
 	}
 
 	@Override
 	public ExecutionStates close() {
-		Logger.getRootLogger().info("Nothing to do");
+		log.info("Closing " + name + "..Nothing to do");
 		return status = ExecutionStates.CLOSED;
 	}
 
 	private Statement createStatement(String[] eventTriple) {
 		Resource subject = ResourceFactory.createResource(eventTriple[0]);
-		Property predicate = (eventTriple[1] != RDFSUtils.TYPE_PROPERTY) ? ResourceFactory
-				.createProperty(eventTriple[1]) : RDF.type;
+		Property predicate = (eventTriple[1] != RDFSUtils.TYPE_PROPERTY) ? ResourceFactory.createProperty(eventTriple[1]) : RDF.type;
 		RDFNode object = ResourceFactory.createResource(eventTriple[2]);
-		Statement s = ResourceFactory.createStatement(subject, predicate,
-				object);
+		Statement s = ResourceFactory.createStatement(subject, predicate, object);
 		return s;
 	}
 
-	private Reasoner getReducedReasoner() {
-
-		List<Rule> rules = Rule.rulesFromURL(FileUtils.RULE_SET);
-
-		GenericRuleReasoner reasoner = new GenericRuleReasoner(rules);
-		reasoner.setOWLTranslation(true); // not needed in RDFS case
-		reasoner.setTransitiveClosureCaching(true);
-		return reasoner;
+	private Reasoner getRHODFReasoner() {
+		return new GenericRuleReasoner(Rule.rulesFromURL(RULESET_ABOX));
 	}
 
 	public boolean isStartable() {
-		return ExecutionStates.READY.equals(status)
-				|| ExecutionStates.CLOSED.equals(status);
+		return ExecutionStates.READY.equals(status) || ExecutionStates.CLOSED.equals(status);
 	}
 
 	public boolean isOn() {

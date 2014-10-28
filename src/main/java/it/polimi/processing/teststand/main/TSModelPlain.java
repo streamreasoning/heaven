@@ -41,7 +41,7 @@ public class TSModelPlain {
 		try {
 			for (String f : files) {
 
-				experimentNumber += testStand.run(f, experimentNumber);
+				experimentNumber += testStand.run(f, experimentNumber, "prova");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

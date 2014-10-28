@@ -1,0 +1,3 @@
+<http://www.Department0.University0.edu/UndergraduateStudent4> <http://swat.cse.lehigh.edu/onto/univ-bench.owl#advisor> <http://www.Department0.University0.edu/AssistantProfessor4> .
+<http://www.Department0.University0.edu/UndergraduateStudent4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://swat.cse.lehigh.edu/onto/univ-bench.owl#UndergraduateStudent> .
+<http://www.Department0.University0.edu/AssistantProfessor4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://swat.cse.lehigh.edu/onto/univ-bench.owl#AssistantProfessor> .

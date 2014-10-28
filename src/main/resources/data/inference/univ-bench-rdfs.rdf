@@ -7,15 +7,15 @@
     <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
     <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
     <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
-    <!ENTITY univ-bench "http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#" >
+    <!ENTITY univ-bench "http://swat.cse.lehigh.edu/onto/univ-bench.owl#" >
 ]>
 
 
-<rdf:RDF xmlns="http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#"
-     xml:base="http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl"
+<rdf:RDF xmlns="http://swat.cse.lehigh.edu/onto/univ-bench.owl#"
+     xml:base="http://swat.cse.lehigh.edu/onto/univ-bench.owl"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
-     xmlns:univ-bench="http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#"
+     xmlns:univ-bench="http://swat.cse.lehigh.edu/onto/univ-bench.owl#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
@@ -34,7 +34,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#advisor -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#advisor -->
 
     <rdf:Property rdf:about="#advisor">
 		<rdfs:label>is being advised by</rdfs:label>
@@ -44,7 +44,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#affiliateOf -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#affiliateOf -->
 
     <rdf:Property rdf:about="#affiliateOf">
         <rdfs:label
@@ -55,7 +55,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#affiliatedOrganizationOf -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#affiliatedOrganizationOf -->
 
     <rdf:Property rdf:about="#affiliatedOrganizationOf">
         <rdfs:label
@@ -66,7 +66,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#degreeFrom -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#degreeFrom -->
 
     <rdf:Property rdf:about="#degreeFrom">
         <rdfs:label
@@ -77,7 +77,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#doctoralDegreeFrom -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#doctoralDegreeFrom -->
 
     <rdf:Property rdf:about="#doctoralDegreeFrom">
         <rdfs:label
@@ -89,7 +89,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#hasAlumnus -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#hasAlumnus -->
 
     <rdf:Property rdf:about="#hasAlumnus">
         <rdfs:label
@@ -100,7 +100,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#headOf -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#headOf -->
 
     <rdf:Property rdf:about="#headOf">
         <rdfs:label>is the head of</rdfs:label>
@@ -109,7 +109,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#listedCourse -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#listedCourse -->
 
     <rdf:Property rdf:about="#listedCourse">
         <rdfs:label
@@ -120,7 +120,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#mastersDegreeFrom -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#mastersDegreeFrom -->
 
     <rdf:Property rdf:about="#mastersDegreeFrom">
         <rdfs:label
@@ -132,7 +132,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#member -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#member -->
 
     <rdf:Property rdf:about="#member">
         <rdfs:label>has as a member</rdfs:label>
@@ -142,7 +142,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#memberOf -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#memberOf -->
 
     <rdf:Property rdf:about="#memberOf">
         <rdfs:label>member of</rdfs:label>
@@ -150,7 +150,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#orgPublication -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#orgPublication -->
 
     <rdf:Property rdf:about="#orgPublication">
         <rdfs:label>publishes</rdfs:label>
@@ -160,7 +160,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#publicationAuthor -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor -->
 
     <rdf:Property rdf:about="#publicationAuthor">
         <rdfs:label>was written by</rdfs:label>
@@ -170,7 +170,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#publicationDate -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationDate -->
 
     <rdf:Property rdf:about="#publicationDate">
         <rdfs:label>was written on</rdfs:label>
@@ -179,7 +179,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#publicationResearch -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationResearch -->
 
     <rdf:Property rdf:about="#publicationResearch">
         <rdfs:label>is about</rdfs:label>
@@ -189,7 +189,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#researchProject -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#researchProject -->
 
     <rdf:Property rdf:about="#researchProject">
         <rdfs:label
@@ -200,7 +200,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#softwareDocumentation -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#softwareDocumentation -->
 
     <rdf:Property rdf:about="#softwareDocumentation">
         <rdfs:label
@@ -211,7 +211,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#softwareVersion -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#softwareVersion -->
 
     <rdf:Property rdf:about="#softwareVersion">
         <rdfs:label>is version</rdfs:label>
@@ -220,7 +220,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#subOrganizationOf -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#subOrganizationOf -->
 
     <rdf:Property rdf:about="#subOrganizationOf">
         <rdfs:label>is part of</rdfs:label>
@@ -230,7 +230,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#takesCourse -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#takesCourse -->
 
     <rdf:Property rdf:about="#takesCourse">
         <rdfs:label>is taking</rdfs:label>
@@ -238,7 +238,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#teacherOf -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#teacherOf -->
 
     <rdf:Property rdf:about="#teacherOf">
         <rdfs:label>teaches</rdfs:label>
@@ -248,7 +248,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#teachingAssistantOf -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#teachingAssistantOf -->
 
     <rdf:Property rdf:about="#teachingAssistantOf">
         <rdfs:label
@@ -259,7 +259,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#tenured -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#tenured -->
 
     <rdf:Property rdf:about="#tenured">
         <rdfs:label>is tenured:</rdfs:label>
@@ -268,7 +268,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#undergraduateDegreeFrom -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#undergraduateDegreeFrom -->
 
     <rdf:Property rdf:about="#undergraduateDegreeFrom">
         <rdfs:label
@@ -280,7 +280,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#worksFor -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#worksFor -->
 
     <rdf:Property rdf:about="#worksFor">
         <rdfs:label>Works For</rdfs:label>
@@ -296,7 +296,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#AdministrativeStaff -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#AdministrativeStaff -->
 
     <rdfs:Class rdf:about="#AdministrativeStaff">
         <rdfs:label
@@ -306,7 +306,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Article -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Article -->
 
     <rdfs:Class rdf:about="#Article">
         <rdfs:label>article</rdfs:label>
@@ -315,7 +315,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#AssistantProfessor -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#AssistantProfessor -->
 
     <rdfs:Class rdf:about="#AssistantProfessor">
         <rdfs:label
@@ -325,7 +325,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#AssociateProfessor -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#AssociateProfessor -->
 
     <rdfs:Class rdf:about="#AssociateProfessor">
         <rdfs:label
@@ -335,7 +335,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Book -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Book -->
 
     <rdfs:Class rdf:about="#Book">
         <rdfs:label>book</rdfs:label>
@@ -344,7 +344,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Chair -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Chair -->
 
     <rdfs:Class rdf:about="#Chair">
         <rdfs:label>chair</rdfs:label>
@@ -354,7 +354,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#ClericalStaff -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#ClericalStaff -->
 
     <rdfs:Class rdf:about="#ClericalStaff">
         <rdfs:label
@@ -364,7 +364,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#College -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#College -->
 
     <rdfs:Class rdf:about="#College">
         <rdfs:label>school</rdfs:label>
@@ -373,7 +373,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#ConferencePaper -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#ConferencePaper -->
 
     <rdfs:Class rdf:about="#ConferencePaper">
         <rdfs:label
@@ -383,7 +383,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Course -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Course -->
 
     <rdfs:Class rdf:about="#Course">
         <rdfs:label>teaching course</rdfs:label>
@@ -392,7 +392,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Dean -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Dean -->
 
     <rdfs:Class rdf:about="#Dean">
         <rdfs:label>dean</rdfs:label>
@@ -402,7 +402,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Department -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Department -->
 
     <rdfs:Class rdf:about="#Department">
         <rdfs:label
@@ -412,7 +412,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Director -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Director -->
 
     <rdfs:Class rdf:about="#Director">
         <rdfs:label>director</rdfs:label>
@@ -421,7 +421,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Employee -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Employee -->
 
     <rdfs:Class rdf:about="#Employee">
         <rdfs:label>Employee</rdfs:label>
@@ -430,7 +430,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Faculty -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Faculty -->
 
     <rdfs:Class rdf:about="#Faculty">
         <rdfs:label>faculty member</rdfs:label>
@@ -439,7 +439,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#FullProfessor -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#FullProfessor -->
 
     <rdfs:Class rdf:about="#FullProfessor">
         <rdfs:label>full professor</rdfs:label>
@@ -448,7 +448,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#GraduateCourse -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#GraduateCourse -->
 
     <rdfs:Class rdf:about="#GraduateCourse">
         <rdfs:label
@@ -458,7 +458,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#GraduateStudent -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#GraduateStudent -->
 
     <rdfs:Class rdf:about="#GraduateStudent">
         <rdfs:label
@@ -468,7 +468,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Institute -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Institute -->
 
     <rdfs:Class rdf:about="#Institute">
         <rdfs:label>institute</rdfs:label>
@@ -477,7 +477,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#JournalArticle -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#JournalArticle -->
 
     <rdfs:Class rdf:about="#JournalArticle">
         <rdfs:label>journal article</rdfs:label>
@@ -486,7 +486,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Lecturer -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Lecturer -->
 
     <rdfs:Class rdf:about="#Lecturer">
         <rdfs:label>lecturer</rdfs:label>
@@ -495,7 +495,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Manual -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Manual -->
 
     <rdfs:Class rdf:about="#Manual">
         <rdfs:label>manual</rdfs:label>
@@ -504,7 +504,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Organization -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Organization -->
 
     <rdfs:Class rdf:about="#Organization">
         <rdfs:label>organization</rdfs:label>
@@ -512,7 +512,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Person -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Person -->
 
     <rdfs:Class rdf:about="#Person">
         <rdfs:label>person</rdfs:label>
@@ -520,7 +520,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#PostDoc -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#PostDoc -->
 
     <rdfs:Class rdf:about="#PostDoc">
         <rdfs:label>post doctorate</rdfs:label>
@@ -529,7 +529,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Professor -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Professor -->
 
     <rdfs:Class rdf:about="#Professor">
         <rdfs:label>professor</rdfs:label>
@@ -538,7 +538,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Program -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Program -->
 
     <rdfs:Class rdf:about="#Program">
         <rdfs:label>program</rdfs:label>
@@ -547,7 +547,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Publication -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Publication -->
 
     <rdfs:Class rdf:about="#Publication">
         <rdfs:label>publication</rdfs:label>
@@ -555,7 +555,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Research -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Research -->
 
     <rdfs:Class rdf:about="#Research">
         <rdfs:label>research work</rdfs:label>
@@ -564,7 +564,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#ResearchAssistant -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#ResearchAssistant -->
 
     <rdfs:Class rdf:about="#ResearchAssistant">
         <rdfs:label
@@ -574,7 +574,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#ResearchGroup -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#ResearchGroup -->
 
     <rdfs:Class rdf:about="#ResearchGroup">
         <rdfs:label>research group</rdfs:label>
@@ -583,7 +583,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Schedule -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Schedule -->
 
     <rdfs:Class rdf:about="#Schedule">
         <rdfs:label>schedule</rdfs:label>
@@ -591,7 +591,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Software -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Software -->
 
     <rdfs:Class rdf:about="#Software">
         <rdfs:label
@@ -601,7 +601,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Specification -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Specification -->
 
     <rdfs:Class rdf:about="#Specification">
         <rdfs:label
@@ -611,7 +611,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Student -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Student -->
 
     <rdfs:Class rdf:about="#Student">
         <rdfs:label>student</rdfs:label>
@@ -620,7 +620,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#SystemsStaff -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#SystemsStaff -->
 
     <rdfs:Class rdf:about="#SystemsStaff">
         <rdfs:label
@@ -630,7 +630,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#TeachingAssistant -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#TeachingAssistant -->
 
     <rdfs:Class rdf:about="#TeachingAssistant">
         <rdfs:label
@@ -640,7 +640,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#TechnicalReport -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#TechnicalReport -->
 
     <rdfs:Class rdf:about="#TechnicalReport">
         <rdfs:label
@@ -650,7 +650,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#UndergraduateStudent -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#UndergraduateStudent -->
 
     <rdfs:Class rdf:about="#UndergraduateStudent">
         <rdfs:label
@@ -660,7 +660,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#University -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#University -->
 
     <rdfs:Class rdf:about="#University">
         <rdfs:label>university</rdfs:label>
@@ -669,7 +669,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#UnofficialPublication -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#UnofficialPublication -->
 
     <rdfs:Class rdf:about="#UnofficialPublication">
         <rdfs:label
@@ -679,7 +679,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#VisitingProfessor -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#VisitingProfessor -->
 
     <rdfs:Class rdf:about="#VisitingProfessor">
         <rdfs:label
@@ -689,7 +689,7 @@
     
 
 
-    <!-- http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#Work -->
+    <!-- http://swat.cse.lehigh.edu/onto/univ-bench.owl#Work -->
 
     <rdfs:Class rdf:about="#Work">
         <rdfs:label>Work</rdfs:label>
