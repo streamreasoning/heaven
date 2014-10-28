@@ -31,15 +31,19 @@ public class SQLLiteEventSaver implements EventSaver {
 	 * 
 	 * @see it.polimi.output.filesystem.DatabaseManager#init()
 	 **/
+	public SQLLiteEventSaver() {
+		this.name = "obqaatcep.db";
+		this.JDBC_SQLITE_OBQAATCEP_DB = "jdbc:sqlite:" + FileUtils.DATABASEPATH + name;
+	}
 
 	public SQLLiteEventSaver(String name) {
 		this.name = name;
 		this.JDBC_SQLITE_OBQAATCEP_DB = "jdbc:sqlite:" + FileUtils.DATABASEPATH + name;
 	}
 
-	public SQLLiteEventSaver() {
-		this.name = "obqaatcep.db";
-		this.JDBC_SQLITE_OBQAATCEP_DB = "jdbc:sqlite:" + FileUtils.DATABASEPATH + name;
+	public SQLLiteEventSaver(String name, String path) {
+		this.name = name;
+		this.JDBC_SQLITE_OBQAATCEP_DB = "jdbc:sqlite:" + path + name;
 	}
 
 	@Override
