@@ -5,6 +5,7 @@ import it.polimi.processing.events.StreamingEvent;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.rspengine.esper.RSPEsperEngine;
 import it.polimi.processing.rspengine.esper.commons.listener.ResultCollectorListener;
+import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.Queries;
 import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.esper.events.RDFS3;
 import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.esper.events.RDFS9;
 import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.esper.events.RDFSInput;
@@ -12,7 +13,6 @@ import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.esp
 import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.ontology.properties.TypeOf;
 import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.rdfs.RDFProperty;
 import it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.rdfs.RDFResource;
-import it.polimi.processing.rspengine.esper.plain.Queries;
 import it.polimi.processing.teststand.core.TestStand;
 
 import java.util.ArrayList;

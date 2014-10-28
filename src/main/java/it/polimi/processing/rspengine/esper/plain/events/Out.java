@@ -12,15 +12,15 @@ import lombok.Data;
 
 @Data
 public class Out implements TripleEvent {
-	private String[] o, s;
-	private String p, channel;
+	private String[] s, p, o;
+	private String channel;
 	private long timestamp, app_timestamp;
 
 	public Out() {
 
 	}
 
-	public Out(String[] s, String p, String[] o, String ch, long timestamp, long app_timestamp) {
+	public Out(String[] s, String[] p, String[] o, String ch, long timestamp, long app_timestamp) {
 		this.s = s;
 		this.p = p;
 		this.o = o;
@@ -31,8 +31,8 @@ public class Out implements TripleEvent {
 
 	@Override
 	public String toString() {
-		return "Out [o=" + Arrays.toString(o) + ", s=" + Arrays.toString(s) + ", p=" + p + ", timestamp=" + timestamp + ", app_timestamp="
-				+ app_timestamp + ", channel=" + channel + "]";
+		return "Out [o=" + Arrays.toString(o) + ", s=" + Arrays.toString(s) + ", p=" + Arrays.toString(p) + ", timestamp=" + timestamp
+				+ ", app_timestamp=" + app_timestamp + ", channel=" + channel + "]";
 	}
 
 	@Override
@@ -43,7 +43,9 @@ public class Out implements TripleEvent {
 		for (String subj : s) {
 			list = new ArrayList<String>();
 			for (String obj : o) {
-				list.add(subj + "," + p + "," + obj);
+				for (String prop : p) {
+					list.add(subj + "," + prop + "," + obj);
+				}
 			}
 
 			for (String string : list) {

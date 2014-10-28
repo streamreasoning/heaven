@@ -49,30 +49,31 @@ public class Ontology {
 			if (RDFSUtils.isSchema(next.toString())) {
 				continue;
 			}
-			// ExtendedIterator<? extends OntProperty> spl = next
-			// .listSuperProperties();
+			ExtendedIterator<? extends OntProperty> spl = next.listSuperProperties();
 			Set<String> supers = new HashSet<String>();
 			supers.add(next.toString());
-			supers.add("http://www.w3.org/1999/02/22-rdf-syntax-ns#Property");
+			// properties are instances of rdf:Property not
+			// subclasses
+			// supers.add("http://www.w3.org/1999/02/22-rdf-syntax-ns#Property");
 
 			String domain = next.getDomain() != null ? next.getDomain().toString() : "";
 			String range = next.getRange() != null ? next.getRange().toString() : "";
 			// P domain D S subpropertyOfP can't infer S domain D
-			// while (spl.hasNext()) {
-			// OntProperty snext = spl.next();
-			// if (RDFSUtils.isSchema(snext.toString())) {
-			// continue;
-			// }
-			// supers.add(snext.toString());
-			// if (domain.isEmpty()) {
-			// domain = snext.getDomain() != null ? snext.getDomain()
-			// .toString() : "";
-			// }
-			// if (range.isEmpty()) {
-			// range = snext.getRange() != null ? snext.getRange()
-			// .toString() : "";
-			// }
-			// }
+			while (spl.hasNext()) {
+				OntProperty snext = spl.next();
+				if (RDFSUtils.isSchema(snext.toString())) {
+					continue;
+				}
+				supers.add(snext.toString());
+				// if (domain.isEmpty()) {
+				// domain = snext.getDomain() != null ?
+				// snext.getDomain().toString() : "";
+				// }
+				// if (range.isEmpty()) {
+				// range = snext.getRange() != null ?
+				// snext.getRange().toString() : "";
+				// }
+			}
 			if (domain.isEmpty()) {
 				domain = RDFSUtils.RDFRESOURCE;
 			}
@@ -142,12 +143,55 @@ public class Ontology {
 		return arr;
 	}
 
-	public static String subPropertyOf(String s) {
-		return properties.get(s)[0];
+	public static String[] subPropertyOf(String[] s) {
+		String[] ret;
+		Set<String> retList = new HashSet<String>();
+		for (String p : s) {
+			for (String sp : properties.get(p)) {
+				if (sp != null) {
+					retList.add(sp);
+				} else {
+					Logger.getRootLogger().info("Null property");
+				}
+			}
+		}
+		ret = new String[retList.size()];
+		return retList.toArray(ret);
+	}
+
+	public static String[] range(String[] p) {
+		String[] ret;
+		Set<String> ranges = new HashSet<String>();
+		for (String string : p) {
+			if (p != null) {
+				ranges.add(propertiesRange.get(string));
+			} else {
+				Logger.getRootLogger().info("Null range");
+			}
+		}
+		ret = new String[ranges.size()];
+		return ranges.toArray(ret);
+
+	}
+
+	public static String[] domain(String[] p) {
+		String[] ret;
+		Set<String> domains = new HashSet<String>();
+		for (String string : p) {
+
+			if (p != null) {
+				domains.add(propertiesDomain.get(string));
+			} else {
+				Logger.getRootLogger().info("Null domain");
+			}
+		}
+		ret = new String[domains.size()];
+		return domains.toArray(ret);
+
 	}
 
 	public static String[] range(String p) {
-		return new String[] { propertiesRange.get(p) };
+		return new String[] { propertiesDomain.get(p) };
 
 	}
 
@@ -156,4 +200,31 @@ public class Ontology {
 
 	}
 
+	public static boolean containsType(String[] p) {
+
+		for (String s : p) {
+			if (RDFSUtils.TYPE_PROPERTY.equals(s)) {
+				return true;
+			}
+		}
+		return false;
+
+	}
+
+	public static boolean notcontainsType(String[] p) {
+
+		return !containsType(p);
+
+	}
+
+	public static String[] type() {
+		return RDFSUtils.TYPE_PROPERTY_ARR;
+	}
+
+	public static void testProperties() {
+		Logger.getRootLogger().info("" + propertiesRange.get("http://swat.cse.lehigh.edu/onto/univ-bench.owl#worksFor"));
+		Logger.getRootLogger().info("" + propertiesDomain.get("http://swat.cse.lehigh.edu/onto/univ-bench.owl#memberOf"));
+		Logger.getRootLogger().info("" + propertiesDomain.get("http://swat.cse.lehigh.edu/onto/univ-bench.owl#worksFor"));
+		Logger.getRootLogger().info("" + propertiesRange.get("http://swat.cse.lehigh.edu/onto/univ-bench.owl#memberOf"));
+	}
 }
