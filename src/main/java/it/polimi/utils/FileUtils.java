@@ -16,10 +16,10 @@ public class FileUtils {
 
 		new File(daypath).mkdirs();
 
-		new File(daypath + "plain/").mkdirs();
-		new File(daypath + "plainrhodf/").mkdirs();
-		new File(daypath + "jena/").mkdirs();
-		new File(daypath + "jenared/").mkdirs();
+		new File(daypath + "plain39/").mkdirs();
+		new File(daypath + "plain369/").mkdirs();
+		new File(daypath + "jenasmpl/").mkdirs();
+		new File(daypath + "jenarhodf/").mkdirs();
 
 		new File(daypath + "database/").mkdirs();
 

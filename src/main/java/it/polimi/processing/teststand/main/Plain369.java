@@ -8,7 +8,7 @@ import it.polimi.processing.events.StreamingEvent;
 import it.polimi.processing.events.result.ExperimentResultEvent;
 import it.polimi.processing.events.result.StreamingEventResult;
 import it.polimi.processing.rspengine.RSPEngine;
-import it.polimi.processing.rspengine.esper.plain.PlainMultipleInheritance;
+import it.polimi.processing.rspengine.esper.plain.PlainCompleteRHODF;
 import it.polimi.processing.teststand.collector.CollectorEventResult;
 import it.polimi.processing.teststand.collector.CollectorExperimentResult;
 import it.polimi.processing.teststand.core.TestStand;
@@ -16,7 +16,7 @@ import it.polimi.processing.teststand.streamer.NTStreamer;
 
 import java.sql.SQLException;
 
-public class TSModelPlain {
+public class Plain369 {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, InterruptedException {
 
@@ -28,7 +28,7 @@ public class TSModelPlain {
 		StartableCollector<StreamingEventResult> streamingEventResultCollector = new CollectorEventResult(testStand, new TrigEventSaver(),
 				new CSVEventSaver());
 		StartableCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
-		RSPEngine engine = new PlainMultipleInheritance("plain", testStand);
+		RSPEngine engine = new PlainCompleteRHODF("plain369", testStand);
 		NTStreamer<StreamingEvent> streamer = new NTStreamer<StreamingEvent>(testStand);
 
 		testStand.build(streamingEventResultCollector, experimentResultCollector, engine, streamer);
@@ -37,7 +37,7 @@ public class TSModelPlain {
 		try {
 			for (String f : files) {
 
-				experimentNumber += testStand.run(f, experimentNumber, "prova");
+				experimentNumber += testStand.run(f, experimentNumber);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,4 +47,5 @@ public class TSModelPlain {
 		testStand.close();
 
 	}
+
 }

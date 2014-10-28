@@ -8,7 +8,7 @@ import it.polimi.processing.events.StreamingEvent;
 import it.polimi.processing.events.result.ExperimentResultEvent;
 import it.polimi.processing.events.result.StreamingEventResult;
 import it.polimi.processing.rspengine.RSPEngine;
-import it.polimi.processing.rspengine.esper.plain.PlainCompleteRHODF;
+import it.polimi.processing.rspengine.jena.JenaEngineReducedRules;
 import it.polimi.processing.teststand.collector.CollectorEventResult;
 import it.polimi.processing.teststand.collector.CollectorExperimentResult;
 import it.polimi.processing.teststand.core.TestStand;
@@ -16,19 +16,17 @@ import it.polimi.processing.teststand.streamer.NTStreamer;
 
 import java.sql.SQLException;
 
-public class PlainRHODF {
+public class JenaRHODF {
 
-	public static void main(String[] args) throws ClassNotFoundException, SQLException, InterruptedException {
-
-		int experimentNumber = 0;
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		String[] files = new String[] { "University0_0_clean.nt" };
-
+		int experimentNumber = 0;
 		TestStand<RSPEngine> testStand = new TestStand<RSPEngine>();
 
 		StartableCollector<StreamingEventResult> streamingEventResultCollector = new CollectorEventResult(testStand, new TrigEventSaver(),
 				new CSVEventSaver());
 		StartableCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
-		RSPEngine engine = new PlainCompleteRHODF("plainrhodf", testStand);
+		RSPEngine engine = new JenaEngineReducedRules("jenarhodf", testStand);
 		NTStreamer<StreamingEvent> streamer = new NTStreamer<StreamingEvent>(testStand);
 
 		testStand.build(streamingEventResultCollector, experimentResultCollector, engine, streamer);
@@ -37,7 +35,7 @@ public class PlainRHODF {
 		try {
 			for (String f : files) {
 
-				experimentNumber += testStand.run(f, experimentNumber, "prova");
+				experimentNumber += testStand.run(f, experimentNumber);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -45,7 +43,5 @@ public class PlainRHODF {
 		}
 
 		testStand.close();
-
 	}
-
 }
