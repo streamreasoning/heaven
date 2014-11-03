@@ -19,7 +19,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-public class Preprocessor {
+public class NTInputFileBuilder {
 	static FileOutputStream fop;
 
 	public static void main(String[] args) throws IOException {
