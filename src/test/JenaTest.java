@@ -1,4 +1,5 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import it.polimi.processing.streamer.Parser;
 import it.polimi.utils.FileUtils;
 
@@ -18,13 +19,12 @@ import com.hp.hpl.jena.query.Dataset;
 
 public class JenaTest {
 
-	private List<Dataset> datasetList;
+	private final List<Dataset> datasetList;
 	private BufferedReader br;
 
 	public JenaTest() {
 
-		String[] files = {
-				"src/main/resource/data/output/trig/jena/_Result_file1.trig",
+		String[] files = { "src/main/resource/data/output/trig/jena/_Result_file1.trig",
 				"src/main/resource/data/output/trig/plain/_Result_file1.trig" };
 		this.datasetList = new ArrayList<Dataset>();
 
@@ -55,17 +55,15 @@ public class JenaTest {
 
 			s[2] = s[2].replace("<", "");
 			s[2] = s[2].replace(">", "");
-			
-			String key = "http://example.org/"
-					+ ("[" + Arrays.deepToString(s) + "]").hashCode();
+
+			String key = "http://example.org/" + ("[" + Arrays.deepToString(s) + "]").hashCode();
 
 			assertFalse(isSound(key));
 			assertTrue(isComplete(key));
 
 		}
-		
+
 		br.close();
-		
 
 	}
 
@@ -75,24 +73,15 @@ public class JenaTest {
 			return false;
 		}
 		Dataset ref = datasetList.get(0);
-		boolean equals = ref.getNamedModel(key).isIsomorphicWith(
-				datasetList.get(1).getNamedModel(key));
+		boolean equals = ref.getNamedModel(key).isIsomorphicWith(datasetList.get(1).getNamedModel(key));
 		return equals;
 	}
 
 	public boolean isComplete(String key) {
-		// Model jenaGraph = datasetList.get(0).getNamedModel(key);
-		// Model engineGraph = datasetList.get(1).getNamedModel(key);
-		// Model diff = jenaGraph.difference(engineGraph);
-		return datasetList.get(1).getNamedModel(key)
-				.difference(datasetList.get(0).getNamedModel(key)).isEmpty();
+		return datasetList.get(1).getNamedModel(key).difference(datasetList.get(0).getNamedModel(key)).isEmpty();
 	}
 
 	public boolean isSound(String key) {
-		// Model jenaGraph = datasetList.get(0).getNamedModel(key);
-		// Model engineGraph = datasetList.get(1).getNamedModel(key);
-		// Model diff = engineGraph.difference(jenaGraph);
-		return datasetList.get(0).getNamedModel(key)
-				.difference(datasetList.get(1).getNamedModel(key)).isEmpty();
+		return datasetList.get(0).getNamedModel(key).difference(datasetList.get(1).getNamedModel(key)).isEmpty();
 	}
 }

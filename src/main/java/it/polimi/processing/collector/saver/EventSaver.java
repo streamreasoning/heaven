@@ -14,13 +14,13 @@ public interface EventSaver {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	public ExecutionStates init() throws ClassNotFoundException, SQLException;
+	public ExecutionStates init();
 
 	/**
 	 * @return Timestamp of the execution
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	public ExecutionStates close() throws ClassNotFoundException, SQLException;
+	public ExecutionStates close();
 
 }

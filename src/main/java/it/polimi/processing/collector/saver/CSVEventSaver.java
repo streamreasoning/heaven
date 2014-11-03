@@ -7,7 +7,6 @@ import it.polimi.utils.FileUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
@@ -27,13 +26,13 @@ public class CSVEventSaver implements EventSaver {
 	}
 
 	@Override
-	public ExecutionStates init() throws ClassNotFoundException, SQLException {
+	public ExecutionStates init() {
 		Logger.getRootLogger().info("Initialising CSVSaver... Nothing to do");
 		return status = ExecutionStates.READY;
 	}
 
 	@Override
-	public ExecutionStates close() throws ClassNotFoundException, SQLException {
+	public ExecutionStates close() {
 		Logger.getRootLogger().info("Closing CSVSaver... Nothing to do");
 		return status = ExecutionStates.CLOSED;
 	}

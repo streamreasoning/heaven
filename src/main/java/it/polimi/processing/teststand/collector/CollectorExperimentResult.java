@@ -48,28 +48,18 @@ public class CollectorExperimentResult implements StartableCollector<ExperimentR
 
 	@Override
 	public ExecutionStates init() {
-		try {
-			if (ExecutionStates.READY.equals(sqlLiteSaver.init())) {
-				return status = ExecutionStates.READY;
-			} else {
-				return status = ExecutionStates.ERROR;
-			}
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
+		if (ExecutionStates.READY.equals(sqlLiteSaver.init())) {
+			return status = ExecutionStates.READY;
+		} else {
 			return status = ExecutionStates.ERROR;
 		}
 	}
 
 	@Override
 	public ExecutionStates close() {
-		try {
-			if (ExecutionStates.CLOSED.equals(sqlLiteSaver.close())) {
-				return status = ExecutionStates.CLOSED;
-			} else {
-				return status = ExecutionStates.ERROR;
-			}
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
+		if (ExecutionStates.CLOSED.equals(sqlLiteSaver.close())) {
+			return status = ExecutionStates.CLOSED;
+		} else {
 			return status = ExecutionStates.ERROR;
 		}
 	}

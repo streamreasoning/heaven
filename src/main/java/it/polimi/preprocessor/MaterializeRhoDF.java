@@ -35,11 +35,9 @@ import com.hp.hpl.jena.reasoner.rulesys.Rule;
 import com.hp.hpl.jena.util.FileManager;
 
 public class MaterializeRhoDF {
-	public static int i = 0;
 	static Reasoner reasoner;
 
 	public static void main(String[] args) throws Exception {
-		// Streamer.stream(new ExampleONT_02());
 
 		Model m = FileManager.get().loadModel("src/main/resources/data/inference/univ-bench-rdfs.rdf", null, "RDF/XML");
 

@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class CSV implements CollectableData {
-
 	private String s;
 
 	@Override

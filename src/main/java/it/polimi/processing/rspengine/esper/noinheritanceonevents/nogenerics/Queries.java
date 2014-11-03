@@ -36,7 +36,7 @@ public class Queries {
 			+ "insert into RDFS9Input select s as s, " + EXTERNAL + ".type()" + " as p, " + EXTERNAL
 			+ ".domain(p) as o, timestamp as timestamp , app_timestamp as app_timestamp, channel || 'RDSF3' as channel " + "output all";
 
-	public static String rdfs6 = "on RDFS6Input "
+	public static final String rdfs6 = "on RDFS6Input "
 
 	+ "insert into QueryOut select s as s, o as o, " + EXTERNAL
 			+ ".subPropertyOf(p) as p, timestamp as timestamp, app_timestamp as app_timestamp, channel || 'RDSF6' as channel "

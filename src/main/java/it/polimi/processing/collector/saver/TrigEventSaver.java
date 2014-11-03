@@ -7,10 +7,10 @@ import it.polimi.utils.FileUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.SQLException;
 
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 
+@Log4j
 public class TrigEventSaver implements EventSaver {
 
 	private ExecutionStates status;
@@ -29,7 +29,7 @@ public class TrigEventSaver implements EventSaver {
 		try {
 			if (ExecutionStates.READY.equals(status)) {
 				String path = trigpath + where + FileUtils.TRIG_FILE_EXTENSION;
-				Logger.getRootLogger().debug("TRIG FILE PATH " + path);
+				log.debug("TRIG FILE PATH " + path);
 				File file = new File(path);
 				if (!file.exists()) {
 					file.createNewFile();
@@ -41,25 +41,27 @@ public class TrigEventSaver implements EventSaver {
 				fop.close();
 				return true;
 			} else {
-				Logger.getRootLogger().warn("Not Ready to write file");
+				log.warn("Not Ready to write file");
 				return false;
 			}
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			log.error(e1.getMessage());
 			return false;
 		}
 	}
 
 	@Override
-	public ExecutionStates init() throws ClassNotFoundException, SQLException {
-		Logger.getRootLogger().info("Initialising TrigSaver... Nothing to do");
-		return status = ExecutionStates.READY;
+	public ExecutionStates init() {
+		log.info("Initialising TrigSaver... Nothing to do");
+		status = ExecutionStates.READY;
+		return status;
 	}
 
 	@Override
-	public ExecutionStates close() throws ClassNotFoundException, SQLException {
-		Logger.getRootLogger().info("Closing TrigSaver... Nothing to do");
-		return status = ExecutionStates.CLOSED;
+	public ExecutionStates close() {
+		log.info("Closing TrigSaver... Nothing to do");
+		status = ExecutionStates.CLOSED;
+		return status;
 	}
 
 }

@@ -16,8 +16,7 @@ public class FileUtils {
 
 		new File(daypath).mkdirs();
 
-		new File(daypath + "plain39/").mkdirs();
-		new File(daypath + "plain369/").mkdirs();
+		new File(daypath + "plain2369/").mkdirs();
 		new File(daypath + "jenasmpl/").mkdirs();
 		new File(daypath + "jenarhodf/").mkdirs();
 

@@ -133,7 +133,7 @@ public class NTStreamer<T extends Event> implements Streamer {
 
 		String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + ">";
 
-		StreamingEvent streamingEvent = new StreamingEvent(eventTriples, id, eventNumber, experimentNumber, tripleGraph, lineNumbers,
+		StreamingEvent streamingEvent = new StreamingEvent(id, eventTriples, eventNumber, experimentNumber, tripleGraph, lineNumbers,
 				System.currentTimeMillis());
 
 		return stand.sendEvent(streamingEvent);

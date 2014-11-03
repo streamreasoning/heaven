@@ -50,14 +50,7 @@ public class StreamingEventResult extends Event {
 	 * 
 	 * **/
 	public CollectableData getTrig() {
-		String eol = System.getProperty("line.separator");
-		String s = inputEvent.getId() + " {";
-		for (String[] resource : all_triples) {
-			s += eol + "<" + resource[0] + ">" + "<" + resource[1] + ">" + "<" + resource[2] + "> .";
-		}
-
-		s += eol + "}";
-		return new TriG(s);
+		return new TriG(inputEvent.getId(), all_triples);
 	}
 
 	public CollectableData getCSV() {

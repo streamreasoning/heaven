@@ -12,12 +12,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import lombok.Getter;
-
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 
 @Getter
+@Log4j
 public class SQLLiteEventSaver implements EventSaver {
 
+	private static final String JDBC_SQLITE = "jdbc:sqlite:";
 	private final String name;
 	private final String JDBC_SQLITE_OBQAATCEP_DB;
 	private static final String ORG_SQLITE_JDBC = "org.sqlite.JDBC";
@@ -33,41 +34,56 @@ public class SQLLiteEventSaver implements EventSaver {
 	 **/
 	public SQLLiteEventSaver() {
 		this.name = "obqaatcep.db";
-		this.JDBC_SQLITE_OBQAATCEP_DB = "jdbc:sqlite:" + FileUtils.DATABASEPATH + name;
+		this.JDBC_SQLITE_OBQAATCEP_DB = JDBC_SQLITE + FileUtils.DATABASEPATH + name;
 	}
 
 	public SQLLiteEventSaver(String name) {
 		this.name = name;
-		this.JDBC_SQLITE_OBQAATCEP_DB = "jdbc:sqlite:" + FileUtils.DATABASEPATH + name;
+		this.JDBC_SQLITE_OBQAATCEP_DB = JDBC_SQLITE + FileUtils.DATABASEPATH + name;
 	}
 
 	public SQLLiteEventSaver(String name, String path) {
 		this.name = name;
-		this.JDBC_SQLITE_OBQAATCEP_DB = "jdbc:sqlite:" + path + name;
+		this.JDBC_SQLITE_OBQAATCEP_DB = JDBC_SQLITE + path + name;
 	}
 
 	@Override
-	public ExecutionStates init() throws ClassNotFoundException, SQLException {
+	public ExecutionStates init() {
 		timestamp = System.currentTimeMillis();
-		Class.forName(ORG_SQLITE_JDBC);
-		c = DriverManager.getConnection(JDBC_SQLITE_OBQAATCEP_DB);
-		Logger.getRootLogger().info("Opened database successfully");
-		stmt = c.createStatement();
-		stmt.executeUpdate(DatabaseUtils.EXPERIMENT_TABLE);
-		stmt.executeUpdate(DatabaseUtils.COMPARATION_TABLE);
-		stmt.close();
-		Logger.getRootLogger().info("Table created successfully");
-		return this.status = ExecutionStates.READY;
+		try {
+			Class.forName(ORG_SQLITE_JDBC);
+			c = DriverManager.getConnection(JDBC_SQLITE_OBQAATCEP_DB);
+			log.info("Opened database successfully");
+			stmt = c.createStatement();
+			stmt.executeUpdate(DatabaseUtils.EXPERIMENT_TABLE);
+			stmt.executeUpdate(DatabaseUtils.COMPARATION_TABLE);
+			stmt.close();
+			log.info("Table created successfully");
+			status = ExecutionStates.READY;
+		} catch (ClassNotFoundException e) {
+			log.error(e.getMessage());
+			status = ExecutionStates.ERROR;
+		} catch (SQLException e) {
+			log.error(e.getMessage());
+			status = ExecutionStates.ERROR;
+		}
+
+		return this.status;
 
 	}
 
 	@Override
-	public ExecutionStates close() throws ClassNotFoundException, SQLException {
-		Logger.getRootLogger().info("Stop the Database System");
-		queryAllComp();
-		c.close();
-		Logger.getRootLogger().info("Closed database successfully");
-		return this.status = ExecutionStates.CLOSED;
+	public ExecutionStates close() {
+		log.info("Stop the Database System");
+		try {
+			queryAllComp();
+			c.close();
+			log.info("Closed database successfully");
+			status = ExecutionStates.CLOSED;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return this.status;
 
 	}
 
@@ -75,28 +91,28 @@ public class SQLLiteEventSaver implements EventSaver {
 		stmt = c.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT * FROM EXPERIMENT;");
 		while (rs.next()) {
-			Logger.getRootLogger().info("EXPERIMENT_ID = " + rs.getString("EXP_ID"));
-			Logger.getRootLogger().info("TS_INIT = " + Long.parseLong(rs.getString("TS_INIT")));
-			Logger.getRootLogger().info("TS_END = " + Long.parseLong(rs.getString("TS_END")));
-			Logger.getRootLogger().info("INPUT_FILE = " + rs.getString("INPUT_FILE"));
-			Logger.getRootLogger().info("RESULT_FILE = " + rs.getString("RESULT_FILE"));
-			Logger.getRootLogger().info("FILE_LOG_FOLDER" + rs.getString("FILE_LOG_FOLDER"));
+			log.info("EXPERIMENT_ID = " + rs.getString("EXP_ID"));
+			log.info("TS_INIT = " + Long.parseLong(rs.getString("TS_INIT")));
+			log.info("TS_END = " + Long.parseLong(rs.getString("TS_END")));
+			log.info("INPUT_FILE = " + rs.getString("INPUT_FILE"));
+			log.info("RESULT_FILE = " + rs.getString("RESULT_FILE"));
+			log.info("FILE_LOG_FOLDER" + rs.getString("FILE_LOG_FOLDER"));
 		}
 		rs.close();
 		stmt.close();
 	}
 
 	public void queryAllComp() throws SQLException {
-		Logger.getRootLogger().info("QUERY ALL");
+		log.info("QUERY ALL");
 		stmt = c.createStatement();
 		ResultSet rs = stmt.executeQuery("SELECT * FROM COMPARATION;");
 		while (rs.next()) {
-			Logger.getRootLogger().debug("EXPERIMENT_ID = " + rs.getString("EXP_ID"));
-			Logger.getRootLogger().debug("EVENT_ID = " + rs.getString("EVENT_ID"));
-			Logger.getRootLogger().debug("SOUND = " + rs.getBoolean("SOUND"));
-			Logger.getRootLogger().debug("COMPLETE = " + rs.getBoolean("COMPLETE"));
-			Logger.getRootLogger().debug("MEMORY = " + rs.getDouble("MEMORY"));
-			Logger.getRootLogger().debug("LATENCY = " + rs.getLong("LATENCY"));
+			log.debug("EXPERIMENT_ID = " + rs.getString("EXP_ID"));
+			log.debug("EVENT_ID = " + rs.getString("EVENT_ID"));
+			log.debug("SOUND = " + rs.getBoolean("SOUND"));
+			log.debug("COMPLETE = " + rs.getBoolean("COMPLETE"));
+			log.debug("MEMORY = " + rs.getDouble("MEMORY"));
+			log.debug("LATENCY = " + rs.getLong("LATENCY"));
 
 		}
 		rs.close();
@@ -107,7 +123,7 @@ public class SQLLiteEventSaver implements EventSaver {
 	public boolean save(CollectableData d, String where) {
 		if (ExecutionStates.READY.equals(status) && d != null) {
 			String sql = DatabaseUtils.EXPERIMENT_INSERT + d.getData();
-			Logger.getRootLogger().debug(" EVENT SQL VALUE " + sql);
+			log.debug(" EVENT SQL VALUE " + sql);
 			try {
 				stmt = c.createStatement();
 				if (sql != null && stmt != null && c != null && !c.isClosed()) {
@@ -123,7 +139,7 @@ public class SQLLiteEventSaver implements EventSaver {
 				return false;
 			}
 		} else {
-			Logger.getRootLogger().warn("Not ready to write db");
+			log.warn("Not ready to write db");
 			return false;
 		}
 	}

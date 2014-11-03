@@ -28,7 +28,7 @@ public class Plain369 {
 		StartableCollector<StreamingEventResult> streamingEventResultCollector = new CollectorEventResult(testStand, new TrigEventSaver(),
 				new CSVEventSaver());
 		StartableCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
-		RSPEngine engine = new PlainCompleteRHODF("plain369", testStand);
+		RSPEngine engine = new PlainCompleteRHODF("plain2369", testStand);
 		NTStreamer<StreamingEvent> streamer = new NTStreamer<StreamingEvent>(testStand);
 
 		testStand.build(streamingEventResultCollector, experimentResultCollector, engine, streamer);

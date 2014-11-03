@@ -11,8 +11,8 @@ import lombok.EqualsAndHashCode;
 @AllArgsConstructor
 public class StreamingEvent extends Event {
 
-	private Set<String[]> eventTriples;
 	private String id;
+	private Set<String[]> eventTriples;
 	private int eventNumber, experimentNumber;
 	private int tripleGraph;
 	private int[] lineNumbers;
