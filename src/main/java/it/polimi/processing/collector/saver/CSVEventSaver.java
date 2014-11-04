@@ -9,8 +9,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
+import lombok.extern.log4j.Log4j;
+
 import org.apache.log4j.Logger;
 
+@Log4j
 public class CSVEventSaver implements EventSaver {
 
 	private ExecutionStates status;
@@ -58,7 +61,7 @@ public class CSVEventSaver implements EventSaver {
 				return false;
 			}
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			log.error(e1.getMessage());
 			return false;
 		}
 

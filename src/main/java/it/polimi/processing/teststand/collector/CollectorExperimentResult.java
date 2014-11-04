@@ -65,7 +65,7 @@ public class CollectorExperimentResult implements StartableCollector<ExperimentR
 	}
 
 	@Override
-	public ExperimentResultEvent newEventInstance(Set<String[]> all_triples, Event e) {
+	public ExperimentResultEvent newEventInstance(Set<String[]> allTriples, Event e) {
 		return null;
 	}
 

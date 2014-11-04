@@ -12,7 +12,7 @@ import it.polimi.processing.events.result.ExperimentResultEvent;
 import it.polimi.processing.events.result.StreamingEventResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.RSPEngine;
-import it.polimi.processing.teststand.streamer.NTStreamer;
+import it.polimi.processing.streamer.Streamer;
 import it.polimi.utils.FileUtils;
 import it.polimi.utils.TripleGraphTypes;
 
@@ -33,14 +33,14 @@ public class TestStand<T extends RSPEngine> extends Stand implements EventProces
 	private StartableCollector<ExperimentResultEvent> experimentResultCollector;
 
 	private T rspEngine;
-	private NTStreamer<StreamingEvent> streamer;
+	private Streamer<StreamingEvent> streamer;
 
 	public TestStand() {
 		super(ExecutionStates.NOT_READY, null);
 	}
 
 	public void build(StartableCollector<StreamingEventResult> resultCollector, StartableCollector<ExperimentResultEvent> experimentResultCollector,
-			T rspEngine, NTStreamer<StreamingEvent> streamer) {
+			T rspEngine, Streamer<StreamingEvent> streamer) {
 		this.experimentResultCollector = experimentResultCollector;
 		this.resultCollector = resultCollector;
 		this.rspEngine = rspEngine;

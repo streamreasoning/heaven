@@ -12,16 +12,16 @@ import it.polimi.processing.rspengine.esper.plain.PlainCompleteRHODF;
 import it.polimi.processing.teststand.collector.CollectorEventResult;
 import it.polimi.processing.teststand.collector.CollectorExperimentResult;
 import it.polimi.processing.teststand.core.TestStand;
-import it.polimi.processing.teststand.streamer.NTStreamer;
+import it.polimi.processing.teststand.streamer.TriGStreamer;
 
 import java.sql.SQLException;
 
-public class Plain369 {
+public class Plain2369 {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, InterruptedException {
 
 		int experimentNumber = 0;
-		String[] files = new String[] { "University0_0_clean.nt" };
+		String[] files = new String[] { "inputTrig.trig" };
 
 		TestStand<RSPEngine> testStand = new TestStand<RSPEngine>();
 
@@ -29,7 +29,7 @@ public class Plain369 {
 				new CSVEventSaver());
 		StartableCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
 		RSPEngine engine = new PlainCompleteRHODF("plain2369", testStand);
-		NTStreamer<StreamingEvent> streamer = new NTStreamer<StreamingEvent>(testStand);
+		TriGStreamer<StreamingEvent> streamer = new TriGStreamer<StreamingEvent>(testStand);
 
 		testStand.build(streamingEventResultCollector, experimentResultCollector, engine, streamer);
 

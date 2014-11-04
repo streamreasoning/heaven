@@ -29,7 +29,7 @@ import lombok.extern.log4j.Log4j;
 
 @Getter
 @Log4j
-public class TriGStreamer<T extends Event> implements Streamer {
+public class TriGStreamer<T extends Event> implements Streamer<T> {
 
 	/**
 	 * Represents the core of the streaming procedure, is must publish the

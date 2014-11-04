@@ -35,6 +35,6 @@ public class TripleGraphTypes {
 	 * A simple rdf triple un a subject S an object O and a generic non-schema
 	 * property P
 	 */
-	public static final int _TRIPLES = 1;
+	public static final int TRIPLES_ = 1;
 
 }

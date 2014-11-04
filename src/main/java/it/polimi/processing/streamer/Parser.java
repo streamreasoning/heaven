@@ -25,7 +25,7 @@ public class Parser {
 
 		// Parse subject
 		if (triple.startsWith("<")) {
-			values[0] = triple.substring(0, triple.indexOf('>') + 1);
+			values[0] = triple.substring(0, triple.indexOf('>') + 1).replace("<", "").replace(">", "");
 		} else { // Is a bnode
 			if (rewriteBlankNodes) {
 				values[0] = "_:" + sanitizeBlankNodeName(fileId) + triple.substring(2, triple.indexOf(' '));
@@ -39,9 +39,9 @@ public class Parser {
 		values[1] = triple.substring(0, triple.indexOf('>') + 1).replace("<", "").replace(">", "");
 
 		// Parse object
-		triple = triple.substring(values[1].length() + 1);
+		triple = triple.substring(triple.indexOf(' ') + 1);
 		if (triple.startsWith("<")) { // URI
-			values[2] = triple.substring(0, triple.indexOf('>') + 1);
+			values[2] = triple.substring(0, triple.indexOf('>') + 1).replace("<", "").replace(">", "");
 		} else if (triple.charAt(0) == '"') { // Literal
 			values[2] = triple.substring(0, triple.substring(1).indexOf('"') + 2);
 			triple = triple.substring(values[2].length(), triple.length());

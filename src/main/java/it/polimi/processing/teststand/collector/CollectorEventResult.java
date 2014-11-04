@@ -69,8 +69,8 @@ public class CollectorEventResult implements StartableCollector<StreamingEventRe
 	}
 
 	@Override
-	public StreamingEventResult newEventInstance(Set<String[]> all_triples, Event e) {
-		return stand.newEventInstance(all_triples, e);
+	public StreamingEventResult newEventInstance(Set<String[]> allTriples, Event e) {
+		return stand.newEventInstance(allTriples, e);
 	}
 
 }

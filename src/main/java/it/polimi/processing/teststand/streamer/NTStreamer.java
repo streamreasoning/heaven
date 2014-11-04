@@ -16,8 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import lombok.Getter;
-
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 
 /**
  * @author Riccardo
@@ -30,7 +29,8 @@ import org.apache.log4j.Logger;
  */
 
 @Getter
-public class NTStreamer<T extends Event> implements Streamer {
+@Log4j
+public class NTStreamer<T extends Event> implements Streamer<T> {
 
 	/**
 	 * Represents the core of the streaming procedure, is must publish the
@@ -58,7 +58,7 @@ public class NTStreamer<T extends Event> implements Streamer {
 	@Override
 	public void stream(BufferedReader br, int experimentNumber, String engineName, int tripleGraph) throws IOException {
 
-		Logger.getRootLogger().debug("Start Streaming");
+		log.debug("Start Streaming");
 		EventFactory<T> factory = null;
 		if (!ExecutionStates.READY.equals(status)) {
 			throw new WrongStatusTransitionException("Not Ready " + status);
@@ -69,10 +69,10 @@ public class NTStreamer<T extends Event> implements Streamer {
 			Set<String[]> eventTriples = new HashSet<String[]>();
 
 			while ((line = br.readLine()) != null) {
-				lineNumber++; // new line reading
+				lineNumber++;
 				status = ExecutionStates.RUNNING;
-				String[] s = parse(line); // new line parsing
-				Logger.getRootLogger().debug("S: " + Arrays.deepToString(s));
+				String[] s = parse(line);
+				log.debug("S: " + Arrays.deepToString(s));
 				if (tripleCount < tripleGraph - 1) {
 					eventTriples.add(s);
 					lineNumbers[tripleCount] = lineNumber;
@@ -82,17 +82,18 @@ public class NTStreamer<T extends Event> implements Streamer {
 					lineNumbers[tripleCount] = lineNumber;
 					if (sendEvent(eventTriples, tripleGraph, streamedEvents, experimentNumber, engineName, lineNumbers, line, factory)) {
 
-						Logger.getRootLogger().debug("SEND NEW EVENT: " + line);
+						log.debug("SEND NEW EVENT: " + line);
 						status = ExecutionStates.READY;
 						streamedEvents++;
 
-						if (streamedEvents % 1000 == 0) {
-							Logger.getRootLogger().info("STREAMED " + streamedEvents + "EVENTS");
-						}
 					} else {
 						status = ExecutionStates.READY;
-						Logger.getRootLogger().info("Not Saved " + line);
+						log.info("Not Saved " + line);
 
+					}
+
+					if (streamedEvents % 1000 == 0) {
+						log.info("STREAMED " + streamedEvents + "EVENTS");
 					}
 
 					tripleCount = 0;
@@ -101,7 +102,7 @@ public class NTStreamer<T extends Event> implements Streamer {
 				}
 
 			}
-			Logger.getRootLogger().info("Number of Events: " + streamedEvents);
+			log.info("Number of Events: " + streamedEvents);
 			br.close();
 
 		}
@@ -113,7 +114,7 @@ public class NTStreamer<T extends Event> implements Streamer {
 			throw new IllegalArgumentException("Too much arguments");
 		}
 
-		Logger.getRootLogger().debug("S: " + Arrays.deepToString(s));
+		log.debug("S: " + Arrays.deepToString(s));
 		s[0] = s[0].replace("<", "");
 		s[0] = s[0].replace(">", "");
 
@@ -128,7 +129,7 @@ public class NTStreamer<T extends Event> implements Streamer {
 	private boolean sendEvent(Set<String[]> eventTriples, int tripleGraph, int eventNumber, int experimentNumber, String engineName,
 			int[] lineNumbers, String line, EventFactory<T> factory) {
 		for (String[] s : eventTriples) {
-			Logger.getRootLogger().debug("tripleSet: " + Arrays.deepToString(s));
+			log.debug("tripleSet: " + Arrays.deepToString(s));
 		}
 
 		String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + ">";

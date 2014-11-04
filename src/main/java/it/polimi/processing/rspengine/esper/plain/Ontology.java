@@ -40,9 +40,9 @@ public class Ontology {
 
 		FileManager.get().addLocatorClassLoader(JenaEngine.class.getClassLoader());
 
-		Model tbox_star = FileManager.get().loadModel(RDFSUtils.UNIV_BENCH_RDFS, null, "RDF/XML"); // http://en.wikipedia.org/wiki/Tbox
+		Model tboxStar = FileManager.get().loadModel(RDFSUtils.UNIV_BENCH_RDFS, null, "RDF/XML"); // http://en.wikipedia.org/wiki/Tbox
 
-		OntModel om = ModelFactory.createOntologyModel(OntModelSpec.RDFS_MEM_RDFS_INF, tbox_star);
+		OntModel om = ModelFactory.createOntologyModel(OntModelSpec.RDFS_MEM_RDFS_INF, tboxStar);
 		ExtendedIterator<OntProperty> pl = om.listOntProperties();
 		while (pl.hasNext()) {
 			OntProperty next = pl.next();
@@ -52,27 +52,15 @@ public class Ontology {
 			ExtendedIterator<? extends OntProperty> spl = next.listSuperProperties();
 			Set<String> supers = new HashSet<String>();
 			supers.add(next.toString());
-			// properties are instances of rdf:Property not
-			// subclasses
-			// supers.add("http://www.w3.org/1999/02/22-rdf-syntax-ns#Property");
 
 			String domain = next.getDomain() != null ? next.getDomain().toString() : "";
 			String range = next.getRange() != null ? next.getRange().toString() : "";
-			// P domain D S subpropertyOfP can't infer S domain D
 			while (spl.hasNext()) {
 				OntProperty snext = spl.next();
 				if (RDFSUtils.isSchema(snext.toString())) {
 					continue;
 				}
 				supers.add(snext.toString());
-				// if (domain.isEmpty()) {
-				// domain = snext.getDomain() != null ?
-				// snext.getDomain().toString() : "";
-				// }
-				// if (range.isEmpty()) {
-				// range = snext.getRange() != null ?
-				// snext.getRange().toString() : "";
-				// }
 			}
 			if (domain.isEmpty()) {
 				domain = RDFSUtils.RDFRESOURCE;
@@ -85,6 +73,7 @@ public class Ontology {
 			propertiesDomain.put(next.toString(), domain);
 			propertiesRange.put(next.toString(), range);
 			numProperties++;
+
 		}
 
 		for (String k : properties.keySet()) {
@@ -146,6 +135,7 @@ public class Ontology {
 	public static String[] subPropertyOf(String[] s) {
 		String[] ret;
 		Set<String> retList = new HashSet<String>();
+
 		for (String p : s) {
 			for (String sp : properties.get(p)) {
 				if (sp != null) {
@@ -201,7 +191,6 @@ public class Ontology {
 	}
 
 	public static boolean containsType(String[] p) {
-
 		for (String s : p) {
 			if (RDFSUtils.TYPE_PROPERTY.equals(s)) {
 				return true;
@@ -221,10 +210,10 @@ public class Ontology {
 		return RDFSUtils.TYPE_PROPERTY_ARR;
 	}
 
-	public static void testProperties() {
-		Logger.getRootLogger().info("" + propertiesRange.get("http://swat.cse.lehigh.edu/onto/univ-bench.owl#worksFor"));
-		Logger.getRootLogger().info("" + propertiesDomain.get("http://swat.cse.lehigh.edu/onto/univ-bench.owl#memberOf"));
-		Logger.getRootLogger().info("" + propertiesDomain.get("http://swat.cse.lehigh.edu/onto/univ-bench.owl#worksFor"));
-		Logger.getRootLogger().info("" + propertiesRange.get("http://swat.cse.lehigh.edu/onto/univ-bench.owl#memberOf"));
+	public static void init() {
+
+		// Static initialization
+
 	}
+
 }

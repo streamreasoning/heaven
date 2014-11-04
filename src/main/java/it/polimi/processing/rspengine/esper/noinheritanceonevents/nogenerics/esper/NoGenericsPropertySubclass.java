@@ -57,9 +57,9 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 	}
 
 	protected void initQueries() {
-		cepAdm.createEPL(Queries.input_nogenerics);
-		cepAdm.createEPL(Queries.rdfs3_nogenerics);
-		cepAdm.createEPL(Queries.rdfs9_nogenerics);
+		cepAdm.createEPL(Queries.INPUT_NOGENERICS);
+		cepAdm.createEPL(Queries.RDFS3_NOGENERICS);
+		cepAdm.createEPL(Queries.RDFS9_NOGENERICS);
 		cepAdm.createEPL(Queries.queryOut_nogenerics);
 		EPStatement out = cepAdm.createEPL("insert into Out select * from QueryOut.win:time_batch(1000 msec)");
 		listener = new ResultCollectorListener(collector, this, stand.getCurrentExperiment());

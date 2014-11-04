@@ -9,7 +9,7 @@ public interface ResultCollector<T extends Event> {
 
 	public boolean store(T r, String where) throws IOException;
 
-	public T newEventInstance(Set<String[]> all_triples, Event e);
+	public T newEventInstance(Set<String[]> allTriples, Event e);
 
 	/**
 	 * @return timestamp of the stop execution, 0 if an error happens

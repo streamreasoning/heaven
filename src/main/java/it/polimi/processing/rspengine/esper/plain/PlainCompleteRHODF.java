@@ -74,9 +74,9 @@ public class PlainCompleteRHODF extends RSPEsperEngine {
 		cepAdm = cep.getEPAdministrator();
 		cepRT = cep.getEPRuntime();
 
-		initQueries();
+		Ontology.init();
 
-		Ontology.testProperties();
+		initQueries();
 
 		return status = ExecutionStates.READY;
 	}
@@ -98,15 +98,13 @@ public class PlainCompleteRHODF extends RSPEsperEngine {
 		status = ExecutionStates.RUNNING;
 		TEvent esperEvent;
 		Set<String[]> eventTriples = e.getEventTriples();
+
 		Logger.getLogger("obqa").debug(eventTriples);
 		for (String[] eventTriple : eventTriples) {
-			// if (!RDFSUtils.TYPE_PROPERTY.equals(eventTriple[1])) {
-			// TODO discarted type property?
 			Logger.getRootLogger().debug("Create New Esper Event");
 			Logger.getRootLogger().debug(eventTriple[1]);
 			esperEvent = new TEvent(eventTriple[0], eventTriple[1], eventTriple[2], cepRT.getCurrentTime(), System.currentTimeMillis(), "Input");
 			cepRT.sendEvent(esperEvent);
-			// }
 		}
 		sendTimeEvent();
 		status = ExecutionStates.READY;

@@ -145,7 +145,7 @@ public class TriGInputFileBuilder {
 	}
 
 	private static void writeHeader(String eventIDBase, int eventNumber) throws IOException {
-		trig.write((eventIDBase + eventNumber + " {"));
+		trig.write((eventIDBase + eventNumber + "> {"));
 	}
 
 	private static void fillGraph(Statement nextStatement) {

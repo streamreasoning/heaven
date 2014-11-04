@@ -12,7 +12,7 @@ public class RDFSUtils {
 	public static final String[] DATATYPEPROPERTIES = { "http://swat.cse.lehigh.edu/onto/univ-bench.owl#age",
 			"http://swat.cse.lehigh.edu/onto/univ-bench.owl#name", "http://swat.cse.lehigh.edu/onto/univ-bench.owl#emailAddress",
 			"http://swat.cse.lehigh.edu/onto/univ-bench.owl#officeNumber", "http://swat.cse.lehigh.edu/onto/univ-bench.owl#title",
-			"http://swat.cse.lehigh.edu/onto/univ-bench.owl#telephone" };
+			"http://swat.cse.lehigh.edu/onto/univ-bench.owl#telephone", "http://swat.cse.lehigh.edu/onto/univ-bench.owl#researchInterest" };
 
 	public static final String[] EXCLUDED_PROPERTIES = { "http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#tenured",
 			"http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#softwareVersion",

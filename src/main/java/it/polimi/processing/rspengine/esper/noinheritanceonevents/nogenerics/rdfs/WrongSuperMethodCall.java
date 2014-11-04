@@ -1,12 +1,12 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.rdfs;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 
 @AllArgsConstructor
-@Data
 public class WrongSuperMethodCall extends RuntimeException {
 
+	@Getter
 	private final Exception e;
 	/**
 	 * 

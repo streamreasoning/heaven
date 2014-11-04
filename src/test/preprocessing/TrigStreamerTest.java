@@ -3,7 +3,6 @@ package preprocessing;
 import static org.junit.Assert.assertEquals;
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.events.StreamingEvent;
-import it.polimi.processing.streamer.Parser;
 import it.polimi.processing.teststand.streamer.TriGStreamer;
 import it.polimi.utils.FileUtils;
 import it.polimi.utils.TripleGraphTypes;
@@ -26,13 +25,6 @@ public class TrigStreamerTest {
 
 			@Override
 			public boolean sendEvent(StreamingEvent e) {
-
-				String[] parseTriple1 = Parser
-						.parseTriple("<http://www.Department0.University0.edu/UndergraduateStudent4> <http://swat.cse.lehigh.edu/onto/univ-bench.owl#advisor> <http://www.Department0.University0.edu/AssistantProfessor4> .");
-				String[] parseTriple2 = Parser
-						.parseTriple("<http://www.Department0.University0.edu/UndergraduateStudent4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://swat.cse.lehigh.edu/onto/univ-bench.owl#UndergraduateStudent> .");
-				String[] parseTriple3 = Parser
-						.parseTriple("<http://www.Department0.University0.edu/AssistantProfessor4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://swat.cse.lehigh.edu/onto/univ-bench.owl#AssistantProfessor> .");
 
 				assertEquals(e.getId(), "<http://experiment.org/0>");
 

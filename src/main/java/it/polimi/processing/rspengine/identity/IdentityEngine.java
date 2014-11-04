@@ -9,8 +9,9 @@ import it.polimi.processing.teststand.core.TestStand;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 
+@Log4j
 public class IdentityEngine extends RSPEngine {
 
 	private final Experiment currentExperiment;
@@ -27,11 +28,11 @@ public class IdentityEngine extends RSPEngine {
 				return collector.store(new StreamingEventResult(e, e.getEventTriples(), System.currentTimeMillis()),
 						name + "/" + currentExperiment.getOutputFileName());
 			} else {
-				Logger.getRootLogger().debug("An Experiment must be initialized");
+				log.debug("An Experiment must be initialized");
 				return false;
 			}
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			log.error(e1.getMessage());
 			return false;
 		}
 
@@ -55,13 +56,13 @@ public class IdentityEngine extends RSPEngine {
 
 	@Override
 	public ExecutionStates init() {
-		Logger.getRootLogger().info("Nothing to do...Turing Off");
+		log.info("Nothing to do...Turing Off");
 		return status = ExecutionStates.READY;
 	}
 
 	@Override
 	public ExecutionStates close() {
-		Logger.getRootLogger().info("Nothing to do...Turing Off");
+		log.info("Nothing to do...Turing Off");
 		return status = ExecutionStates.CLOSED;
 	}
 

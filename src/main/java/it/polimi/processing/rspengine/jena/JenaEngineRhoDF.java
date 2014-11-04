@@ -55,7 +55,7 @@ import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 @Log4j
-public class JenaEngineReducedRules extends RSPEngine {
+public class JenaEngineRhoDF extends RSPEngine {
 
 	private final Model tbox_star;
 	private Model abox;
@@ -64,18 +64,18 @@ public class JenaEngineReducedRules extends RSPEngine {
 	private Experiment currentExperiment;
 	private final String TBOX, RULESET_ABOX;
 
-	public JenaEngineReducedRules(String name, String tbox, String ruleset_abox, TestStand<RSPEngine> stand) {
+	public JenaEngineRhoDF(String name, String tbox, String ruleset_abox, TestStand<RSPEngine> stand) {
 		super(name, stand);
 		super.stand = stand;
 		this.TBOX = (tbox != null && !tbox.isEmpty()) ? tbox : FileUtils.UNIV_BENCH_RHODF_MODIFIED;
 		this.RULESET_ABOX = (ruleset_abox != null && !ruleset_abox.isEmpty()) ? ruleset_abox : FileUtils.RHODF_RULE_SET_RUNTIME;
-		FileManager.get().addLocatorClassLoader(JenaEngineReducedRules.class.getClassLoader());
+		FileManager.get().addLocatorClassLoader(JenaEngineRhoDF.class.getClassLoader());
 
 		// CARICO LA TBOX CHIUSA
 		tbox_star = FileManager.get().loadModel(TBOX, null, "RDF/XML");
 	}
 
-	public JenaEngineReducedRules(String name, TestStand<RSPEngine> stand) {
+	public JenaEngineRhoDF(String name, TestStand<RSPEngine> stand) {
 		this(name, "", "", stand);
 	}
 
