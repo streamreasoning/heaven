@@ -6,6 +6,7 @@ import it.polimi.processing.events.Event;
 import it.polimi.processing.events.result.StreamingEventResult;
 import it.polimi.processing.rspengine.RSPEngine;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.ConfigurationMethodRef;
@@ -15,6 +16,7 @@ import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.time.CurrentTimeEvent;
 
 @Getter
+@Log4j
 public abstract class RSPEsperEngine extends RSPEngine {
 
 	protected static Configuration cepConfig;
@@ -31,8 +33,10 @@ public abstract class RSPEsperEngine extends RSPEngine {
 	}
 
 	protected void sendTimeEvent() {
+
 		time += 1000;
 		cepRT.sendEvent(new CurrentTimeEvent(time));
+		log.info("Sent time Event");
 	}
 
 	protected void resetTime() {

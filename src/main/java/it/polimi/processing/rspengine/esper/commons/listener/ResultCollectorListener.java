@@ -13,12 +13,12 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 
 import com.espertech.esper.client.EventBean;
 
 @Data
+@Log4j
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class ResultCollectorListener extends GenearlListener {
@@ -26,18 +26,19 @@ public class ResultCollectorListener extends GenearlListener {
 	private final ResultCollector<StreamingEventResult> resultCollector;
 	private final RSPEsperEngine engine;
 	private Experiment experiment;
+	private Set<String[]> statements = new HashSet<String[]>();
+	private Set<String[]> start_triples = new HashSet<String[]>();
+	private StreamingEventResult eventToSend;
 
 	@Override
 	public void update(EventBean[] newEvents, EventBean[] oldEvents) {
 
-		StreamingEventResult eventToSend;
-		Set<String[]> statements = new HashSet<String[]>();
-		Set<String[]> start_triples = new HashSet<String[]>();
+		log.debug("Run the Listener");
+
+		resetData();
+
 		for (EventBean eventBean : newEvents) {
-			Logger.getRootLogger().debug(eventBean.getUnderlying());
-
 			TripleEvent storableEvent = (TripleEvent) eventBean.getUnderlying();
-
 			statements.addAll(storableEvent.getTriples());
 
 			if (eventBean.get("channel").equals("Input")) {
@@ -48,11 +49,16 @@ public class ResultCollectorListener extends GenearlListener {
 		eventToSend = resultCollector.newEventInstance(statements, engine.getCurrentStreamingEvent());
 
 		try {
-			Logger.getRootLogger().debug("SEND STORE EVENT");
+			log.debug("Send Event to the StoreCollector");
 			resultCollector.store(eventToSend, engine.getName() + "/" + experiment.getOutputFileName());
-			Logger.getRootLogger().debug("SENT STORE EVENT");
 		} catch (IOException e) {
-			Logger.getRootLogger().debug("SEND NOt STORE EVENT");
+			log.error("Somethign went wrong, can't save the event");
 		}
+	}
+
+	private void resetData() {
+		statements = new HashSet<String[]>();
+		start_triples = new HashSet<String[]>();
+		eventToSend = null;
 	}
 }
