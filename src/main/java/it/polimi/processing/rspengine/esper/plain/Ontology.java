@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -20,6 +20,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
+@Log4j
 public class Ontology {
 
 	private static Map<String, String[]> ontology;
@@ -27,20 +28,14 @@ public class Ontology {
 	private static Map<String, String> propertiesRange;
 	private static Map<String, String> propertiesDomain;
 	private static int numProperties, numClasses = 0;
-
-	static {
-		properties = new HashMap<String, String[]>();
-		propertiesDomain = new HashMap<String, String>();
-		propertiesRange = new HashMap<String, String>();
-		initializeObjectProperties();
-		inizializeOntology();
-	}
+	public static String univBenchRdfs;
+	private static int rangeCalls, domainCalls = 0;
 
 	private static void initializeObjectProperties() {
 
 		FileManager.get().addLocatorClassLoader(JenaEngine.class.getClassLoader());
 
-		Model tboxStar = FileManager.get().loadModel(RDFSUtils.UNIV_BENCH_RDFS, null, "RDF/XML"); // http://en.wikipedia.org/wiki/Tbox
+		Model tboxStar = FileManager.get().loadModel(univBenchRdfs, null, "RDF/XML"); // http://en.wikipedia.org/wiki/Tbox
 
 		OntModel om = ModelFactory.createOntologyModel(OntModelSpec.RDFS_MEM_RDFS_INF, tboxStar);
 		ExtendedIterator<OntProperty> pl = om.listOntProperties();
@@ -77,11 +72,10 @@ public class Ontology {
 		}
 
 		for (String k : properties.keySet()) {
-			Logger.getRootLogger().debug(
-					k + "   " + Arrays.deepToString(properties.get(k)) + " DOMAIN " + propertiesDomain.get(k) + " RANGE " + propertiesRange.get(k));
+			log.debug(k + "   " + Arrays.deepToString(properties.get(k)) + " DOMAIN " + propertiesDomain.get(k) + " RANGE " + propertiesRange.get(k));
 
 		}
-		Logger.getRootLogger().debug("NUM PROPERTIES :" + numProperties);
+		log.debug("NUM PROPERTIES :" + numProperties);
 	}
 
 	private static void inizializeOntology() {
@@ -113,16 +107,16 @@ public class Ontology {
 		}
 
 		for (String k : ontology.keySet()) {
-			Logger.getRootLogger().debug(k + "   " + Arrays.deepToString(ontology.get(k)));
+			log.debug(k + "   " + Arrays.deepToString(ontology.get(k)));
 		}
 
-		Logger.getRootLogger().debug("NUM CLASSES " + numClasses);
+		log.debug("NUM CLASSES " + numClasses);
 	}
 
 	public static String[] subClassOf(String[] listString) {
 		Set<String> retList = new HashSet<String>();
 		for (String keyClass : listString) {
-			Logger.getRootLogger().debug(keyClass);
+			log.debug(keyClass);
 			if (ontology.containsKey(keyClass)) {
 				retList.addAll(Arrays.asList(ontology.get(keyClass)));
 			} else
@@ -141,7 +135,7 @@ public class Ontology {
 				if (sp != null) {
 					retList.add(sp);
 				} else {
-					Logger.getRootLogger().info("Null property");
+					log.info("Null property");
 				}
 			}
 		}
@@ -150,13 +144,14 @@ public class Ontology {
 	}
 
 	public static String[] range(String[] p) {
+		log.debug("Domain method call number [" + domainCalls++ + "]");
 		String[] ret;
 		Set<String> ranges = new HashSet<String>();
 		for (String string : p) {
 			if (p != null) {
 				ranges.add(propertiesRange.get(string));
 			} else {
-				Logger.getRootLogger().info("Null range");
+				log.info("Null range");
 			}
 		}
 		ret = new String[ranges.size()];
@@ -165,6 +160,7 @@ public class Ontology {
 	}
 
 	public static String[] domain(String[] p) {
+		log.debug("Range method call number [" + rangeCalls++ + "]");
 		String[] ret;
 		Set<String> domains = new HashSet<String>();
 		for (String string : p) {
@@ -172,7 +168,7 @@ public class Ontology {
 			if (p != null) {
 				domains.add(propertiesDomain.get(string));
 			} else {
-				Logger.getRootLogger().info("Null domain");
+				log.info("Null domain");
 			}
 		}
 		ret = new String[domains.size()];
@@ -181,11 +177,13 @@ public class Ontology {
 	}
 
 	public static String[] range(String p) {
+		log.info("Range method call number [" + rangeCalls++ + "]");
 		return new String[] { propertiesDomain.get(p) };
 
 	}
 
 	public static String[] domain(String p) {
+		log.info("Domain method call number [" + domainCalls++ + "]");
 		return new String[] { propertiesDomain.get(p) };
 
 	}
@@ -210,10 +208,12 @@ public class Ontology {
 		return RDFSUtils.TYPE_PROPERTY_ARR;
 	}
 
-	public static void init() {
-
-		// Static initialization
-
+	public static void init(String onto) {
+		univBenchRdfs = onto;
+		properties = new HashMap<String, String[]>();
+		propertiesDomain = new HashMap<String, String>();
+		propertiesRange = new HashMap<String, String>();
+		initializeObjectProperties();
+		inizializeOntology();
 	}
-
 }

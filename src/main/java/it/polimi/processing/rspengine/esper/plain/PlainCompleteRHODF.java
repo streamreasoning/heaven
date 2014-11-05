@@ -11,7 +11,7 @@ import it.polimi.processing.teststand.core.TestStand;
 
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.ConfigurationMethodRef;
@@ -31,27 +31,29 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
  * by refering statements
  * 
  * **/
-
+@Log4j
 public class PlainCompleteRHODF extends RSPEsperEngine {
 
 	private ResultCollectorListener listener = null;
+	private final String runtimeOnto;
 
-	public PlainCompleteRHODF(String name, TestStand<RSPEngine> stand) {
+	public PlainCompleteRHODF(String name, TestStand<RSPEngine> stand, String runtimeOnto) {
 		super(name, stand);
 		super.stand = stand;
+		this.runtimeOnto = runtimeOnto;
 	}
 
 	protected void initQueries() {
 
-		Logger.getRootLogger().debug(Queries.input);
-		Logger.getRootLogger().debug(Queries.rdfs3);
-		Logger.getRootLogger().debug(Queries.rdfs6);
-		Logger.getRootLogger().debug(Queries.rdfs9);
+		log.debug(Queries.INPUT);
+		log.debug(Queries.RDFS23);
+		log.debug(Queries.RDFS6);
+		log.debug(Queries.RDFS9);
 
-		cepAdm.createEPL(Queries.input);
-		cepAdm.createEPL(Queries.rdfs3);
-		cepAdm.createEPL(Queries.rdfs6);
-		cepAdm.createEPL(Queries.rdfs9);
+		cepAdm.createEPL(Queries.INPUT);
+		cepAdm.createEPL(Queries.RDFS23);
+		cepAdm.createEPL(Queries.RDFS6);
+		cepAdm.createEPL(Queries.RDFS9);
 
 		EPStatement out = cepAdm.createEPL("insert into Out select * from QueryOut.win:time_batch(1000 msec)");
 		listener = new ResultCollectorListener(collector, this, stand.getCurrentExperiment());
@@ -74,11 +76,11 @@ public class PlainCompleteRHODF extends RSPEsperEngine {
 		cepAdm = cep.getEPAdministrator();
 		cepRT = cep.getEPRuntime();
 
-		Ontology.init();
-
+		Ontology.init(runtimeOnto);
 		initQueries();
-
-		return status = ExecutionStates.READY;
+		status = ExecutionStates.READY;
+		log.debug("Status[" + status + "] Initizalized the RSPEngine");
+		return status;
 	}
 
 	@Override
@@ -87,9 +89,11 @@ public class PlainCompleteRHODF extends RSPEsperEngine {
 			resetTime();
 			listener.setExperiment(stand.getCurrentExperiment());
 			cepRT.sendEvent(new CurrentTimeEvent(time));
-			return status = ExecutionStates.READY;
-		} else
-			return status = ExecutionStates.ERROR;
+			status = ExecutionStates.READY;
+		} else {
+			status = ExecutionStates.ERROR;
+		}
+		return status;
 	}
 
 	@Override
@@ -99,13 +103,18 @@ public class PlainCompleteRHODF extends RSPEsperEngine {
 		TEvent esperEvent;
 		Set<String[]> eventTriples = e.getEventTriples();
 
-		Logger.getLogger("obqa").debug(eventTriples);
+		int count = 0;
 		for (String[] eventTriple : eventTriples) {
-			Logger.getRootLogger().debug("Create New Esper Event");
-			Logger.getRootLogger().debug(eventTriple[1]);
+			count++;
+			if (count % 1000 == 0) {
+				log.debug("Sent [" + count + "] events");
+			}
 			esperEvent = new TEvent(eventTriple[0], eventTriple[1], eventTriple[2], cepRT.getCurrentTime(), System.currentTimeMillis(), "Input");
 			cepRT.sendEvent(esperEvent);
 		}
+
+		log.debug("Status[" + status + "] Parsing done, prepare time scheduling...");
+
 		sendTimeEvent();
 		status = ExecutionStates.READY;
 		return true;
@@ -114,15 +123,18 @@ public class PlainCompleteRHODF extends RSPEsperEngine {
 	@Override
 	public ExecutionStates stopProcessing() {
 		if (isOn()) {
-			return status = ExecutionStates.CLOSED;
-		} else
-			return status = ExecutionStates.ERROR;
+			status = ExecutionStates.CLOSED;
+		} else {
+			status = ExecutionStates.ERROR;
+		}
+		return status;
 	}
 
 	@Override
 	public ExecutionStates close() {
-		Logger.getRootLogger().info("Nothing to do...Turing Off");
-		return status = ExecutionStates.CLOSED;
+		status = ExecutionStates.CLOSED;
+		log.info("Status[" + status + "] Nothing to do...Turing Off");
+		return status;
 	}
 
 }
