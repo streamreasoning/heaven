@@ -21,11 +21,12 @@ import java.util.Date;
 import java.util.Set;
 
 import lombok.Getter;
+import lombok.extern.log4j.Log4j;
 
 import org.apache.http.impl.cookie.DateUtils;
-import org.apache.log4j.Logger;
 
 @Getter
+@Log4j
 public class TestStand<T extends RSPEngine> extends Stand implements EventProcessor<StreamingEvent>, ResultCollector<StreamingEventResult>,
 		Startable<ExecutionStates> {
 
@@ -48,7 +49,7 @@ public class TestStand<T extends RSPEngine> extends Stand implements EventProces
 	}
 
 	public int run(String f, int experimentNumber, String comment) throws Exception {
-		Logger.getRootLogger().info("START STREAMING " + System.currentTimeMillis());
+		log.info("START STREAMING " + System.currentTimeMillis());
 		String experimentDescription = "EXPERIMENT_ON_" + f + "_WITH_ENGINE_" + rspEngine.getName();
 		String inputFileName = FileUtils.INPUT_FILE_PATH + f;
 		Date d = new Date();
@@ -58,37 +59,37 @@ public class TestStand<T extends RSPEngine> extends Stand implements EventProces
 			throw new WrongStatusTransitionException("Not ON");
 		} else {
 
-			Logger.getLogger("obqa").debug("RUN");
-			// Start running
+			log.debug("Status [" + status + "]" + " Start Running The Expeirment " + "Results will be named as [" + outputFileName + "]");
+
 			status = ExecutionStates.RUNNING;
 
 			currentExperiment = new Experiment(experimentNumber, experimentDescription, rspEngine.getName(), inputFileName, outputFileName,
 					System.currentTimeMillis(), comment);
 
+			log.debug("Status [" + status + "] Experiment Created");
 			ExecutionStates engineStatus = rspEngine.startProcessing();
+			log.debug("Status [" + status + "] Processing is started");
 
 			if (ExecutionStates.READY.equals(engineStatus)) {
-
 				try {
 					streamer.stream(getBuffer(inputFileName), experimentNumber, rspEngine.getName(), TripleGraphTypes.UTRIPLES);
-
 				} catch (IOException ex) {
 					status = ExecutionStates.ERROR;
-					ex.printStackTrace();
+					log.error(ex.getMessage());
 					return 0;
 				}
 			}
 
 			engineStatus = rspEngine.stopProcessing();
+			log.debug("Status [" + status + "] Processing is ended");
 
-			String where = "";
-			experimentResultCollector.store(new ExperimentResultEvent(currentExperiment, System.currentTimeMillis()), where);
+			experimentResultCollector.store(new ExperimentResultEvent(currentExperiment, System.currentTimeMillis()), "");
 
 			if (ExecutionStates.CLOSED.equals(engineStatus)) {
 				status = ExecutionStates.READY;
 			}
 
-			Logger.getRootLogger().info("STOP STREAMING " + System.currentTimeMillis());
+			log.info("Status [" + status + "] Stop the Streamign " + System.currentTimeMillis());
 
 		}
 		return 1;
@@ -109,7 +110,7 @@ public class TestStand<T extends RSPEngine> extends Stand implements EventProces
 	@Override
 	public ExecutionStates close() {
 		if (!isOn()) {
-			throw new WrongStatusTransitionException("Can't move from a status different from ON Current: " + status);
+			throw new WrongStatusTransitionException("Can't Switch from Status [" + status + "] to [" + ExecutionStates.CLOSED + "]");
 		} else {
 			ExecutionStates streamerStatus = streamer.close();
 			ExecutionStates engineStatus = rspEngine.close();
@@ -118,39 +119,38 @@ public class TestStand<T extends RSPEngine> extends Stand implements EventProces
 
 			if (ExecutionStates.CLOSED.equals(streamerStatus) && ExecutionStates.CLOSED.equals(experimenTcollectorStatus)
 					&& ExecutionStates.CLOSED.equals(collectorStatus) && ExecutionStates.CLOSED.equals(engineStatus)) {
-				return status = ExecutionStates.CLOSED;
+				status = ExecutionStates.CLOSED;
+				log.debug("Status [" + status + "] Closing the TestStand");
 			} else {
-				Logger.getLogger("obqa").error("streamerStatus: " + streamerStatus);
-				Logger.getLogger("obqa").error("collectorStatus: " + collectorStatus);
-				Logger.getLogger("obqa").error("experimentCollectorStatus: " + experimenTcollectorStatus);
-				Logger.getLogger("obqa").error("engineStatus: " + engineStatus);
-				return status = ExecutionStates.ERROR;
+				log.error("streamerStatus: " + streamerStatus);
+				log.error("collectorStatus: " + collectorStatus);
+				log.error("experimentCollectorStatus: " + experimenTcollectorStatus);
+				log.error("engineStatus: " + engineStatus);
+				status = ExecutionStates.ERROR;
 			}
-
+			return status;
 		}
 	}
 
 	@Override
 	public ExecutionStates init() {
-		if (isStartable()) {
+		if (!isStartable()) {
+			throw new WrongStatusTransitionException("Can't Switch from Status [" + status + "] to [" + ExecutionStates.READY + "]");
+		} else {
 			ExecutionStates streamerStatus = streamer.init();
 			ExecutionStates engineStatus = rspEngine.init();
 			ExecutionStates collectorStatus = resultCollector.init();
 			ExecutionStates experimenTcollectorStatus = experimentResultCollector.init();
-
 			if (ExecutionStates.READY.equals(streamerStatus) && ExecutionStates.READY.equals(collectorStatus)
 					&& ExecutionStates.READY.equals(engineStatus) && ExecutionStates.READY.equals(experimenTcollectorStatus)) {
-				return status = ExecutionStates.READY;
+				status = ExecutionStates.READY;
+				log.debug("Status [" + status + "] Initializing the TestStand");
 			} else {
-				Logger.getLogger("obqa").error("streamerStatus: " + streamerStatus);
-				Logger.getLogger("obqa").error("collectorStatus: " + collectorStatus);
-				Logger.getLogger("obqa").error("experimentCollectorStatus: " + experimenTcollectorStatus);
-				Logger.getLogger("obqa").error("engineStatus: " + engineStatus);
-				return status = ExecutionStates.ERROR;
+				log.error("streamerStatus [" + streamerStatus + "] collectorStatus [" + collectorStatus + "] experimentCollectorStatus ["
+						+ experimenTcollectorStatus + "] engineStatus [" + engineStatus + "]");
+				status = ExecutionStates.ERROR;
 			}
-
-		} else {
-			throw new WrongStatusTransitionException("Can't move from a status different from OFF Current: " + status);
+			return status;
 		}
 
 	}
