@@ -1,12 +1,15 @@
 package it.polimi.processing.collector.saver;
 
 import it.polimi.processing.collector.saver.data.CollectableData;
+import it.polimi.processing.collector.saver.data.TriG;
 import it.polimi.processing.enums.ExecutionStates;
 import it.polimi.utils.FileUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.extern.log4j.Log4j;
 
@@ -15,6 +18,8 @@ public class TrigEventSaver implements EventSaver {
 
 	private ExecutionStates status;
 	private final String trigpath;
+	private List<CollectableData> trigs;
+	String path = "";
 
 	public TrigEventSaver() {
 		trigpath = FileUtils.TRIG_OUTPUT_FILE_PATH;
@@ -26,26 +31,13 @@ public class TrigEventSaver implements EventSaver {
 
 	@Override
 	public boolean save(CollectableData d, String where) {
-		try {
-			if (ExecutionStates.READY.equals(status)) {
-				String path = trigpath + where + FileUtils.TRIG_FILE_EXTENSION;
-				log.debug("TRIG FILE PATH " + path);
-				File file = new File(path);
-				if (!file.exists()) {
-					file.createNewFile();
-				}
-				FileOutputStream fop = new FileOutputStream(file, true);
-				fop.write(d.getData().getBytes());
-				fop.write(System.getProperty("line.separator").getBytes());
-				fop.flush();
-				fop.close();
-				return true;
-			} else {
-				log.warn("Not Ready to write file");
-				return false;
-			}
-		} catch (IOException e1) {
-			log.error(e1.getMessage());
+		if (ExecutionStates.READY.equals(status)) {
+			path = trigpath + where + FileUtils.TRIG_FILE_EXTENSION;
+			trigs.add(d);
+			log.debug("TRIG FILE PATH " + path);
+			return true;
+		} else {
+			log.warn("Not Ready to register file");
 			return false;
 		}
 	}
@@ -53,6 +45,7 @@ public class TrigEventSaver implements EventSaver {
 	@Override
 	public ExecutionStates init() {
 		log.info("Initialising TrigSaver... Nothing to do");
+		trigs = new ArrayList<CollectableData>();
 		status = ExecutionStates.READY;
 		return status;
 	}
@@ -60,8 +53,37 @@ public class TrigEventSaver implements EventSaver {
 	@Override
 	public ExecutionStates close() {
 		log.info("Closing TrigSaver... Nothing to do");
+		String eof = System.getProperty("line.separator");
+		try {
+			File file;
+
+			FileWriter writer = null;
+			for (CollectableData d : trigs) {
+				TriG t = (TriG) d;
+
+				log.info(path);
+				file = new File(path);
+				if (!file.exists()) {
+					file.createNewFile();
+				}
+				writer = new FileWriter(file, true);
+				writer.write(t.getKey() + " {");
+				writer.write(eof);
+				for (String[] resource : t.getTriples()) {
+					writer.write(eof + "<" + resource[0] + ">" + " " + "<" + resource[1] + ">" + " " + "<" + resource[2] + "> .");
+				}
+				writer.write(eof + "}");
+				writer.write(eof);
+				writer.flush();
+			}
+
+			writer.close();
+
+		} catch (IOException e) {
+			log.error(e.getMessage());
+			status = ExecutionStates.ERROR;
+		}
 		status = ExecutionStates.CLOSED;
 		return status;
 	}
-
 }

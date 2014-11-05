@@ -13,4 +13,9 @@ public class CSV implements CollectableData {
 		return s;
 	}
 
+	@Override
+	public CollectableData append(String c) {
+		return new CSV(s + "," + c);
+	}
+
 }

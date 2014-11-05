@@ -12,4 +12,8 @@ public class SQL implements CollectableData {
 		return s;
 	}
 
+	@Override
+	public CollectableData append(String c) {
+		return new SQL(s + c);
+	}
 }

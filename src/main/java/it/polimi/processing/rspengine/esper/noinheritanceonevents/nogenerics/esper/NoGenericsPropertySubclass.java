@@ -17,6 +17,7 @@ import it.polimi.processing.teststand.core.TestStand;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -62,7 +63,7 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 		cepAdm.createEPL(Queries.RDFS9_NOGENERICS);
 		cepAdm.createEPL(Queries.queryOut_nogenerics);
 		EPStatement out = cepAdm.createEPL("insert into Out select * from QueryOut.win:time_batch(1000 msec)");
-		listener = new ResultCollectorListener(collector, this, stand.getCurrentExperiment());
+		listener = new ResultCollectorListener(collector, this, stand.getCurrentExperiment(), new HashSet<String[]>(), new HashSet<String[]>(), null);
 		out.addListener(listener); // and
 		// listener;
 	}

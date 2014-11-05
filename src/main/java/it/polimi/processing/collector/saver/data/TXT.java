@@ -14,4 +14,9 @@ public class TXT implements CollectableData {
 		return s;
 	}
 
+	@Override
+	public CollectableData append(String c) {
+		return new TXT(s + " " + c);
+	}
+
 }

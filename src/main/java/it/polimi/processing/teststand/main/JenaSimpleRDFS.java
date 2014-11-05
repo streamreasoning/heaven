@@ -9,17 +9,18 @@ import it.polimi.processing.events.result.ExperimentResultEvent;
 import it.polimi.processing.events.result.StreamingEventResult;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.rspengine.jena.JenaEngine;
+import it.polimi.processing.streamer.Streamer;
 import it.polimi.processing.teststand.collector.CollectorEventResult;
 import it.polimi.processing.teststand.collector.CollectorExperimentResult;
 import it.polimi.processing.teststand.core.TestStand;
-import it.polimi.processing.teststand.streamer.NTStreamer;
+import it.polimi.processing.teststand.streamer.TriGStreamer;
 
 import java.sql.SQLException;
 
 public class JenaSimpleRDFS {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		String[] files = new String[] { "University0_0_clean.nt" };
+		String[] files = new String[] { "inputTrigD3GF10000.trig" };
 
 		TestStand<RSPEngine> testStand = new TestStand<RSPEngine>();
 
@@ -27,8 +28,7 @@ public class JenaSimpleRDFS {
 				new CSVEventSaver());
 		StartableCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
 		RSPEngine engine = new JenaEngine("jenasmpl", testStand);
-		NTStreamer<StreamingEvent> streamer = new NTStreamer<StreamingEvent>(testStand);
-
+		Streamer<StreamingEvent> streamer = new TriGStreamer<StreamingEvent>(testStand);
 		testStand.build(streamingEventResultCollector, experimentResultCollector, engine, streamer);
 
 		int experimentNumber = 0;

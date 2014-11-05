@@ -30,12 +30,23 @@ public class TriGInputFileBuilder {
 	static WritingTriG trig;
 	private static Set<Statement> tempStatementGraph;
 	private static Model inputOriginal, inputOnlyTypeOf, inputNoTypeOf;
+	private static final String BASENAME = "inputTrig";
 
 	public static void main(String[] args) {
-		String file = "src/main/resources/data/input/University0_0.nt";
+		String file = "src/main/resources/data/input/big.nt";
 
 		try {
-			generate(file, "inputTrig.trig", true, 1, GrowPower.LINEAR, 10, -10, GrowForm.STEP, 5, 5);
+			int growDistance = 3;
+			int growFactor = 10000;
+			int decreaseDistance = 10;
+			int decreaseFactor = -10;
+			int initialGraphSize = 1;
+			boolean cleanInput = true;
+
+			String outputFileName = BASENAME + "D" + growDistance + "GF" + growFactor + FileUtils.TRIG_FILE_EXTENSION;
+
+			generate(file, outputFileName, cleanInput, initialGraphSize, GrowPower.LINEAR, growFactor, decreaseFactor, GrowForm.STEP, growDistance,
+					decreaseDistance, 30000);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -43,7 +54,7 @@ public class TriGInputFileBuilder {
 	}
 
 	private static void generate(String inputFile, String outputFileName, boolean clean, int initialGraphSize, String grow, int growFactor,
-			int decreaseFactor, String form, int growDistance, int decreaseDistance) throws IOException {
+			int decreaseFactor, String form, int growDistance, int decreaseDistance, int maxDim) throws IOException {
 
 		inputOriginal = FileManager.get().loadModel(inputFile, null, "RDF/XML");
 		inputOnlyTypeOf = inputOriginal.query(new SimpleSelector(null, RDF.type, (RDFNode) null));
@@ -71,41 +82,56 @@ public class TriGInputFileBuilder {
 		int roundGraphSize = graphSize;
 		int currentGraphSize = 0;
 		int traveledDistance = 0;
-
+		int max = (maxDim > 0) ? maxDim : 100000000;
 		while (inputIterator.hasNext()) {
 
 			traveledDistance = 0;
+			if (roundGraphSize < max) {
+				while (traveledDistance < distance) {
 
-			while (traveledDistance < distance) {
+					cleanTemp();
 
-				cleanTemp();
-				currentGraphSize = 0;
-				writeHeader(eventIDBase, eventNumber); // write the header
+					currentGraphSize = 0;
+					writeHeader(eventIDBase, eventNumber); // write the header
 
-				while (currentGraphSize < roundGraphSize) {
+					while (currentGraphSize < roundGraphSize) {
 
-					if (inputIterator.hasNext()) {// else? may i can restart...
-						fillGraph(inputIterator.next());
-						currentGraphSize++;
-					} else {
-						log.info("No more statemens..");
-						trig.flush();
-						trig.close();
-						return;
+						if (inputIterator.hasNext()) {// else? may i can
+							fillGraph(inputIterator.next());
+							currentGraphSize += 3; // considering this plus the two typeOf
+													// statmenets for a U graph
+						} else {
+							trig.EOF();
+							trig.write("}");
+							endWriting("No more statemens..");
+							return;
+						}
 					}
-				}
-				completeGraph();
-				eventNumber++; // new event created
-				traveledDistance++; // new step to the distance
+					completeGraph();
+					eventNumber++; // new event created
+					traveledDistance++; // new step to the distance
 
+				}
+
+				roundGraphSize += growFactor;
+				// next graph will be bigger
+				log.info("New Size [" + roundGraphSize + "] Event Number [" + eventNumber + "]");
+			} else {
+				endWriting("Max Size Reached");
 			}
 
-			roundGraphSize += growFactor; // next graph will be bigger
 		}
 
 		trig.flush();
 
 		trig.close();
+	}
+
+	private static void endWriting(String msg) throws IOException {
+		log.info(msg);
+		trig.flush();
+		trig.close();
+		return;
 	}
 
 	private static void cleanInput() {
@@ -169,7 +195,7 @@ public class TriGInputFileBuilder {
 
 			if (s.getPredicate().equals(RDF.type) && stmt.getPredicate().equals(RDF.type) && stmt.getSubject().equals(s.getSubject())) {
 				// TODO get the lower
-				log.info("Avoid W Graphs " + s.asTriple().toString() + " " + stmt.asTriple().toString());
+				log.debug("Avoid W Graphs " + s.asTriple().toString() + " " + stmt.asTriple().toString());
 				return;
 			}
 
