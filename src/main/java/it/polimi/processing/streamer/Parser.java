@@ -19,6 +19,7 @@ public class Parser {
 	}
 
 	public static String[] parseTriple(String tripleInput, String fileId, boolean rewriteBlankNodes) {
+
 		String[] values = new String[3];
 
 		String triple = tripleInput.replace("><", "> <");
@@ -88,10 +89,11 @@ public class Parser {
 			String[] tripleBody = Parser.parseTrigBody(body);
 
 			List<String[]> triples = new ArrayList<String[]>();
-
-			for (String triple : tripleBody) {
-				String[] parseTriple = Parser.parseTriple(triple, "", false);
-				triples.add(parseTriple);
+			if (tripleBody != null) {
+				for (String triple : tripleBody) {
+					String[] parseTriple = Parser.parseTriple(triple, "", false);
+					triples.add(parseTriple);
+				}
 			}
 
 			return new TriG(key, triples);
