@@ -12,6 +12,7 @@ import it.polimi.processing.streamer.Streamer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,9 +22,9 @@ import lombok.extern.log4j.Log4j;
  * @author Riccardo
  * 
  * @param <T>
- *            The kind of class thar will received the streamed events in this
+ *            The kind of class that will received the streamed events in this
  *            implementation it extends EventProcessor which offers sendEvent(E
- *            e) method. This class is paramtric too, and the kind of event
+ *            e) method. This class is parametric too, and the kind of event
  *            processed at this time is StreamingEvent
  */
 
@@ -39,6 +40,9 @@ public class TriGStreamer<T extends Event> implements Streamer<T> {
 	private final EventProcessor<StreamingEvent> stand;
 	@Setter
 	private ExecutionStates status;
+	private String line;
+	private TriG eventTrig = null;
+	private String currentTriG = "";
 
 	public TriGStreamer(EventProcessor<StreamingEvent> stand) {
 		this.stand = stand;
@@ -58,41 +62,48 @@ public class TriGStreamer<T extends Event> implements Streamer<T> {
 	@Override
 	public void stream(BufferedReader br, int experimentNumber, String engineName, int tripleGraph) throws IOException {
 
-		log.debug("Start Streaming");
 		if (!ExecutionStates.READY.equals(status)) {
 			throw new WrongStatusTransitionException("Not Ready " + status);
 		} else {
 			int streamedEvents = 0, graphNumber = 0;
-			String line;
-			TriG eventTrig = null;
-			String triGLine = "";
+			int count = 0;
+			while ((line = br.readLine()) != null && !line.isEmpty()) {
 
-			while ((line = br.readLine()) != null) {
+				count++;
 
-				if (triGLine.equals(""))
-					triGLine += line;
+				if (currentTriG.equals(""))
+					// Status One
+					currentTriG += line;
 				else {
-					triGLine += Parser.EOF + line;
+					// Status Two
+					currentTriG += Parser.EOF + line;
 				}
-				if (!Parser.triGMatch(triGLine)) {
+
+				if (!"}".equals(line)) {
 					continue;
-				} else {
+					// Control the good format of the received TriG vefore sending
+				} else if (Parser.triGMatch(currentTriG)) {
+					// Status Tree
+
 					graphNumber++;
-					eventTrig = Parser.parseTrigGraph(triGLine);
+					eventTrig = Parser.parseTrigGraph(currentTriG);
 					status = ExecutionStates.RUNNING;
 
 					if (sendEvent(eventTrig, tripleGraph, streamedEvents, experimentNumber, new int[] { graphNumber })) {
-
-						log.debug("SEND NEW EVENT: " + line);
+						log.debug("Send [ " + line + " ] as a New StreamEvent");
 
 						status = ExecutionStates.READY;
 						streamedEvents++;
-						triGLine = "";
+						resetCurrentTrig();
+
 					} else {
 						status = ExecutionStates.READY;
-						log.info("Not Saved " + line);
+						log.debug("Not Saved " + line);
 
 					}
+
+					log.info("Total Graph Size " + count);
+					count = 0;
 
 					if (streamedEvents % 1000 == 0) {
 						log.info("STREAMED " + streamedEvents + "EVENTS");
@@ -106,10 +117,22 @@ public class TriGStreamer<T extends Event> implements Streamer<T> {
 		}
 	}
 
+	private void resetCurrentTrig() {
+		currentTriG = "";
+	}
+
 	private boolean sendEvent(TriG trig, int tripleGraph, int eventNumber, int experimentNumber, int[] graphNumber) {
-		StreamingEvent streamingEvent = new StreamingEvent(trig.getKey(), new HashSet<String[]>(trig.getTriples()), eventNumber, experimentNumber,
-				tripleGraph, graphNumber, System.currentTimeMillis());
-		return stand.sendEvent(streamingEvent);
+
+		String key = trig.getKey();
+		List<String[]> triples = trig.getTriples();
+
+		if (trig != null && key != null && !key.isEmpty() && triples != null && triples.size() > 0) {
+			StreamingEvent streamingEvent = new StreamingEvent(key, new HashSet<String[]>(triples), eventNumber, experimentNumber, tripleGraph,
+					graphNumber, System.currentTimeMillis());
+
+			return stand.sendEvent(streamingEvent);
+		}
+		return false;
 	}
 
 	@Override
