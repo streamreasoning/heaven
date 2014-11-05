@@ -26,8 +26,8 @@ public class ResultCollectorListener extends GenearlListener {
 	private final ResultCollector<StreamingEventResult> resultCollector;
 	private final RSPEsperEngine engine;
 	private Experiment experiment;
-	private Set<String[]> statements = new HashSet<String[]>();
-	private Set<String[]> start_triples = new HashSet<String[]>();
+	private Set<String[]> statements;
+	private Set<String[]> start_triples;
 	private StreamingEventResult eventToSend;
 
 	@Override

@@ -9,6 +9,7 @@ import it.polimi.processing.rspengine.esper.plain.events.Out;
 import it.polimi.processing.rspengine.esper.plain.events.TEvent;
 import it.polimi.processing.teststand.core.TestStand;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import lombok.extern.log4j.Log4j;
@@ -56,7 +57,7 @@ public class PlainCompleteRHODF extends RSPEsperEngine {
 		cepAdm.createEPL(Queries.RDFS9);
 
 		EPStatement out = cepAdm.createEPL("insert into Out select * from QueryOut.win:time_batch(1000 msec)");
-		listener = new ResultCollectorListener(collector, this, stand.getCurrentExperiment());
+		listener = new ResultCollectorListener(collector, this, stand.getCurrentExperiment(), new HashSet<String[]>(), new HashSet<String[]>(), null);
 		out.addListener(listener);
 	}
 
