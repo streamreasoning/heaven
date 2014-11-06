@@ -7,6 +7,7 @@ import it.polimi.utils.RDFSUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,22 +32,25 @@ public class TriGInputFileBuilder {
 	private static Set<Statement> tempStatementGraph;
 	private static Model inputOriginal, inputOnlyTypeOf, inputNoTypeOf;
 	private static final String BASENAME = "inputTrig";
+	private static final String EVENTIDBASE = "<http://example.org/";
 
 	public static void main(String[] args) {
 		String file = "src/main/resources/data/input/big.nt";
 
 		try {
-			int growDistance = 3;
-			int growFactor = 10000;
+			int growDistance = 1;
+			int growFactor = 0;
 			int decreaseDistance = 10;
 			int decreaseFactor = -10;
-			int initialGraphSize = 1;
+			int initialGraphSize = 100;
+			int maxDim = -1;
+			int maxEvents = 1000;
 			boolean cleanInput = true;
-
-			String outputFileName = BASENAME + "D" + growDistance + "GF" + growFactor + FileUtils.TRIG_FILE_EXTENSION;
+			boolean debug = false;
+			String outputFileName = ((debug) ? "DEBUG_" : "") + BASENAME + "INIT" + initialGraphSize + "D" + growDistance + "GF" + growFactor;
 
 			generate(file, outputFileName, cleanInput, initialGraphSize, GrowPower.LINEAR, growFactor, decreaseFactor, GrowForm.STEP, growDistance,
-					decreaseDistance, 30000);
+					decreaseDistance, maxDim, maxEvents, true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -54,7 +58,8 @@ public class TriGInputFileBuilder {
 	}
 
 	private static void generate(String inputFile, String outputFileName, boolean clean, int initialGraphSize, String grow, int growFactor,
-			int decreaseFactor, String form, int growDistance, int decreaseDistance, int maxDim) throws IOException {
+			int decreaseFactor, String form, int growDistance, int decreaseDistance, int maxDim, int maxEvents, boolean incremental)
+			throws IOException {
 
 		inputOriginal = FileManager.get().loadModel(inputFile, null, "RDF/XML");
 		inputOnlyTypeOf = inputOriginal.query(new SimpleSelector(null, RDF.type, (RDFNode) null));
@@ -65,17 +70,17 @@ public class TriGInputFileBuilder {
 		}
 
 		FileUtils.createFolders(FileUtils.PREPROCESSING_FILE_PATH);
-		File file = new File(FileUtils.PREPROCESSING_FILE_PATH + outputFileName);
+		File file = new File(FileUtils.PREPROCESSING_FILE_PATH + outputFileName + ((incremental) ? "I" : "") + ((maxDim > 0) ? "MAX" + maxDim : "")
+				+ FileUtils.TRIG_FILE_EXTENSION);
 		if (!file.exists()) {
 			file.createNewFile();
 		}
 
-		String eventIDBase = "<http://example.org/";
 		int eventNumber = 0;
 		int graphSize = initialGraphSize;
 		int distance = growDistance;
 
-		trig = new WritingTriG(new FileOutputStream(file, true));
+		trig = new WritingTriG(new FileWriter(file, true));
 
 		StmtIterator inputIterator = inputNoTypeOf.listStatements();
 
@@ -83,48 +88,52 @@ public class TriGInputFileBuilder {
 		int currentGraphSize = 0;
 		int traveledDistance = 0;
 		int max = (maxDim > 0) ? maxDim : 100000000;
-		while (inputIterator.hasNext()) {
+		int localMaxEvents = (maxEvents > 0) ? maxEvents : 1000;
+		while (inputIterator.hasNext() && roundGraphSize < max && eventNumber < localMaxEvents) {
 
 			traveledDistance = 0;
-			if (roundGraphSize < max) {
-				while (traveledDistance < distance) {
 
-					cleanTemp();
+			while (traveledDistance < distance) {
 
-					currentGraphSize = 0;
-					writeHeader(eventIDBase, eventNumber); // write the header
+				cleanTemp();
 
-					while (currentGraphSize < roundGraphSize) {
+				currentGraphSize = 0;
+				// write the header
+				writeHeader(EVENTIDBASE, eventNumber);
 
-						if (inputIterator.hasNext()) {// else? may i can
-							fillGraph(inputIterator.next());
-							currentGraphSize += 3; // considering this plus the two typeOf
-													// statmenets for a U graph
-						} else {
-							trig.EOF();
-							trig.write("}");
-							endWriting("No more statemens..");
-							return;
-						}
+				while (currentGraphSize < roundGraphSize) {
+
+					// else? may i can
+					if (inputIterator.hasNext()) {
+						fillGraph(inputIterator.next());
+						// considering this plus the two typeOf statmenets for a U graph
+						currentGraphSize += 3;
+					} else {
+						trig.EOF();
+						trig.write("}");
+						endWriting("No more statemens..");
+						return;
 					}
-					completeGraph();
-					eventNumber++; // new event created
-					traveledDistance++; // new step to the distance
-
 				}
+				completeGraph();
+				eventNumber++; // new event created
+				traveledDistance++; // new step to the distance
 
-				roundGraphSize += growFactor;
-				// next graph will be bigger
-				log.info("New Size [" + roundGraphSize + "] Event Number [" + eventNumber + "]");
-			} else {
-				endWriting("Max Size Reached");
 			}
+
+			roundGraphSize += growFactor;
+			if (incremental) {
+				inputIterator = inputNoTypeOf.listStatements();
+				log.info("Incremental update, the Itarator is regenerated");
+
+			}
+			// next graph will be bigger
+			log.info("New Size [" + roundGraphSize + "] Event Number [" + eventNumber + "]");
 
 		}
 
-		trig.flush();
+		endWriting("Max Size Reached");
 
-		trig.close();
 	}
 
 	private static void endWriting(String msg) throws IOException {

@@ -102,7 +102,7 @@ public class TriGStreamer<T extends Event> implements Streamer<T> {
 
 					}
 
-					log.info("Total Graph Size " + count);
+					log.debug("Total Graph Size " + count);
 					count = 0;
 
 					if (streamedEvents % 1000 == 0) {

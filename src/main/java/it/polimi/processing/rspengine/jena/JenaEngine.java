@@ -1,14 +1,14 @@
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
+ * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
+ * regarding copyright ownership. The ASF licenses this file
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,6 +32,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import lombok.extern.log4j.Log4j;
+
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.graph.Triple;
@@ -52,6 +54,7 @@ import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.ReasonerVocabulary;
 
+@Log4j
 public class JenaEngine extends RSPEngine {
 
 	private static Model tbox_star, abox;
@@ -96,14 +99,14 @@ public class JenaEngine extends RSPEngine {
 				t = iterator.next().asTriple();
 				statementStrings = new String[] { t.getSubject().toString(), t.getPredicate().toString(), t.getObject().toString() };
 				statements.add(statementStrings);
-				Logger.getLogger("obqa").debug(Arrays.deepToString(statementStrings));
+				log.debug(Arrays.deepToString(statementStrings));
 			}
 
 			try {
 				return collector.store(new StreamingEventResult(e, statements, System.currentTimeMillis()),
 						name + "/" + currentExperiment.getOutputFileName());
 			} catch (IOException e1) {
-				e1.printStackTrace();
+				log.error(e1.getMessage());
 				return false;
 			}
 
@@ -119,38 +122,42 @@ public class JenaEngine extends RSPEngine {
 	@Override
 	public ExecutionStates startProcessing() {
 		if (isStartable()) {
-			return status = ExecutionStates.READY;
-		} else
-
-			return status = ExecutionStates.ERROR;
+			status = ExecutionStates.READY;
+		} else {
+			status = ExecutionStates.ERROR;
+		}
+		return status;
 	}
 
 	@Override
 	public ExecutionStates stopProcessing() {
 		if (isOn()) {
-			return status = ExecutionStates.CLOSED;
-		} else
-			return status = ExecutionStates.ERROR;
+			status = ExecutionStates.CLOSED;
+		} else {
+			status = ExecutionStates.ERROR;
+		}
+		return status;
 	}
 
 	@Override
 	public ExecutionStates init() {
-		Logger.getRootLogger().info("Nothing to do");
-		return status = ExecutionStates.READY;
+		status = ExecutionStates.READY;
+		log.info("Status [" + status + "] Initializing JenaEngine");
+		return status;
 	}
 
 	@Override
 	public ExecutionStates close() {
-		Logger.getRootLogger().info("Nothing to do");
-		return status = ExecutionStates.CLOSED;
+		status = ExecutionStates.CLOSED;
+		log.info("Status [" + status + "] Closing JenaEngine");
+		return status;
 	}
 
 	private Statement createStatement(String[] eventTriple) {
 		Resource subject = ResourceFactory.createResource(eventTriple[0]);
 		Property predicate = (eventTriple[1] != RDFSUtils.TYPE_PROPERTY) ? ResourceFactory.createProperty(eventTriple[1]) : RDF.type;
 		RDFNode object = ResourceFactory.createResource(eventTriple[2]);
-		Statement s = ResourceFactory.createStatement(subject, predicate, object);
-		return s;
+		return ResourceFactory.createStatement(subject, predicate, object);
 	}
 
 	public boolean isStartable() {

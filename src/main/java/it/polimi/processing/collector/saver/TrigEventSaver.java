@@ -61,7 +61,7 @@ public class TrigEventSaver implements EventSaver {
 			for (CollectableData d : trigs) {
 				TriG t = (TriG) d;
 
-				log.info(path);
+				log.debug(path);
 				file = new File(path);
 				if (!file.exists()) {
 					file.createNewFile();

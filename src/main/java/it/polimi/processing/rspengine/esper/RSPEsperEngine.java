@@ -36,7 +36,7 @@ public abstract class RSPEsperEngine extends RSPEngine {
 
 		time += 1000;
 		cepRT.sendEvent(new CurrentTimeEvent(time));
-		log.info("Sent time Event");
+		log.debug("Sent time Event");
 	}
 
 	protected void resetTime() {

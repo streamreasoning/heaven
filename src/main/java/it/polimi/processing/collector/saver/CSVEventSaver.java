@@ -11,8 +11,6 @@ import java.util.Date;
 
 import lombok.extern.log4j.Log4j;
 
-import org.apache.log4j.Logger;
-
 @Log4j
 public class CSVEventSaver implements EventSaver {
 
@@ -30,13 +28,13 @@ public class CSVEventSaver implements EventSaver {
 
 	@Override
 	public ExecutionStates init() {
-		Logger.getRootLogger().info("Initialising CSVSaver... Nothing to do");
+		log.info("Initialising CSVSaver... Nothing to do");
 		return status = ExecutionStates.READY;
 	}
 
 	@Override
 	public ExecutionStates close() {
-		Logger.getRootLogger().info("Closing CSVSaver... Nothing to do");
+		log.info("Closing CSVSaver... Nothing to do");
 		return status = ExecutionStates.CLOSED;
 	}
 
@@ -57,7 +55,7 @@ public class CSVEventSaver implements EventSaver {
 				fop.close();
 				return true;
 			} else {
-				Logger.getRootLogger().warn("Not Ready to write file");
+				log.warn("Not Ready to write file");
 				return false;
 			}
 		} catch (IOException e1) {

@@ -46,4 +46,22 @@ public class JenaRHODF {
 
 		testStand.close();
 	}
+
+	public static void run(String f, int experimentNumber, TestStand<RSPEngine> testStand,
+			StartableCollector<StreamingEventResult> streamingEventResultCollector,
+			StartableCollector<ExperimentResultEvent> experimentResultCollector, RSPEngine engine, Streamer<StreamingEvent> streamer)
+			throws ClassNotFoundException, SQLException {
+
+		testStand.build(streamingEventResultCollector, experimentResultCollector, engine, streamer);
+
+		testStand.init();
+		try {
+			experimentNumber += testStand.run(f, experimentNumber);
+		} catch (Exception e) {
+			e.printStackTrace();
+			testStand.stop();
+		}
+
+		testStand.close();
+	}
 }

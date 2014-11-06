@@ -48,11 +48,11 @@ public class TestStand<T extends RSPEngine> extends Stand implements EventProces
 		this.streamer = streamer;
 	}
 
-	public int run(String f, int experimentNumber, String comment) throws Exception {
+	public int run(String f, int experimentNumber, String comment, Date d) throws Exception {
 		log.info("START STREAMING " + System.currentTimeMillis());
 		String experimentDescription = "EXPERIMENT_ON_" + f + "_WITH_ENGINE_" + rspEngine.getName();
 		String inputFileName = FileUtils.INPUT_FILE_PATH + f;
-		Date d = new Date();
+
 		String outputFileName = "Result_" + DateUtils.formatDate(d, "YYYY_MM_dd_HH_mm_SS") + "_" + f.split("\\.")[0];
 
 		if (!isOn()) {
@@ -104,7 +104,7 @@ public class TestStand<T extends RSPEngine> extends Stand implements EventProces
 	 * @throws Exception
 	 */
 	public int run(String f, int experimentNumber) throws Exception {
-		return run(f, experimentNumber, "");
+		return run(f, experimentNumber, "", new Date());
 	}
 
 	@Override

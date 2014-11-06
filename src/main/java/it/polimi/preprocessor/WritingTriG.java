@@ -1,6 +1,6 @@
 package it.polimi.preprocessor;
 
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import lombok.AllArgsConstructor;
@@ -8,22 +8,22 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class WritingTriG {
 
-	private final byte[] EOF = System.getProperty("line.separator").getBytes();
-	private final FileOutputStream fop;
+	private final String EOF = System.getProperty("line.separator");
+	private final FileWriter w;
 
 	public void write(String s) throws IOException {
-		fop.write(s.getBytes());
+		w.write(s);
 	}
 
 	public void close() throws IOException {
-		fop.close();
+		w.close();
 	}
 
 	public void EOF() throws IOException {
-		fop.write(EOF);
+		w.write(EOF);
 	}
 
 	public void flush() throws IOException {
-		fop.flush();
+		w.flush();
 	}
 }
