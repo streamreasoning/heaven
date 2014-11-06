@@ -8,6 +8,11 @@
 *.war
 *.ear
 
+#InputFiles
+*.nt
+*.csv
+*.triG
+
 <<<<<<< HEAD
 # Eclipse
 .classpath
