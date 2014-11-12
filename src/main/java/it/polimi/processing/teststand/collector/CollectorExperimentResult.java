@@ -49,24 +49,25 @@ public class CollectorExperimentResult implements StartableCollector<ExperimentR
 	@Override
 	public ExecutionStates init() {
 		if (ExecutionStates.READY.equals(sqlLiteSaver.init())) {
-			return status = ExecutionStates.READY;
+			status = ExecutionStates.READY;
 		} else {
-			return status = ExecutionStates.ERROR;
+			status = ExecutionStates.ERROR;
 		}
+		return status;
 	}
 
 	@Override
 	public ExecutionStates close() {
 		if (ExecutionStates.CLOSED.equals(sqlLiteSaver.close())) {
-			return status = ExecutionStates.CLOSED;
+			status = ExecutionStates.CLOSED;
 		} else {
-			return status = ExecutionStates.ERROR;
+			status = ExecutionStates.ERROR;
 		}
+		return status;
 	}
 
 	@Override
 	public ExperimentResultEvent newEventInstance(Set<String[]> allTriples, Event e) {
-		return null;
+		throw new RuntimeException("Not Implemented, Remove");
 	}
-
 }

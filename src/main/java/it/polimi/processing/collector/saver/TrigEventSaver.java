@@ -77,13 +77,20 @@ public class TrigEventSaver implements EventSaver {
 				writer.flush();
 			}
 
-			writer.close();
+			if (writer == null) {
+				status = ExecutionStates.ERROR;
+				log.error("Null Writer, File not Found");
+
+			} else {
+				writer.close();
+				status = ExecutionStates.CLOSED;
+			}
 
 		} catch (IOException e) {
 			log.error(e.getMessage());
 			status = ExecutionStates.ERROR;
 		}
-		status = ExecutionStates.CLOSED;
+
 		return status;
 	}
 }

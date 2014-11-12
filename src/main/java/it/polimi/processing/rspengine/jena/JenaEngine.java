@@ -78,10 +78,10 @@ public class JenaEngine extends RSPEngine {
 			return false;
 		} else {
 			abox = ModelFactory.createMemModelMaker().createDefaultModel();
-
+			Statement s;
 			for (String[] eventTriple : e.getEventTriples()) {
 				Logger.getRootLogger().debug(Arrays.deepToString(eventTriple));
-				Statement s = createStatement(eventTriple);
+				s = createStatement(eventTriple);
 				abox.add(s);
 			}
 
@@ -142,7 +142,7 @@ public class JenaEngine extends RSPEngine {
 	@Override
 	public ExecutionStates init() {
 		status = ExecutionStates.READY;
-		log.info("Status [" + status + "] Initializing JenaEngine");
+		log.info("Status [" + status + "] Initializing JenaEngine [" + name + "]");
 		return status;
 	}
 

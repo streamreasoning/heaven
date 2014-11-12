@@ -81,9 +81,10 @@ public class SQLLiteEventSaver implements EventSaver {
 			log.info("Closed database successfully");
 			status = ExecutionStates.CLOSED;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			status = ExecutionStates.ERROR;
+			log.error(e.getMessage());
 		}
-		return this.status;
+		return status;
 
 	}
 
@@ -130,18 +131,15 @@ public class SQLLiteEventSaver implements EventSaver {
 
 					stmt.executeUpdate(sql);
 					stmt.close();
-				} else {
-					return false;
+					return true;
 				}
-				return true;
 			} catch (SQLException ex) {
-				ex.printStackTrace();
-				return false;
+				log.error(ex.getMessage());
 			}
 		} else {
 			log.warn("Not ready to write db");
-			return false;
 		}
+		return false;
 	}
 
 }

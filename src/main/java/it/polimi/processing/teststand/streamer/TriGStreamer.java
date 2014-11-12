@@ -43,6 +43,7 @@ public class TriGStreamer<T extends Event> implements Streamer<T> {
 	private String line;
 	private TriG eventTrig = null;
 	private String currentTriG = "";
+	private StreamingEvent streamingEvent;
 
 	public TriGStreamer(EventProcessor<StreamingEvent> stand) {
 		this.stand = stand;
@@ -127,8 +128,18 @@ public class TriGStreamer<T extends Event> implements Streamer<T> {
 		List<String[]> triples = trig.getTriples();
 
 		if (trig != null && key != null && !key.isEmpty() && triples != null && triples.size() > 0) {
-			StreamingEvent streamingEvent = new StreamingEvent(key, new HashSet<String[]>(triples), eventNumber, experimentNumber, tripleGraph,
-					graphNumber, System.currentTimeMillis());
+			if (streamingEvent == null)
+				streamingEvent = new StreamingEvent(key, new HashSet<String[]>(triples), eventNumber, experimentNumber, tripleGraph, graphNumber,
+						System.currentTimeMillis());
+			else {
+				streamingEvent.setId(key);
+				streamingEvent.setEventTriples(new HashSet<String[]>(triples));
+				streamingEvent.setEventNumber(eventNumber);
+				streamingEvent.setExperimentNumber(experimentNumber);
+				streamingEvent.setTripleGraph(tripleGraph);
+				streamingEvent.setLineNumbers(graphNumber);
+				streamingEvent.setTimestamp(System.currentTimeMillis());
+			}
 
 			return stand.sendEvent(streamingEvent);
 		}

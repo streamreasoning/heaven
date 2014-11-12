@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
+
 import org.reflections.Reflections;
 
 import com.espertech.esper.client.Configuration;
@@ -46,7 +47,7 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
  * 
  * 
  * **/
-
+@Log4j
 public class NoGenericsPropertySubclass extends RSPEsperEngine {
 	private final Map<String, Class<? extends RDFResource>> classes = new HashMap<String, Class<? extends RDFResource>>();
 	private final Map<String, RDFProperty> props = new HashMap<String, RDFProperty>();
@@ -61,11 +62,10 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 		cepAdm.createEPL(Queries.INPUT_NOGENERICS);
 		cepAdm.createEPL(Queries.RDFS3_NOGENERICS);
 		cepAdm.createEPL(Queries.RDFS9_NOGENERICS);
-		cepAdm.createEPL(Queries.queryOut_nogenerics);
+		cepAdm.createEPL(Queries.QUERYOUT_NOGENERICS);
 		EPStatement out = cepAdm.createEPL("insert into Out select * from QueryOut.win:time_batch(1000 msec)");
 		listener = new ResultCollectorListener(collector, this, stand.getCurrentExperiment(), new HashSet<String[]>(), new HashSet<String[]>(), null);
-		out.addListener(listener); // and
-		// listener;
+		out.addListener(listener);
 	}
 
 	@Override
@@ -112,20 +112,18 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 			sendTimeEvent();
 			return true;
 		} catch (InstantiationException e1) {
-
-			e1.printStackTrace();
-			return false;
+			log.error(e1.getMessage());
 		} catch (IllegalAccessException e1) {
-			e1.printStackTrace();
-			return false;
+			log.error(e1.getMessage());
 		}
+		return false;
 
 	}
 
 	private void check(RDFSInput event, StreamingEvent se) {
 		if (event.getO() == null || event.getS() == null || event.getP() == null) {
-			Logger.getRootLogger().info(event.toString());
-			Logger.getRootLogger().info(se.toString());
+			log.info(event.toString());
+			log.info(se.toString());
 			throw new RuntimeException("Resources must be not null, line " + se.getLineNumbers());
 		}
 
@@ -140,9 +138,9 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 		try {
 			classRegistration();
 		} catch (InstantiationException e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 
 		cepConfig.getEngineDefaults().getViewResources().setShareViews(false);
@@ -189,22 +187,26 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 			resetTime();
 			listener.setExperiment(stand.getCurrentExperiment());
 			cepRT.sendEvent(new CurrentTimeEvent(time));
-			return status = ExecutionStates.READY;
-		} else
-			return status = ExecutionStates.ERROR;
+			status = ExecutionStates.READY;
+		} else {
+			status = ExecutionStates.ERROR;
+		}
+		return status;
 	}
 
 	@Override
 	public ExecutionStates stopProcessing() {
 		if (isOn()) {
-			return status = ExecutionStates.CLOSED;
-		} else
-			return status = ExecutionStates.ERROR;
+			status = ExecutionStates.CLOSED;
+		} else {
+			status = ExecutionStates.ERROR;
+		}
+		return status;
 	}
 
 	@Override
 	public ExecutionStates close() {
-		Logger.getRootLogger().info("Nothing to do...Turing Off");
+		log.info("Nothing to do...Turing Off");
 		return status = ExecutionStates.CLOSED;
 	}
 }

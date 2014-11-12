@@ -17,6 +17,12 @@ import it.polimi.processing.teststand.streamer.TriGStreamer;
 
 import java.sql.SQLException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JenaSimpleRDFS {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
@@ -39,7 +45,7 @@ public class JenaSimpleRDFS {
 
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 			testStand.stop();
 		}
 

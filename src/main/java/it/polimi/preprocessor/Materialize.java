@@ -21,7 +21,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 
 import com.hp.hpl.jena.rdf.model.InfModel;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -30,6 +30,7 @@ import com.hp.hpl.jena.reasoner.Reasoner;
 import com.hp.hpl.jena.reasoner.ReasonerRegistry;
 import com.hp.hpl.jena.util.FileManager;
 
+@Log4j
 public class Materialize {
 
 	public static void main(String[] args) throws Exception {
@@ -52,10 +53,10 @@ public class Materialize {
 			fop.close();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 
-		Logger.getRootLogger().info("Done");
+		log.info("Done");
 	}
 
 }

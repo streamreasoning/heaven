@@ -1,5 +1,9 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Queries {
 
 	private static final String EXTERNAL = "it.polimi.processing.rspengine.esper.plain.Ontology";
@@ -49,7 +53,7 @@ public class Queries {
 	+ "insert into QueryOut select s as s, p, " + EXTERNAL
 			+ ".subClassOf(o)  as o, timestamp as timestamp, app_timestamp as app_timestamp , channel || 'RDSF9' as channel ";
 
-	public static final String queryOut = "insert into Out "
+	public static final String QUERYOUT = "insert into Out "
 			+ "select  s as s, p as p, o as o, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel from QueryOut.win:time_batch(1000 msec) ";
 
 	public static final String INPUT_NOGENERICS = "on RDFSInput " + "insert into RDFS3Input select s as s, o as o, p as p, channel as channel "
@@ -65,8 +69,8 @@ public class Queries {
 	public static final String RDFS9_NOGENERICS = "on RDFS9Input(p=typeOf) "
 			+ "insert into QueryOut select s as s, p, o.super as o , channel || 'RDSF9' as channel where p=typeOf "
 			+ "insert into QueryOut select s as s, p, o as o , channel || 'RDSF9' as channel where p!=typeOf output all";
-	public static final String queryOut_nogenerics = "insert into OutEvent " + "select current_timestamp, * from QueryOut.win:time_batch(1000 msec)";
-	public static final String queryOut1_nogenerics = "insert into OutEvent "
+	public static final String QUERYOUT_NOGENERICS = "insert into OutEvent " + "select current_timestamp, * from QueryOut.win:time_batch(1000 msec)";
+	public static final String QUERYOUT1_NOGENERICS = "insert into OutEvent "
 			+ "select * from QueryOut(instanceof(s, rdf.museo.ihneritance.nogenerics.RDFSUtils.Person) ).win:time_batch(1000 msec)";
 
 }

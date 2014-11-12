@@ -27,43 +27,48 @@ public class IdentityEngine extends RSPEngine {
 			if (currentExperiment != null) {
 				return collector.store(new StreamingEventResult(e, e.getEventTriples(), System.currentTimeMillis()),
 						name + "/" + currentExperiment.getOutputFileName());
-			} else {
-				log.debug("An Experiment must be initialized");
-				return false;
 			}
+			log.debug("An Experiment must be initialized");
 		} catch (IOException e1) {
 			log.error(e1.getMessage());
-			return false;
 		}
+		return false;
 
 	}
 
 	@Override
 	public ExecutionStates startProcessing() {
 		if (currentExperiment != null) {
-			return status = ExecutionStates.READY;
-		} else
-			return status = ExecutionStates.ERROR;
+			status = ExecutionStates.READY;
+		} else {
+			log.warn("The Experiment is Null");
+			status = ExecutionStates.ERROR;
+		}
+		return status;
 	}
 
 	@Override
 	public ExecutionStates stopProcessing() {
 		if (isOn()) {
-			return status = ExecutionStates.CLOSED;
-		} else
-			return status = ExecutionStates.ERROR;
+			status = ExecutionStates.CLOSED;
+		} else {
+			status = ExecutionStates.ERROR;
+		}
+		return status;
 	}
 
 	@Override
 	public ExecutionStates init() {
 		log.info("Nothing to do...Turing Off");
-		return status = ExecutionStates.READY;
+		status = ExecutionStates.READY;
+		return status;
 	}
 
 	@Override
 	public ExecutionStates close() {
 		log.info("Nothing to do...Turing Off");
-		return status = ExecutionStates.CLOSED;
+		status = ExecutionStates.CLOSED;
+		return status;
 	}
 
 	public boolean isStartable() {

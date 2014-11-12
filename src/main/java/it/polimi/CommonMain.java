@@ -2,8 +2,11 @@ package it.polimi;
 
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.collector.saver.CSVEventSaver;
+import it.polimi.processing.collector.saver.EventSaver;
 import it.polimi.processing.collector.saver.SQLLiteEventSaver;
 import it.polimi.processing.collector.saver.TrigEventSaver;
+import it.polimi.processing.collector.saver.data.CollectableData;
+import it.polimi.processing.enums.ExecutionStates;
 import it.polimi.processing.events.StreamingEvent;
 import it.polimi.processing.events.result.ExperimentResultEvent;
 import it.polimi.processing.events.result.StreamingEventResult;
@@ -19,26 +22,49 @@ import it.polimi.processing.teststand.streamer.TriGStreamer;
 import it.polimi.utils.FileUtils;
 
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommonMain {
 	private static final int PLAIN2369 = 0, JENA = 1, JENARHODF = 2;
+	private static final int PLAIN2369NW = 3, JENANW = 4, JENARHODFNW = 5;
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
-		String[] files = new String[] { "inputTrigINIT100D1GF0I.trig" };
+		String[] files = new String[] { "inputTrigINIT500D1GF0SN2R.trig" };
 
-		int rspengine = 1;
+		int rspengine = PLAIN2369NW;
+		String comment = "1000EventsV2";
 
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		Date exeperimentDate = df.parse("2014-11-05");
+		Date exeperimentDate = FileUtils.d;
 		int experimentNumber = 0;
 		TestStand<RSPEngine> testStand = new TestStand<RSPEngine>();
 
 		StartableCollector<StreamingEventResult> streamingEventResultCollector = new CollectorEventResult(testStand, new TrigEventSaver(),
 				new CSVEventSaver());
+
+		StartableCollector<StreamingEventResult> ligthStreamingEventResultCollector = new CollectorEventResult(testStand, new EventSaver() {
+
+			@Override
+			public boolean save(CollectableData d, String where) {
+				return true;
+			}
+
+			@Override
+			public ExecutionStates init() {
+				return ExecutionStates.READY;
+			}
+
+			@Override
+			public ExecutionStates close() {
+				return ExecutionStates.CLOSED;
+			}
+		}, new CSVEventSaver());
 
 		StartableCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
 
@@ -47,22 +73,42 @@ public class CommonMain {
 		for (String f : files) {
 			switch (rspengine) {
 				case JENA:
-					run(f, experimentNumber, testStand, streamingEventResultCollector, experimentResultCollector, new JenaEngine("jenasmpl",
+					run(f, comment, experimentNumber, testStand, streamingEventResultCollector, experimentResultCollector, new JenaEngine("jenasmpl",
 							testStand), streamer, exeperimentDate);
-				case JENARHODF:
-					run(f, experimentNumber, testStand, streamingEventResultCollector, experimentResultCollector, new JenaEngineRhoDF("jenarhodf",
-							testStand), streamer, exeperimentDate);
-				case PLAIN2369:
-					run(f, experimentNumber, testStand, streamingEventResultCollector, experimentResultCollector, new PlainCompleteRHODF("plain2369",
-							testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED), streamer, exeperimentDate);
-				default:
 					break;
+				case JENARHODF:
+					run(f, comment, experimentNumber, testStand, streamingEventResultCollector, experimentResultCollector, new JenaEngineRhoDF(
+							"jenarhodf", FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand), streamer, exeperimentDate);
+					break;
+				case PLAIN2369:
+					run(f, comment, experimentNumber, testStand, streamingEventResultCollector, experimentResultCollector, new PlainCompleteRHODF(
+							"plain2369", testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED), streamer, exeperimentDate);
+					break;
+				case JENANW:
+					run(f, comment, experimentNumber, testStand, ligthStreamingEventResultCollector, experimentResultCollector, new JenaEngine(
+							"jenasmplNW", testStand), streamer, exeperimentDate);
+					break;
+				case JENARHODFNW:
+					run(f, comment, experimentNumber, testStand, ligthStreamingEventResultCollector, experimentResultCollector, new JenaEngineRhoDF(
+							"jenarhodfNW", FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand), streamer,
+							exeperimentDate);
+					break;
+				case PLAIN2369NW:
+					run(f, comment, experimentNumber, testStand, ligthStreamingEventResultCollector, experimentResultCollector,
+							new PlainCompleteRHODF("plain2369NW", testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED), streamer, exeperimentDate);
+					break;
+
+				default:
+
+					run(f, comment, experimentNumber, testStand, ligthStreamingEventResultCollector, experimentResultCollector,
+							new PlainCompleteRHODF("DEF", testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED), streamer, exeperimentDate);
+
 			}
 
 		}
 	}
 
-	public static void run(String f, int experimentNumber, TestStand<RSPEngine> testStand,
+	private static void run(String f, String comment, int experimentNumber, TestStand<RSPEngine> testStand,
 			StartableCollector<StreamingEventResult> streamingEventResultCollector,
 			StartableCollector<ExperimentResultEvent> experimentResultCollector, RSPEngine engine, Streamer<StreamingEvent> streamer, Date d)
 			throws ClassNotFoundException, SQLException {
@@ -71,9 +117,9 @@ public class CommonMain {
 
 		testStand.init();
 		try {
-			experimentNumber += testStand.run(f, experimentNumber, "", d);
+			experimentNumber += testStand.run(f, experimentNumber, comment, d);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 			testStand.stop();
 		}
 

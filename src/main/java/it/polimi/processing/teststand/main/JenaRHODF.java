@@ -17,6 +17,12 @@ import it.polimi.processing.teststand.streamer.TriGStreamer;
 
 import java.sql.SQLException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JenaRHODF {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
@@ -40,28 +46,11 @@ public class JenaRHODF {
 				experimentNumber += testStand.run(f, experimentNumber);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 			testStand.stop();
 		}
 
 		testStand.close();
 	}
 
-	public static void run(String f, int experimentNumber, TestStand<RSPEngine> testStand,
-			StartableCollector<StreamingEventResult> streamingEventResultCollector,
-			StartableCollector<ExperimentResultEvent> experimentResultCollector, RSPEngine engine, Streamer<StreamingEvent> streamer)
-			throws ClassNotFoundException, SQLException {
-
-		testStand.build(streamingEventResultCollector, experimentResultCollector, engine, streamer);
-
-		testStand.init();
-		try {
-			experimentNumber += testStand.run(f, experimentNumber);
-		} catch (Exception e) {
-			e.printStackTrace();
-			testStand.stop();
-		}
-
-		testStand.close();
-	}
 }

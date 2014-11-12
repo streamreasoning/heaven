@@ -1,14 +1,14 @@
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
+ * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
+ * regarding copyright ownership. The ASF licenses this file
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,8 +34,6 @@ import java.util.Set;
 
 import lombok.extern.log4j.Log4j;
 
-import org.apache.log4j.Logger;
-
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.InfModel;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -57,22 +55,22 @@ import com.hp.hpl.jena.vocabulary.RDF;
 @Log4j
 public class JenaEngineRhoDF extends RSPEngine {
 
-	private final Model tbox_star;
+	private final Model tBoxStar;
 	private Model abox;
-	private InfModel abox_star;
+	private InfModel aboxStar;
 	int i = 0;
 	private Experiment currentExperiment;
-	private final String TBOX, RULESET_ABOX;
+	private final String tbox, aBoxRuleset;
 
 	public JenaEngineRhoDF(String name, String tbox, String ruleset_abox, TestStand<RSPEngine> stand) {
 		super(name, stand);
 		super.stand = stand;
-		this.TBOX = (tbox != null && !tbox.isEmpty()) ? tbox : FileUtils.UNIV_BENCH_RHODF_MODIFIED;
-		this.RULESET_ABOX = (ruleset_abox != null && !ruleset_abox.isEmpty()) ? ruleset_abox : FileUtils.RHODF_RULE_SET_RUNTIME;
+		this.tbox = (tbox != null && !tbox.isEmpty()) ? tbox : FileUtils.UNIV_BENCH_RHODF_MODIFIED;
+		this.aBoxRuleset = (ruleset_abox != null && !ruleset_abox.isEmpty()) ? ruleset_abox : FileUtils.RHODF_RULE_SET_RUNTIME;
 		FileManager.get().addLocatorClassLoader(JenaEngineRhoDF.class.getClassLoader());
 
 		// CARICO LA TBOX CHIUSA
-		tbox_star = FileManager.get().loadModel(TBOX, null, "RDF/XML");
+		tBoxStar = FileManager.get().loadModel(tbox, null, "RDF/XML");
 	}
 
 	public JenaEngineRhoDF(String name, TestStand<RSPEngine> stand) {
@@ -95,27 +93,27 @@ public class JenaEngineRhoDF extends RSPEngine {
 
 			Reasoner reasoner = getRHODFReasoner();
 
-			InfGraph graph = reasoner.bindSchema(tbox_star.getGraph()).bind(abox.getGraph());
-			abox_star = new InfModelImpl(graph);
+			InfGraph graph = reasoner.bindSchema(tBoxStar.getGraph()).bind(abox.getGraph());
+			aboxStar = new InfModelImpl(graph);
 
 			Set<String[]> statements = new HashSet<String[]>();
-			Model difference = abox_star.difference(tbox_star);
+			Model difference = aboxStar.difference(tBoxStar);
 			StmtIterator iterator = difference.listStatements();
 
 			while (iterator.hasNext()) {
 				Triple t = iterator.next().asTriple();
 				String[] statementStrings = new String[] { t.getSubject().toString(), t.getPredicate().toString(), t.getObject().toString() };
 				statements.add(statementStrings);
-				Logger.getLogger("obqa").debug(Arrays.deepToString(statementStrings));
+				log.debug(Arrays.deepToString(statementStrings));
 			}
 
 			try {
 				return collector.store(new StreamingEventResult(e, statements, System.currentTimeMillis()),
 						name + "/" + currentExperiment.getOutputFileName());
 			} catch (IOException e1) {
-				e1.printStackTrace();
-				return false;
+				log.error(e1.getMessage());
 			}
+			return false;
 
 		}
 	}
@@ -123,42 +121,48 @@ public class JenaEngineRhoDF extends RSPEngine {
 	@Override
 	public ExecutionStates startProcessing() {
 		if (isStartable()) {
-			return status = ExecutionStates.READY;
-		} else
-
-			return status = ExecutionStates.ERROR;
+			status = ExecutionStates.READY;
+		} else {
+			status = ExecutionStates.ERROR;
+		}
+		return status;
 	}
 
 	@Override
 	public ExecutionStates stopProcessing() {
 		if (isOn()) {
-			return status = ExecutionStates.CLOSED;
-		} else
-			return status = ExecutionStates.ERROR;
+			status = ExecutionStates.CLOSED;
+
+		} else {
+
+			status = ExecutionStates.ERROR;
+		}
+		return status;
 	}
 
 	@Override
 	public ExecutionStates init() {
 		log.info("Initializing " + name + "..Nothing to do");
-		return status = ExecutionStates.READY;
+		status = ExecutionStates.READY;
+		return status;
 	}
 
 	@Override
 	public ExecutionStates close() {
 		log.info("Closing " + name + "..Nothing to do");
-		return status = ExecutionStates.CLOSED;
+		status = ExecutionStates.CLOSED;
+		return status;
 	}
 
 	private Statement createStatement(String[] eventTriple) {
 		Resource subject = ResourceFactory.createResource(eventTriple[0]);
 		Property predicate = (eventTriple[1] != RDFSUtils.TYPE_PROPERTY) ? ResourceFactory.createProperty(eventTriple[1]) : RDF.type;
 		RDFNode object = ResourceFactory.createResource(eventTriple[2]);
-		Statement s = ResourceFactory.createStatement(subject, predicate, object);
-		return s;
+		return ResourceFactory.createStatement(subject, predicate, object);
 	}
 
 	private Reasoner getRHODFReasoner() {
-		return new GenericRuleReasoner(Rule.rulesFromURL(RULESET_ABOX));
+		return new GenericRuleReasoner(Rule.rulesFromURL(aBoxRuleset));
 	}
 
 	public boolean isStartable() {

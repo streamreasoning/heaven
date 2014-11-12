@@ -35,6 +35,8 @@ public class TestStand<T extends RSPEngine> extends Stand implements EventProces
 
 	private T rspEngine;
 	private Streamer<StreamingEvent> streamer;
+	private StreamingEvent se;
+	private StreamingEventResult ser;
 
 	public TestStand() {
 		super(ExecutionStates.NOT_READY, null);
@@ -53,7 +55,7 @@ public class TestStand<T extends RSPEngine> extends Stand implements EventProces
 		String experimentDescription = "EXPERIMENT_ON_" + f + "_WITH_ENGINE_" + rspEngine.getName();
 		String inputFileName = FileUtils.INPUT_FILE_PATH + f;
 
-		String outputFileName = "Result_" + DateUtils.formatDate(d, "YYYY_MM_dd_HH_mm_SS") + "_" + f.split("\\.")[0];
+		String outputFileName = "Result_" + comment + DateUtils.formatDate(d, "YYYY_MM_dd_HH_mm_SS") + "_" + f.split("\\.")[0];
 
 		if (!isOn()) {
 			throw new WrongStatusTransitionException("Not ON");
@@ -179,6 +181,9 @@ public class TestStand<T extends RSPEngine> extends Stand implements EventProces
 
 	@Override
 	public boolean sendEvent(StreamingEvent e) {
+
+		se = e;
+
 		return rspEngine.sendEvent(e);
 	}
 
@@ -198,7 +203,14 @@ public class TestStand<T extends RSPEngine> extends Stand implements EventProces
 
 	@Override
 	public StreamingEventResult newEventInstance(Set<String[]> all_triples, Event e) {
-		return new StreamingEventResult((StreamingEvent) e, all_triples, System.currentTimeMillis());
+		if (ser == null) {
+			ser = new StreamingEventResult((StreamingEvent) e, all_triples, System.currentTimeMillis());
+		} else {
+			ser.setAll_triples(all_triples);
+			ser.setInputEvent((StreamingEvent) e);
+			ser.setResultTimestamp(System.currentTimeMillis());
+		}
+		return ser;
 	}
 
 }

@@ -53,19 +53,21 @@ public class CollectorEventResult implements StartableCollector<StreamingEventRe
 	@Override
 	public ExecutionStates init() {
 		if (ExecutionStates.READY.equals(trigSaver.init()) && ExecutionStates.READY.equals(csvSaver.init())) {
-			return status = ExecutionStates.READY;
+			status = ExecutionStates.READY;
 		} else {
-			return status = ExecutionStates.ERROR;
+			status = ExecutionStates.ERROR;
 		}
+		return status;
 	}
 
 	@Override
 	public ExecutionStates close() {
 		if (ExecutionStates.CLOSED.equals(trigSaver.close()) && ExecutionStates.CLOSED.equals(csvSaver.close())) {
-			return status = ExecutionStates.CLOSED;
+			status = ExecutionStates.CLOSED;
 		} else {
-			return status = ExecutionStates.ERROR;
+			status = ExecutionStates.ERROR;
 		}
+		return status;
 	}
 
 	@Override

@@ -12,13 +12,14 @@
 *.nt
 *.csv
 *.triG
+#Output
 
 <<<<<<< HEAD
 # Eclipse
 .classpath
 .project
 .settings/
-
+src/main/resources/data/preprocessing/
 
 #Maven
 target

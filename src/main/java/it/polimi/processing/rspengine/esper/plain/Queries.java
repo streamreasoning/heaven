@@ -71,4 +71,42 @@ public class Queries {
 	public static final String QUERYOUT = "insert into Out "
 			+ "select  s as s, p as p, o as o, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel from QueryOut.win:time_batch(1000 msec) ";
 
+	// REVERSE
+
+	// TODO verificare se la distinct lavora anche sullo stream in cui inserisco per evitare
+	// duplicati
+	public static final String OUTPUTREV1 = "insert into QueryOut select e.ss as s, e.ps as p, e.os as o, timestamp as timestamp, app_timestamp as app_timestamp, channel || 'OUT' as channel  from TEvent as e ";
+	public static final String OUTPUTREV2 = "insert into QueryOut select * from RDFS3Input ";
+	public static final String OUTPUTREV3 = "insert into QueryOut select * from RDFS6Input ";
+	public static final String OUTPUTREV4 = "insert into QueryOut select * from RDFS9Input ";
+
+	public static final String RDFS9REV1 = " insert into RDFS9Input select  e.ss as s, e.ps as p, "
+			+ EXTERNAL
+			+ ".subClassOf(e.os)  as o, timestamp as timestamp, app_timestamp as app_timestamp , channel || 'RDSF9' as channel from TEvent as e where "
+			+ EXTERNAL + ".containsType(e.ps) ";
+	public static final String RDFS9REV2 = "insert into RDFS9Input select  s as s, p as p, " + EXTERNAL
+			+ ".subClassOf(o)  as o, timestamp as timestamp, app_timestamp as app_timestamp , channel || 'RDSF9' as channel from RDFS6Input where  "
+			+ EXTERNAL + ".containsType(p)  ";
+	public static final String RDFS9REV3 = "insert into RDFS9Input select  s as s, p as p, " + EXTERNAL
+			+ ".subClassOf(o)  as o, timestamp as timestamp, app_timestamp as app_timestamp , channel || 'RDSF9' as channel from RDFS3Input where  "
+			+ EXTERNAL + ".containsType(p)  ";
+
+	public static final String RDFS6REV = " insert into RDFS6Input select e.ss as s, e.os as o, "
+			+ EXTERNAL
+			+ ".subPropertyOf(e.ps) as p, timestamp as timestamp, app_timestamp as app_timestamp, channel || 'RDSF6' as channel from TEvent as e where not "
+			+ EXTERNAL + ".containsType(e.ps)  ";
+
+	public static final String RDFS23REV1 = "insert into RDFS3Input select e.os as s, " + EXTERNAL + ".type()" + " as p, " + EXTERNAL
+			+ ".range(e.ps) as o, timestamp as timestamp , app_timestamp as app_timestamp, channel || 'RDSF23' as channel "
+			+ "from TEvent as e where not " + EXTERNAL + ".containsType(e.ps) ";
+	public static final String RDFS23REV2 = "insert into RDFS3Input select e.os as s, " + EXTERNAL + ".type()" + " as p, " + EXTERNAL
+			+ ".domain(e.ps) as o, timestamp as timestamp , app_timestamp as app_timestamp, channel || 'RDSF23' as channel "
+			+ "from TEvent as e where not " + EXTERNAL + ".containsType(e.ps) ";
+	public static final String RDFS23REV3 = "insert into RDFS3Input select o as s, " + EXTERNAL + ".type()" + " as p, " + EXTERNAL
+			+ ".range(p) as o, timestamp as timestamp , app_timestamp as app_timestamp, channel || 'RDSF23' as channel "
+			+ "from RDFS6Input where not " + EXTERNAL + ".containsType(p) ";
+	public static final String RDFS23REV4 = "insert into RDFS3Input select o as s, " + EXTERNAL + ".type()" + " as p, " + EXTERNAL
+			+ ".domain(p) as o, timestamp as timestamp , app_timestamp as app_timestamp, channel || 'RDSF23' as channel "
+			+ "from RDFS6Input where not " + EXTERNAL + ".containsType(p) ";
+
 }

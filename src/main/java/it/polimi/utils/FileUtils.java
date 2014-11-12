@@ -1,31 +1,42 @@
 package it.polimi.utils;
 
 import java.io.File;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import lombok.Getter;
 
 public class FileUtils {
 
 	private static String daypath;
-	private static Date d;
+	@Getter
+	public static Date d;
 	static {
-		d = new Date();
-		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			d = dt.parse("2014-11-11");
+		} catch (java.text.ParseException e) {
+			d = new Date();
+		}
 
 		daypath = "src/main/resources/data/output/" + dt.format(d) + "/";
 
 		new File(daypath).mkdirs();
 
 		new File(daypath + "plain2369/").mkdirs();
+		new File(daypath + "plain2369NW/").mkdirs();
 		new File(daypath + "jenasmpl/").mkdirs();
 		new File(daypath + "jenarhodf/").mkdirs();
+		new File(daypath + "jenasmplNW/").mkdirs();
+		new File(daypath + "jenarhodfNW/").mkdirs();
 
 		new File(daypath + "database/").mkdirs();
 
 	}
 
 	public static final String MODEL_FILE_PATH = "";
-	public static final String INPUT_FILE_PATH = "src/main/resources/data/input/";
+	public static final String INPUT_FILE_PATH = "src/main/resources/data/input/SINK1/1000Events/";
 	public static final String OUTPUT_FILE_PATH = daypath;
 	public static final String PREPROCESSING_FILE_PATH = "src/main/resources/data/preprocessing/";
 	public static final String PREPROCESSING_EXCLUDED_FILE_PATH = PREPROCESSING_FILE_PATH + "excluded/";

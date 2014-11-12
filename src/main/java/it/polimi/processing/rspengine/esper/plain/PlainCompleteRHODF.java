@@ -37,6 +37,7 @@ public class PlainCompleteRHODF extends RSPEsperEngine {
 
 	private ResultCollectorListener listener = null;
 	private final String runtimeOnto;
+	private TEvent esperEvent = null;
 
 	public PlainCompleteRHODF(String name, TestStand<RSPEngine> stand, String runtimeOnto) {
 		super(name, stand);
@@ -50,11 +51,22 @@ public class PlainCompleteRHODF extends RSPEsperEngine {
 		log.debug(Queries.RDFS23);
 		log.debug(Queries.RDFS6);
 		log.debug(Queries.RDFS9);
-
-		cepAdm.createEPL(Queries.INPUT);
-		cepAdm.createEPL(Queries.RDFS23);
-		cepAdm.createEPL(Queries.RDFS6);
-		cepAdm.createEPL(Queries.RDFS9);
+		//
+		// cepAdm.createEPL(Queries.INPUT);
+		// cepAdm.createEPL(Queries.RDFS23);
+		// cepAdm.createEPL(Queries.RDFS6);
+		// cepAdm.createEPL(Queries.RDFS9);
+		cepAdm.createEPL(Queries.RDFS6REV);
+		cepAdm.createEPL(Queries.RDFS23REV1);
+		cepAdm.createEPL(Queries.RDFS23REV2);
+		cepAdm.createEPL(Queries.RDFS23REV3);
+		cepAdm.createEPL(Queries.RDFS23REV4);
+		cepAdm.createEPL(Queries.RDFS9REV1);
+		cepAdm.createEPL(Queries.RDFS9REV2);
+		cepAdm.createEPL(Queries.RDFS9REV3);
+		cepAdm.createEPL(Queries.OUTPUTREV1);
+		cepAdm.createEPL(Queries.OUTPUTREV3);
+		cepAdm.createEPL(Queries.OUTPUTREV4);
 
 		EPStatement out = cepAdm.createEPL("insert into Out select * from QueryOut.win:time_batch(1000 msec)");
 		listener = new ResultCollectorListener(collector, this, stand.getCurrentExperiment(), new HashSet<String[]>(), new HashSet<String[]>(), null);
@@ -101,7 +113,6 @@ public class PlainCompleteRHODF extends RSPEsperEngine {
 	public boolean sendEvent(StreamingEvent e) {
 		this.currentStreamingEvent = e;
 		status = ExecutionStates.RUNNING;
-		TEvent esperEvent;
 		Set<String[]> eventTriples = e.getEventTriples();
 
 		int count = 0;
@@ -110,6 +121,7 @@ public class PlainCompleteRHODF extends RSPEsperEngine {
 			if (count % 1000 == 0) {
 				log.debug("Sent [" + count + "] events");
 			}
+			// Esper events must be immutable
 			esperEvent = new TEvent(eventTriple[0], eventTriple[1], eventTriple[2], cepRT.getCurrentTime(), System.currentTimeMillis(), "Input");
 			cepRT.sendEvent(esperEvent);
 		}

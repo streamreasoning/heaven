@@ -9,8 +9,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j;
 
+@Log4j
 public class TXTEventSaver implements EventSaver {
 
 	private ExecutionStates status;
@@ -18,14 +19,16 @@ public class TXTEventSaver implements EventSaver {
 
 	@Override
 	public ExecutionStates init() {
-		Logger.getRootLogger().info("Initialising CSVSaver... Nothing to do");
-		return status = ExecutionStates.READY;
+		log.info("Initialising CSVSaver... Nothing to do");
+		status = ExecutionStates.READY;
+		return status;
 	}
 
 	@Override
 	public ExecutionStates close() {
-		Logger.getRootLogger().info("Closing CSVSaver... Nothing to do");
-		return status = ExecutionStates.CLOSED;
+		log.info("Closing CSVSaver... Nothing to do");
+		status = ExecutionStates.CLOSED;
+		return status;
 	}
 
 	@Override
@@ -45,13 +48,12 @@ public class TXTEventSaver implements EventSaver {
 				fop.close();
 				return true;
 			} else {
-				Logger.getRootLogger().warn("Not Ready to write file");
-				return false;
+				log.warn("Not Ready to write file");
 			}
 		} catch (IOException e1) {
-			e1.printStackTrace();
-			return false;
+			log.error(e1.getMessage());
 		}
+		return false;
 
 	}
 }

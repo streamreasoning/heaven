@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 import com.hp.hpl.jena.ontology.OntClass;
@@ -21,6 +23,7 @@ import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 @Log4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Ontology {
 
 	private static Map<String, String[]> ontology;
@@ -28,7 +31,7 @@ public class Ontology {
 	private static Map<String, String> propertiesRange;
 	private static Map<String, String> propertiesDomain;
 	private static int numProperties, numClasses = 0;
-	public static String univBenchRdfs;
+	private static String univBenchRdfs;
 	private static int rangeCalls, domainCalls = 0;
 
 	private static void initializeObjectProperties() {
@@ -83,9 +86,9 @@ public class Ontology {
 
 		FileManager.get().addLocatorClassLoader(JenaEngine.class.getClassLoader());
 
-		Model tbox_star = FileManager.get().loadModel(RDFSUtils.UNIV_BENCH_RDFS, null, "RDF/XML"); // http://en.wikipedia.org/wiki/Tbox
+		Model tBoxStar = FileManager.get().loadModel(RDFSUtils.UNIV_BENCH_RDFS, null, "RDF/XML");
 
-		OntModel om = ModelFactory.createOntologyModel(OntModelSpec.RDFS_MEM_RDFS_INF, tbox_star);
+		OntModel om = ModelFactory.createOntologyModel(OntModelSpec.RDFS_MEM_RDFS_INF, tBoxStar);
 		ExtendedIterator<OntClass> cl = om.listClasses();
 		while (cl.hasNext()) {
 			OntClass next = cl.next();
@@ -119,11 +122,11 @@ public class Ontology {
 			log.debug(keyClass);
 			if (ontology.containsKey(keyClass)) {
 				retList.addAll(Arrays.asList(ontology.get(keyClass)));
-			} else
+			} else {
 				retList.add(RDFSUtils.RDFRESOURCE);
+			}
 		}
-		String[] arr = retList.toArray(new String[retList.size()]);
-		return arr;
+		return retList.toArray(new String[retList.size()]);
 	}
 
 	public static String[] subPropertyOf(String[] s) {

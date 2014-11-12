@@ -5,7 +5,7 @@ import it.polimi.processing.enums.ExecutionStates;
 import it.polimi.utils.FileUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
@@ -17,6 +17,11 @@ public class CSVEventSaver implements EventSaver {
 	private ExecutionStates status;
 	Date d = new Date();
 	private final String outputPath;
+	private String path = "";
+	private String previousWhere = "";
+	private File file;
+
+	private FileWriter writer;
 
 	public CSVEventSaver(String path) {
 		this.outputPath = path;
@@ -29,39 +34,58 @@ public class CSVEventSaver implements EventSaver {
 	@Override
 	public ExecutionStates init() {
 		log.info("Initialising CSVSaver... Nothing to do");
-		return status = ExecutionStates.READY;
+		status = ExecutionStates.READY;
+		return status;
 	}
 
 	@Override
 	public ExecutionStates close() {
 		log.info("Closing CSVSaver... Nothing to do");
-		return status = ExecutionStates.CLOSED;
+		status = ExecutionStates.CLOSED;
+		try {
+			writer.close();
+		} catch (IOException e) {
+			log.error(e.getMessage());
+			status = ExecutionStates.ERROR;
+		}
+		return status;
+
 	}
 
 	@Override
 	public boolean save(CollectableData dt, String where) {
 		try {
 			if (ExecutionStates.READY.equals(status)) {
-				String path = outputPath + where.replace("Result", "LOG") + FileUtils.CSV;
-				File file = new File(path);
+
+				if ("".equals(previousWhere)) {
+					previousWhere = where;
+					path = outputPath + where.replace("Result", "LOG") + FileUtils.CSV;
+					file = new File(path);
+					writer = new FileWriter(file, true);
+				} else if (!previousWhere.equals(where)) {
+					previousWhere = where;
+					path = outputPath + where.replace("Result", "LOG") + FileUtils.CSV;
+					file = new File(path);
+					writer = new FileWriter(file, true);
+
+				}
 
 				if (!file.exists()) {
 					file.createNewFile();
 				}
-				FileOutputStream fop = new FileOutputStream(file, true);
-				fop.write(dt.getData().getBytes());
-				fop.write(System.getProperty("line.separator").getBytes());
-				fop.flush();
-				fop.close();
+
+				writer.write(dt.getData());
+				writer.write(System.getProperty("line.separator"));
+				writer.flush();
+
 				return true;
 			} else {
 				log.warn("Not Ready to write file");
-				return false;
 			}
 		} catch (IOException e1) {
 			log.error(e1.getMessage());
-			return false;
 		}
+		return false;
 
 	}
 }
