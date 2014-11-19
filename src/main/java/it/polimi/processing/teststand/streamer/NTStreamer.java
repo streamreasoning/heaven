@@ -8,6 +8,7 @@ import it.polimi.processing.events.StreamingEvent;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.streamer.Parser;
 import it.polimi.processing.streamer.Streamer;
+import it.polimi.utils.Memory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -135,7 +136,7 @@ public class NTStreamer<T extends Event> implements Streamer<T> {
 		String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + ">";
 
 		StreamingEvent streamingEvent = new StreamingEvent(id, eventTriples, eventNumber, experimentNumber, tripleGraph, lineNumbers,
-				System.currentTimeMillis());
+				System.currentTimeMillis(), Memory.getMemoryUsage());
 
 		return stand.sendEvent(streamingEvent);
 	}

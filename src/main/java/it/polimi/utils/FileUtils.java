@@ -6,7 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import lombok.Getter;
+import lombok.extern.log4j.Log4j;
 
+@Log4j
 public class FileUtils {
 
 	private static String daypath;
@@ -15,8 +17,9 @@ public class FileUtils {
 	static {
 		DateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
 		try {
-			d = dt.parse("2014-11-11");
+			d = dt.parse("2014-11-19");
 		} catch (java.text.ParseException e) {
+			log.info("Wrong parsing");
 			d = new Date();
 		}
 
@@ -26,10 +29,16 @@ public class FileUtils {
 
 		new File(daypath + "plain2369/").mkdirs();
 		new File(daypath + "plain2369NW/").mkdirs();
+		new File(daypath + "plain2369NWM/").mkdirs();
+		new File(daypath + "plain2369NM/").mkdirs();
 		new File(daypath + "jenasmpl/").mkdirs();
-		new File(daypath + "jenarhodf/").mkdirs();
 		new File(daypath + "jenasmplNW/").mkdirs();
+		new File(daypath + "jenasmplNWM/").mkdirs();
+		new File(daypath + "jenasmplNM/").mkdirs();
+		new File(daypath + "jenarhodf/").mkdirs();
 		new File(daypath + "jenarhodfNW/").mkdirs();
+		new File(daypath + "jenarhodfNM/").mkdirs();
+		new File(daypath + "jenarhodfNWM/").mkdirs();
 
 		new File(daypath + "database/").mkdirs();
 

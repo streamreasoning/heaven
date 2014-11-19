@@ -6,6 +6,7 @@ import it.polimi.processing.events.StreamingEvent;
 import it.polimi.processing.events.result.StreamingEventResult;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.teststand.core.TestStand;
+import it.polimi.utils.Memory;
 
 import java.io.IOException;
 
@@ -25,8 +26,8 @@ public class IdentityEngine extends RSPEngine {
 	public boolean sendEvent(StreamingEvent e) {
 		try {
 			if (currentExperiment != null) {
-				return collector.store(new StreamingEventResult(e, e.getEventTriples(), System.currentTimeMillis()),
-						name + "/" + currentExperiment.getOutputFileName());
+				return collector.store(new StreamingEventResult(e, e.getEventTriples(), System.currentTimeMillis(), Memory.getMemoryUsage()), name
+						+ "/" + currentExperiment.getOutputFileName());
 			}
 			log.debug("An Experiment must be initialized");
 		} catch (IOException e1) {

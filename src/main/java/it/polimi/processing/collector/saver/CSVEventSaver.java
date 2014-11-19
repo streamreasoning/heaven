@@ -73,7 +73,6 @@ public class CSVEventSaver implements EventSaver {
 				if (!file.exists()) {
 					file.createNewFile();
 				}
-
 				writer.write(dt.getData());
 				writer.write(System.getProperty("line.separator"));
 				writer.flush();

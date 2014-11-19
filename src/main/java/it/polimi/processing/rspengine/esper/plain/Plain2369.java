@@ -33,16 +33,18 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
  * 
  * **/
 @Log4j
-public class PlainCompleteRHODF extends RSPEsperEngine {
+public class Plain2369 extends RSPEsperEngine {
 
 	private ResultCollectorListener listener = null;
 	private final String runtimeOnto;
 	private TEvent esperEvent = null;
+	private final String ontologyClass;
 
-	public PlainCompleteRHODF(String name, TestStand<RSPEngine> stand, String runtimeOnto) {
+	public Plain2369(String name, TestStand<RSPEngine> stand, String runtimeOnto, String ontologyClass) {
 		super(name, stand);
 		super.stand = stand;
 		this.runtimeOnto = runtimeOnto;
+		this.ontologyClass = ontologyClass;
 	}
 
 	protected void initQueries() {
@@ -52,21 +54,22 @@ public class PlainCompleteRHODF extends RSPEsperEngine {
 		log.debug(Queries.RDFS6);
 		log.debug(Queries.RDFS9);
 		//
-		// cepAdm.createEPL(Queries.INPUT);
-		// cepAdm.createEPL(Queries.RDFS23);
-		// cepAdm.createEPL(Queries.RDFS6);
-		// cepAdm.createEPL(Queries.RDFS9);
-		cepAdm.createEPL(Queries.RDFS6REV);
-		cepAdm.createEPL(Queries.RDFS23REV1);
-		cepAdm.createEPL(Queries.RDFS23REV2);
-		cepAdm.createEPL(Queries.RDFS23REV3);
-		cepAdm.createEPL(Queries.RDFS23REV4);
-		cepAdm.createEPL(Queries.RDFS9REV1);
-		cepAdm.createEPL(Queries.RDFS9REV2);
-		cepAdm.createEPL(Queries.RDFS9REV3);
-		cepAdm.createEPL(Queries.OUTPUTREV1);
-		cepAdm.createEPL(Queries.OUTPUTREV3);
-		cepAdm.createEPL(Queries.OUTPUTREV4);
+		// cepAdm.createEPL(Queries.RDFS6REV);
+		// cepAdm.createEPL(Queries.RDFS23REV1);
+		// cepAdm.createEPL(Queries.RDFS23REV2);
+		// cepAdm.createEPL(Queries.RDFS23REV3);
+		// cepAdm.createEPL(Queries.RDFS23REV4);
+		// cepAdm.createEPL(Queries.RDFS9REV1);
+		// cepAdm.createEPL(Queries.RDFS9REV2);
+		// cepAdm.createEPL(Queries.RDFS9REV3);
+		// cepAdm.createEPL(Queries.OUTPUTREV1);
+		// cepAdm.createEPL(Queries.OUTPUTREV3);
+		// cepAdm.createEPL(Queries.OUTPUTREV4);
+
+		cepAdm.createEPL(Queries.INPUT);
+		cepAdm.createEPL(Queries.RDFS23);
+		cepAdm.createEPL(Queries.RDFS6);
+		cepAdm.createEPL(Queries.RDFS9);
 
 		EPStatement out = cepAdm.createEPL("insert into Out select * from QueryOut.win:time_batch(1000 msec)");
 		listener = new ResultCollectorListener(collector, this, stand.getCurrentExperiment(), new HashSet<String[]>(), new HashSet<String[]>(), null);
@@ -77,19 +80,28 @@ public class PlainCompleteRHODF extends RSPEsperEngine {
 	public ExecutionStates init() {
 		ref = new ConfigurationMethodRef();
 		cepConfig = new Configuration();
-		cepConfig.addMethodRef(Ontology.class, ref);
 
 		cepConfig.addEventType("TEvent", TEvent.class.getName());
 		cepConfig.addEventType("Out", Out.class.getName());
 
 		cepConfig.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
 
-		cep = EPServiceProviderManager.getProvider(PlainCompleteRHODF.class.getName(), cepConfig);
+		cep = EPServiceProviderManager.getProvider(Plain2369.class.getName(), cepConfig);
 		// We register an EPL statement
 		cepAdm = cep.getEPAdministrator();
 		cepRT = cep.getEPRuntime();
 
-		Ontology.init(runtimeOnto);
+		if ("CompleatingOntology".equals(ontologyClass)) {
+			cepConfig.addMethodRef(CompletingOntology.class, ref);
+			CompletingOntology.init(runtimeOnto);
+		} else if ("CompleteOntology".equals(ontologyClass)) {
+			cepConfig.addMethodRef(CompleteOntology.class, ref);
+			CompleteOntology.init(runtimeOnto);
+		} else {
+			cepConfig.addMethodRef(Ontology.class, ref);
+			Ontology.init(runtimeOnto);
+		}
+
 		initQueries();
 		status = ExecutionStates.READY;
 		log.debug("Status[" + status + "] Initizalized the RSPEngine");

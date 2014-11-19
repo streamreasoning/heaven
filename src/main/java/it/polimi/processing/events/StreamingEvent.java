@@ -17,5 +17,6 @@ public class StreamingEvent extends Event {
 	private int tripleGraph;
 	private int[] lineNumbers;
 	private long timestamp;
+	private double memory;
 
 }

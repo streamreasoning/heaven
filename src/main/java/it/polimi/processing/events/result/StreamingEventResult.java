@@ -21,6 +21,7 @@ public class StreamingEventResult extends Event {
 	private StreamingEvent inputEvent;
 	private Set<String[]> all_triples;
 	private long resultTimestamp;
+	private double memory;
 
 	public String getStartTripleEvent() {
 		String starttriples = "[";
@@ -61,8 +62,7 @@ public class StreamingEventResult extends Event {
 		}
 
 		long queryLatency = resultTimestamp - inputEvent.getTimestamp();
-		String s = inputEvent.getId() + lines + inputEvent.getTimestamp() + ",0," + queryLatency;
+		String s = inputEvent.getId() + lines + inputEvent.getTimestamp() + "," + inputEvent.getMemory() + "," + memory + "," + queryLatency;
 		return new CSV(s);
 	}
-
 }

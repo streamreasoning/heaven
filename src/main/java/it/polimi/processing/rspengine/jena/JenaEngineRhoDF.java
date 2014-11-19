@@ -25,6 +25,7 @@ import it.polimi.processing.events.result.StreamingEventResult;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.teststand.core.TestStand;
 import it.polimi.utils.FileUtils;
+import it.polimi.utils.Memory;
 import it.polimi.utils.RDFSUtils;
 
 import java.io.IOException;
@@ -108,8 +109,8 @@ public class JenaEngineRhoDF extends RSPEngine {
 			}
 
 			try {
-				return collector.store(new StreamingEventResult(e, statements, System.currentTimeMillis()),
-						name + "/" + currentExperiment.getOutputFileName());
+				return collector.store(new StreamingEventResult(e, statements, System.currentTimeMillis(), Memory.getMemoryUsage()), name + "/"
+						+ currentExperiment.getOutputFileName());
 			} catch (IOException e1) {
 				log.error(e1.getMessage());
 			}

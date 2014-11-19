@@ -1,8 +1,10 @@
 package it.polimi.processing.rspengine.esper.plain;
 
+import it.polimi.CommonMain;
+
 public class Queries {
 
-	private static final String EXTERNAL = "it.polimi.processing.rspengine.esper.plain.Ontology";
+	private static final String EXTERNAL = "it.polimi.processing.rspengine.esper.plain." + CommonMain.ontologyClass;
 
 	public static final String INPUT_RDFS6 = "on TEvent "
 			+ "insert into RDFS3Input select s as s, o as o, p as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel "

@@ -8,6 +8,7 @@ import it.polimi.processing.events.StreamingEvent;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.streamer.Parser;
 import it.polimi.processing.streamer.Streamer;
+import it.polimi.utils.Memory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -92,7 +93,6 @@ public class TriGStreamer<T extends Event> implements Streamer<T> {
 
 					if (sendEvent(eventTrig, tripleGraph, streamedEvents, experimentNumber, new int[] { graphNumber })) {
 						log.debug("Send [ " + line + " ] as a New StreamEvent");
-
 						status = ExecutionStates.READY;
 						streamedEvents++;
 						resetCurrentTrig();
@@ -130,7 +130,7 @@ public class TriGStreamer<T extends Event> implements Streamer<T> {
 		if (trig != null && key != null && !key.isEmpty() && triples != null && triples.size() > 0) {
 			if (streamingEvent == null)
 				streamingEvent = new StreamingEvent(key, new HashSet<String[]>(triples), eventNumber, experimentNumber, tripleGraph, graphNumber,
-						System.currentTimeMillis());
+						System.currentTimeMillis(), Memory.getMemoryUsage());
 			else {
 				streamingEvent.setId(key);
 				streamingEvent.setEventTriples(new HashSet<String[]>(triples));
@@ -139,6 +139,7 @@ public class TriGStreamer<T extends Event> implements Streamer<T> {
 				streamingEvent.setTripleGraph(tripleGraph);
 				streamingEvent.setLineNumbers(graphNumber);
 				streamingEvent.setTimestamp(System.currentTimeMillis());
+				streamingEvent.setMemory(Memory.getMemoryUsage());
 			}
 
 			return stand.sendEvent(streamingEvent);

@@ -14,16 +14,17 @@ import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.streamer.Streamer;
 import it.polimi.utils.FileUtils;
+import it.polimi.utils.Memory;
 import it.polimi.utils.TripleGraphTypes;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
-
-import org.apache.http.impl.cookie.DateUtils;
 
 @Getter
 @Log4j
@@ -54,14 +55,15 @@ public class TestStand<T extends RSPEngine> extends Stand implements EventProces
 		log.info("START STREAMING " + System.currentTimeMillis());
 		String experimentDescription = "EXPERIMENT_ON_" + f + "_WITH_ENGINE_" + rspEngine.getName();
 		String inputFileName = FileUtils.INPUT_FILE_PATH + f;
-
-		String outputFileName = "Result_" + comment + DateUtils.formatDate(d, "YYYY_MM_dd_HH_mm_SS") + "_" + f.split("\\.")[0];
+		DateFormat dt = new SimpleDateFormat("yyyy_MM_dd");
+		String outputFileName = "Result_" + "EN" + experimentNumber + "_" + comment + "_" + dt.format(d) + "_" + f.split("\\.")[0];
 
 		if (!isOn()) {
 			throw new WrongStatusTransitionException("Not ON");
 		} else {
 
-			log.debug("Status [" + status + "]" + " Start Running The Expeirment " + "Results will be named as [" + outputFileName + "]");
+			log.info("Status [" + status + "]" + " Start Running The Experiment [" + experimentNumber + "] of date [" + d + "] "
+					+ "Results will be named as [" + outputFileName + "]");
 
 			status = ExecutionStates.RUNNING;
 
@@ -204,11 +206,12 @@ public class TestStand<T extends RSPEngine> extends Stand implements EventProces
 	@Override
 	public StreamingEventResult newEventInstance(Set<String[]> all_triples, Event e) {
 		if (ser == null) {
-			ser = new StreamingEventResult((StreamingEvent) e, all_triples, System.currentTimeMillis());
+			ser = new StreamingEventResult((StreamingEvent) e, all_triples, System.currentTimeMillis(), Memory.getMemoryUsage());
 		} else {
 			ser.setAll_triples(all_triples);
 			ser.setInputEvent((StreamingEvent) e);
 			ser.setResultTimestamp(System.currentTimeMillis());
+			ser.setMemory(Memory.getMemoryUsage());
 		}
 		return ser;
 	}
