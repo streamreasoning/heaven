@@ -1,7 +1,7 @@
 package it.polimi.processing.rspengine.esper.noinheritanceonevents.nogenerics.esper;
 
 import it.polimi.processing.enums.ExecutionStates;
-import it.polimi.processing.events.StreamingEvent;
+import it.polimi.processing.events.TestStandEvent;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.rspengine.esper.RSPEsperEngine;
 import it.polimi.processing.rspengine.esper.commons.listener.ResultCollectorListener;
@@ -69,7 +69,7 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 	}
 
 	@Override
-	public boolean sendEvent(StreamingEvent e) {
+	public boolean sendEvent(TestStandEvent e) {
 		this.currentStreamingEvent = e;
 		RDFSInput event = new RDFSInput();
 		RDFResource s, o;
@@ -120,7 +120,7 @@ public class NoGenericsPropertySubclass extends RSPEsperEngine {
 
 	}
 
-	private void check(RDFSInput event, StreamingEvent se) {
+	private void check(RDFSInput event, TestStandEvent se) {
 		if (event.getO() == null || event.getS() == null || event.getP() == null) {
 			log.info(event.toString());
 			log.info(se.toString());

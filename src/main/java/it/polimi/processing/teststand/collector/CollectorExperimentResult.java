@@ -3,8 +3,9 @@ package it.polimi.processing.teststand.collector;
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.collector.saver.EventSaver;
 import it.polimi.processing.enums.ExecutionStates;
-import it.polimi.processing.events.Event;
-import it.polimi.processing.events.result.ExperimentResultEvent;
+import it.polimi.processing.events.TestStandEvent;
+import it.polimi.processing.events.interfaces.Event;
+import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.teststand.core.TestStand;
 
@@ -17,14 +18,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CollectorExperimentResult implements StartableCollector<ExperimentResultEvent> {
+public class CollectorExperimentResult implements StartableCollector<ExperimentResult> {
 
 	private long timestamp;
 	private EventSaver sqlLiteSaver;
-	private TestStand<RSPEngine> stand;
+	private TestStand<RSPEngine<TestStandEvent>> stand;
 	private ExecutionStates status;
+	private String where;
 
-	public CollectorExperimentResult(TestStand<RSPEngine> stand, EventSaver saver) throws SQLException, ClassNotFoundException {
+	public CollectorExperimentResult(TestStand<RSPEngine<TestStandEvent>> stand, EventSaver saver) throws SQLException, ClassNotFoundException {
 		this.stand = stand;
 		this.sqlLiteSaver = saver;
 		this.timestamp = System.currentTimeMillis();
@@ -32,18 +34,13 @@ public class CollectorExperimentResult implements StartableCollector<ExperimentR
 	}
 
 	@Override
-	public boolean store(ExperimentResultEvent r, String where) throws IOException {
+	public boolean store(ExperimentResult r) throws IOException {
 		if (!ExecutionStates.READY.equals(status)) {
 			return false;
 		} else {
-			return sqlLiteSaver.save(r.getSQL(), where);
+			return sqlLiteSaver.save(r.getSQL(), this.where);
 
 		}
-	}
-
-	@Override
-	public long getTimestamp() {
-		return timestamp;
 	}
 
 	@Override
@@ -67,7 +64,7 @@ public class CollectorExperimentResult implements StartableCollector<ExperimentR
 	}
 
 	@Override
-	public ExperimentResultEvent newEventInstance(Set<String[]> allTriples, Event e) {
+	public ExperimentResult newEventInstance(Set<String[]> allTriples, Event e) {
 		throw new RuntimeException("Not Implemented, Remove");
 	}
 }

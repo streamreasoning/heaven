@@ -7,9 +7,9 @@ import it.polimi.processing.collector.saver.SQLLiteEventSaver;
 import it.polimi.processing.collector.saver.TrigEventSaver;
 import it.polimi.processing.collector.saver.data.CollectableData;
 import it.polimi.processing.enums.ExecutionStates;
-import it.polimi.processing.events.StreamingEvent;
-import it.polimi.processing.events.result.ExperimentResultEvent;
-import it.polimi.processing.events.result.StreamingEventResult;
+import it.polimi.processing.events.TestStandEvent;
+import it.polimi.processing.events.interfaces.EventResult;
+import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.rspengine.esper.plain.Plain2369;
 import it.polimi.processing.rspengine.jena.JenaEngine;
@@ -23,7 +23,9 @@ import it.polimi.utils.ExecutionEnvirorment;
 import it.polimi.utils.FileUtils;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import lombok.AccessLevel;
@@ -41,6 +43,9 @@ public class CommonMain {
 	public static int EXPERIMENTNUMBER;
 	public static final String ontologyClass = "Ontology";
 
+	private static StartableCollector<EventResult> streamingEventResultCollector;
+	private static TestStand<RSPEngine<TestStandEvent>> testStand;
+
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
 		// String[] files = new String[] { "inputTrigINIT50D1GF0SN1R.trig" };
 		// String[] files = new String[] { "inputTrigINIT100D1GF0SN1R.trig" };
@@ -53,34 +58,15 @@ public class CommonMain {
 
 		Date exeperimentDate = FileUtils.d;
 
-		TestStand<RSPEngine> testStand = new TestStand<RSPEngine>();
+		testStand = new TestStand<RSPEngine<TestStandEvent>>();
 
-		StartableCollector<StreamingEventResult> streamingEventResultCollector = ExecutionEnvirorment.isWritingProtected() ? new CollectorEventResult(
-				testStand, new EventSaver() {
+		StartableCollector<ExperimentResult> experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
 
-					@Override
-					public boolean save(CollectableData d, String where) {
-						return true;
-					}
-
-					@Override
-					public ExecutionStates init() {
-						return ExecutionStates.READY;
-					}
-
-					@Override
-					public ExecutionStates close() {
-						return ExecutionStates.CLOSED;
-					}
-				}, new CSVEventSaver()) : new CollectorEventResult(testStand, new TrigEventSaver(), new CSVEventSaver());
-
-		StartableCollector<ExperimentResultEvent> experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
-
-		Streamer<StreamingEvent> streamer = new TriGStreamer<StreamingEvent>(testStand);
+		Streamer<TestStandEvent> streamer = new TriGStreamer(testStand);
 		String JENASMPLNAME = "jenasmpl";
 		String JENARHODFNAME = "jenarhodf";
 		String PLAIN2369NAME = "plain2369";
-		RSPEngine engine;
+		RSPEngine<TestStandEvent> engine;
 		for (String f : files) {
 			switch (CURRENTENGINE) {
 				case JENA:
@@ -135,15 +121,37 @@ public class CommonMain {
 			}
 
 			log.info("Experiment [" + EXPERIMENTNUMBER + "] of [" + exeperimentDate + "]");
+
+			DateFormat dt = new SimpleDateFormat("yyyy_MM_dd");
+			String outputFileName = "Result_" + "EN" + EXPERIMENTNUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + f.split("\\.")[0];
+
+			streamingEventResultCollector = ExecutionEnvirorment.isWritingProtected() ? new CollectorEventResult(testStand, new EventSaver() {
+
+				@Override
+				public boolean save(CollectableData d, String where) {
+					return true;
+				}
+
+				@Override
+				public ExecutionStates init() {
+					return ExecutionStates.READY;
+				}
+
+				@Override
+				public ExecutionStates close() {
+					return ExecutionStates.CLOSED;
+				}
+			}, new CSVEventSaver(), engine.getName() + "/" + outputFileName) : new CollectorEventResult(testStand, new TrigEventSaver(),
+					new CSVEventSaver(), engine.getName() + "/" + outputFileName);
+
 			run(f, comment, EXPERIMENTNUMBER, testStand, streamingEventResultCollector, experimentResultCollector, engine, streamer, exeperimentDate);
 
 		}
 	}
 
-	private static void run(String f, String comment, int experimentNumber, TestStand<RSPEngine> testStand,
-			StartableCollector<StreamingEventResult> streamingEventResultCollector,
-			StartableCollector<ExperimentResultEvent> experimentResultCollector, RSPEngine engine, Streamer<StreamingEvent> streamer, Date d)
-			throws ClassNotFoundException, SQLException {
+	private static void run(String f, String comment, int experimentNumber, TestStand<RSPEngine<TestStandEvent>> testStand,
+			StartableCollector<EventResult> streamingEventResultCollector, StartableCollector<ExperimentResult> experimentResultCollector,
+			RSPEngine<TestStandEvent> engine, Streamer<TestStandEvent> streamer, Date d) throws ClassNotFoundException, SQLException {
 
 		testStand.build(streamingEventResultCollector, experimentResultCollector, engine, streamer);
 

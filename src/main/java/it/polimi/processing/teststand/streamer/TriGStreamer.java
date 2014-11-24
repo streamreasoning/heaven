@@ -3,8 +3,7 @@ package it.polimi.processing.teststand.streamer;
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.collector.saver.data.TriG;
 import it.polimi.processing.enums.ExecutionStates;
-import it.polimi.processing.events.Event;
-import it.polimi.processing.events.StreamingEvent;
+import it.polimi.processing.events.TestStandEvent;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.streamer.Parser;
 import it.polimi.processing.streamer.Streamer;
@@ -31,23 +30,23 @@ import lombok.extern.log4j.Log4j;
 
 @Getter
 @Log4j
-public class TriGStreamer<T extends Event> implements Streamer<T> {
+public class TriGStreamer implements Streamer<TestStandEvent> {
 
 	/**
 	 * Represents the core of the streaming procedure, is must publish the
 	 * sendEvent method through which is possibile to inject any kind of event
 	 * into the system
 	 */
-	private final EventProcessor<StreamingEvent> stand;
+	private final EventProcessor<TestStandEvent> engine;
 	@Setter
 	private ExecutionStates status;
 	private String line;
 	private TriG eventTrig = null;
 	private String currentTriG = "";
-	private StreamingEvent streamingEvent;
+	private TestStandEvent streamingEvent;
 
-	public TriGStreamer(EventProcessor<StreamingEvent> stand) {
-		this.stand = stand;
+	public TriGStreamer(EventProcessor<TestStandEvent> stand) {
+		this.engine = stand;
 		this.status = ExecutionStates.CLOSED;
 	}
 
@@ -128,21 +127,10 @@ public class TriGStreamer<T extends Event> implements Streamer<T> {
 		List<String[]> triples = trig.getTriples();
 
 		if (trig != null && key != null && !key.isEmpty() && triples != null && triples.size() > 0) {
-			if (streamingEvent == null)
-				streamingEvent = new StreamingEvent(key, new HashSet<String[]>(triples), eventNumber, experimentNumber, tripleGraph, graphNumber,
-						System.currentTimeMillis(), Memory.getMemoryUsage());
-			else {
-				streamingEvent.setId(key);
-				streamingEvent.setEventTriples(new HashSet<String[]>(triples));
-				streamingEvent.setEventNumber(eventNumber);
-				streamingEvent.setExperimentNumber(experimentNumber);
-				streamingEvent.setTripleGraph(tripleGraph);
-				streamingEvent.setLineNumbers(graphNumber);
-				streamingEvent.setTimestamp(System.currentTimeMillis());
-				streamingEvent.setMemory(Memory.getMemoryUsage());
-			}
+			streamingEvent = new TestStandEvent(key, new HashSet<String[]>(triples), eventNumber, experimentNumber, tripleGraph, graphNumber,
+					System.currentTimeMillis(), Memory.getMemoryUsage());
 
-			return stand.sendEvent(streamingEvent);
+			return engine.sendEvent(streamingEvent);
 		}
 		return false;
 	}

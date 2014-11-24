@@ -2,9 +2,9 @@ package it.polimi.processing.teststand.streamer;
 
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.enums.ExecutionStates;
-import it.polimi.processing.events.Event;
 import it.polimi.processing.events.EventFactory;
-import it.polimi.processing.events.StreamingEvent;
+import it.polimi.processing.events.TestStandEvent;
+import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.streamer.Parser;
 import it.polimi.processing.streamer.Streamer;
@@ -38,10 +38,10 @@ public class NTStreamer<T extends Event> implements Streamer<T> {
 	 * sendEvent method through which is possibile to inject any kind of event
 	 * into the system
 	 */
-	private final EventProcessor<StreamingEvent> stand;
+	private final EventProcessor<TestStandEvent> stand;
 	private ExecutionStates status;
 
-	public NTStreamer(EventProcessor<StreamingEvent> stand) {
+	public NTStreamer(EventProcessor<TestStandEvent> stand) {
 		this.stand = stand;
 		this.status = ExecutionStates.CLOSED;
 	}
@@ -135,8 +135,8 @@ public class NTStreamer<T extends Event> implements Streamer<T> {
 
 		String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + ">";
 
-		StreamingEvent streamingEvent = new StreamingEvent(id, eventTriples, eventNumber, experimentNumber, tripleGraph, lineNumbers,
-				System.currentTimeMillis(), Memory.getMemoryUsage());
+		TestStandEvent streamingEvent = new TestStandEvent(id, eventTriples, eventNumber, experimentNumber, tripleGraph, lineNumbers,
+				System.currentTimeMillis(), Memory.getMemoryUsage(), null, 0L, 0D);
 
 		return stand.sendEvent(streamingEvent);
 	}

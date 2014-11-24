@@ -2,7 +2,7 @@ package preprocessing;
 
 import static org.junit.Assert.assertEquals;
 import it.polimi.processing.EventProcessor;
-import it.polimi.processing.events.StreamingEvent;
+import it.polimi.processing.events.TestStandEvent;
 import it.polimi.processing.teststand.streamer.TriGStreamer;
 import it.polimi.utils.FileUtils;
 import it.polimi.utils.TripleGraphTypes;
@@ -16,15 +16,15 @@ import org.junit.Test;
 
 public class TrigStreamerTest {
 
-	StreamingEvent e;
+	TestStandEvent e;
 
 	@Test
 	public void simpleTrigTest() {
 
-		TriGStreamer<StreamingEvent> streamer = new TriGStreamer<StreamingEvent>(new EventProcessor<StreamingEvent>() {
+		TriGStreamer<TestStandEvent> streamer = new TriGStreamer<TestStandEvent>(new EventProcessor<TestStandEvent>() {
 
 			@Override
-			public boolean sendEvent(StreamingEvent e) {
+			public boolean sendEvent(TestStandEvent e) {
 
 				assertEquals(e.getId(), "<http://experiment.org/0>");
 
@@ -50,11 +50,11 @@ public class TrigStreamerTest {
 	@Test
 	public void twoGraphsTrigTest() {
 
-		TriGStreamer<StreamingEvent> streamer = new TriGStreamer<StreamingEvent>(new EventProcessor<StreamingEvent>() {
+		TriGStreamer<TestStandEvent> streamer = new TriGStreamer<TestStandEvent>(new EventProcessor<TestStandEvent>() {
 			int numEvents = 0;
 
 			@Override
-			public boolean sendEvent(StreamingEvent e) {
+			public boolean sendEvent(TestStandEvent e) {
 
 				assertEquals(e.getId(), "<http://example.org/" + numEvents + ">");
 				numEvents++;

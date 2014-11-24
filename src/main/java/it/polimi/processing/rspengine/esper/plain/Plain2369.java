@@ -1,13 +1,13 @@
 package it.polimi.processing.rspengine.esper.plain;
 
+import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionStates;
-import it.polimi.processing.events.StreamingEvent;
-import it.polimi.processing.rspengine.RSPEngine;
+import it.polimi.processing.events.TestStandEvent;
+import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.esper.RSPEsperEngine;
 import it.polimi.processing.rspengine.esper.commons.listener.ResultCollectorListener;
 import it.polimi.processing.rspengine.esper.plain.events.Out;
 import it.polimi.processing.rspengine.esper.plain.events.TEvent;
-import it.polimi.processing.teststand.core.TestStand;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -40,9 +40,8 @@ public class Plain2369 extends RSPEsperEngine {
 	private TEvent esperEvent = null;
 	private final String ontologyClass;
 
-	public Plain2369(String name, TestStand<RSPEngine> stand, String runtimeOnto, String ontologyClass) {
-		super(name, stand);
-		super.stand = stand;
+	public Plain2369(String name, ResultCollector<EventResult> collector, String runtimeOnto, String ontologyClass) {
+		super(name, collector);
 		this.runtimeOnto = runtimeOnto;
 		this.ontologyClass = ontologyClass;
 	}
@@ -72,7 +71,7 @@ public class Plain2369 extends RSPEsperEngine {
 		cepAdm.createEPL(Queries.RDFS9);
 
 		EPStatement out = cepAdm.createEPL("insert into Out select * from QueryOut.win:time_batch(1000 msec)");
-		listener = new ResultCollectorListener(collector, this, stand.getCurrentExperiment(), new HashSet<String[]>(), new HashSet<String[]>(), null);
+		listener = new ResultCollectorListener(collector, this, name, new HashSet<String[]>(), new HashSet<String[]>(), null);
 		out.addListener(listener);
 	}
 
@@ -112,7 +111,6 @@ public class Plain2369 extends RSPEsperEngine {
 	public ExecutionStates startProcessing() {
 		if (isStartable()) {
 			resetTime();
-			listener.setExperiment(stand.getCurrentExperiment());
 			cepRT.sendEvent(new CurrentTimeEvent(time));
 			status = ExecutionStates.READY;
 		} else {
@@ -122,7 +120,7 @@ public class Plain2369 extends RSPEsperEngine {
 	}
 
 	@Override
-	public boolean sendEvent(StreamingEvent e) {
+	public boolean sendEvent(TestStandEvent e) {
 		this.currentStreamingEvent = e;
 		status = ExecutionStates.RUNNING;
 		Set<String[]> eventTriples = e.getEventTriples();

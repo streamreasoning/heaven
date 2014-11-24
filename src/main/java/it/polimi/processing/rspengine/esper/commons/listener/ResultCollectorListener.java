@@ -1,8 +1,7 @@
 package it.polimi.processing.rspengine.esper.commons.listener;
 
 import it.polimi.processing.collector.ResultCollector;
-import it.polimi.processing.events.Experiment;
-import it.polimi.processing.events.result.StreamingEventResult;
+import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.esper.RSPEsperEngine;
 import it.polimi.processing.rspengine.esper.TripleEvent;
 
@@ -23,12 +22,12 @@ import com.espertech.esper.client.EventBean;
 @EqualsAndHashCode(callSuper = false)
 public class ResultCollectorListener extends GenearlListener {
 
-	private final ResultCollector<StreamingEventResult> resultCollector;
+	private final ResultCollector<EventResult> resultCollector;
 	private final RSPEsperEngine engine;
-	private Experiment experiment;
+	private String name;
 	private Set<String[]> statements;
 	private Set<String[]> start_triples;
-	private StreamingEventResult eventToSend;
+	private EventResult eventToSend;
 
 	@Override
 	public void update(EventBean[] newEvents, EventBean[] oldEvents) {
@@ -50,7 +49,7 @@ public class ResultCollectorListener extends GenearlListener {
 
 		try {
 			log.debug("Send Event to the StoreCollector");
-			resultCollector.store(eventToSend, engine.getName() + "/" + experiment.getOutputFileName());
+			resultCollector.store(eventToSend);
 		} catch (IOException e) {
 			log.error("Somethign went wrong, can't save the event");
 		}

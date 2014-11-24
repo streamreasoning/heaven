@@ -4,8 +4,9 @@ import it.polimi.processing.Startable;
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.collector.saver.EventSaver;
 import it.polimi.processing.enums.ExecutionStates;
-import it.polimi.processing.events.Event;
-import it.polimi.processing.events.result.StreamingEventResult;
+import it.polimi.processing.events.TestStandEvent;
+import it.polimi.processing.events.interfaces.Event;
+import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.teststand.core.TestStand;
 
@@ -18,17 +19,19 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CollectorEventResult implements StartableCollector<StreamingEventResult>, Startable<ExecutionStates> {
+public class CollectorEventResult implements StartableCollector<EventResult>, Startable<ExecutionStates> {
 
 	private long timestamp;
 	private EventSaver trigSaver;
 	private EventSaver csvSaver;
 
 	private ExecutionStates status;
+	private String where;
 
-	private TestStand<RSPEngine> stand;
+	private TestStand<RSPEngine<TestStandEvent>> stand;
 
-	public CollectorEventResult(TestStand<RSPEngine> stand, EventSaver trig, EventSaver csv) throws SQLException, ClassNotFoundException {
+	public CollectorEventResult(TestStand<RSPEngine<TestStandEvent>> stand, EventSaver trig, EventSaver csv, String where) throws SQLException,
+			ClassNotFoundException {
 		this.stand = stand;
 		this.trigSaver = trig;
 		this.csvSaver = csv;
@@ -37,17 +40,12 @@ public class CollectorEventResult implements StartableCollector<StreamingEventRe
 	}
 
 	@Override
-	public boolean store(StreamingEventResult r, String where) throws IOException {
+	public boolean store(EventResult r) throws IOException {
 		if (!ExecutionStates.READY.equals(status)) {
 			return false;
 		} else {
-			return trigSaver.save(r.getTrig(), where) && csvSaver.save(r.getCSV(), where);
+			return trigSaver.save(r.getTrig(), where) && csvSaver.save(r.getCSV(), this.where);
 		}
-	}
-
-	@Override
-	public long getTimestamp() {
-		return timestamp;
 	}
 
 	@Override
@@ -71,7 +69,7 @@ public class CollectorEventResult implements StartableCollector<StreamingEventRe
 	}
 
 	@Override
-	public StreamingEventResult newEventInstance(Set<String[]> allTriples, Event e) {
+	public EventResult newEventInstance(Set<String[]> allTriples, Event e) {
 		return stand.newEventInstance(allTriples, e);
 	}
 

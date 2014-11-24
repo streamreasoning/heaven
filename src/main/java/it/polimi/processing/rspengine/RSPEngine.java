@@ -3,22 +3,19 @@ package it.polimi.processing.rspengine;
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionStates;
-import it.polimi.processing.events.StreamingEvent;
-import it.polimi.processing.events.result.StreamingEventResult;
-import it.polimi.processing.teststand.core.Stand;
+import it.polimi.processing.events.interfaces.EventResult;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class RSPEngine implements EventProcessor<StreamingEvent> {
+public abstract class RSPEngine<TestStandEvent> implements EventProcessor<TestStandEvent> {
 
 	protected ExecutionStates status;
-	protected ResultCollector<StreamingEventResult> collector;
+	protected ResultCollector<EventResult> collector;
 	protected String name;
-	protected Stand stand;
 
-	public RSPEngine(String name, ResultCollector<StreamingEventResult> stand) {
+	public RSPEngine(String name, ResultCollector<EventResult> stand) {
 		this.collector = stand;
 		this.name = name;
 	}

@@ -20,12 +20,10 @@ package it.polimi.processing.rspengine.jena;
 
 import it.polimi.processing.enums.ExecutionStates;
 import it.polimi.processing.events.Experiment;
-import it.polimi.processing.events.StreamingEvent;
-import it.polimi.processing.events.result.StreamingEventResult;
+import it.polimi.processing.events.TestStandEvent;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.teststand.core.TestStand;
 import it.polimi.utils.FileUtils;
-import it.polimi.utils.Memory;
 import it.polimi.utils.RDFSUtils;
 
 import java.io.IOException;
@@ -56,16 +54,15 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.ReasonerVocabulary;
 
 @Log4j
-public class JenaEngine extends RSPEngine {
+public class JenaEngine extends RSPEngine<TestStandEvent> {
 
 	private static Model tbox_star, abox;
 	private static InfModel abox_star;
 	int i = 0;
 	private Experiment currentExperiment;
 
-	public JenaEngine(String name, TestStand<RSPEngine> stand) {
-		super(name, stand);
-		super.stand = stand;
+	public JenaEngine(String name, TestStand<RSPEngine<TestStandEvent>> collector) {
+		super(name, collector);
 		FileManager.get().addLocatorClassLoader(JenaEngine.class.getClassLoader());
 
 		// CARICO LA TBOX CHIUSA
@@ -73,8 +70,7 @@ public class JenaEngine extends RSPEngine {
 	}
 
 	@Override
-	public boolean sendEvent(StreamingEvent e) {
-		this.currentExperiment = stand.getCurrentExperiment();
+	public boolean sendEvent(TestStandEvent e) {
 		if (currentExperiment == null) {
 			return false;
 		} else {
@@ -104,8 +100,7 @@ public class JenaEngine extends RSPEngine {
 			}
 
 			try {
-				return collector.store(new StreamingEventResult(e, statements, System.currentTimeMillis(), Memory.getMemoryUsage()), name + "/"
-						+ currentExperiment.getOutputFileName());
+				return collector.store(collector.newEventInstance(statements, e));
 			} catch (IOException e1) {
 				log.error(e1.getMessage());
 				return false;

@@ -3,8 +3,9 @@ package it.polimi.processing.teststand.collector;
 import it.polimi.processing.Startable;
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.enums.ExecutionStates;
-import it.polimi.processing.events.Event;
-import it.polimi.processing.events.result.StreamingEventResult;
+import it.polimi.processing.events.TestStandEvent;
+import it.polimi.processing.events.interfaces.Event;
+import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.teststand.core.TestStand;
 
@@ -17,28 +18,23 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class EmptyCollectorStreamingEvent implements StartableCollector<StreamingEventResult>, Startable<ExecutionStates> {
+public class EmptyCollectorStreamingEvent implements StartableCollector<EventResult>, Startable<ExecutionStates> {
 
 	private long timestamp;
 
 	private ExecutionStates status;
 
-	private TestStand<RSPEngine> stand;
+	private TestStand<RSPEngine<TestStandEvent>> stand;
 
-	public EmptyCollectorStreamingEvent(TestStand<RSPEngine> stand) throws SQLException, ClassNotFoundException {
+	public EmptyCollectorStreamingEvent(TestStand<RSPEngine<TestStandEvent>> stand) throws SQLException, ClassNotFoundException {
 		this.stand = stand;
 		this.timestamp = System.currentTimeMillis();
 		this.status = ExecutionStates.READY;
 	}
 
 	@Override
-	public boolean store(StreamingEventResult r, String where) throws IOException {
+	public boolean store(EventResult r) throws IOException {
 		return true;
-	}
-
-	@Override
-	public long getTimestamp() {
-		return timestamp;
 	}
 
 	@Override
@@ -54,7 +50,7 @@ public class EmptyCollectorStreamingEvent implements StartableCollector<Streamin
 	}
 
 	@Override
-	public StreamingEventResult newEventInstance(Set<String[]> allTriples, Event e) {
+	public EventResult newEventInstance(Set<String[]> allTriples, Event e) {
 		return stand.newEventInstance(allTriples, e);
 	}
 

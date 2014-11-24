@@ -5,11 +5,11 @@ import it.polimi.processing.Startable;
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.enums.ExecutionStates;
-import it.polimi.processing.events.Event;
 import it.polimi.processing.events.Experiment;
-import it.polimi.processing.events.StreamingEvent;
-import it.polimi.processing.events.result.ExperimentResultEvent;
-import it.polimi.processing.events.result.StreamingEventResult;
+import it.polimi.processing.events.TestStandEvent;
+import it.polimi.processing.events.interfaces.Event;
+import it.polimi.processing.events.interfaces.EventResult;
+import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.streamer.Streamer;
@@ -28,23 +28,22 @@ import lombok.extern.log4j.Log4j;
 
 @Getter
 @Log4j
-public class TestStand<T extends RSPEngine> extends Stand implements EventProcessor<StreamingEvent>, ResultCollector<StreamingEventResult>,
+public class TestStand<T extends RSPEngine<TestStandEvent>> extends Stand implements EventProcessor<TestStandEvent>, ResultCollector<EventResult>,
 		Startable<ExecutionStates> {
 
-	private StartableCollector<StreamingEventResult> resultCollector;
-	private StartableCollector<ExperimentResultEvent> experimentResultCollector;
+	private StartableCollector<EventResult> resultCollector;
+	private StartableCollector<ExperimentResult> experimentResultCollector;
 
 	private T rspEngine;
-	private Streamer<StreamingEvent> streamer;
-	private StreamingEvent se;
-	private StreamingEventResult ser;
+	private Streamer<TestStandEvent> streamer;
+	private TestStandEvent se;
 
 	public TestStand() {
 		super(ExecutionStates.NOT_READY, null);
 	}
 
-	public void build(StartableCollector<StreamingEventResult> resultCollector, StartableCollector<ExperimentResultEvent> experimentResultCollector,
-			T rspEngine, Streamer<StreamingEvent> streamer) {
+	public void build(StartableCollector<EventResult> resultCollector, StartableCollector<ExperimentResult> experimentResultCollector, T rspEngine,
+			Streamer<TestStandEvent> streamer) {
 		this.experimentResultCollector = experimentResultCollector;
 		this.resultCollector = resultCollector;
 		this.rspEngine = rspEngine;
@@ -68,7 +67,7 @@ public class TestStand<T extends RSPEngine> extends Stand implements EventProces
 			status = ExecutionStates.RUNNING;
 
 			currentExperiment = new Experiment(experimentNumber, experimentDescription, rspEngine.getName(), inputFileName, outputFileName,
-					System.currentTimeMillis(), comment);
+					System.currentTimeMillis(), comment, 0L);
 
 			log.debug("Status [" + status + "] Experiment Created");
 			ExecutionStates engineStatus = rspEngine.startProcessing();
@@ -87,7 +86,8 @@ public class TestStand<T extends RSPEngine> extends Stand implements EventProces
 			engineStatus = rspEngine.stopProcessing();
 			log.debug("Status [" + status + "] Processing is ended");
 
-			experimentResultCollector.store(new ExperimentResultEvent(currentExperiment, System.currentTimeMillis()), "");
+			currentExperiment.setTimestampEnd(System.currentTimeMillis());
+			experimentResultCollector.store(currentExperiment);
 
 			if (ExecutionStates.CLOSED.equals(engineStatus)) {
 				status = ExecutionStates.READY;
@@ -182,7 +182,7 @@ public class TestStand<T extends RSPEngine> extends Stand implements EventProces
 	}
 
 	@Override
-	public boolean sendEvent(StreamingEvent e) {
+	public boolean sendEvent(TestStandEvent e) {
 
 		se = e;
 
@@ -190,30 +190,20 @@ public class TestStand<T extends RSPEngine> extends Stand implements EventProces
 	}
 
 	@Override
-	public boolean store(StreamingEventResult r, String where) {
+	public boolean store(EventResult r) {
 		try {
-			return resultCollector.store(r, rspEngine.getName() + "/" + currentExperiment.getOutputFileName());
+			return resultCollector.store(r);
 		} catch (IOException e) {
 			return false;
 		}
 	}
 
 	@Override
-	public long getTimestamp() {
-		return resultCollector.getTimestamp();
-	}
-
-	@Override
-	public StreamingEventResult newEventInstance(Set<String[]> all_triples, Event e) {
-		if (ser == null) {
-			ser = new StreamingEventResult((StreamingEvent) e, all_triples, System.currentTimeMillis(), Memory.getMemoryUsage());
-		} else {
-			ser.setAll_triples(all_triples);
-			ser.setInputEvent((StreamingEvent) e);
-			ser.setResultTimestamp(System.currentTimeMillis());
-			ser.setMemory(Memory.getMemoryUsage());
-		}
-		return ser;
+	public EventResult newEventInstance(Set<String[]> all_triples, Event e) {
+		se.setAll_triples(all_triples);
+		se.setResultTimestamp(System.currentTimeMillis());
+		se.setMemoryAR(Memory.getMemoryUsage());
+		return se;
 	}
 
 }

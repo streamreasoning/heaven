@@ -2,8 +2,9 @@ package it.polimi.processing.rspengine.esper;
 
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionStates;
-import it.polimi.processing.events.Event;
-import it.polimi.processing.events.result.StreamingEventResult;
+import it.polimi.processing.events.TestStandEvent;
+import it.polimi.processing.events.interfaces.Event;
+import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.RSPEngine;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
@@ -17,7 +18,7 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
 
 @Getter
 @Log4j
-public abstract class RSPEsperEngine extends RSPEngine {
+public abstract class RSPEsperEngine extends RSPEngine<TestStandEvent> {
 
 	protected static Configuration cepConfig;
 	protected static EPServiceProvider cep;
@@ -28,8 +29,8 @@ public abstract class RSPEsperEngine extends RSPEngine {
 
 	protected int time = 0;
 
-	public RSPEsperEngine(String name, ResultCollector<StreamingEventResult> stand) {
-		super(name, stand);
+	public RSPEsperEngine(String name, ResultCollector<EventResult> collector) {
+		super(name, collector);
 	}
 
 	protected void sendTimeEvent() {

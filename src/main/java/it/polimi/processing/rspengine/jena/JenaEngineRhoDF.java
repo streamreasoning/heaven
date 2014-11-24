@@ -18,14 +18,13 @@
 
 package it.polimi.processing.rspengine.jena;
 
+import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionStates;
-import it.polimi.processing.events.Experiment;
-import it.polimi.processing.events.StreamingEvent;
-import it.polimi.processing.events.result.StreamingEventResult;
+import it.polimi.processing.events.TestStandEvent;
+import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.teststand.core.TestStand;
 import it.polimi.utils.FileUtils;
-import it.polimi.utils.Memory;
 import it.polimi.utils.RDFSUtils;
 
 import java.io.IOException;
@@ -54,77 +53,68 @@ import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 @Log4j
-public class JenaEngineRhoDF extends RSPEngine {
+public class JenaEngineRhoDF extends RSPEngine<TestStandEvent> {
 
 	private final Model tBoxStar;
 	private Model abox;
 	private InfModel aboxStar;
 	int i = 0;
-	private Experiment currentExperiment;
-	private final String tbox, aBoxRuleset;
+	private final String aBoxRuleset;
 
-	public JenaEngineRhoDF(String name, String tbox, String ruleset_abox, TestStand<RSPEngine> stand) {
-		super(name, stand);
-		super.stand = stand;
-		this.tbox = (tbox != null && !tbox.isEmpty()) ? tbox : FileUtils.UNIV_BENCH_RHODF_MODIFIED;
+	public JenaEngineRhoDF(String name, String tbox, String ruleset_abox, ResultCollector<EventResult> collector) {
+		super(name, collector);
+		String localTbox = (tbox != null && !tbox.isEmpty()) ? tbox : FileUtils.UNIV_BENCH_RHODF_MODIFIED;
 		this.aBoxRuleset = (ruleset_abox != null && !ruleset_abox.isEmpty()) ? ruleset_abox : FileUtils.RHODF_RULE_SET_RUNTIME;
 		FileManager.get().addLocatorClassLoader(JenaEngineRhoDF.class.getClassLoader());
 
 		// CARICO LA TBOX CHIUSA
-		tBoxStar = FileManager.get().loadModel(tbox, null, "RDF/XML");
+		tBoxStar = FileManager.get().loadModel(localTbox, null, "RDF/XML");
 	}
 
-	public JenaEngineRhoDF(String name, TestStand<RSPEngine> stand) {
+	public JenaEngineRhoDF(String name, TestStand<RSPEngine<TestStandEvent>> stand) {
 		this(name, "", "", stand);
 	}
 
 	@Override
-	public boolean sendEvent(StreamingEvent e) {
-		this.currentExperiment = stand.getCurrentExperiment();
-		if (currentExperiment == null) {
+	public boolean sendEvent(TestStandEvent e) {
+		abox = ModelFactory.createMemModelMaker().createDefaultModel();
+
+		for (String[] eventTriple : e.getEventTriples()) {
+			log.debug(Arrays.deepToString(eventTriple));
+			Statement s = createStatement(eventTriple);
+			abox.add(s);
+		}
+
+		Reasoner reasoner = getRHODFReasoner();
+
+		InfGraph graph = reasoner.bindSchema(tBoxStar.getGraph()).bind(abox.getGraph());
+		aboxStar = new InfModelImpl(graph);
+
+		Set<String[]> statements = new HashSet<String[]>();
+		Model difference = aboxStar.difference(tBoxStar);
+		StmtIterator iterator = difference.listStatements();
+
+		while (iterator.hasNext()) {
+			Triple t = iterator.next().asTriple();
+			String[] statementStrings = new String[] { t.getSubject().toString(), t.getPredicate().toString(), t.getObject().toString() };
+			statements.add(statementStrings);
+			log.debug(Arrays.deepToString(statementStrings));
+		}
+
+		try {
+			return collector.store(collector.newEventInstance(statements, e));
+		} catch (IOException e1) {
+			log.error(e1.getMessage());
 			return false;
-		} else {
-			abox = ModelFactory.createMemModelMaker().createDefaultModel();
-
-			for (String[] eventTriple : e.getEventTriples()) {
-				log.debug(Arrays.deepToString(eventTriple));
-				Statement s = createStatement(eventTriple);
-				abox.add(s);
-			}
-
-			Reasoner reasoner = getRHODFReasoner();
-
-			InfGraph graph = reasoner.bindSchema(tBoxStar.getGraph()).bind(abox.getGraph());
-			aboxStar = new InfModelImpl(graph);
-
-			Set<String[]> statements = new HashSet<String[]>();
-			Model difference = aboxStar.difference(tBoxStar);
-			StmtIterator iterator = difference.listStatements();
-
-			while (iterator.hasNext()) {
-				Triple t = iterator.next().asTriple();
-				String[] statementStrings = new String[] { t.getSubject().toString(), t.getPredicate().toString(), t.getObject().toString() };
-				statements.add(statementStrings);
-				log.debug(Arrays.deepToString(statementStrings));
-			}
-
-			try {
-				return collector.store(new StreamingEventResult(e, statements, System.currentTimeMillis(), Memory.getMemoryUsage()), name + "/"
-						+ currentExperiment.getOutputFileName());
-			} catch (IOException e1) {
-				log.error(e1.getMessage());
-			}
-			return false;
-
 		}
 	}
 
 	@Override
 	public ExecutionStates startProcessing() {
 		if (isStartable()) {
-			status = ExecutionStates.READY;
+			this.status = ExecutionStates.READY;
 		} else {
-			status = ExecutionStates.ERROR;
+			this.status = ExecutionStates.ERROR;
 		}
 		return status;
 	}
@@ -132,11 +122,11 @@ public class JenaEngineRhoDF extends RSPEngine {
 	@Override
 	public ExecutionStates stopProcessing() {
 		if (isOn()) {
-			status = ExecutionStates.CLOSED;
+			this.status = ExecutionStates.CLOSED;
 
 		} else {
 
-			status = ExecutionStates.ERROR;
+			this.status = ExecutionStates.ERROR;
 		}
 		return status;
 	}
@@ -144,14 +134,14 @@ public class JenaEngineRhoDF extends RSPEngine {
 	@Override
 	public ExecutionStates init() {
 		log.info("Initializing " + name + "..Nothing to do");
-		status = ExecutionStates.READY;
+		this.status = ExecutionStates.READY;
 		return status;
 	}
 
 	@Override
 	public ExecutionStates close() {
 		log.info("Closing " + name + "..Nothing to do");
-		status = ExecutionStates.CLOSED;
+		this.status = ExecutionStates.CLOSED;
 		return status;
 	}
 
