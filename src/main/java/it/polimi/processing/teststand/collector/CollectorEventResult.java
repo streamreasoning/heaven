@@ -37,6 +37,7 @@ public class CollectorEventResult implements StartableCollector<EventResult>, St
 		this.csvSaver = csv;
 		this.timestamp = System.currentTimeMillis();
 		this.status = ExecutionStates.READY;
+		this.where = where;
 	}
 
 	@Override
@@ -44,7 +45,7 @@ public class CollectorEventResult implements StartableCollector<EventResult>, St
 		if (!ExecutionStates.READY.equals(status)) {
 			return false;
 		} else {
-			return trigSaver.save(r.getTrig(), where) && csvSaver.save(r.getCSV(), this.where);
+			return trigSaver.save(r.getTrig(), this.where) && csvSaver.save(r.getCSV(), this.where);
 		}
 	}
 

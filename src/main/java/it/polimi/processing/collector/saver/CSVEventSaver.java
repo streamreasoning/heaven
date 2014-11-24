@@ -18,7 +18,6 @@ public class CSVEventSaver implements EventSaver {
 	Date d = new Date();
 	private final String outputPath;
 	private String path = "";
-	private String previousWhere = "";
 	private File file;
 
 	private FileWriter writer;
@@ -57,18 +56,9 @@ public class CSVEventSaver implements EventSaver {
 		try {
 			if (ExecutionStates.READY.equals(status)) {
 
-				if ("".equals(previousWhere)) {
-					previousWhere = where;
-					path = outputPath + where.replace("Result", "LOG") + FileUtils.CSV;
-					file = new File(path);
-					writer = new FileWriter(file, true);
-				} else if (!previousWhere.equals(where)) {
-					previousWhere = where;
-					path = outputPath + where.replace("Result", "LOG") + FileUtils.CSV;
-					file = new File(path);
-					writer = new FileWriter(file, true);
-
-				}
+				path = outputPath + where.replace("Result", "LOG") + FileUtils.CSV;
+				file = new File(path);
+				writer = new FileWriter(file, true);
 
 				if (!file.exists()) {
 					file.createNewFile();
