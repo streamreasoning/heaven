@@ -31,7 +31,7 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
  * 
  * **/
 @Log4j
-public class JenaEsperSMPL extends RSPEsperEngine<RSPEvent> {
+public class JenaEsperSMPL extends RSPEsperEngine {
 
 	private JenaCEPListener listener = null;
 	private final String runtimeOnto;
@@ -84,7 +84,7 @@ public class JenaEsperSMPL extends RSPEsperEngine<RSPEvent> {
 	}
 
 	@Override
-	public boolean sendEvent(RSPEvent e) {
+	public boolean process(RSPEvent e) {
 		this.currentStreamingEvent = e;
 		status = ExecutionState.RUNNING;
 		Set<String[]> eventTriples = e.getEventTriples();
@@ -101,7 +101,7 @@ public class JenaEsperSMPL extends RSPEsperEngine<RSPEvent> {
 		log.debug("Status[" + status + "] Parsing done, prepare time scheduling...");
 		sendTimeEvent();
 		status = ExecutionState.READY;
-		return true;
+		return processDone();
 	}
 
 	@Override
@@ -121,4 +121,8 @@ public class JenaEsperSMPL extends RSPEsperEngine<RSPEvent> {
 		return status;
 	}
 
+	@Override
+	public boolean processDone() {
+		return true;
+	}
 }

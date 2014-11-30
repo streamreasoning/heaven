@@ -54,13 +54,14 @@ import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 @Log4j
-public class JenaEngineRhoDF extends RSPEngine<RSPEvent> {
+public class JenaEngineRhoDF extends RSPEngine {
 
 	private final Model tBoxStar;
 	private Model abox;
 	private InfModel aboxStar;
 	int i = 0;
 	private final String aBoxRuleset;
+	private RSPEvent currentEvent;
 
 	public JenaEngineRhoDF(String name, String tbox, String ruleset_abox, ResultCollector<EventResult> collector) {
 		super(name, collector);
@@ -72,12 +73,15 @@ public class JenaEngineRhoDF extends RSPEngine<RSPEvent> {
 		tBoxStar = FileManager.get().loadModel(localTbox, null, "RDF/XML");
 	}
 
-	public JenaEngineRhoDF(String name, TestStand<RSPEngine<RSPEvent>> stand) {
+	public JenaEngineRhoDF(String name, TestStand stand) {
 		this(name, "", "", stand);
 	}
 
 	@Override
-	public boolean sendEvent(RSPEvent e) {
+	public boolean process(RSPEvent e) {
+
+		currentEvent = e;
+
 		abox = ModelFactory.createMemModelMaker().createDefaultModel();
 
 		for (String[] eventTriple : e.getEventTriples()) {
@@ -102,16 +106,11 @@ public class JenaEngineRhoDF extends RSPEngine<RSPEvent> {
 			log.debug(Arrays.deepToString(statementStrings));
 		}
 
-		try {
-			e.setAll_triples(statements);
-			e.setResultTimestamp(System.currentTimeMillis());
-			e.setMemoryAR(Memory.getMemoryUsage());
+		currentEvent.setAll_triples(statements);
+		currentEvent.setResultTimestamp(System.currentTimeMillis());
+		currentEvent.setMemoryAR(Memory.getMemoryUsage());
 
-			return collector.store(e);
-		} catch (IOException e1) {
-			log.error(e1.getMessage());
-			return false;
-		}
+		return processDone();
 	}
 
 	@Override
@@ -171,5 +170,19 @@ public class JenaEngineRhoDF extends RSPEngine<RSPEvent> {
 
 	public boolean isReady() {
 		return ExecutionState.READY.equals(status);
+	}
+
+	@Override
+	public boolean processDone() {
+		if (currentEvent == null) {
+			return false;
+		} else {
+			try {
+				return collector.store(currentEvent);
+			} catch (IOException e) {
+				log.error(e.getMessage());
+				return false;
+			}
+		}
 	}
 }

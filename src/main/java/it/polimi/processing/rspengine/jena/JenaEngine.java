@@ -55,14 +55,14 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.ReasonerVocabulary;
 
 @Log4j
-public class JenaEngine extends RSPEngine<RSPEvent> {
+public class JenaEngine extends RSPEngine {
 
 	private static Model tbox_star, abox;
 	private static InfModel abox_star;
 	int i = 0;
 	private Experiment currentExperiment;
 
-	public JenaEngine(String name, TestStand<RSPEngine<RSPEvent>> collector) {
+	public JenaEngine(String name, TestStand collector) {
 		super(name, collector);
 		FileManager.get().addLocatorClassLoader(JenaEngine.class.getClassLoader());
 
@@ -71,10 +71,9 @@ public class JenaEngine extends RSPEngine<RSPEvent> {
 	}
 
 	@Override
-	public boolean sendEvent(RSPEvent e) {
-		if (currentExperiment == null) {
-			return false;
-		} else {
+	public boolean process(RSPEvent e) {
+		if (currentExperiment != null) {
+
 			abox = ModelFactory.createMemModelMaker().createDefaultModel();
 			Statement s;
 			for (String[] eventTriple : e.getEventTriples()) {
@@ -101,18 +100,19 @@ public class JenaEngine extends RSPEngine<RSPEvent> {
 			}
 
 			try {
-
 				e.setAll_triples(statements);
 				e.setResultTimestamp(System.currentTimeMillis());
 				e.setMemoryAR(Memory.getMemoryUsage());
-
-				return collector.store(e);
+				if (collector.store(e)) {
+					return processDone();
+				}
 			} catch (IOException e1) {
 				log.error(e1.getMessage());
 				return false;
 			}
 
 		}
+		return !processDone();
 	}
 
 	private Reasoner getRDFSSimpleReasoner() {
@@ -172,5 +172,10 @@ public class JenaEngine extends RSPEngine<RSPEvent> {
 
 	public boolean isReady() {
 		return ExecutionState.READY.equals(status);
+	}
+
+	@Override
+	public boolean processDone() {
+		return true;
 	}
 }

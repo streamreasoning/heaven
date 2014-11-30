@@ -33,7 +33,7 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
  * 
  * **/
 @Log4j
-public class Plain2369 extends RSPEsperEngine<RSPEvent> {
+public class Plain2369 extends RSPEsperEngine {
 
 	private ResultCollectorListener listener = null;
 	private final String runtimeOnto;
@@ -120,7 +120,7 @@ public class Plain2369 extends RSPEsperEngine<RSPEvent> {
 	}
 
 	@Override
-	public boolean sendEvent(RSPEvent e) {
+	public boolean process(RSPEvent e) {
 		this.currentStreamingEvent = e;
 		status = ExecutionState.RUNNING;
 		Set<String[]> eventTriples = e.getEventTriples();
@@ -140,7 +140,7 @@ public class Plain2369 extends RSPEsperEngine<RSPEvent> {
 
 		sendTimeEvent();
 		status = ExecutionState.READY;
-		return true;
+		return processDone();
 	}
 
 	@Override
@@ -158,6 +158,11 @@ public class Plain2369 extends RSPEsperEngine<RSPEvent> {
 		status = ExecutionState.CLOSED;
 		log.info("Status[" + status + "] Nothing to do...Turing Off");
 		return status;
+	}
+
+	@Override
+	public boolean processDone() {
+		return true;
 	}
 
 }

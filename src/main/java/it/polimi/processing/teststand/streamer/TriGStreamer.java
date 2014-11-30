@@ -121,7 +121,7 @@ public class TriGStreamer extends RSPEventStreamer {
 
 		if (trig != null && key != null && !key.isEmpty() && triples != null && triples.size() > 0) {
 			streamingEvent = createEvent(key, new HashSet<String[]>(triples), eventNumber, experimentNumber);
-			return processor.sendEvent(streamingEvent);
+			return processor.process(streamingEvent);
 		}
 		return false;
 	}

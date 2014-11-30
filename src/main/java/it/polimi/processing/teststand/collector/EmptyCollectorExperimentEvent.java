@@ -3,9 +3,7 @@ package it.polimi.processing.teststand.collector;
 import it.polimi.processing.Startable;
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.interfaces.EventResult;
-import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.teststand.core.TestStand;
 
 import java.io.IOException;
@@ -22,9 +20,9 @@ public class EmptyCollectorExperimentEvent implements StartableCollector<EventRe
 
 	private ExecutionState status;
 
-	private TestStand<RSPEngine<RSPEvent>> stand;
+	private TestStand stand;
 
-	public EmptyCollectorExperimentEvent(TestStand<RSPEngine<RSPEvent>> stand) throws SQLException, ClassNotFoundException {
+	public EmptyCollectorExperimentEvent(TestStand stand) throws SQLException, ClassNotFoundException {
 		this.stand = stand;
 		this.timestamp = System.currentTimeMillis();
 		this.status = ExecutionState.READY;

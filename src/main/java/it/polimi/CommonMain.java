@@ -5,7 +5,6 @@ import it.polimi.processing.collector.saver.CSVEventSaver;
 import it.polimi.processing.collector.saver.SQLLiteEventSaver;
 import it.polimi.processing.collector.saver.TrigEventSaver;
 import it.polimi.processing.collector.saver.VoidSaver;
-import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.rspengine.RSPEngine;
@@ -13,7 +12,7 @@ import it.polimi.processing.rspengine.esper.plain.Plain2369;
 import it.polimi.processing.rspengine.jena.JenaEngine;
 import it.polimi.processing.rspengine.jena.JenaEngineRhoDF;
 import it.polimi.processing.rspengine.jena.JenaEsperSMPL;
-import it.polimi.processing.streamer.Streamer;
+import it.polimi.processing.streamer.RSPEventStreamer;
 import it.polimi.processing.teststand.collector.CollectorEventResult;
 import it.polimi.processing.teststand.collector.CollectorExperimentResult;
 import it.polimi.processing.teststand.core.TestStand;
@@ -43,7 +42,7 @@ public class CommonMain {
 	public static final String ontologyClass = "Ontology";
 
 	private static StartableCollector<EventResult> streamingEventResultCollector;
-	private static TestStand<RSPEngine<RSPEvent>> testStand;
+	private static TestStand testStand;
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
 		// String[] files = new String[] { "inputTrigINIT50D1GF0SN1R.trig" };
@@ -57,14 +56,14 @@ public class CommonMain {
 
 		Date exeperimentDate = FileUtils.d;
 
-		testStand = new TestStand<RSPEngine<RSPEvent>>();
+		testStand = new TestStand();
 
 		StartableCollector<ExperimentResult> experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
 
 		String JENASMPLNAME = "jenasmpl";
 		String JENARHODFNAME = "jenarhodf";
 		String PLAIN2369NAME = "plain2369";
-		RSPEngine<RSPEvent> engine;
+		RSPEngine engine;
 		for (String f : files) {
 			switch (CURRENTENGINE) {
 				case JENA:
@@ -118,7 +117,7 @@ public class CommonMain {
 
 			}
 
-			Streamer<RSPEvent> streamer = new TriGStreamer(testStand);
+			RSPEventStreamer streamer = new TriGStreamer(testStand);
 
 			log.info("Experiment [" + EXPERIMENTNUMBER + "] of [" + exeperimentDate + "]");
 
@@ -136,9 +135,9 @@ public class CommonMain {
 		}
 	}
 
-	private static void run(String f, String comment, int experimentNumber, TestStand<RSPEngine<RSPEvent>> testStand,
+	private static void run(String f, String comment, int experimentNumber, TestStand testStand,
 			StartableCollector<EventResult> streamingEventResultCollector, StartableCollector<ExperimentResult> experimentResultCollector,
-			RSPEngine<RSPEvent> engine, Streamer<RSPEvent> streamer, Date d) throws ClassNotFoundException, SQLException {
+			RSPEngine engine, RSPEventStreamer streamer, Date d) throws ClassNotFoundException, SQLException {
 
 		testStand.build(streamingEventResultCollector, experimentResultCollector, engine, streamer);
 

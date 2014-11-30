@@ -3,13 +3,14 @@ package it.polimi.processing.rspengine;
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionState;
+import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.interfaces.EventResult;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class RSPEngine<Event> implements EventProcessor<Event> {
+public abstract class RSPEngine implements EventProcessor<RSPEvent> {
 
 	protected ExecutionState status;
 	protected ResultCollector<EventResult> collector;

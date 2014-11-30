@@ -2,6 +2,7 @@ package it.polimi.processing.rspengine.esper;
 
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionState;
+import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.RSPEngine;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
 
 @Getter
 @Log4j
-public abstract class RSPEsperEngine<Event> extends RSPEngine<Event> {
+public abstract class RSPEsperEngine extends RSPEngine {
 
 	protected static Configuration cepConfig;
 	protected static EPServiceProvider cep;
@@ -24,7 +25,7 @@ public abstract class RSPEsperEngine<Event> extends RSPEngine<Event> {
 	protected static EPAdministrator cepAdm;
 	protected static ConfigurationMethodRef ref;
 	@Getter
-	protected Event currentStreamingEvent = null;
+	protected RSPEvent currentStreamingEvent = null;
 
 	protected int time = 0;
 

@@ -119,7 +119,7 @@ public class NTStreamer extends RSPEventStreamer {
 
 		String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + ">";
 
-		return processor.sendEvent(lastEvent = createEvent(id, eventTriples, experimentNumber, eventNumber));
+		return processor.process(lastEvent = createEvent(id, eventTriples, experimentNumber, eventNumber));
 
 	}
 

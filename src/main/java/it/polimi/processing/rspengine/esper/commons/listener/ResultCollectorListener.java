@@ -25,7 +25,7 @@ import com.espertech.esper.client.EventBean;
 public class ResultCollectorListener extends GenearlListener {
 
 	private final ResultCollector<EventResult> resultCollector;
-	private final RSPEsperEngine<RSPEvent> engine;
+	private final RSPEsperEngine engine;
 	private String name;
 	private Set<String[]> statements;
 	private Set<String[]> start_triples;

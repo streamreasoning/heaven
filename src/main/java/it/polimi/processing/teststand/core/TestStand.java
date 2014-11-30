@@ -11,7 +11,7 @@ import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.RSPEngine;
-import it.polimi.processing.streamer.Streamer;
+import it.polimi.processing.streamer.RSPEventStreamer;
 import it.polimi.utils.FileUtils;
 
 import java.io.IOException;
@@ -24,26 +24,25 @@ import lombok.extern.log4j.Log4j;
 
 @Getter
 @Log4j
-public class TestStand<T extends RSPEngine<RSPEvent>> extends Stand implements EventProcessor<RSPEvent>, ResultCollector<EventResult>,
-		Startable<ExecutionState> {
+public class TestStand extends Stand implements EventProcessor<RSPEvent>, ResultCollector<EventResult>, Startable<ExecutionState> {
 
 	private StartableCollector<EventResult> resultCollector;
 	private StartableCollector<ExperimentResult> experimentResultCollector;
 
-	private T rspEngine;
-	private Streamer<RSPEvent> streamer;
+	private RSPEngine rspEngine;
+	private RSPEventStreamer RSPEventStreamer;
 	private RSPEvent se;
 
 	public TestStand() {
 		super(ExecutionState.NOT_READY, null);
 	}
 
-	public void build(StartableCollector<EventResult> resultCollector, StartableCollector<ExperimentResult> experimentResultCollector, T rspEngine,
-			Streamer<RSPEvent> streamer) {
+	public void build(StartableCollector<EventResult> resultCollector, StartableCollector<ExperimentResult> experimentResultCollector,
+			RSPEngine rspEngine, RSPEventStreamer RSPEventStreamer) {
 		this.experimentResultCollector = experimentResultCollector;
 		this.resultCollector = resultCollector;
 		this.rspEngine = rspEngine;
-		this.streamer = streamer;
+		this.RSPEventStreamer = RSPEventStreamer;
 	}
 
 	public int run(String f, int experimentNumber, String comment, Date d) throws Exception {
@@ -71,7 +70,7 @@ public class TestStand<T extends RSPEngine<RSPEvent>> extends Stand implements E
 
 			if (ExecutionState.READY.equals(engineStatus)) {
 				try {
-					streamer.stream(getBuffer(inputFileName), experimentNumber);
+					RSPEventStreamer.stream(getBuffer(inputFileName), experimentNumber);
 				} catch (IOException ex) {
 					status = ExecutionState.ERROR;
 					log.error(ex.getMessage());
@@ -112,17 +111,17 @@ public class TestStand<T extends RSPEngine<RSPEvent>> extends Stand implements E
 		if (!isOn()) {
 			throw new WrongStatusTransitionException("Can't Switch from Status [" + status + "] to [" + ExecutionState.CLOSED + "]");
 		} else {
-			ExecutionState streamerStatus = streamer.close();
+			ExecutionState RSPEventStreamerStatus = RSPEventStreamer.close();
 			ExecutionState engineStatus = rspEngine.close();
 			ExecutionState collectorStatus = resultCollector.close();
 			ExecutionState experimenTcollectorStatus = experimentResultCollector.close();
 
-			if (ExecutionState.CLOSED.equals(streamerStatus) && ExecutionState.CLOSED.equals(experimenTcollectorStatus)
+			if (ExecutionState.CLOSED.equals(RSPEventStreamerStatus) && ExecutionState.CLOSED.equals(experimenTcollectorStatus)
 					&& ExecutionState.CLOSED.equals(collectorStatus) && ExecutionState.CLOSED.equals(engineStatus)) {
 				status = ExecutionState.CLOSED;
 				log.debug("Status [" + status + "] Closing the TestStand");
 			} else {
-				log.error("streamerStatus: " + streamerStatus);
+				log.error("RSPEventStreamerStatus: " + RSPEventStreamerStatus);
 				log.error("collectorStatus: " + collectorStatus);
 				log.error("experimentCollectorStatus: " + experimenTcollectorStatus);
 				log.error("engineStatus: " + engineStatus);
@@ -137,7 +136,7 @@ public class TestStand<T extends RSPEngine<RSPEvent>> extends Stand implements E
 		if (!isStartable()) {
 			throw new WrongStatusTransitionException("Can't Switch from Status [" + status + "] to [" + ExecutionState.READY + "]");
 		} else {
-			ExecutionState streamerStatus = streamer.init();
+			ExecutionState streamerStatus = RSPEventStreamer.init();
 			ExecutionState engineStatus = rspEngine.init();
 			ExecutionState collectorStatus = resultCollector.init();
 			ExecutionState experimenTcollectorStatus = experimentResultCollector.init();
@@ -146,7 +145,7 @@ public class TestStand<T extends RSPEngine<RSPEvent>> extends Stand implements E
 				status = ExecutionState.READY;
 				log.debug("Status [" + status + "] Initializing the TestStand");
 			} else {
-				log.error("streamerStatus [" + streamerStatus + "] collectorStatus [" + collectorStatus + "] experimentCollectorStatus ["
+				log.error("RSPEventStreamerStatus [" + streamerStatus + "] collectorStatus [" + collectorStatus + "] experimentCollectorStatus ["
 						+ experimenTcollectorStatus + "] engineStatus [" + engineStatus + "]");
 				status = ExecutionState.ERROR;
 			}
@@ -178,11 +177,10 @@ public class TestStand<T extends RSPEngine<RSPEvent>> extends Stand implements E
 	}
 
 	@Override
-	public boolean sendEvent(RSPEvent e) {
-
+	public boolean process(RSPEvent e) {
+		// TODO call the collector to ensure pull call
 		se = e;
-
-		return rspEngine.sendEvent(e);
+		return rspEngine.process(e);
 	}
 
 	@Override
@@ -192,6 +190,12 @@ public class TestStand<T extends RSPEngine<RSPEvent>> extends Stand implements E
 		} catch (IOException e) {
 			return false;
 		}
+	}
+
+	@Override
+	public boolean processDone() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
