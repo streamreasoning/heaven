@@ -2,7 +2,7 @@ package it.polimi.processing.collector.saver;
 
 import it.polimi.processing.collector.saver.data.CollectableData;
 import it.polimi.processing.collector.saver.data.TriG;
-import it.polimi.processing.enums.ExecutionStates;
+import it.polimi.processing.enums.ExecutionState;
 import it.polimi.utils.FileUtils;
 
 import java.io.File;
@@ -16,7 +16,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class TrigEventSaver implements EventSaver {
 
-	private ExecutionStates status;
+	private ExecutionState status;
 	private final String trigpath;
 	private List<CollectableData> trigs;
 	String path = "";
@@ -31,7 +31,7 @@ public class TrigEventSaver implements EventSaver {
 
 	@Override
 	public boolean save(CollectableData d, String where) {
-		if (ExecutionStates.READY.equals(status)) {
+		if (ExecutionState.READY.equals(status)) {
 			path = trigpath + where + FileUtils.TRIG_FILE_EXTENSION;
 			trigs.add(d);
 			log.debug("TRIG FILE PATH " + path);
@@ -43,15 +43,15 @@ public class TrigEventSaver implements EventSaver {
 	}
 
 	@Override
-	public ExecutionStates init() {
+	public ExecutionState init() {
 		log.info("Initialising TrigSaver... Nothing to do");
 		trigs = new ArrayList<CollectableData>();
-		status = ExecutionStates.READY;
+		status = ExecutionState.READY;
 		return status;
 	}
 
 	@Override
-	public ExecutionStates close() {
+	public ExecutionState close() {
 		log.info("Closing TrigSaver... Nothing to do");
 		String eof = System.getProperty("line.separator");
 		try {
@@ -78,17 +78,17 @@ public class TrigEventSaver implements EventSaver {
 			}
 
 			if (writer == null) {
-				status = ExecutionStates.ERROR;
+				status = ExecutionState.ERROR;
 				log.error("Null Writer, File not Found");
 
 			} else {
 				writer.close();
-				status = ExecutionStates.CLOSED;
+				status = ExecutionState.CLOSED;
 			}
 
 		} catch (IOException e) {
 			log.error(e.getMessage());
-			status = ExecutionStates.ERROR;
+			status = ExecutionState.ERROR;
 		}
 
 		return status;

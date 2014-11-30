@@ -1,9 +1,11 @@
 package it.polimi.processing.rspengine.esper.commons.listener;
 
 import it.polimi.processing.collector.ResultCollector;
+import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.esper.RSPEsperEngine;
 import it.polimi.processing.rspengine.esper.TripleEvent;
+import it.polimi.utils.Memory;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -23,7 +25,7 @@ import com.espertech.esper.client.EventBean;
 public class ResultCollectorListener extends GenearlListener {
 
 	private final ResultCollector<EventResult> resultCollector;
-	private final RSPEsperEngine engine;
+	private final RSPEsperEngine<RSPEvent> engine;
 	private String name;
 	private Set<String[]> statements;
 	private Set<String[]> start_triples;
@@ -45,13 +47,16 @@ public class ResultCollectorListener extends GenearlListener {
 			// }
 		}
 
-		eventToSend = resultCollector.newEventInstance(statements, engine.getCurrentStreamingEvent());
+		RSPEvent eventToSend = engine.getCurrentStreamingEvent();
+		eventToSend.setAll_triples(statements);
+		eventToSend.setResultTimestamp(System.currentTimeMillis());
+		eventToSend.setMemoryAR(Memory.getMemoryUsage());
 
 		try {
 			log.debug("Send Event to the StoreCollector");
 			resultCollector.store(eventToSend);
 		} catch (IOException e) {
-			log.error("Somethign went wrong, can't save the event");
+			log.error("Something went wrong, can't save the event");
 		}
 	}
 

@@ -1,7 +1,7 @@
 package it.polimi.processing.collector.saver;
 
 import it.polimi.processing.collector.saver.data.CollectableData;
-import it.polimi.processing.enums.ExecutionStates;
+import it.polimi.processing.enums.ExecutionState;
 import it.polimi.utils.FileUtils;
 
 import java.io.File;
@@ -14,7 +14,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class CSVEventSaver implements EventSaver {
 
-	private ExecutionStates status;
+	private ExecutionState status;
 	Date d = new Date();
 	private final String outputPath;
 	private String path = "";
@@ -31,21 +31,21 @@ public class CSVEventSaver implements EventSaver {
 	}
 
 	@Override
-	public ExecutionStates init() {
+	public ExecutionState init() {
 		log.info("Initialising CSVSaver... Nothing to do");
-		status = ExecutionStates.READY;
+		status = ExecutionState.READY;
 		return status;
 	}
 
 	@Override
-	public ExecutionStates close() {
+	public ExecutionState close() {
 		log.info("Closing CSVSaver... Nothing to do");
-		status = ExecutionStates.CLOSED;
+		status = ExecutionState.CLOSED;
 		try {
 			writer.close();
 		} catch (IOException e) {
 			log.error(e.getMessage());
-			status = ExecutionStates.ERROR;
+			status = ExecutionState.ERROR;
 		}
 		return status;
 
@@ -54,7 +54,7 @@ public class CSVEventSaver implements EventSaver {
 	@Override
 	public boolean save(CollectableData dt, String where) {
 		try {
-			if (ExecutionStates.READY.equals(status)) {
+			if (ExecutionState.READY.equals(status)) {
 
 				path = outputPath + where.replace("Result", "LOG") + FileUtils.CSV;
 				file = new File(path);

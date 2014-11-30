@@ -1,6 +1,6 @@
 package it.polimi.processing.teststand.core;
 
-import it.polimi.processing.enums.ExecutionStates;
+import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.Experiment;
 
 import java.io.BufferedReader;
@@ -14,7 +14,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public abstract class Stand {
-	protected ExecutionStates status;
+	protected ExecutionState status;
 	protected Experiment currentExperiment;
 
 	public BufferedReader getBuffer(String fileName) throws FileNotFoundException {

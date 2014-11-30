@@ -18,12 +18,13 @@
 
 package it.polimi.processing.rspengine.jena;
 
-import it.polimi.processing.enums.ExecutionStates;
+import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.Experiment;
-import it.polimi.processing.events.TestStandEvent;
+import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.teststand.core.TestStand;
 import it.polimi.utils.FileUtils;
+import it.polimi.utils.Memory;
 import it.polimi.utils.RDFSUtils;
 
 import java.io.IOException;
@@ -54,14 +55,14 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.ReasonerVocabulary;
 
 @Log4j
-public class JenaEngine extends RSPEngine<TestStandEvent> {
+public class JenaEngine extends RSPEngine<RSPEvent> {
 
 	private static Model tbox_star, abox;
 	private static InfModel abox_star;
 	int i = 0;
 	private Experiment currentExperiment;
 
-	public JenaEngine(String name, TestStand<RSPEngine<TestStandEvent>> collector) {
+	public JenaEngine(String name, TestStand<RSPEngine<RSPEvent>> collector) {
 		super(name, collector);
 		FileManager.get().addLocatorClassLoader(JenaEngine.class.getClassLoader());
 
@@ -70,7 +71,7 @@ public class JenaEngine extends RSPEngine<TestStandEvent> {
 	}
 
 	@Override
-	public boolean sendEvent(TestStandEvent e) {
+	public boolean sendEvent(RSPEvent e) {
 		if (currentExperiment == null) {
 			return false;
 		} else {
@@ -100,7 +101,12 @@ public class JenaEngine extends RSPEngine<TestStandEvent> {
 			}
 
 			try {
-				return collector.store(collector.newEventInstance(statements, e));
+
+				e.setAll_triples(statements);
+				e.setResultTimestamp(System.currentTimeMillis());
+				e.setMemoryAR(Memory.getMemoryUsage());
+
+				return collector.store(e);
 			} catch (IOException e1) {
 				log.error(e1.getMessage());
 				return false;
@@ -116,35 +122,35 @@ public class JenaEngine extends RSPEngine<TestStandEvent> {
 	}
 
 	@Override
-	public ExecutionStates startProcessing() {
+	public ExecutionState startProcessing() {
 		if (isStartable()) {
-			status = ExecutionStates.READY;
+			status = ExecutionState.READY;
 		} else {
-			status = ExecutionStates.ERROR;
+			status = ExecutionState.ERROR;
 		}
 		return status;
 	}
 
 	@Override
-	public ExecutionStates stopProcessing() {
+	public ExecutionState stopProcessing() {
 		if (isOn()) {
-			status = ExecutionStates.CLOSED;
+			status = ExecutionState.CLOSED;
 		} else {
-			status = ExecutionStates.ERROR;
+			status = ExecutionState.ERROR;
 		}
 		return status;
 	}
 
 	@Override
-	public ExecutionStates init() {
-		status = ExecutionStates.READY;
+	public ExecutionState init() {
+		status = ExecutionState.READY;
 		log.info("Status [" + status + "] Initializing JenaEngine [" + name + "]");
 		return status;
 	}
 
 	@Override
-	public ExecutionStates close() {
-		status = ExecutionStates.CLOSED;
+	public ExecutionState close() {
+		status = ExecutionState.CLOSED;
 		log.info("Status [" + status + "] Closing JenaEngine");
 		return status;
 	}
@@ -157,14 +163,14 @@ public class JenaEngine extends RSPEngine<TestStandEvent> {
 	}
 
 	public boolean isStartable() {
-		return ExecutionStates.READY.equals(status) || ExecutionStates.CLOSED.equals(status);
+		return ExecutionState.READY.equals(status) || ExecutionState.CLOSED.equals(status);
 	}
 
 	public boolean isOn() {
-		return ExecutionStates.READY.equals(status);
+		return ExecutionState.READY.equals(status);
 	}
 
 	public boolean isReady() {
-		return ExecutionStates.READY.equals(status);
+		return ExecutionState.READY.equals(status);
 	}
 }

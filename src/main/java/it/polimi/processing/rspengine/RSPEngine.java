@@ -2,16 +2,16 @@ package it.polimi.processing.rspengine;
 
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.collector.ResultCollector;
-import it.polimi.processing.enums.ExecutionStates;
+import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.interfaces.EventResult;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class RSPEngine<TestStandEvent> implements EventProcessor<TestStandEvent> {
+public abstract class RSPEngine<Event> implements EventProcessor<Event> {
 
-	protected ExecutionStates status;
+	protected ExecutionState status;
 	protected ResultCollector<EventResult> collector;
 	protected String name;
 
@@ -20,12 +20,12 @@ public abstract class RSPEngine<TestStandEvent> implements EventProcessor<TestSt
 		this.name = name;
 	}
 
-	public abstract ExecutionStates init();
+	public abstract ExecutionState init();
 
-	public abstract ExecutionStates close();
+	public abstract ExecutionState close();
 
-	public abstract ExecutionStates startProcessing();
+	public abstract ExecutionState startProcessing();
 
-	public abstract ExecutionStates stopProcessing();
+	public abstract ExecutionState stopProcessing();
 
 }

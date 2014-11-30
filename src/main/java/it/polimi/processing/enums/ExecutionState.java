@@ -1,6 +1,6 @@
 package it.polimi.processing.enums;
 
-public enum ExecutionStates {
+public enum ExecutionState {
 
 	/**
 	 * OFF: Nothing can be done, used by only the Envirorments (Stands)

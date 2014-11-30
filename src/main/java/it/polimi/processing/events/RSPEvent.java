@@ -5,8 +5,8 @@ import it.polimi.processing.collector.saver.data.CollectableData;
 import it.polimi.processing.collector.saver.data.TriG;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.EventResult;
+import it.polimi.utils.Memory;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
@@ -16,13 +16,11 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
-public class TestStandEvent implements Event, EventResult {
+public class RSPEvent implements Event, EventResult {
 
 	private String id;
 	private Set<String[]> eventTriples;
 	private int eventNumber, experimentNumber;
-	private int tripleGraph;
-	private int[] lineNumbers;
 	private long inputTimestamp;
 	private double memoryBR;
 
@@ -30,16 +28,13 @@ public class TestStandEvent implements Event, EventResult {
 	private long resultTimestamp;
 	private double memoryAR;
 
-	public TestStandEvent(String key, HashSet<String[]> hashSet, int eventNumber, int experimentNumber, int tripleGraph, int[] graphNumber,
-			long currentTimeMillis, double memoryUsage) {
-		this.id = key;
+	public RSPEvent(String id, Set<String[]> hashSet, int eventNumber, int experimentNumber) {
+		this.id = id;
 		this.eventTriples = hashSet;
 		this.eventNumber = eventNumber;
 		this.experimentNumber = experimentNumber;
-		this.tripleGraph = tripleGraph;
-		this.lineNumbers = graphNumber;
-		this.inputTimestamp = currentTimeMillis;
-		this.memoryBR = memoryUsage;
+		this.inputTimestamp = System.currentTimeMillis();
+		this.memoryBR = Memory.getMemoryUsage();
 	}
 
 	@Override
@@ -50,9 +45,6 @@ public class TestStandEvent implements Event, EventResult {
 	@Override
 	public CollectableData getCSV() {
 		String lines = ",";
-		for (int p : lineNumbers) {
-			lines += p + ",";
-		}
 
 		long queryLatency = resultTimestamp - inputTimestamp;
 		String s = id + lines + inputTimestamp + "," + memoryBR + "," + memoryAR + "," + queryLatency;

@@ -2,34 +2,32 @@ package it.polimi.processing.teststand.collector;
 
 import it.polimi.processing.Startable;
 import it.polimi.processing.collector.StartableCollector;
-import it.polimi.processing.enums.ExecutionStates;
-import it.polimi.processing.events.TestStandEvent;
-import it.polimi.processing.events.interfaces.Event;
+import it.polimi.processing.enums.ExecutionState;
+import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.teststand.core.TestStand;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Set;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class EmptyCollectorStreamingEvent implements StartableCollector<EventResult>, Startable<ExecutionStates> {
+public class EmptyCollectorStreamingEvent implements StartableCollector<EventResult>, Startable<ExecutionState> {
 
 	private long timestamp;
 
-	private ExecutionStates status;
+	private ExecutionState status;
 
-	private TestStand<RSPEngine<TestStandEvent>> stand;
+	private TestStand<RSPEngine<RSPEvent>> stand;
 
-	public EmptyCollectorStreamingEvent(TestStand<RSPEngine<TestStandEvent>> stand) throws SQLException, ClassNotFoundException {
+	public EmptyCollectorStreamingEvent(TestStand<RSPEngine<RSPEvent>> stand) throws SQLException, ClassNotFoundException {
 		this.stand = stand;
 		this.timestamp = System.currentTimeMillis();
-		this.status = ExecutionStates.READY;
+		this.status = ExecutionState.READY;
 	}
 
 	@Override
@@ -38,20 +36,15 @@ public class EmptyCollectorStreamingEvent implements StartableCollector<EventRes
 	}
 
 	@Override
-	public ExecutionStates init() {
-		status = ExecutionStates.READY;
+	public ExecutionState init() {
+		status = ExecutionState.READY;
 		return status;
 	}
 
 	@Override
-	public ExecutionStates close() {
-		status = ExecutionStates.CLOSED;
+	public ExecutionState close() {
+		status = ExecutionState.CLOSED;
 		return status;
-	}
-
-	@Override
-	public EventResult newEventInstance(Set<String[]> allTriples, Event e) {
-		return stand.newEventInstance(allTriples, e);
 	}
 
 }

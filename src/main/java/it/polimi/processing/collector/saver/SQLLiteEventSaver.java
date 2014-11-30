@@ -1,7 +1,7 @@
 package it.polimi.processing.collector.saver;
 
 import it.polimi.processing.collector.saver.data.CollectableData;
-import it.polimi.processing.enums.ExecutionStates;
+import it.polimi.processing.enums.ExecutionState;
 import it.polimi.utils.DatabaseUtils;
 import it.polimi.utils.FileUtils;
 
@@ -25,7 +25,7 @@ public class SQLLiteEventSaver implements EventSaver {
 	private long timestamp;
 	private Connection c;
 	private Statement stmt = null;
-	private ExecutionStates status;
+	private ExecutionState status;
 
 	/**
 	 * Initialize the mains tables of the system
@@ -48,7 +48,7 @@ public class SQLLiteEventSaver implements EventSaver {
 	}
 
 	@Override
-	public ExecutionStates init() {
+	public ExecutionState init() {
 		timestamp = System.currentTimeMillis();
 		try {
 			Class.forName(ORG_SQLITE_JDBC);
@@ -59,13 +59,13 @@ public class SQLLiteEventSaver implements EventSaver {
 			stmt.executeUpdate(DatabaseUtils.COMPARATION_TABLE);
 			stmt.close();
 			log.info("Table created successfully");
-			status = ExecutionStates.READY;
+			status = ExecutionState.READY;
 		} catch (ClassNotFoundException e) {
 			log.error(e.getMessage());
-			status = ExecutionStates.ERROR;
+			status = ExecutionState.ERROR;
 		} catch (SQLException e) {
 			log.error(e.getMessage());
-			status = ExecutionStates.ERROR;
+			status = ExecutionState.ERROR;
 		}
 
 		return this.status;
@@ -73,15 +73,15 @@ public class SQLLiteEventSaver implements EventSaver {
 	}
 
 	@Override
-	public ExecutionStates close() {
+	public ExecutionState close() {
 		log.info("Stop the Database System");
 		try {
 			queryAllComp();
 			c.close();
 			log.info("Closed database successfully");
-			status = ExecutionStates.CLOSED;
+			status = ExecutionState.CLOSED;
 		} catch (SQLException e) {
-			status = ExecutionStates.ERROR;
+			status = ExecutionState.ERROR;
 			log.error(e.getMessage());
 		}
 		return status;
@@ -122,7 +122,7 @@ public class SQLLiteEventSaver implements EventSaver {
 
 	@Override
 	public boolean save(CollectableData d, String where) {
-		if (ExecutionStates.READY.equals(status) && d != null) {
+		if (ExecutionState.READY.equals(status) && d != null) {
 			String sql = DatabaseUtils.EXPERIMENT_INSERT + d.getData();
 			log.debug(" EVENT SQL VALUE " + sql);
 			try {

@@ -1,9 +1,7 @@
 package it.polimi.processing.rspengine.esper;
 
 import it.polimi.processing.collector.ResultCollector;
-import it.polimi.processing.enums.ExecutionStates;
-import it.polimi.processing.events.TestStandEvent;
-import it.polimi.processing.events.interfaces.Event;
+import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.RSPEngine;
 import lombok.Getter;
@@ -18,13 +16,14 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
 
 @Getter
 @Log4j
-public abstract class RSPEsperEngine extends RSPEngine<TestStandEvent> {
+public abstract class RSPEsperEngine<Event> extends RSPEngine<Event> {
 
 	protected static Configuration cepConfig;
 	protected static EPServiceProvider cep;
 	protected static EPRuntime cepRT;
 	protected static EPAdministrator cepAdm;
 	protected static ConfigurationMethodRef ref;
+	@Getter
 	protected Event currentStreamingEvent = null;
 
 	protected int time = 0;
@@ -45,15 +44,15 @@ public abstract class RSPEsperEngine extends RSPEngine<TestStandEvent> {
 	}
 
 	protected boolean isStartable() {
-		return ExecutionStates.READY.equals(status) || ExecutionStates.CLOSED.equals(status);
+		return ExecutionState.READY.equals(status) || ExecutionState.CLOSED.equals(status);
 	}
 
 	protected boolean isOn() {
-		return ExecutionStates.READY.equals(status);
+		return ExecutionState.READY.equals(status);
 	}
 
 	protected boolean isReady() {
-		return ExecutionStates.READY.equals(status);
+		return ExecutionState.READY.equals(status);
 	}
 
 }

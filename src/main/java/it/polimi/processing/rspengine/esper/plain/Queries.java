@@ -18,16 +18,16 @@ public class Queries {
 			+ ".subPropertyOf(p) as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel " + "output all ";
 
 	public static final String INPUT = "on TEvent as e "
-			+ "insert into RDFS3Input select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel where not "
+			+ "insert into RDFS3Input.win:time(1000 msec) select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel where not "
 			+ EXTERNAL
 			+ ".containsType(e.ps) "
-			+ "insert into RDFS6Input select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel where not "
+			+ "insert into RDFS6Input.win:time(1000 msec) select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel where not "
 			+ EXTERNAL
 			+ ".containsType(e.ps) "
-			+ "insert into RDFS9Input select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel where  "
+			+ "insert into RDFS9Input.win:time(1000 msec) select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel where  "
 			+ EXTERNAL
 			+ ".containsType(e.ps) "
-			+ "insert into QueryOut   select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel "
+			+ "insert into QueryOut.win:time(1000 msec)   select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel "
 			+ "output all ";
 
 	public static final String RDFS23 = "on RDFS3Input as e "

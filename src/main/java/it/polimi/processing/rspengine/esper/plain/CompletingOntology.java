@@ -34,6 +34,7 @@ public class CompletingOntology {
 	private static Map<String, String[]> propertiesDomain;
 	private static int numProperties, numClasses = 0;
 	private static String univBenchRdfs;
+	@Getter
 	private static int rangeCalls, domainCalls = 0;
 
 	private static void initializeObjectProperties() {

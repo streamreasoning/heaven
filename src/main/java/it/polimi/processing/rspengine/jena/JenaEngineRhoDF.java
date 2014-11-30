@@ -19,12 +19,13 @@
 package it.polimi.processing.rspengine.jena;
 
 import it.polimi.processing.collector.ResultCollector;
-import it.polimi.processing.enums.ExecutionStates;
-import it.polimi.processing.events.TestStandEvent;
+import it.polimi.processing.enums.ExecutionState;
+import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.RSPEngine;
 import it.polimi.processing.teststand.core.TestStand;
 import it.polimi.utils.FileUtils;
+import it.polimi.utils.Memory;
 import it.polimi.utils.RDFSUtils;
 
 import java.io.IOException;
@@ -53,7 +54,7 @@ import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 @Log4j
-public class JenaEngineRhoDF extends RSPEngine<TestStandEvent> {
+public class JenaEngineRhoDF extends RSPEngine<RSPEvent> {
 
 	private final Model tBoxStar;
 	private Model abox;
@@ -71,12 +72,12 @@ public class JenaEngineRhoDF extends RSPEngine<TestStandEvent> {
 		tBoxStar = FileManager.get().loadModel(localTbox, null, "RDF/XML");
 	}
 
-	public JenaEngineRhoDF(String name, TestStand<RSPEngine<TestStandEvent>> stand) {
+	public JenaEngineRhoDF(String name, TestStand<RSPEngine<RSPEvent>> stand) {
 		this(name, "", "", stand);
 	}
 
 	@Override
-	public boolean sendEvent(TestStandEvent e) {
+	public boolean sendEvent(RSPEvent e) {
 		abox = ModelFactory.createMemModelMaker().createDefaultModel();
 
 		for (String[] eventTriple : e.getEventTriples()) {
@@ -102,7 +103,11 @@ public class JenaEngineRhoDF extends RSPEngine<TestStandEvent> {
 		}
 
 		try {
-			return collector.store(collector.newEventInstance(statements, e));
+			e.setAll_triples(statements);
+			e.setResultTimestamp(System.currentTimeMillis());
+			e.setMemoryAR(Memory.getMemoryUsage());
+
+			return collector.store(e);
 		} catch (IOException e1) {
 			log.error(e1.getMessage());
 			return false;
@@ -110,38 +115,38 @@ public class JenaEngineRhoDF extends RSPEngine<TestStandEvent> {
 	}
 
 	@Override
-	public ExecutionStates startProcessing() {
+	public ExecutionState startProcessing() {
 		if (isStartable()) {
-			this.status = ExecutionStates.READY;
+			this.status = ExecutionState.READY;
 		} else {
-			this.status = ExecutionStates.ERROR;
+			this.status = ExecutionState.ERROR;
 		}
 		return status;
 	}
 
 	@Override
-	public ExecutionStates stopProcessing() {
+	public ExecutionState stopProcessing() {
 		if (isOn()) {
-			this.status = ExecutionStates.CLOSED;
+			this.status = ExecutionState.CLOSED;
 
 		} else {
 
-			this.status = ExecutionStates.ERROR;
+			this.status = ExecutionState.ERROR;
 		}
 		return status;
 	}
 
 	@Override
-	public ExecutionStates init() {
+	public ExecutionState init() {
 		log.info("Initializing " + name + "..Nothing to do");
-		this.status = ExecutionStates.READY;
+		this.status = ExecutionState.READY;
 		return status;
 	}
 
 	@Override
-	public ExecutionStates close() {
+	public ExecutionState close() {
 		log.info("Closing " + name + "..Nothing to do");
-		this.status = ExecutionStates.CLOSED;
+		this.status = ExecutionState.CLOSED;
 		return status;
 	}
 
@@ -157,14 +162,14 @@ public class JenaEngineRhoDF extends RSPEngine<TestStandEvent> {
 	}
 
 	public boolean isStartable() {
-		return ExecutionStates.READY.equals(status) || ExecutionStates.CLOSED.equals(status);
+		return ExecutionState.READY.equals(status) || ExecutionState.CLOSED.equals(status);
 	}
 
 	public boolean isOn() {
-		return ExecutionStates.READY.equals(status);
+		return ExecutionState.READY.equals(status);
 	}
 
 	public boolean isReady() {
-		return ExecutionStates.READY.equals(status);
+		return ExecutionState.READY.equals(status);
 	}
 }
