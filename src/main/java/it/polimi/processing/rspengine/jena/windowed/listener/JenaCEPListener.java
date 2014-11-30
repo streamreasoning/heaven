@@ -1,8 +1,8 @@
 package it.polimi.processing.rspengine.jena.windowed.listener;
 
 import it.polimi.processing.collector.ResultCollector;
+import it.polimi.processing.events.Result;
 import it.polimi.processing.events.interfaces.EventResult;
-import it.polimi.processing.rspengine.esper.commons.listener.Result;
 import it.polimi.processing.rspengine.esper.plain.events.TEvent;
 import it.polimi.utils.RDFSUtils;
 

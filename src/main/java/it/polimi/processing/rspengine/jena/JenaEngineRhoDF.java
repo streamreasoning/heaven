@@ -23,7 +23,7 @@ import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.RSPEngine;
-import it.polimi.processing.teststand.core.TestStand;
+import it.polimi.processing.teststand.core.RSPWorkBench;
 import it.polimi.utils.FileUtils;
 import it.polimi.utils.Memory;
 import it.polimi.utils.RDFSUtils;
@@ -73,7 +73,7 @@ public class JenaEngineRhoDF extends RSPEngine {
 		tBoxStar = FileManager.get().loadModel(localTbox, null, "RDF/XML");
 	}
 
-	public JenaEngineRhoDF(String name, TestStand stand) {
+	public JenaEngineRhoDF(String name, RSPWorkBench stand) {
 		this(name, "", "", stand);
 	}
 

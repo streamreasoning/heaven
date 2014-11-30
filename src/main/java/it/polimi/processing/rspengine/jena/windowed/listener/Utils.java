@@ -15,18 +15,18 @@ import com.hp.hpl.jena.util.FileManager;
 
 public class Utils {
 
-	public static String serializeRDFFile(String filePath) throws Exception{
+	public static String serializeRDFFile(String filePath) throws Exception {
 		File f = new File(filePath);
 		Model m = ModelFactory.createDefaultModel();
-		try{
+		try {
 			m.read(FileManager.get().open(f.getAbsolutePath()), null, "RDF/XML");
-		} catch(Exception e){
-			try{
+		} catch (Exception e) {
+			try {
 				m.read(FileManager.get().open(f.getAbsolutePath()), null, "TURTLE");
-			} catch(Exception e1){
-				try{
+			} catch (Exception e1) {
+				try {
 					m.read(FileManager.get().open(f.getAbsolutePath()), null, "N-TRIPLE");
-				} catch(Exception e2){
+				} catch (Exception e2) {
 					m.read(FileManager.get().open(f.getAbsolutePath()), null, "RDF/JSON");
 				}
 			}
@@ -36,7 +36,7 @@ public class Utils {
 		return sw.toString();
 	}
 
-	public static String serializeJenaModel(Model model) throws Exception{
+	public static String serializeJenaModel(Model model) throws Exception {
 		StringWriter sw = new StringWriter();
 		model.write(sw);
 		return sw.toString();
@@ -61,9 +61,10 @@ public class Utils {
 
 	public static Statement createJenaStatementFromString(String s, String separator) throws Exception {
 		String list[] = s.split(separator);
-		if(list[2].contains("^^")){
+		if (list[2].contains("^^")) {
 			String litList[] = list[2].split("^^");
-			return new StatementImpl(new ResourceImpl(list[0]), new PropertyImpl(list[1]), ModelFactory.createDefaultModel().createTypedLiteral(litList[0], litList[1].replace("\"","")));
+			return new StatementImpl(new ResourceImpl(list[0]), new PropertyImpl(list[1]), ModelFactory.createDefaultModel().createTypedLiteral(
+					litList[0], litList[1].replace("\"", "")));
 		} else {
 			return new StatementImpl(new ResourceImpl(list[0]), new PropertyImpl(list[1]), new ResourceImpl(list[2]));
 		}

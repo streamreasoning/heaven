@@ -1,4 +1,4 @@
-package it.polimi.processing.teststand.core;
+package it.polimi.processing.events;
 
 import it.polimi.processing.collector.saver.data.CSV;
 import it.polimi.processing.collector.saver.data.CollectableData;
@@ -22,6 +22,7 @@ public class TSResult implements EventResult {
 	private long inputTimestamp, outputTimestamp;
 	private double memoryA;
 	private double memoryB;
+	private Boolean cs, ss, cr, sr;
 
 	@Override
 	public CollectableData getTrig() {
@@ -30,8 +31,11 @@ public class TSResult implements EventResult {
 
 	@Override
 	public CollectableData getCSV() {
-		String s = id + "," + eventNumber + "," + memoryB + "," + memoryA + "," + (outputTimestamp - inputTimestamp);
+		String compleAndSoundSIMPL = (cs != null && ss != null) ? "," + cs + "," + ss : "";
+		String compleAndSoundRHODF = (cr != null && sr != null) ? "," + cr + "," + sr : "";
+
+		String s = id + "," + eventNumber + "," + memoryB + "," + memoryA + "," + (outputTimestamp - inputTimestamp) + compleAndSoundSIMPL
+				+ compleAndSoundRHODF;
 		return new CSV(s);
 	}
-
 }

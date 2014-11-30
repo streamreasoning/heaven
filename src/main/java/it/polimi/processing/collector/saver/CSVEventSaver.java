@@ -7,27 +7,23 @@ import it.polimi.utils.FileUtils;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Date;
 
 import lombok.extern.log4j.Log4j;
 
 @Log4j
 public class CSVEventSaver implements EventSaver {
 
-	private ExecutionState status;
-	Date d = new Date();
 	private final String outputPath;
-	private String path = "";
+	private ExecutionState status;
 	private File file;
-
 	private FileWriter writer;
-
-	public CSVEventSaver(String path) {
-		this.outputPath = path;
-	}
 
 	public CSVEventSaver() {
 		this.outputPath = FileUtils.CSV_OUTPUT_FILE_PATH;
+	}
+
+	public CSVEventSaver(String outputPath) {
+		this.outputPath = outputPath;
 	}
 
 	@Override
@@ -56,7 +52,7 @@ public class CSVEventSaver implements EventSaver {
 		try {
 			if (ExecutionState.READY.equals(status)) {
 
-				path = outputPath + where.replace("Result", "LOG") + FileUtils.CSV;
+				String path = outputPath + where.replace("Result", "RESLOG").replace("Window", "WINLOG") + FileUtils.CSV;
 				file = new File(path);
 				writer = new FileWriter(file, true);
 

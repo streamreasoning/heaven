@@ -1,4 +1,4 @@
-package it.polimi.processing.rspengine.esper.commons.listener;
+package it.polimi.processing.events;
 
 import it.polimi.processing.collector.saver.data.CSV;
 import it.polimi.processing.collector.saver.data.CollectableData;
@@ -9,16 +9,15 @@ import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class Result implements EventResult {
 
 	private Set<String[]> statements;
 	private long from, to;
 	private long timestamp;
+	private Boolean completeSMPL, soundSMPL, completeRHODF, soundRHODF;;
 
 	@Override
 	public CollectableData getTrig() {
@@ -29,6 +28,13 @@ public class Result implements EventResult {
 	public CollectableData getCSV() {
 		String s = "<http://example.org/" + from + "/" + to + ">";
 		return new CSV(s);
+	}
+
+	public Result(Set<String[]> statements, long from, long to, long timestamp) {
+		this.statements = statements;
+		this.from = from;
+		this.to = to;
+		this.timestamp = timestamp;
 	}
 
 }

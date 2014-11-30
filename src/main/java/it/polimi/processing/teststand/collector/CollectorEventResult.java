@@ -5,7 +5,7 @@ import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.collector.saver.EventSaver;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.interfaces.EventResult;
-import it.polimi.processing.teststand.core.TestStand;
+import it.polimi.processing.teststand.core.RSPWorkBench;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -26,9 +26,9 @@ public class CollectorEventResult implements StartableCollector<EventResult>, St
 	private ExecutionState status;
 	private String where;
 
-	private TestStand stand;
+	private RSPWorkBench stand;
 
-	public CollectorEventResult(TestStand stand, EventSaver trig, EventSaver csv, String where) throws SQLException, ClassNotFoundException {
+	public CollectorEventResult(RSPWorkBench stand, EventSaver trig, EventSaver csv, String where) throws SQLException, ClassNotFoundException {
 		this.stand = stand;
 		this.trigSaver = trig;
 		this.csvSaver = csv;

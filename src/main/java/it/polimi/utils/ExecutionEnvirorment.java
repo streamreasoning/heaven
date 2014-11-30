@@ -1,6 +1,6 @@
 package it.polimi.utils;
 
-import it.polimi.CommonMain;
+import it.polimi.main.CommonMain;
 
 public class ExecutionEnvirorment {
 

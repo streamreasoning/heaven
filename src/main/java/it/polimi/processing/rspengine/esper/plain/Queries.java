@@ -1,6 +1,6 @@
 package it.polimi.processing.rspengine.esper.plain;
 
-import it.polimi.CommonMain;
+import it.polimi.main.CommonMain;
 
 public class Queries {
 

@@ -22,7 +22,7 @@ import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.rspengine.RSPEngine;
-import it.polimi.processing.teststand.core.TestStand;
+import it.polimi.processing.teststand.core.RSPWorkBench;
 import it.polimi.utils.FileUtils;
 import it.polimi.utils.Memory;
 import it.polimi.utils.RDFSUtils;
@@ -62,7 +62,7 @@ public class JenaEngine extends RSPEngine {
 	int i = 0;
 	private Experiment currentExperiment;
 
-	public JenaEngine(String name, TestStand collector) {
+	public JenaEngine(String name, RSPWorkBench collector) {
 		super(name, collector);
 		FileManager.get().addLocatorClassLoader(JenaEngine.class.getClassLoader());
 

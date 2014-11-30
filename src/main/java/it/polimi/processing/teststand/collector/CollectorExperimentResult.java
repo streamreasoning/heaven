@@ -4,27 +4,25 @@ import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.collector.saver.EventSaver;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.interfaces.ExperimentResult;
-import it.polimi.processing.teststand.core.TestStand;
+import it.polimi.processing.teststand.core.RSPWorkBench;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j;
 
 @Getter
 @Setter
-@Log4j
 public class CollectorExperimentResult implements StartableCollector<ExperimentResult> {
 
 	private long timestamp;
 	private EventSaver sqlLiteSaver;
-	private TestStand stand;
+	private RSPWorkBench stand;
 	private ExecutionState status;
 	private String where;
 
-	public CollectorExperimentResult(TestStand stand, EventSaver saver) throws SQLException, ClassNotFoundException {
+	public CollectorExperimentResult(RSPWorkBench stand, EventSaver saver) throws SQLException, ClassNotFoundException {
 		this.stand = stand;
 		this.sqlLiteSaver = saver;
 		this.timestamp = System.currentTimeMillis();

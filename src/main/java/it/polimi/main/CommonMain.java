@@ -1,4 +1,4 @@
-package it.polimi;
+package it.polimi.main;
 
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.collector.saver.CSVEventSaver;
@@ -8,10 +8,7 @@ import it.polimi.processing.collector.saver.VoidSaver;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.rspengine.RSPEngine;
-import it.polimi.processing.rspengine.esper.commons.listener.ResultCollectorListener;
 import it.polimi.processing.rspengine.esper.plain.Plain2369;
-import it.polimi.processing.rspengine.jena.JenaEngine;
-import it.polimi.processing.rspengine.jena.JenaEngineRhoDF;
 import it.polimi.processing.rspengine.jena.windowed.JenaEsperRhoDF;
 import it.polimi.processing.rspengine.jena.windowed.JenaEsperSMPL;
 import it.polimi.processing.rspengine.jena.windowed.listener.JenaRhoDFListener;
@@ -19,8 +16,9 @@ import it.polimi.processing.rspengine.jena.windowed.listener.JenaSMPLListener;
 import it.polimi.processing.streamer.RSPEventStreamer;
 import it.polimi.processing.teststand.collector.CollectorEventResult;
 import it.polimi.processing.teststand.collector.CollectorExperimentResult;
-import it.polimi.processing.teststand.core.TestStand;
+import it.polimi.processing.teststand.core.RSPWorkBench;
 import it.polimi.processing.teststand.streamer.NTStreamer;
+import it.polimi.processing.validation.JenaRhoDFCSListener;
 import it.polimi.utils.ExecutionEnvirorment;
 import it.polimi.utils.FileUtils;
 
@@ -29,7 +27,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -66,7 +63,7 @@ public class CommonMain {
 	private static Date exeperimentDate;
 	private static String file, comment;
 
-	private static TestStand testStand;
+	private static RSPWorkBench testStand;
 	private static StartableCollector<EventResult> streamingEventResultCollector;
 	private static StartableCollector<ExperimentResult> experimentResultCollector;
 	private static UpdateListener listener;
@@ -91,7 +88,7 @@ public class CommonMain {
 
 		exeperimentDate = FileUtils.d;
 
-		testStand = new TestStand();
+		testStand = new RSPWorkBench();
 
 		outputFileName = "Result_" + "EN" + EXPERIMENTNUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + file.split("\\.")[0];
 		windowFileName = "Window_" + "EN" + EXPERIMENTNUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + file.split("\\.")[0];
@@ -128,42 +125,12 @@ public class CommonMain {
 
 				break;
 			case PLAIN2369:
-				listener = new ResultCollectorListener(testStand, engineName, new HashSet<String[]>(), new HashSet<String[]>(), 0);
+				// listener = new ResultCollectorListener(testStand, engineName, new
+				// HashSet<String[]>(), new HashSet<String[]>(), 0);
+				// listener = new CompleteSoundListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED,
+				// FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
+				listener = new JenaRhoDFCSListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
 				engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass, listener);
-				break;
-
-			// NO output with memory
-			case JENANW:
-				engine = new JenaEngine(engineName, testStand);
-				break;
-			case JENARHODFNW:
-				engine = new JenaEngineRhoDF(engineName, FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
-				break;
-			case PLAIN2369NW:
-
-				engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass, listener);
-				break;
-
-			// NO Memory with output
-			case JENANM:
-				engine = new JenaEngine(engineName, testStand);
-				break;
-			case JENARHODFNM:
-				engine = new JenaEngineRhoDF(engineName, FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
-				break;
-			case PLAIN2369NM:
-				engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass, listener);
-				break;
-
-			// NO memory no Output
-			case JENANWM:
-				engine = new JenaEngine(JENASMPLNAME + "NWM", testStand);
-				break;
-			case JENARHODFNWM:
-				engine = new JenaEngineRhoDF(JENARHODFNAME + "NWM", FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
-				break;
-			case PLAIN2369NWM:
-				engine = new Plain2369(PLAIN2369NAME + "NWM", testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass, listener);
 				break;
 
 			default:
@@ -184,6 +151,7 @@ public class CommonMain {
 		try {
 			experimentNumber += testStand.run(f, experimentNumber, comment, outputFileName, windowFileName, experimentDescription);
 		} catch (Exception e) {
+
 			log.error(e.getMessage());
 			testStand.stop();
 		}

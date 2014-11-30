@@ -4,7 +4,7 @@ import it.polimi.processing.Startable;
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.interfaces.EventResult;
-import it.polimi.processing.teststand.core.TestStand;
+import it.polimi.processing.teststand.core.RSPWorkBench;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -20,9 +20,9 @@ public class EmptyCollectorExperimentEvent implements StartableCollector<EventRe
 
 	private ExecutionState status;
 
-	private TestStand stand;
+	private RSPWorkBench stand;
 
-	public EmptyCollectorExperimentEvent(TestStand stand) throws SQLException, ClassNotFoundException {
+	public EmptyCollectorExperimentEvent(RSPWorkBench stand) throws SQLException, ClassNotFoundException {
 		this.stand = stand;
 		this.timestamp = System.currentTimeMillis();
 		this.status = ExecutionState.READY;
