@@ -12,9 +12,11 @@ import java.sql.SQLException;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 
 @Getter
 @Setter
+@Log4j
 public class CollectorEventResult implements StartableCollector<EventResult>, Startable<ExecutionState> {
 
 	private long timestamp;
@@ -41,6 +43,16 @@ public class CollectorEventResult implements StartableCollector<EventResult>, St
 			return false;
 		} else {
 			return trigSaver.save(r.getTrig(), this.where) && csvSaver.save(r.getCSV(), this.where);
+		}
+	}
+
+	@Override
+	public boolean store(EventResult r, String w) throws IOException {
+		log.info("Store [" + w + "]");
+		if (!ExecutionState.READY.equals(status)) {
+			return false;
+		} else {
+			return trigSaver.save(r.getTrig(), w) && csvSaver.save(r.getCSV(), w);
 		}
 	}
 

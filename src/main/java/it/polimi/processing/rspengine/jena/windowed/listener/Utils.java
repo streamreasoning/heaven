@@ -1,4 +1,4 @@
-package it.polimi.processing.rspengine.jena.listener;
+package it.polimi.processing.rspengine.jena.windowed.listener;
 
 import java.io.BufferedReader;
 import java.io.File;

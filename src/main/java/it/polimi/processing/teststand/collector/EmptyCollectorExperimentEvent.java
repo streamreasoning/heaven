@@ -45,4 +45,9 @@ public class EmptyCollectorExperimentEvent implements StartableCollector<EventRe
 		return status;
 	}
 
+	@Override
+	public boolean store(EventResult r, String where) throws IOException {
+		return true;
+	}
+
 }

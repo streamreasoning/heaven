@@ -11,13 +11,14 @@ import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.RSPEngine;
+import it.polimi.processing.rspengine.esper.commons.listener.Result;
 import it.polimi.processing.streamer.RSPEventStreamer;
 import it.polimi.utils.FileUtils;
+import it.polimi.utils.Memory;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
@@ -33,6 +34,13 @@ public class TestStand extends Stand implements EventProcessor<RSPEvent>, Result
 	private RSPEventStreamer RSPEventStreamer;
 	private RSPEvent se;
 
+	private int experimentNumber, numberEvents = 0;
+	private long timestamp, resultTimestamp = 0L;
+	private double memoryA = 0D;
+	private double memoryB = 0D;
+	private final DateFormat dt = new SimpleDateFormat("yyyy_MM_dd");
+	private String outputFileName, windowFileName, inputFileNameWithPath, experimentDescription;
+
 	public TestStand() {
 		super(ExecutionState.NOT_READY, null);
 	}
@@ -45,32 +53,33 @@ public class TestStand extends Stand implements EventProcessor<RSPEvent>, Result
 		this.RSPEventStreamer = RSPEventStreamer;
 	}
 
-	public int run(String f, int experimentNumber, String comment, Date d) throws Exception {
-		log.info("START STREAMING " + System.currentTimeMillis());
-		String experimentDescription = "EXPERIMENT_ON_" + f + "_WITH_ENGINE_" + rspEngine.getName();
-		String inputFileName = FileUtils.INPUT_FILE_PATH + f;
-		DateFormat dt = new SimpleDateFormat("yyyy_MM_dd");
-		String outputFileName = "Result_" + "EN" + experimentNumber + "_" + comment + "_" + dt.format(d) + "_" + f.split("\\.")[0];
+	public int run(String f, int experimentNumber, String comment, String outputFileName, String windowFileName, String experimentDescription)
+			throws Exception {
+		this.experimentNumber = experimentNumber;
+		this.experimentDescription = experimentDescription;
+		this.inputFileNameWithPath = FileUtils.INPUT_FILE_PATH + f;
+		this.outputFileName = outputFileName;
+		this.windowFileName = windowFileName;
+
+		log.info("Start Streaming " + System.currentTimeMillis());
 
 		if (!isOn()) {
 			throw new WrongStatusTransitionException("Not ON");
 		} else {
-
-			log.info("Status [" + status + "]" + " Start Running The Experiment [" + experimentNumber + "] of date [" + d + "] "
+			log.info("Status [" + status + "]" + " Start Running The Experiment [" + experimentNumber + "] of date [" + FileUtils.d + "] "
 					+ "Results will be named as [" + outputFileName + "]");
 
 			status = ExecutionState.RUNNING;
-
-			currentExperiment = new Experiment(experimentNumber, experimentDescription, rspEngine.getName(), inputFileName, outputFileName,
+			currentExperiment = new Experiment(experimentNumber, experimentDescription, rspEngine.getName(), inputFileNameWithPath, outputFileName,
 					System.currentTimeMillis(), comment, 0L);
-
 			log.debug("Status [" + status + "] Experiment Created");
+
 			ExecutionState engineStatus = rspEngine.startProcessing();
 			log.debug("Status [" + status + "] Processing is started");
 
 			if (ExecutionState.READY.equals(engineStatus)) {
 				try {
-					RSPEventStreamer.stream(getBuffer(inputFileName), experimentNumber);
+					RSPEventStreamer.stream(getBuffer(inputFileNameWithPath), experimentNumber);
 				} catch (IOException ex) {
 					status = ExecutionState.ERROR;
 					log.error(ex.getMessage());
@@ -79,6 +88,7 @@ public class TestStand extends Stand implements EventProcessor<RSPEvent>, Result
 			}
 
 			engineStatus = rspEngine.stopProcessing();
+
 			log.debug("Status [" + status + "] Processing is ended");
 
 			currentExperiment.setTimestampEnd(System.currentTimeMillis());
@@ -86,24 +96,14 @@ public class TestStand extends Stand implements EventProcessor<RSPEvent>, Result
 
 			if (ExecutionState.CLOSED.equals(engineStatus)) {
 				status = ExecutionState.READY;
+			} else if (ExecutionState.ERROR.equals(engineStatus)) {
+				status = ExecutionState.ERROR;
 			}
 
-			log.info("Status [" + status + "] Stop the Streamign " + System.currentTimeMillis());
+			log.info("Status [" + status + "] Stop the Streaming " + System.currentTimeMillis());
 
 		}
 		return 1;
-	}
-
-	/**
-	 * 
-	 * Start the system execution Move the system state from ON to RUNNING
-	 * 
-	 * @param experimentNumber
-	 * 
-	 * @throws Exception
-	 */
-	public int run(String f, int experimentNumber) throws Exception {
-		return run(f, experimentNumber, "", new Date());
 	}
 
 	@Override
@@ -178,24 +178,73 @@ public class TestStand extends Stand implements EventProcessor<RSPEvent>, Result
 
 	@Override
 	public boolean process(RSPEvent e) {
-		// TODO call the collector to ensure pull call
 		se = e;
-		return rspEngine.process(e);
+		boolean process = false;
+		if (numberEvents % 50 == 0 && numberEvents != 0) { // Stream 50 events at time
+			memoryA = Memory.getMemoryUsage();
+			process = processDone();
+			memoryA = memoryB = 0D;
+			timestamp = resultTimestamp = 0L;
+		} else {
+			if (numberEvents % 50 == 1 || numberEvents == 0) {
+				memoryB = Memory.getMemoryUsage();
+				timestamp = System.currentTimeMillis();
+			}
+			process = rspEngine.process(e);
+		}
+
+		numberEvents++;
+		return process;
+	}
+
+	@Override
+	public boolean processDone() {
+		log.info("Move window");
+		resultTimestamp = System.currentTimeMillis();
+		memoryA = Memory.getMemoryUsage();
+		resultTimestamp = System.currentTimeMillis();
+		return rspEngine.processDone();
 	}
 
 	@Override
 	public boolean store(EventResult r) {
 		try {
-			return resultCollector.store(r);
+			Result engineResult = (Result) r;
+			resultTimestamp = engineResult.getTimestamp();
+			int eventNumber = rspEngine.getEventNumber();
+			String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + "/" + engineResult.getFrom() + "/" + engineResult.getTo()
+					+ ">";
+			double memoryA2 = memoryA;
+			double memoryB2 = memoryB;
+
+			boolean ret = resultCollector.store(new TSResult(id, eventNumber, engineResult.getStatements(), timestamp, resultTimestamp, memoryA2,
+					memoryB2));
+
+			memoryA = memoryB = 0D;
+			timestamp = resultTimestamp = 0L;
+
+			return ret;
+
 		} catch (IOException e) {
 			return false;
 		}
 	}
 
 	@Override
-	public boolean processDone() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public boolean store(EventResult r, String where) throws IOException {
 
+		try {
+			Result engineResult = (Result) r;
+			String w = rspEngine.getName() + "/" + (("Window".equals(where)) ? windowFileName : outputFileName);
+			int eventNumber = rspEngine.getEventNumber();
+			resultTimestamp = engineResult.getTimestamp();
+			String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + "/" + engineResult.getFrom() + "/" + engineResult.getTo()
+					+ ">";
+
+			return resultCollector
+					.store(new TSResult(id, eventNumber, engineResult.getStatements(), timestamp, resultTimestamp, memoryA, memoryB), w);
+		} catch (IOException e) {
+			return false;
+		}
+	}
 }

@@ -8,8 +8,6 @@ import it.polimi.utils.FileUtils;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import lombok.extern.log4j.Log4j;
 
@@ -18,7 +16,6 @@ public class TrigEventSaver implements EventSaver {
 
 	private ExecutionState status;
 	private final String trigpath;
-	private List<CollectableData> trigs;
 	String path = "";
 
 	public TrigEventSaver() {
@@ -33,7 +30,22 @@ public class TrigEventSaver implements EventSaver {
 	public boolean save(CollectableData d, String where) {
 		if (ExecutionState.READY.equals(status)) {
 			path = trigpath + where + FileUtils.TRIG_FILE_EXTENSION;
-			trigs.add(d);
+			try {
+				FileWriter writer;
+				File file = new File(path);
+				TriG t = (TriG) d;
+				if (!file.exists()) {
+					file.createNewFile();
+				}
+				writer = new FileWriter(file, true);
+				writer.write(t.getData());
+				writer.flush();
+				writer.close();
+			} catch (IOException e) {
+				log.error(e.getMessage());
+				status = ExecutionState.ERROR;
+				return false;
+			}
 			log.debug("TRIG FILE PATH " + path);
 			return true;
 		} else {
@@ -45,7 +57,6 @@ public class TrigEventSaver implements EventSaver {
 	@Override
 	public ExecutionState init() {
 		log.info("Initialising TrigSaver... Nothing to do");
-		trigs = new ArrayList<CollectableData>();
 		status = ExecutionState.READY;
 		return status;
 	}
@@ -53,44 +64,9 @@ public class TrigEventSaver implements EventSaver {
 	@Override
 	public ExecutionState close() {
 		log.info("Closing TrigSaver... Nothing to do");
-		String eof = System.getProperty("line.separator");
-		try {
-			File file;
 
-			FileWriter writer = null;
-			for (CollectableData d : trigs) {
-				TriG t = (TriG) d;
-
-				log.debug(path);
-				file = new File(path);
-				if (!file.exists()) {
-					file.createNewFile();
-				}
-				writer = new FileWriter(file, true);
-				writer.write(t.getKey() + " {");
-				writer.write(eof);
-				for (String[] resource : t.getTriples()) {
-					writer.write(eof + "<" + resource[0] + ">" + " " + "<" + resource[1] + ">" + " " + "<" + resource[2] + "> .");
-				}
-				writer.write(eof + "}");
-				writer.write(eof);
-				writer.flush();
-			}
-
-			if (writer == null) {
-				status = ExecutionState.ERROR;
-				log.error("Null Writer, File not Found");
-
-			} else {
-				writer.close();
-				status = ExecutionState.CLOSED;
-			}
-
-		} catch (IOException e) {
-			log.error(e.getMessage());
-			status = ExecutionState.ERROR;
-		}
-
+		status = ExecutionState.CLOSED;
 		return status;
 	}
+
 }

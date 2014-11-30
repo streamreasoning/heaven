@@ -178,4 +178,10 @@ public class JenaEngine extends RSPEngine {
 	public boolean processDone() {
 		return true;
 	}
+
+	@Override
+	public int getEventNumber() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

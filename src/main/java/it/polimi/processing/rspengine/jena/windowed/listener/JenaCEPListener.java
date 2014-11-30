@@ -1,15 +1,12 @@
-package it.polimi.processing.rspengine.jena.listener;
+package it.polimi.processing.rspengine.jena.windowed.listener;
 
 import it.polimi.processing.collector.ResultCollector;
-import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.interfaces.EventResult;
+import it.polimi.processing.rspengine.esper.commons.listener.Result;
 import it.polimi.processing.rspengine.esper.plain.events.TEvent;
-import it.polimi.processing.rspengine.jena.JenaEsperSMPL;
-import it.polimi.utils.Memory;
 import it.polimi.utils.RDFSUtils;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,43 +27,44 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.rdf.model.impl.InfModelImpl;
 import com.hp.hpl.jena.reasoner.InfGraph;
 import com.hp.hpl.jena.reasoner.Reasoner;
-import com.hp.hpl.jena.reasoner.ReasonerRegistry;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.ReasonerVocabulary;
 
 @Log4j
-public class JenaCEPListener implements UpdateListener {
+public abstract class JenaCEPListener implements UpdateListener {
 
-	private final Model tbox_star;
+	private final Model TBoxStar;
 	private Model abox;
-	private InfModel abox_star;
+	private InfModel ABoxStar;
 	private Reasoner reasoner;
 	private final ResultCollector<EventResult> collector;
-	private final JenaEsperSMPL engine;
+	private int eventNumber = 0;
+	private Set<String[]> ABoxTriples;
 
-	public JenaCEPListener(String ontology, JenaEsperSMPL engine, ResultCollector<EventResult> collector) {
-		FileManager.get().addLocatorClassLoader(JenaCEPListener.class.getClassLoader());
+	public JenaCEPListener(String tbox, ResultCollector<EventResult> collector) {
+		FileManager.get().addLocatorClassLoader(this.getClass().getClassLoader());
+		this.TBoxStar = FileManager.get().loadModel(tbox, null, "RDF/XML");
 		this.collector = collector;
-		this.tbox_star = FileManager.get().loadModel(ontology, null, "RDF/XML");
-		this.engine = engine;
 	}
 
 	@Override
 	public void update(EventBean[] newData, EventBean[] oldData) {
 
 		abox = ModelFactory.createMemModelMaker().createDefaultModel();
+		ABoxTriples = new HashSet<String[]>();
 
 		for (EventBean e : newData) {
-			abox.add(createStatement((TEvent) e.getUnderlying()));
+			TEvent underlying = (TEvent) e.getUnderlying();
+			ABoxTriples.add(new String[] { underlying.getS(), underlying.getP(), underlying.getO() });
+			abox.add(createStatement(underlying));
 		}
 
-		reasoner = getRDFSSimpleReasoner();
-		InfGraph graph = reasoner.bindSchema(tbox_star.getGraph()).bind(abox.getGraph());
-		abox_star = new InfModelImpl(graph);
+		reasoner = getReasoner();
+		InfGraph graph = reasoner.bindSchema(TBoxStar.getGraph()).bind(abox.getGraph());
+		ABoxStar = new InfModelImpl(graph);
 
 		Set<String[]> statements = new HashSet<String[]>();
-		StmtIterator iterator = abox_star.difference(tbox_star).listStatements();
+		StmtIterator iterator = ABoxStar.difference(TBoxStar).listStatements();
 
 		Triple t;
 		String[] statementStrings;
@@ -74,16 +72,14 @@ public class JenaCEPListener implements UpdateListener {
 			t = iterator.next().asTriple();
 			statementStrings = new String[] { t.getSubject().toString(), t.getPredicate().toString(), t.getObject().toString() };
 			statements.add(statementStrings);
-			log.debug(Arrays.deepToString(statementStrings));
 		}
 
 		try {
 
-			RSPEvent e = engine.getRSPEvent();
-			e.setAll_triples(statements);
-			e.setResultTimestamp(System.currentTimeMillis());
-			e.setMemoryAR(Memory.getMemoryUsage());
-			collector.store(e);
+			log.debug("Send Event to the StoreCollector");
+			collector.store(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis()), "Result");
+			collector.store(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis()), "Window");
+			eventNumber += ABoxTriples.size();
 
 		} catch (IOException e1) {
 			log.error(e1.getMessage());
@@ -91,17 +87,12 @@ public class JenaCEPListener implements UpdateListener {
 	}
 
 	private Statement createStatement(TEvent e) {
-
 		Resource subject = ResourceFactory.createResource(e.getS());
 		Property predicate = (e.getP() != RDFSUtils.TYPE_PROPERTY) ? ResourceFactory.createProperty(e.getP()) : RDF.type;
 		RDFNode object = ResourceFactory.createResource(e.getO());
 		return ResourceFactory.createStatement(subject, predicate, object);
 	}
 
-	private Reasoner getRDFSSimpleReasoner() {
-		Reasoner reasoner = ReasonerRegistry.getRDFSReasoner();
-		reasoner.setParameter(ReasonerVocabulary.PROPsetRDFSLevel, ReasonerVocabulary.RDFS_SIMPLE);
-		return reasoner;
-	}
+	protected abstract Reasoner getReasoner();
 
 }

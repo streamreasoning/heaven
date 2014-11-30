@@ -1,4 +1,4 @@
-package it.polimi.processing.rspengine.jena;
+package it.polimi.processing.rspengine.jena.windowed;
 
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionState;
@@ -6,7 +6,6 @@ import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.esper.RSPEsperEngine;
 import it.polimi.processing.rspengine.esper.plain.events.TEvent;
-import it.polimi.processing.rspengine.jena.listener.JenaCEPListener;
 
 import java.util.Set;
 
@@ -16,6 +15,7 @@ import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.ConfigurationMethodRef;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
+import com.espertech.esper.client.UpdateListener;
 import com.espertech.esper.client.time.CurrentTimeEvent;
 
 /**
@@ -31,24 +31,18 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
  * 
  * **/
 @Log4j
-public class JenaEsperSMPL extends RSPEsperEngine {
+public class JenaEsperRhoDF extends RSPEsperEngine {
 
-	private JenaCEPListener listener = null;
-	private final String runtimeOnto;
+	private UpdateListener listener = null;
 
-	public JenaEsperSMPL(String name, ResultCollector<EventResult> collector, String runtimeOnto) {
+	public JenaEsperRhoDF(String name, ResultCollector<EventResult> collector, UpdateListener listener) {
 		super(name, collector);
-		this.runtimeOnto = runtimeOnto;
-	}
-
-	public RSPEvent getRSPEvent() {
-		return this.currentStreamingEvent;
+		this.listener = listener;
 	}
 
 	protected void initQueries() {
 
 		EPStatement out = cepAdm.createEPL("insert into Out select * from TEvent.win:time(1000 msec) output all every 1000msec ");
-		listener = new JenaCEPListener(runtimeOnto, this, collector);
 		out.addListener(listener);
 	}
 
@@ -61,7 +55,7 @@ public class JenaEsperSMPL extends RSPEsperEngine {
 
 		cepConfig.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
 
-		cep = EPServiceProviderManager.getProvider(JenaEsperSMPL.class.getName(), cepConfig);
+		cep = EPServiceProviderManager.getProvider(JenaEsperRhoDF.class.getName(), cepConfig);
 		// We register an EPL statement
 		cepAdm = cep.getEPAdministrator();
 		cepRT = cep.getEPRuntime();
@@ -85,7 +79,7 @@ public class JenaEsperSMPL extends RSPEsperEngine {
 
 	@Override
 	public boolean process(RSPEvent e) {
-		this.currentStreamingEvent = e;
+		setCurrentEvent(e);
 		status = ExecutionState.RUNNING;
 		Set<String[]> eventTriples = e.getEventTriples();
 		int count = 0;
@@ -98,10 +92,9 @@ public class JenaEsperSMPL extends RSPEsperEngine {
 			cepRT.sendEvent(new TEvent(eventTriple[0], eventTriple[1], eventTriple[2], cepRT.getCurrentTime(), System.currentTimeMillis(), "Input"));
 		}
 
-		log.debug("Status[" + status + "] Parsing done, prepare time scheduling...");
-		sendTimeEvent();
+		log.debug("Status [" + status + "] Parsing done, return...");
 		status = ExecutionState.READY;
-		return processDone();
+		return true;
 	}
 
 	@Override
@@ -123,6 +116,8 @@ public class JenaEsperSMPL extends RSPEsperEngine {
 
 	@Override
 	public boolean processDone() {
+		moveWindow();
+		status = ExecutionState.READY;
 		return true;
 	}
 }

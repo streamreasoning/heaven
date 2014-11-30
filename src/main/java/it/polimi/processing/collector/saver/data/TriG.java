@@ -25,7 +25,7 @@ public class TriG implements CollectableData {
 			trig += eol + "<" + resource[0] + ">" + " " + "<" + resource[1] + ">" + " " + "<" + resource[2] + "> .";
 		}
 
-		trig += eol + "}";
+		trig += eol + "}" + eol;
 		return trig;
 	}
 

@@ -8,4 +8,6 @@ public interface ResultCollector<T extends Event> {
 
 	public boolean store(T r) throws IOException;
 
+	public boolean store(T r, String where) throws IOException;
+
 }

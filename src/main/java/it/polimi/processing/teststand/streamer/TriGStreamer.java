@@ -63,9 +63,7 @@ public class TriGStreamer extends RSPEventStreamer {
 			int eventNumber = 0;
 			int graphSize = 0;
 			while ((line = br.readLine()) != null && !line.isEmpty()) {
-
 				graphSize++;
-
 				if (currentTriG.equals(""))
 					// Status One
 					currentTriG += line;

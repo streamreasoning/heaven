@@ -5,29 +5,21 @@ import it.polimi.CommonMain;
 public class Queries {
 
 	private static final String EXTERNAL = "it.polimi.processing.rspengine.esper.plain." + CommonMain.ontologyClass;
+	public static final long window = 1000;
 
-	public static final String INPUT_RDFS6 = "on TEvent "
-			+ "insert into RDFS3Input select s as s, o as o, p as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel "
-			+ "insert into RDFS9Input select s as s, o as o, p as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel "
-			+ "insert into QueryOut select s as s, o as o, p as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel "
-			+ "insert into RDFS3Input select s as s, o as o, as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel "
-			+ EXTERNAL + ".subPropertyOf(p) as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel "
-			+ "insert into RDFS9Input select s as s, o as o," + EXTERNAL
-			+ ".subPropertyOf(p) as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel "
-			+ "insert into QueryOut select s as s, o as o," + EXTERNAL
-			+ ".subPropertyOf(p) as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel " + "output all ";
+	public static final String INPUT = "insert into InputEvent select * from  TEvent";
 
-	public static final String INPUT = "on TEvent as e "
-			+ "insert into RDFS3Input.win:time(1000 msec) select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel where not "
+	public static final String INPUT_TE = "on InputEvent as e "
+			+ "insert into RDFS3Input select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel where not "
 			+ EXTERNAL
 			+ ".containsType(e.ps) "
-			+ "insert into RDFS6Input.win:time(1000 msec) select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel where not "
+			+ "insert into RDFS6Input select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel where not "
 			+ EXTERNAL
 			+ ".containsType(e.ps) "
-			+ "insert into RDFS9Input.win:time(1000 msec) select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel where  "
+			+ "insert into RDFS9Input select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel where  "
 			+ EXTERNAL
 			+ ".containsType(e.ps) "
-			+ "insert into QueryOut.win:time(1000 msec)   select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel "
+			+ "insert into QueryOut select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel "
 			+ "output all ";
 
 	public static final String RDFS23 = "on RDFS3Input as e "
@@ -77,12 +69,12 @@ public class Queries {
 
 	// TODO verificare se la distinct lavora anche sullo stream in cui inserisco per evitare
 	// duplicati
-	public static final String OUTPUTREV1 = "insert into QueryOut select e.ss as s, e.ps as p, e.os as o, timestamp as timestamp, app_timestamp as app_timestamp, channel || 'OUT' as channel  from TEvent as e ";
+	public static final String OUTPUTREV1 = "insert into QueryOut select e.ss as s, e.ps as p, e.os as o, timestamp as timestamp, app_timestamp as app_timestamp, channel || 'OUT' as channel  from TEvent.win:time(1000 msec) as e ";
 	public static final String OUTPUTREV2 = "insert into QueryOut select * from RDFS3Input ";
 	public static final String OUTPUTREV3 = "insert into QueryOut select * from RDFS6Input ";
 	public static final String OUTPUTREV4 = "insert into QueryOut select * from RDFS9Input ";
 
-	public static final String RDFS9REV1 = " insert into RDFS9Input select  e.ss as s, e.ps as p, "
+	public static final String RDFS9REV1 = " insert into RDFS9Input select e.ss as s, e.ps as p, "
 			+ EXTERNAL
 			+ ".subClassOf(e.os)  as o, timestamp as timestamp, app_timestamp as app_timestamp , channel || 'RDSF9' as channel from TEvent as e where "
 			+ EXTERNAL + ".containsType(e.ps) ";

@@ -44,10 +44,9 @@ public class RSPEvent implements Event, EventResult {
 
 	@Override
 	public CollectableData getCSV() {
-		String lines = ",";
 
 		long queryLatency = resultTimestamp - inputTimestamp;
-		String s = id + lines + inputTimestamp + "," + memoryBR + "," + memoryAR + "," + queryLatency;
+		String s = id + "," + inputTimestamp + "," + memoryBR + "," + memoryAR + "," + queryLatency;
 		return new CSV(s);
 	}
 

@@ -185,4 +185,10 @@ public class JenaEngineRhoDF extends RSPEngine {
 			}
 		}
 	}
+
+	@Override
+	public int getEventNumber() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

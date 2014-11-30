@@ -17,7 +17,7 @@ public class FileUtils {
 	static {
 		DateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
 		try {
-			d = dt.parse("2014-11-24");
+			d = dt.parse("2014-11-30");
 		} catch (java.text.ParseException e) {
 			log.info("Wrong parsing");
 			d = new Date();
@@ -45,7 +45,7 @@ public class FileUtils {
 	}
 
 	public static final String MODEL_FILE_PATH = "";
-	public static final String INPUT_FILE_PATH = "src/main/resources/data/input/SINK1/1000Events/";
+	public static final String INPUT_FILE_PATH = "src/main/resources/data/input/";
 	public static final String OUTPUT_FILE_PATH = daypath;
 	public static final String PREPROCESSING_FILE_PATH = "src/main/resources/data/preprocessing/";
 	public static final String PREPROCESSING_EXCLUDED_FILE_PATH = PREPROCESSING_FILE_PATH + "excluded/";

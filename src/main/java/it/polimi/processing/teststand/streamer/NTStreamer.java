@@ -62,35 +62,26 @@ public class NTStreamer extends RSPEventStreamer {
 			int streamedEvents = 0;
 			String line;
 			Set<String[]> eventTriples = new HashSet<String[]>();
-
 			while ((line = br.readLine()) != null) {
 				status = ExecutionState.RUNNING;
 				String[] s = parse(line);
 				log.debug("S: " + Arrays.deepToString(s));
-
 				eventTriples.add(s);
 				if (sendEvent(eventTriples, experimentNumber, streamedEvents)) {
-
-					log.debug("SEND NEW EVENT: " + line);
+					log.debug("Sent [" + eventTriples.size() + "] New Events " + line);
 					status = ExecutionState.READY;
 					streamedEvents++;
-
 				} else {
 					status = ExecutionState.READY;
 					log.info("Not Saved " + line);
-
 				}
-
 				if (streamedEvents % 1000 == 0) {
 					log.info("STREAMED " + streamedEvents + "EVENTS");
 				}
-
 				eventTriples = new HashSet<String[]>();
-
 			}
 			log.info("Number of Events: " + streamedEvents);
 			br.close();
-
 		}
 	}
 
@@ -99,7 +90,6 @@ public class NTStreamer extends RSPEventStreamer {
 		if (s.length > 3) {
 			throw new IllegalArgumentException("Too much arguments");
 		}
-
 		log.debug("S: " + Arrays.deepToString(s));
 		s[0] = s[0].replace("<", "");
 		s[0] = s[0].replace(">", "");
@@ -116,22 +106,17 @@ public class NTStreamer extends RSPEventStreamer {
 		for (String[] s : eventTriples) {
 			log.debug("tripleSet: " + Arrays.deepToString(s));
 		}
-
-		String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + ">";
-
+		String id = "<http://example.org/" + experimentNumber + "/";
 		return processor.process(lastEvent = createEvent(id, eventTriples, experimentNumber, eventNumber));
-
 	}
 
 	@Override
 	public ExecutionState init() {
 		return status = ExecutionState.READY;
-
 	}
 
 	@Override
 	public ExecutionState close() {
 		return status = ExecutionState.CLOSED;
 	}
-
 }

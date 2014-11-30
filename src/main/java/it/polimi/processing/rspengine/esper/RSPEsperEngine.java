@@ -2,9 +2,9 @@ package it.polimi.processing.rspengine.esper;
 
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.RSPEngine;
+import it.polimi.processing.rspengine.esper.plain.Queries;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
@@ -24,18 +24,22 @@ public abstract class RSPEsperEngine extends RSPEngine {
 	protected static EPRuntime cepRT;
 	protected static EPAdministrator cepAdm;
 	protected static ConfigurationMethodRef ref;
-	@Getter
-	protected RSPEvent currentStreamingEvent = null;
 
-	protected int time = 0;
+	protected int windowShots, time = 0;
 
 	public RSPEsperEngine(String name, ResultCollector<EventResult> collector) {
 		super(name, collector);
 	}
 
-	protected void sendTimeEvent() {
+	public void sendTimeEvent(long delta) {
+		this.time += delta;
+		cepRT.sendEvent(new CurrentTimeEvent(time));
+		log.debug("Sent time Event");
+	}
 
-		time += 1000;
+	public void moveWindow() {
+		time += Queries.window;
+		windowShots++;
 		cepRT.sendEvent(new CurrentTimeEvent(time));
 		log.debug("Sent time Event");
 	}
@@ -54,6 +58,11 @@ public abstract class RSPEsperEngine extends RSPEngine {
 
 	protected boolean isReady() {
 		return ExecutionState.READY.equals(status);
+	}
+
+	@Override
+	public int getEventNumber() {
+		return getWindowShots();
 	}
 
 }

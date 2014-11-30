@@ -1,11 +1,10 @@
-package it.polimi.processing.rspengine.esper.plain;
+package it.polimi.processing.rspengine.jena.windowed;
 
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.esper.RSPEsperEngine;
-import it.polimi.processing.rspengine.esper.plain.events.Out;
 import it.polimi.processing.rspengine.esper.plain.events.TEvent;
 
 import java.util.Set;
@@ -32,41 +31,18 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
  * 
  * **/
 @Log4j
-public class Plain2369 extends RSPEsperEngine {
+public class JenaEsperSMPL extends RSPEsperEngine {
 
 	private final UpdateListener listener;
-	private final String runtimeOnto;
-	private TEvent esperEvent = null;
-	private final String ontologyClass;
 
-	public Plain2369(String name, ResultCollector<EventResult> collector, String runtimeOnto, String ontologyClass, UpdateListener listener) {
+	public JenaEsperSMPL(String name, ResultCollector<EventResult> collector, UpdateListener listener) {
 		super(name, collector);
-		this.runtimeOnto = runtimeOnto;
-		this.ontologyClass = ontologyClass;
 		this.listener = listener;
 	}
 
 	protected void initQueries() {
 
-		// cepAdm.createEPL(Queries.RDFS6REV);
-		// cepAdm.createEPL(Queries.RDFS23REV1);
-		// cepAdm.createEPL(Queries.RDFS23REV2);
-		// cepAdm.createEPL(Queries.RDFS23REV3);
-		// cepAdm.createEPL(Queries.RDFS23REV4);
-		// cepAdm.createEPL(Queries.RDFS9REV1);
-		// cepAdm.createEPL(Queries.RDFS9REV2);
-		// cepAdm.createEPL(Queries.RDFS9REV3);
-		// cepAdm.createEPL(Queries.OUTPUTREV1);
-		// cepAdm.createEPL(Queries.OUTPUTREV3);
-		// cepAdm.createEPL(Queries.OUTPUTREV4);
-
-		cepAdm.createEPL(Queries.INPUT);
-		cepAdm.createEPL(Queries.INPUT_TE);
-		cepAdm.createEPL(Queries.RDFS23);
-		cepAdm.createEPL(Queries.RDFS6);
-		cepAdm.createEPL(Queries.RDFS9);
-
-		EPStatement out = cepAdm.createEPL("insert into Out select * from QueryOut.win:time(1000 msec) output all every 1000 msec");
+		EPStatement out = cepAdm.createEPL("insert into Out select * from TEvent.win:time(1000 msec) output all every 1000msec ");
 		out.addListener(listener);
 	}
 
@@ -76,26 +52,13 @@ public class Plain2369 extends RSPEsperEngine {
 		cepConfig = new Configuration();
 
 		cepConfig.addEventType("TEvent", TEvent.class.getName());
-		cepConfig.addEventType("Out", Out.class.getName());
 
 		cepConfig.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
 
-		cep = EPServiceProviderManager.getProvider(Plain2369.class.getName(), cepConfig);
+		cep = EPServiceProviderManager.getProvider(JenaEsperSMPL.class.getName(), cepConfig);
 		// We register an EPL statement
 		cepAdm = cep.getEPAdministrator();
 		cepRT = cep.getEPRuntime();
-
-		if ("CompleatingOntology".equals(ontologyClass)) {
-			cepConfig.addMethodRef(CompletingOntology.class, ref);
-			CompletingOntology.init(runtimeOnto);
-		} else if ("CompleteOntology".equals(ontologyClass)) {
-			cepConfig.addMethodRef(CompleteOntology.class, ref);
-			CompleteOntology.init(runtimeOnto);
-		} else {
-			cepConfig.addMethodRef(Ontology.class, ref);
-			Ontology.init(runtimeOnto);
-		}
-
 		initQueries();
 		status = ExecutionState.READY;
 		log.debug("Status[" + status + "] Initizalized the RSPEngine");
@@ -119,7 +82,6 @@ public class Plain2369 extends RSPEsperEngine {
 		setCurrentEvent(e);
 		status = ExecutionState.RUNNING;
 		Set<String[]> eventTriples = e.getEventTriples();
-
 		int count = 0;
 		for (String[] eventTriple : eventTriples) {
 			count++;
@@ -127,11 +89,10 @@ public class Plain2369 extends RSPEsperEngine {
 				log.debug("Sent [" + count + "] events");
 			}
 			// Esper events must be immutable
-			esperEvent = new TEvent(eventTriple[0], eventTriple[1], eventTriple[2], cepRT.getCurrentTime(), System.currentTimeMillis(), "Input");
-			cepRT.sendEvent(esperEvent);
+			cepRT.sendEvent(new TEvent(eventTriple[0], eventTriple[1], eventTriple[2], cepRT.getCurrentTime(), System.currentTimeMillis(), "Input"));
 		}
 
-		log.debug("Status [" + status + "] Parsing done, return...");
+		log.debug("Status[" + status + "] Parsing done, prepare time scheduling...");
 		status = ExecutionState.READY;
 		return true;
 	}

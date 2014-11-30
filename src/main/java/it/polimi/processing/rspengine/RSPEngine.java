@@ -16,6 +16,9 @@ public abstract class RSPEngine implements EventProcessor<RSPEvent> {
 	protected ResultCollector<EventResult> collector;
 	protected String name;
 
+	@Getter
+	protected RSPEvent currentEvent = null;
+
 	public RSPEngine(String name, ResultCollector<EventResult> stand) {
 		this.collector = stand;
 		this.name = name;
@@ -28,5 +31,7 @@ public abstract class RSPEngine implements EventProcessor<RSPEvent> {
 	public abstract ExecutionState startProcessing();
 
 	public abstract ExecutionState stopProcessing();
+
+	public abstract int getEventNumber();
 
 }

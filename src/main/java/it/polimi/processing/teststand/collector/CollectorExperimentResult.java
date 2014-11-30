@@ -11,9 +11,11 @@ import java.sql.SQLException;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 
 @Getter
 @Setter
+@Log4j
 public class CollectorExperimentResult implements StartableCollector<ExperimentResult> {
 
 	private long timestamp;
@@ -35,6 +37,17 @@ public class CollectorExperimentResult implements StartableCollector<ExperimentR
 			return false;
 		} else {
 			return sqlLiteSaver.save(r.getSQL(), this.where);
+
+		}
+	}
+
+	@Override
+	public boolean store(ExperimentResult r, String where) throws IOException {
+
+		if (!ExecutionState.READY.equals(status)) {
+			return false;
+		} else {
+			return sqlLiteSaver.save(r.getSQL(), where);
 
 		}
 	}

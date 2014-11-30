@@ -8,15 +8,19 @@ import it.polimi.processing.collector.saver.VoidSaver;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.rspengine.RSPEngine;
+import it.polimi.processing.rspengine.esper.commons.listener.ResultCollectorListener;
 import it.polimi.processing.rspengine.esper.plain.Plain2369;
 import it.polimi.processing.rspengine.jena.JenaEngine;
 import it.polimi.processing.rspengine.jena.JenaEngineRhoDF;
-import it.polimi.processing.rspengine.jena.JenaEsperSMPL;
+import it.polimi.processing.rspengine.jena.windowed.JenaEsperRhoDF;
+import it.polimi.processing.rspengine.jena.windowed.JenaEsperSMPL;
+import it.polimi.processing.rspengine.jena.windowed.listener.JenaRhoDFListener;
+import it.polimi.processing.rspengine.jena.windowed.listener.JenaSMPLListener;
 import it.polimi.processing.streamer.RSPEventStreamer;
 import it.polimi.processing.teststand.collector.CollectorEventResult;
 import it.polimi.processing.teststand.collector.CollectorExperimentResult;
 import it.polimi.processing.teststand.core.TestStand;
-import it.polimi.processing.teststand.streamer.TriGStreamer;
+import it.polimi.processing.teststand.streamer.NTStreamer;
 import it.polimi.utils.ExecutionEnvirorment;
 import it.polimi.utils.FileUtils;
 
@@ -25,10 +29,13 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j;
+
+import com.espertech.esper.client.UpdateListener;
 
 @Log4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -39,111 +46,143 @@ public class CommonMain {
 	public static final int PLAIN2369NWM = 9, JENANWM = 10, JENARHODFNWM = 11;
 	public static int CURRENTENGINE;
 	public static int EXPERIMENTNUMBER;
+
+	private static String JENASMPLNAME = "jenasmpl";
+	private static String JENARHODFNAME = "jenarhodf";
+	private static String PLAIN2369NAME = "plain2369";
+
+	public static String[] engineNames = new String[] { PLAIN2369NAME, JENASMPLNAME, JENARHODFNAME,
+
+	PLAIN2369NAME + "NW", JENASMPLNAME + "NW", JENARHODFNAME + "NW",
+
+	PLAIN2369NAME + "NM", JENASMPLNAME + "NM", JENARHODFNAME + "NM",
+
+	PLAIN2369NAME + "NWM", JENASMPLNAME + "NWM", JENARHODFNAME + "NWM" };
+
 	public static final String ontologyClass = "Ontology";
 
-	private static StartableCollector<EventResult> streamingEventResultCollector;
+	private static RSPEngine engine;
+
+	private static Date exeperimentDate;
+	private static String file, comment;
+
 	private static TestStand testStand;
+	private static StartableCollector<EventResult> streamingEventResultCollector;
+	private static StartableCollector<ExperimentResult> experimentResultCollector;
+	private static UpdateListener listener;
+
+	private static final DateFormat dt = new SimpleDateFormat("yyyy_MM_dd");
+	private static CSVEventSaver csv = new CSVEventSaver();
+	private static CollectorEventResult completeSaver;
+	private static CollectorEventResult noTrigSaver;
+	private static String whereOutput, whereWindow, outputFileName, windowFileName, experimentDescription;
+	private static RSPEventStreamer streamer;
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
 		// String[] files = new String[] { "inputTrigINIT50D1GF0SN1R.trig" };
 		// String[] files = new String[] { "inputTrigINIT100D1GF0SN1R.trig" };
 		// String[] files = new String[] { "inputTrigINIT250D1GF0SN1R.trig" };
-		String[] files = new String[] { "inputTrigINIT50D1GF0SN1R1.trig" };
+
+		file = "University0_0_clean.nt";
 
 		EXPERIMENTNUMBER = Integer.parseInt(args[0]);
 		CURRENTENGINE = Integer.parseInt(args[1]);
-		String comment = args.length > 2 ? args[2] : "";
+		comment = args.length > 2 ? args[2] : "";
 
-		Date exeperimentDate = FileUtils.d;
+		exeperimentDate = FileUtils.d;
 
 		testStand = new TestStand();
 
-		StartableCollector<ExperimentResult> experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
+		outputFileName = "Result_" + "EN" + EXPERIMENTNUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + file.split("\\.")[0];
+		windowFileName = "Window_" + "EN" + EXPERIMENTNUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + file.split("\\.")[0];
 
-		String JENASMPLNAME = "jenasmpl";
-		String JENARHODFNAME = "jenarhodf";
-		String PLAIN2369NAME = "plain2369";
-		RSPEngine engine;
-		for (String f : files) {
-			switch (CURRENTENGINE) {
-				case JENA:
-					engine = new JenaEsperSMPL(JENASMPLNAME, testStand, FileUtils.UNIV_BENCH_RDFS_MODIFIED);
-					break;
-				case JENARHODF:
-					engine = new JenaEngineRhoDF(JENARHODFNAME, FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
-					break;
-				case PLAIN2369:
-					engine = new Plain2369(PLAIN2369NAME, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass);
-					break;
+		String engineName = engineNames[CURRENTENGINE];
 
-				// NO output with memory
-				case JENANW:
-					engine = new JenaEngine(JENASMPLNAME + "NW", testStand);
-					break;
-				case JENARHODFNW:
-					engine = new JenaEngineRhoDF(JENARHODFNAME + "NW", FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME,
-							testStand);
-					break;
-				case PLAIN2369NW:
-					engine = new Plain2369(PLAIN2369NAME + "NW", testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass);
-					break;
+		whereOutput = engineName + "/" + outputFileName;
+		whereWindow = engineName + "/" + windowFileName;
 
-				// NO Memory with output
-				case JENANM:
-					engine = new JenaEngine(JENASMPLNAME + "NM", testStand);
-					break;
-				case JENARHODFNM:
-					engine = new JenaEngineRhoDF(JENARHODFNAME + "NM", FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME,
-							testStand);
-					break;
-				case PLAIN2369NM:
-					engine = new Plain2369(PLAIN2369NAME + "NM", testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass);
-					break;
+		experimentDescription = "EXPERIMENT_ON_" + file + "_WITH_ENGINE_" + engineName;
 
-				// NO memory no Output
-				case JENANWM:
-					engine = new JenaEngine(JENASMPLNAME + "NWM", testStand);
-					break;
-				case JENARHODFNWM:
-					engine = new JenaEngineRhoDF(JENARHODFNAME + "NWM", FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME,
-							testStand);
-					break;
-				case PLAIN2369NWM:
-					engine = new Plain2369(PLAIN2369NAME + "NWM", testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass);
-					break;
+		log.info("output file name will be: [" + whereOutput + "]");
+		log.info("window file name will be: [" + whereWindow + "]");
 
-				default:
-					engine = null;
+		experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
 
-			}
+		noTrigSaver = new CollectorEventResult(testStand, new VoidSaver(), csv, engineName + "/");
+		completeSaver = new CollectorEventResult(testStand, new TrigEventSaver(), csv, engineName + "/");
 
-			RSPEventStreamer streamer = new TriGStreamer(testStand);
+		streamingEventResultCollector = ExecutionEnvirorment.isWritingProtected() ? noTrigSaver : completeSaver;
 
-			log.info("Experiment [" + EXPERIMENTNUMBER + "] of [" + exeperimentDate + "]");
+		streamer = new NTStreamer(testStand);
 
-			DateFormat dt = new SimpleDateFormat("yyyy_MM_dd");
-			String outputFileName = "Result_" + "EN" + EXPERIMENTNUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + f.split("\\.")[0];
+		log.info("Experiment [" + EXPERIMENTNUMBER + "] of [" + exeperimentDate + "]");
 
-			String where = engine.getName() + "/" + outputFileName;
+		switch (CURRENTENGINE) {
+			case JENA:
+				listener = new JenaSMPLListener(FileUtils.UNIV_BENCH_RDFS_MODIFIED, testStand);
+				engine = new JenaEsperSMPL(engineName, testStand, listener);
+				break;
+			case JENARHODF:
+				listener = new JenaRhoDFListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
+				engine = new JenaEsperRhoDF(engineName, testStand, listener);
 
-			log.info("output file name will be: [" + where + "]");
-			streamingEventResultCollector = ExecutionEnvirorment.isWritingProtected() ? new CollectorEventResult(testStand, new VoidSaver(),
-					new CSVEventSaver(), where) : new CollectorEventResult(testStand, new TrigEventSaver(), new CSVEventSaver(), where);
+				break;
+			case PLAIN2369:
+				listener = new ResultCollectorListener(testStand, engineName, new HashSet<String[]>(), new HashSet<String[]>(), 0);
+				engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass, listener);
+				break;
 
-			run(f, comment, EXPERIMENTNUMBER, testStand, streamingEventResultCollector, experimentResultCollector, engine, streamer, exeperimentDate);
+			// NO output with memory
+			case JENANW:
+				engine = new JenaEngine(engineName, testStand);
+				break;
+			case JENARHODFNW:
+				engine = new JenaEngineRhoDF(engineName, FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
+				break;
+			case PLAIN2369NW:
+
+				engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass, listener);
+				break;
+
+			// NO Memory with output
+			case JENANM:
+				engine = new JenaEngine(engineName, testStand);
+				break;
+			case JENARHODFNM:
+				engine = new JenaEngineRhoDF(engineName, FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
+				break;
+			case PLAIN2369NM:
+				engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass, listener);
+				break;
+
+			// NO memory no Output
+			case JENANWM:
+				engine = new JenaEngine(JENASMPLNAME + "NWM", testStand);
+				break;
+			case JENARHODFNWM:
+				engine = new JenaEngineRhoDF(JENARHODFNAME + "NWM", FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
+				break;
+			case PLAIN2369NWM:
+				engine = new Plain2369(PLAIN2369NAME + "NWM", testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass, listener);
+				break;
+
+			default:
+				engine = null;
 
 		}
+
+		run(file, comment, EXPERIMENTNUMBER, exeperimentDate, experimentDescription);
+
 	}
 
-	private static void run(String f, String comment, int experimentNumber, TestStand testStand,
-			StartableCollector<EventResult> streamingEventResultCollector, StartableCollector<ExperimentResult> experimentResultCollector,
-			RSPEngine engine, RSPEventStreamer streamer, Date d) throws ClassNotFoundException, SQLException {
+	private static void run(String f, String comment, int experimentNumber, Date d, String experimentDescription) throws ClassNotFoundException,
+			SQLException {
 
 		testStand.build(streamingEventResultCollector, experimentResultCollector, engine, streamer);
 
 		testStand.init();
 		try {
-			experimentNumber += testStand.run(f, experimentNumber, comment, d);
+			experimentNumber += testStand.run(f, experimentNumber, comment, outputFileName, windowFileName, experimentDescription);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			testStand.stop();

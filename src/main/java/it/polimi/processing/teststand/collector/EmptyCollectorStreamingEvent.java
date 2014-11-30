@@ -45,4 +45,9 @@ public class EmptyCollectorStreamingEvent implements StartableCollector<EventRes
 		return status;
 	}
 
+	@Override
+	public boolean store(EventResult r, String where) throws IOException {
+		return true;
+	}
+
 }
