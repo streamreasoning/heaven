@@ -79,7 +79,7 @@ public abstract class JenaCEPListener implements UpdateListener {
 			log.debug("Send Event to the StoreCollector");
 			collector.store(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis()), "Result");
 			collector.store(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis()), "Window");
-			eventNumber += ABoxTriples.size();
+			eventNumber += ABoxTriples.size() + 1;
 
 		} catch (IOException e1) {
 			log.error(e1.getMessage());

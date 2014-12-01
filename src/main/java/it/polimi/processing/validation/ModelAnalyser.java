@@ -15,7 +15,7 @@ import com.hp.hpl.jena.vocabulary.ReasonerVocabulary;
  * 
  */
 @Getter
-public class Analyser {
+public class ModelAnalyser {
 
 	public static boolean isCorrect(Model reference, Model compare) {
 		return reference.isIsomorphicWith(compare);

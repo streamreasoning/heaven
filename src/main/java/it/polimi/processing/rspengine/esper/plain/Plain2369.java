@@ -66,7 +66,7 @@ public class Plain2369 extends RSPEsperEngine {
 		cepAdm.createEPL(Queries.RDFS6);
 		cepAdm.createEPL(Queries.RDFS9);
 
-		EPStatement out = cepAdm.createEPL("insert into Out select * from QueryOut.win:time(1000 msec) output all every 1000 msec");
+		EPStatement out = cepAdm.createEPL(Queries.QUERYOUT);
 		out.addListener(listener);
 	}
 
@@ -86,11 +86,9 @@ public class Plain2369 extends RSPEsperEngine {
 		cepRT = cep.getEPRuntime();
 
 		if ("CompleatingOntology".equals(ontologyClass)) {
-			cepConfig.addMethodRef(CompletingOntology.class, ref);
-			CompletingOntology.init(runtimeOnto);
+			// TODO runtime onotology building
 		} else if ("CompleteOntology".equals(ontologyClass)) {
-			cepConfig.addMethodRef(CompleteOntology.class, ref);
-			CompleteOntology.init(runtimeOnto);
+			// TODO complete exploded ontology
 		} else {
 			cepConfig.addMethodRef(Ontology.class, ref);
 			Ontology.init(runtimeOnto);

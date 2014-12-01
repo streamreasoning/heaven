@@ -10,7 +10,7 @@ public class Queries {
 	public static final String INPUT = "insert into InputEvent select * from  TEvent";
 
 	public static final String INPUT_TE = "on InputEvent as e "
-			+ "insert into RDFS3Input select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel where not "
+			+ "insert into RDFS23Input select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel where not "
 			+ EXTERNAL
 			+ ".containsType(e.ps) "
 			+ "insert into RDFS6Input select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel where not "
@@ -22,22 +22,22 @@ public class Queries {
 			+ "insert into QueryOut select e.ss as s, e.os as o, e.ps as p, timestamp as timestamp, app_timestamp as app_timestamp, channel as channel "
 			+ "output all ";
 
-	public static final String RDFS23 = "on RDFS3Input as e "
+	public static final String RDFS23 = "on RDFS23Input as e "
 
 	+ "insert into QueryOut select o as s, " + EXTERNAL + ".type()" + " as p, " + EXTERNAL
-			+ ".range(p) as o, timestamp as timestamp , app_timestamp as app_timestamp, channel || 'RDSF3' as channel where not " + EXTERNAL
+			+ ".range(p) as o, timestamp as timestamp , app_timestamp as app_timestamp, channel || 'RDSF23' as channel where not " + EXTERNAL
 			+ ".containsType(e.p) "
 
 			+ "insert into RDFS9Input select o as s, " + EXTERNAL + ".type()" + " as p, " + EXTERNAL
-			+ ".range(p) as o, timestamp as timestamp, app_timestamp as app_timestamp , channel || 'RDSF3' as channel where not " + EXTERNAL
+			+ ".range(p) as o, timestamp as timestamp, app_timestamp as app_timestamp , channel || 'RDSF23' as channel where not " + EXTERNAL
 			+ ".containsType(e.p) "
 
 			+ "insert into QueryOut select s as s, " + EXTERNAL + ".type()" + " as p, " + EXTERNAL
-			+ ".domain(p) as o, timestamp as timestamp , app_timestamp as app_timestamp, channel || 'RDSF3' as channel where not " + EXTERNAL
+			+ ".domain(p) as o, timestamp as timestamp , app_timestamp as app_timestamp, channel || 'RDSF23' as channel where not " + EXTERNAL
 			+ ".containsType(e.p) "
 
 			+ "insert into RDFS9Input select s as s, " + EXTERNAL + ".type()" + " as p, " + EXTERNAL
-			+ ".domain(p) as o, timestamp as timestamp , app_timestamp as app_timestamp, channel || 'RDSF3' as channel where not " + EXTERNAL
+			+ ".domain(p) as o, timestamp as timestamp , app_timestamp as app_timestamp, channel || 'RDSF23' as channel where not " + EXTERNAL
 			+ ".containsType(e.p) "
 
 			+ "output all";

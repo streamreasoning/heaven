@@ -2,8 +2,6 @@ package it.polimi.processing.collector.saver.data;
 
 import it.polimi.processing.streamer.Parser;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
@@ -13,7 +11,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class TriG implements CollectableData {
 	private String key;
-	private List<String[]> triples;
+	private Set<String[]> triples;
 
 	@Override
 	public String getData() {
@@ -29,13 +27,9 @@ public class TriG implements CollectableData {
 		return trig;
 	}
 
-	public TriG(String event_key, Set<String[]> triples) {
-		this(event_key, new ArrayList<String[]>(triples));
-	}
-
 	@Override
 	public CollectableData append(String triple) {
-		List<String[]> triples2 = getTriples();
+		Set<String[]> triples2 = getTriples();
 		triples.add(Parser.parseTriple(triple));
 		return new TriG(key, triples2);
 	}

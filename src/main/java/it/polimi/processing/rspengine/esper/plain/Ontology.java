@@ -1,6 +1,5 @@
 package it.polimi.processing.rspengine.esper.plain;
 
-import it.polimi.processing.rspengine.jena.JenaEngine;
 import it.polimi.utils.RDFSUtils;
 
 import java.util.Arrays;
@@ -36,7 +35,7 @@ public class Ontology {
 
 	private static void initializeObjectProperties() {
 
-		FileManager.get().addLocatorClassLoader(JenaEngine.class.getClassLoader());
+		FileManager.get().addLocatorClassLoader(Ontology.class.getClassLoader());
 
 		Model tboxStar = FileManager.get().loadModel(univBenchRdfs, null, "RDF/XML"); // http://en.wikipedia.org/wiki/Tbox
 
@@ -84,7 +83,7 @@ public class Ontology {
 	private static void inizializeOntology() {
 		ontology = new HashMap<String, String[]>();
 
-		FileManager.get().addLocatorClassLoader(JenaEngine.class.getClassLoader());
+		FileManager.get().addLocatorClassLoader(Ontology.class.getClassLoader());
 
 		Model tBoxStar = FileManager.get().loadModel(RDFSUtils.UNIV_BENCH_RDFS, null, "RDF/XML");
 

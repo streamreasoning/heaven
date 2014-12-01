@@ -11,7 +11,7 @@ import it.polimi.processing.streamer.RSPEventStreamer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Set;
 
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
@@ -115,7 +115,7 @@ public class TriGStreamer extends RSPEventStreamer {
 	private boolean sendEvent(TriG trig, int eventNumber, int experimentNumber) {
 
 		String key = trig.getKey();
-		List<String[]> triples = trig.getTriples();
+		Set<String[]> triples = trig.getTriples();
 
 		if (trig != null && key != null && !key.isEmpty() && triples != null && triples.size() > 0) {
 			streamingEvent = createEvent(key, new HashSet<String[]>(triples), eventNumber, experimentNumber);

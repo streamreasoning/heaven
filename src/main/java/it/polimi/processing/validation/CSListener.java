@@ -58,6 +58,7 @@ public abstract class CSListener implements UpdateListener {
 		statements = new HashSet<String[]>();
 
 		for (EventBean e : newData) {
+
 			Out underlying = (Out) e.getUnderlying();
 			for (String[] triple : underlying.getTriples()) {
 				statements.add(triple);
@@ -100,19 +101,19 @@ public abstract class CSListener implements UpdateListener {
 		reasoner = getReasoner();
 		InfGraph graph = reasoner.bindSchema(TBoxStar.getGraph()).bind(jenaABox.getGraph());
 		jenaResult = new InfModelImpl(graph);
-		completeness = Analyser.isComplete(jenaResult, esperResult);
-		soundness = Analyser.isSound(jenaResult, esperResult);
+		completeness = ModelAnalyser.isComplete(jenaResult, esperResult);
+		soundness = ModelAnalyser.isSound(jenaResult, esperResult);
 
 		System.out.println("COMPLETE");
 
-		StmtIterator iterator = Analyser.getCompleteDiff(jenaABox, esperResult).listStatements();
+		StmtIterator iterator = ModelAnalyser.getCompleteDiff(jenaABox, esperResult).listStatements();
 		while (iterator.hasNext()) {
 			Triple t = iterator.next().asTriple();
 			System.out.println(t.toString());
 		}
 
 		System.out.println("SOUND");
-		iterator = Analyser.getSoundDiff(jenaABox, esperResult).listStatements();
+		iterator = ModelAnalyser.getSoundDiff(jenaABox, esperResult).listStatements();
 		while (iterator.hasNext()) {
 			Triple t = iterator.next().asTriple();
 			System.out.println(t.toString());

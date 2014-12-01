@@ -13,6 +13,7 @@ import it.polimi.utils.Memory;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Set;
 
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
@@ -86,16 +87,17 @@ public class RSPWorkBench extends WorkBench<RSPEvent> {
 	public boolean process(RSPEvent e) {
 		se = e;
 		boolean process = false;
-		if (numberEvents % 50 == 0 && numberEvents != 0) { // Stream 50 events at time
+		if (numberEvents == 0 || numberEvents % 50 == 1) {
+			memoryB = Memory.getMemoryUsage();
+			timestamp = System.currentTimeMillis();
+		}
+
+		if (numberEvents != 0 && numberEvents % 50 == 0) { // Stream 50 events at time
 			memoryA = Memory.getMemoryUsage();
 			process = processDone();
 			memoryA = memoryB = 0D;
 			timestamp = resultTimestamp = 0L;
 		} else {
-			if (numberEvents % 50 == 1 || numberEvents == 0) {
-				memoryB = Memory.getMemoryUsage();
-				timestamp = System.currentTimeMillis();
-			}
 			process = rspEngine.process(e);
 		}
 
@@ -120,9 +122,10 @@ public class RSPWorkBench extends WorkBench<RSPEvent> {
 			int eventNumber = rspEngine.getEventNumber();
 			String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + "/" + engineResult.getFrom() + "/" + engineResult.getTo()
 					+ ">";
+			Set<String[]> statements = engineResult.getStatements();
 
-			TSResult r2 = new TSResult(id, eventNumber, engineResult.getStatements(), timestamp, resultTimestamp, memoryA, memoryB,
-					engineResult.getCompleteSMPL(), engineResult.getSoundSMPL(), engineResult.getCompleteRHODF(), engineResult.getSoundRHODF());
+			TSResult r2 = new TSResult(id, eventNumber, statements, timestamp, resultTimestamp, memoryA, memoryB, engineResult.getCompleteSMPL(),
+					engineResult.getSoundSMPL(), engineResult.getCompleteRHODF(), engineResult.getSoundRHODF());
 			boolean ret = resultCollector.store(r2);
 
 			return ret;

@@ -1,11 +1,9 @@
 package it.polimi.processing.rspengine.esper.commons.listener;
 
 import it.polimi.processing.collector.ResultCollector;
-import it.polimi.processing.events.Result;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.esper.TripleEvent;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,8 +23,7 @@ public class ResultCollectorListener implements UpdateListener {
 
 	private final ResultCollector<EventResult> resultCollector;
 	private String name;
-	private Set<String[]> statements;
-	private Set<String[]> ABoxTriples;
+
 	private int eventNumber = 0;
 
 	@Override
@@ -34,28 +31,30 @@ public class ResultCollectorListener implements UpdateListener {
 
 		log.debug("Run the Listener");
 
-		resetData();
-
+		Set<String[]> statements = new HashSet<String[]>();
+		Set<String[]> ABoxTriples = new HashSet<String[]>();
+		// TODO ottimizzazione duplicati lavorando su hashcode, struttura dati dedicata
 		for (EventBean eventBean : newEvents) {
+			System.out.println(eventBean.getUnderlying());
 			TripleEvent storableEvent = (TripleEvent) eventBean.getUnderlying();
-			statements.addAll(storableEvent.getTriples());
-			if (eventBean.get("channel").equals("Input")) {
-				ABoxTriples.addAll(storableEvent.getTriples());
+			for (String[] strings : storableEvent.getTriples()) {
+				statements.add(strings);
+				if (eventBean.get("channel").equals("Input")) {
+					ABoxTriples.add(strings);
+				}
 			}
 		}
 
-		try {
-			log.debug("Send Event to the StoreCollector");
-			resultCollector.store(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis()), "Result");
-			resultCollector.store(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis()), "Window");
-			eventNumber += ABoxTriples.size();
-		} catch (IOException e) {
-			log.error("Something went wrong, can't save the event");
-		}
+		// try {
+		// log.debug("Send Event to the StoreCollector");
+		// // resultCollector.store(new Result(statements, eventNumber, (eventNumber +
+		// // ABoxTriples.size()), System.currentTimeMillis()), "Result");
+		// // resultCollector.store(new Result(ABoxTriples, eventNumber, (eventNumber +
+		// // ABoxTriples.size()), System.currentTimeMillis()), "Window");
+		// eventNumber += ABoxTriples.size() + 1;
+		// } catch (IOException e) {
+		// log.error("Something went wrong, can't save the event");
+		// }
 	}
 
-	private void resetData() {
-		statements = new HashSet<String[]>();
-		ABoxTriples = new HashSet<String[]>();
-	}
 }

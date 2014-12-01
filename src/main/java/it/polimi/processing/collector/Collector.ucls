@@ -23,40 +23,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="3" language="java" name="it.polimi.processing.collector.saver.SQLLiteEventSaver" 
-    project="OBQA-OOCEP-LUBM-TestStand" 
-    file="/OBQA-OOCEP-LUBM-TestStand/src/main/java/it/polimi/processing/collector/saver/SQLLiteEventSaver.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1636" y="266"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="4" language="java" name="it.polimi.processing.collector.saver.CSVEventSaver" 
-    project="OBQA-OOCEP-LUBM-TestStand" 
-    file="/OBQA-OOCEP-LUBM-TestStand/src/main/java/it/polimi/processing/collector/saver/CSVEventSaver.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="296" width="231" x="670" y="30"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="5" language="java" name="it.polimi.processing.collector.saver.TXTEventSaver" 
-    project="OBQA-OOCEP-LUBM-TestStand" 
-    file="/OBQA-OOCEP-LUBM-TestStand/src/main/java/it/polimi/processing/collector/saver/TXTEventSaver.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="188" width="231" x="941" y="30"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <interface id="6" language="java" name="it.polimi.processing.collector.saver.EventSaver" 
+  <interface id="3" language="java" name="it.polimi.processing.collector.saver.EventSaver" 
     project="OBQA-OOCEP-LUBM-TestStand" 
     file="/OBQA-OOCEP-LUBM-TestStand/src/main/java/it/polimi/processing/collector/saver/EventSaver.java" binary="false" 
     corner="BOTTOM_RIGHT">    
@@ -67,18 +34,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="7" language="java" name="it.polimi.processing.collector.saver.TrigEventSaver" 
-    project="OBQA-OOCEP-LUBM-TestStand" 
-    file="/OBQA-OOCEP-LUBM-TestStand/src/main/java/it/polimi/processing/collector/saver/TrigEventSaver.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="242" width="231" x="1212" y="30"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="8" language="java" name="it.polimi.processing.teststand.collector.CollectorExperimentResult" 
+  <class id="4" language="java" name="it.polimi.processing.teststand.collector.CollectorExperimentResult" 
     project="OBQA-OOCEP-LUBM-TestStand" 
     file="/OBQA-OOCEP-LUBM-TestStand/src/main/java/it/polimi/processing/teststand/collector/CollectorExperimentResult.java" 
     binary="false" corner="BOTTOM_RIGHT">    
@@ -89,7 +45,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="it.polimi.processing.teststand.collector.CollectorEventResult" 
+  <class id="5" language="java" name="it.polimi.processing.teststand.collector.CollectorEventResult" 
     project="OBQA-OOCEP-LUBM-TestStand" 
     file="/OBQA-OOCEP-LUBM-TestStand/src/main/java/it/polimi/processing/teststand/collector/CollectorEventResult.java" 
     binary="false" corner="BOTTOM_RIGHT">    
@@ -100,57 +56,41 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <realization id="10">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="6"/>  
-  </realization>  
-  <realization id="11">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="2"/>  
-  </realization>  
-  <association id="12">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="13" name="sqlLiteSaver"/>      
-      <multiplicity id="14" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="15">    
+  <generalization id="6">    
     <end type="SOURCE" refId="2"/>    
     <end type="TARGET" refId="1"/>  
   </generalization>  
+  <association id="7">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="8" name="csvSaver"/>      
+      <multiplicity id="9" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="10">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="11" name="trigSaver"/>      
+      <multiplicity id="12" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="13">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="14" name="sqlLiteSaver"/>      
+      <multiplicity id="15" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <realization id="16">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="6"/>  
-  </realization>  
-  <realization id="17">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="6"/>  
-  </realization>  
-  <association id="18">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="19" name="csvSaver"/>      
-      <multiplicity id="20" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="21">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="22" name="trigSaver"/>      
-      <multiplicity id="23" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="24">    
-    <end type="SOURCE" refId="9"/>    
+    <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="2"/>  
   </realization>  
-  <realization id="25">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="6"/>  
+  <realization id="17">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="2"/>  
   </realization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     accessors="true" visibility="true">    

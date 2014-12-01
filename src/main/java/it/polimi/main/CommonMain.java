@@ -8,6 +8,7 @@ import it.polimi.processing.collector.saver.VoidSaver;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.rspengine.RSPEngine;
+import it.polimi.processing.rspengine.esper.commons.listener.ResultCollectorListener;
 import it.polimi.processing.rspengine.esper.plain.Plain2369;
 import it.polimi.processing.rspengine.jena.windowed.JenaEsperRhoDF;
 import it.polimi.processing.rspengine.jena.windowed.JenaEsperSMPL;
@@ -18,7 +19,6 @@ import it.polimi.processing.teststand.collector.CollectorEventResult;
 import it.polimi.processing.teststand.collector.CollectorExperimentResult;
 import it.polimi.processing.teststand.core.RSPWorkBench;
 import it.polimi.processing.teststand.streamer.NTStreamer;
-import it.polimi.processing.validation.JenaRhoDFCSListener;
 import it.polimi.utils.ExecutionEnvirorment;
 import it.polimi.utils.FileUtils;
 
@@ -80,7 +80,7 @@ public class CommonMain {
 		// String[] files = new String[] { "inputTrigINIT100D1GF0SN1R.trig" };
 		// String[] files = new String[] { "inputTrigINIT250D1GF0SN1R.trig" };
 
-		file = "University0_0_clean.nt";
+		file = "_CLND_UNIV10INDEX0SEED01000Lines.nt";
 
 		EXPERIMENTNUMBER = Integer.parseInt(args[0]);
 		CURRENTENGINE = Integer.parseInt(args[1]);
@@ -125,11 +125,11 @@ public class CommonMain {
 
 				break;
 			case PLAIN2369:
-				// listener = new ResultCollectorListener(testStand, engineName, new
-				// HashSet<String[]>(), new HashSet<String[]>(), 0);
+				listener = new ResultCollectorListener(testStand, engineName, 0);
 				// listener = new CompleteSoundListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED,
 				// FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
-				listener = new JenaRhoDFCSListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
+				// listener = new JenaRhoDFCSListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED,
+				// FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
 				engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass, listener);
 				break;
 

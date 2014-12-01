@@ -2,8 +2,8 @@ package it.polimi.processing.streamer;
 
 import it.polimi.processing.collector.saver.data.TriG;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -88,7 +88,7 @@ public class Parser {
 			String body = matcher.group(2);
 			String[] tripleBody = Parser.parseTrigBody(body);
 
-			List<String[]> triples = new ArrayList<String[]>();
+			Set<String[]> triples = new HashSet<String[]>();
 			if (tripleBody != null) {
 				for (String triple : tripleBody) {
 					String[] parseTriple = Parser.parseTriple(triple, "", false);

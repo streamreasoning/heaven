@@ -48,13 +48,13 @@ public class CompleteSoundListener extends CSListener {
 		Reasoner smpl = getReasoner();
 		InfGraph graph = smpl.bindSchema(TBoxStar.getGraph()).bind(jenaABox.getGraph());
 		jenaResult = new InfModelImpl(graph);
-		cs = Analyser.isComplete(jenaResult, esperResult);
-		ss = Analyser.isSound(jenaResult, esperResult);
+		cs = ModelAnalyser.isComplete(jenaResult, esperResult);
+		ss = ModelAnalyser.isSound(jenaResult, esperResult);
 		Reasoner rhodf = getRHODFReasoner();
 		graph = rhodf.bindSchema(TBoxStar.getGraph()).bind(jenaABox.getGraph());
 		jenaResult = new InfModelImpl(graph);
-		cr = Analyser.isComplete(jenaResult, esperResult);
-		sr = Analyser.isSound(jenaResult, esperResult);
+		cr = ModelAnalyser.isComplete(jenaResult, esperResult);
+		sr = ModelAnalyser.isSound(jenaResult, esperResult);
 	}
 
 }
