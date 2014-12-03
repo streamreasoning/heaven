@@ -1,8 +1,8 @@
 package it.polimi.processing.streamer;
 
-import it.polimi.processing.EventProcessor;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.workbench.core.EventProcessor;
 
 import java.util.Set;
 

@@ -1,8 +1,8 @@
 package it.polimi.processing.collector;
 
-import it.polimi.processing.Startable;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.interfaces.Event;
+import it.polimi.processing.workbench.core.Startable;
 
 import java.io.IOException;
 

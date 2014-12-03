@@ -2,7 +2,7 @@ package it.polimi.processing.validation;
 
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.events.interfaces.EventResult;
-import it.polimi.processing.rspengine.esper.plain.events.Out;
+import it.polimi.processing.rspengine.windowed.esper.plain.events.Out;
 import it.polimi.utils.RDFSUtils;
 
 import java.io.IOException;

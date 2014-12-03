@@ -39,6 +39,7 @@ public class FileUtils {
 		new File(daypath + "jenarhodfNW/").mkdirs();
 		new File(daypath + "jenarhodfNM/").mkdirs();
 		new File(daypath + "jenarhodfNWM/").mkdirs();
+		new File(daypath + "jenafull/").mkdirs();
 
 		new File(daypath + "database/").mkdirs();
 

@@ -34,9 +34,9 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="4" language="java" name="it.polimi.processing.teststand.collector.CollectorExperimentResult" 
+  <class id="4" language="java" name="it.polimi.processing.workbench.collector.CollectorExperimentResult" 
     project="OBQA-OOCEP-LUBM-TestStand" 
-    file="/OBQA-OOCEP-LUBM-TestStand/src/main/java/it/polimi/processing/teststand/collector/CollectorExperimentResult.java" 
+    file="/OBQA-OOCEP-LUBM-TestStand/src/main/java/it/polimi/processing/workbench/collector/CollectorExperimentResult.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="2021" y="767"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
@@ -45,9 +45,9 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="it.polimi.processing.teststand.collector.CollectorEventResult" 
+  <class id="5" language="java" name="it.polimi.processing.workbench.collector.CollectorEventResult" 
     project="OBQA-OOCEP-LUBM-TestStand" 
-    file="/OBQA-OOCEP-LUBM-TestStand/src/main/java/it/polimi/processing/teststand/collector/CollectorEventResult.java" 
+    file="/OBQA-OOCEP-LUBM-TestStand/src/main/java/it/polimi/processing/workbench/collector/CollectorEventResult.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="882" y="1109"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
@@ -56,42 +56,42 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <generalization id="6">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="1"/>  
-  </generalization>  
+  <realization id="6">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="2"/>  
+  </realization>  
   <association id="7">    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="8" name="csvSaver"/>      
+      <attribute id="8" name="trigSaver"/>      
       <multiplicity id="9" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="10">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="11" name="trigSaver"/>      
-      <multiplicity id="12" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="13">    
+  <generalization id="10">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <association id="11">    
     <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="14" name="sqlLiteSaver"/>      
-      <multiplicity id="15" minimum="0" maximum="1"/>    
+      <attribute id="12" name="sqlLiteSaver"/>      
+      <multiplicity id="13" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="16">    
+  <realization id="14">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="2"/>  
   </realization>  
-  <realization id="17">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="2"/>  
-  </realization>  
+  <association id="15">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="16" name="csvSaver"/>      
+      <multiplicity id="17" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
