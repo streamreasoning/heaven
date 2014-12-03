@@ -1,5 +1,6 @@
 package it.polimi.processing.rspengine.windowed.esper.plain.events;
 
+import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.rspengine.windowed.esper.TripleEvent;
 
 import java.util.ArrayList;
@@ -36,8 +37,8 @@ public class Out implements TripleEvent {
 	}
 
 	@Override
-	public Set<String[]> getTriples() {
-		Set<String[]> triples = new HashSet<String[]>();
+	public Set<TripleContainer> getTriples() {
+		Set<TripleContainer> triples = new HashSet<TripleContainer>();
 		List<String> list;
 
 		for (String subj : s) {
@@ -49,7 +50,7 @@ public class Out implements TripleEvent {
 			}
 
 			for (String string : list) {
-				triples.add(string.split(","));
+				triples.add(new TripleContainer(string.split(",")));
 			}
 		}
 

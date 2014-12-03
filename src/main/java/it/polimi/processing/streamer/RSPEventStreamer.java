@@ -2,6 +2,7 @@ package it.polimi.processing.streamer;
 
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.workbench.core.EventProcessor;
 
 import java.util.Set;
@@ -19,7 +20,7 @@ public abstract class RSPEventStreamer implements Streamer<RSPEvent> {
 	protected ExecutionState status;
 
 	@Override
-	public RSPEvent createEvent(String key, Set<String[]> triple, int eventNumber, int experimentNumber) {
+	public RSPEvent createEvent(String key, Set<TripleContainer> triple, int eventNumber, int experimentNumber) {
 		return new RSPEvent(key, triple, eventNumber, experimentNumber);
 	}
 }

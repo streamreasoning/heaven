@@ -3,6 +3,7 @@ package it.polimi.processing.rspengine.windowed.esper.plain;
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.windowed.esper.RSPEsperEngine;
 import it.polimi.processing.rspengine.windowed.esper.plain.events.Out;
@@ -116,16 +117,17 @@ public class Plain2369 extends RSPEsperEngine {
 	public boolean process(RSPEvent e) {
 		setCurrentEvent(e);
 		status = ExecutionState.RUNNING;
-		Set<String[]> eventTriples = e.getEventTriples();
+		Set<TripleContainer> eventTriples = e.getEventTriples();
 
 		int count = 0;
-		for (String[] eventTriple : eventTriples) {
+		for (TripleContainer tc : eventTriples) {
 			count++;
 			if (count % 1000 == 0) {
 				log.debug("Sent [" + count + "] events");
 			}
 			// Esper events must be immutable
-			esperEvent = new TEvent(eventTriple[0], eventTriple[1], eventTriple[2], cepRT.getCurrentTime(), System.currentTimeMillis(), "Input");
+			String[] t = tc.getTriple();
+			esperEvent = new TEvent(t[0], t[1], t[2], cepRT.getCurrentTime(), System.currentTimeMillis(), "Input");
 			cepRT.sendEvent(esperEvent);
 		}
 

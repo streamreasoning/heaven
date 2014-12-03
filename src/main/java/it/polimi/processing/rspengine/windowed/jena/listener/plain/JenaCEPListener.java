@@ -2,6 +2,7 @@ package it.polimi.processing.rspengine.windowed.jena.listener.plain;
 
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.events.Result;
+import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.windowed.jena.JenaEsperEvent;
 
@@ -33,7 +34,7 @@ public abstract class JenaCEPListener implements UpdateListener {
 	private Reasoner reasoner;
 	private final ResultCollector<EventResult> collector;
 	private int eventNumber = 0;
-	private Set<String[]> ABoxTriples;
+	private Set<TripleContainer> ABoxTriples;
 
 	public JenaCEPListener(String tbox, ResultCollector<EventResult> collector) {
 		FileManager.get().addLocatorClassLoader(this.getClass().getClassLoader());
@@ -45,7 +46,7 @@ public abstract class JenaCEPListener implements UpdateListener {
 	public void update(EventBean[] newData, EventBean[] oldData) {
 
 		abox = ModelFactory.createMemModelMaker().createDefaultModel().getGraph();
-		ABoxTriples = new HashSet<String[]>();
+		ABoxTriples = new HashSet<TripleContainer>();
 
 		for (EventBean e : newData) {
 			JenaEsperEvent underlying = (JenaEsperEvent) e.getUnderlying();
@@ -57,14 +58,14 @@ public abstract class JenaCEPListener implements UpdateListener {
 		InfGraph graph = reasoner.bindSchema(TBoxStar.getGraph()).bind(abox);
 		ABoxStar = new InfModelImpl(graph);
 
-		Set<String[]> statements = new HashSet<String[]>();
+		Set<TripleContainer> statements = new HashSet<TripleContainer>();
 		StmtIterator iterator = ABoxStar.difference(TBoxStar).listStatements();
 
 		Triple t;
-		String[] statementStrings;
+		TripleContainer statementStrings;
 		while (iterator.hasNext()) {
 			t = iterator.next().asTriple();
-			statementStrings = new String[] { t.getSubject().toString(), t.getPredicate().toString(), t.getObject().toString() };
+			statementStrings = new TripleContainer(t.getSubject().toString(), t.getPredicate().toString(), t.getObject().toString());
 			statements.add(statementStrings);
 		}
 

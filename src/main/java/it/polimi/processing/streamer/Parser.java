@@ -1,6 +1,7 @@
 package it.polimi.processing.streamer;
 
 import it.polimi.processing.collector.saver.data.TriG;
+import it.polimi.processing.events.TripleContainer;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -88,11 +89,11 @@ public class Parser {
 			String body = matcher.group(2);
 			String[] tripleBody = Parser.parseTrigBody(body);
 
-			Set<String[]> triples = new HashSet<String[]>();
+			Set<TripleContainer> triples = new HashSet<TripleContainer>();
 			if (tripleBody != null) {
 				for (String triple : tripleBody) {
 					String[] parseTriple = Parser.parseTriple(triple, "", false);
-					triples.add(parseTriple);
+					triples.add(new TripleContainer(parseTriple));
 				}
 			}
 

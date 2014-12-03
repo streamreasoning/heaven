@@ -1,5 +1,6 @@
 package it.polimi.processing.rspengine.windowed.jena.events;
 
+import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.rspengine.windowed.jena.JenaEsperEvent;
 
 import java.util.HashSet;
@@ -26,12 +27,12 @@ public class GraphEvent implements JenaEsperEvent {
 	}
 
 	@Override
-	public Set<String[]> serialize() {
-		HashSet<String[]> hashSet = new HashSet<String[]>();
+	public Set<TripleContainer> serialize() {
+		HashSet<TripleContainer> hashSet = new HashSet<TripleContainer>();
 		ExtendedIterator<Triple> all = GraphUtil.findAll(graph);
 		while (all.hasNext()) {
 			Triple next = all.next();
-			hashSet.add(new String[] { next.getSubject().toString(), next.getPredicate().toString(), next.getObject().toString() });
+			hashSet.add(new TripleContainer(next.getSubject().toString(), next.getPredicate().toString(), next.getObject().toString()));
 		}
 
 		return hashSet;

@@ -15,12 +15,12 @@ import lombok.EqualsAndHashCode;
 public class RSPEvent implements Event {
 
 	private String id;
-	private Set<String[]> eventTriples;
+	private Set<TripleContainer> eventTriples;
 	private int eventNumber, experimentNumber;
 	private long inputTimestamp;
 	private double memoryBR;
 
-	public RSPEvent(String id, Set<String[]> hashSet, int eventNumber, int experimentNumber) {
+	public RSPEvent(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber) {
 		this.id = id;
 		this.eventTriples = hashSet;
 		this.eventNumber = eventNumber;

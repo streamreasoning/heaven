@@ -1,5 +1,6 @@
 package it.polimi.processing.collector.saver.data;
 
+import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.streamer.Parser;
 
 import java.util.Set;
@@ -11,7 +12,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class TriG implements CollectableData {
 	private String key;
-	private Set<String[]> triples;
+	private Set<TripleContainer> triples;
 
 	@Override
 	public String getData() {
@@ -19,7 +20,8 @@ public class TriG implements CollectableData {
 		// self savign data?
 		String eol = System.getProperty("line.separator");
 		String trig = key + " {";
-		for (String[] resource : triples) {
+		for (TripleContainer tr : triples) {
+			String[] resource = tr.getTriple();
 			trig += eol + "<" + resource[0] + ">" + " " + "<" + resource[1] + ">" + " " + "<" + resource[2] + "> .";
 		}
 
@@ -29,8 +31,8 @@ public class TriG implements CollectableData {
 
 	@Override
 	public CollectableData append(String triple) {
-		Set<String[]> triples2 = getTriples();
-		triples.add(Parser.parseTriple(triple));
+		Set<TripleContainer> triples2 = getTriples();
+		triples.add(new TripleContainer(Parser.parseTriple(triple)));
 		return new TriG(key, triples2);
 	}
 }

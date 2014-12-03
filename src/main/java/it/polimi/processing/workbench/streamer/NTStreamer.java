@@ -2,6 +2,7 @@ package it.polimi.processing.workbench.streamer;
 
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.streamer.Parser;
 import it.polimi.processing.streamer.RSPEventStreamer;
@@ -61,12 +62,12 @@ public class NTStreamer extends RSPEventStreamer {
 		} else {
 			int streamedEvents = 0;
 			String line;
-			Set<String[]> eventTriples = new HashSet<String[]>();
+			Set<TripleContainer> eventTriples = new HashSet<TripleContainer>();
 			while ((line = br.readLine()) != null) {
 				status = ExecutionState.RUNNING;
 				String[] s = parse(line);
 				log.debug("S: " + Arrays.deepToString(s));
-				eventTriples.add(s);
+				eventTriples.add(new TripleContainer(s));
 				if (sendEvent(eventTriples, experimentNumber, streamedEvents)) {
 					log.debug("Sent [" + eventTriples.size() + "] New Events " + line);
 					status = ExecutionState.READY;
@@ -78,7 +79,7 @@ public class NTStreamer extends RSPEventStreamer {
 				if (streamedEvents % 1000 == 0) {
 					log.info("STREAMED " + streamedEvents + "EVENTS");
 				}
-				eventTriples = new HashSet<String[]>();
+				eventTriples = new HashSet<TripleContainer>();
 			}
 			log.info("Number of Events: " + streamedEvents);
 			br.close();
@@ -102,9 +103,9 @@ public class NTStreamer extends RSPEventStreamer {
 		return s;
 	}
 
-	private boolean sendEvent(Set<String[]> eventTriples, int experimentNumber, int eventNumber) {
-		for (String[] s : eventTriples) {
-			log.debug("tripleSet: " + Arrays.deepToString(s));
+	private boolean sendEvent(Set<TripleContainer> eventTriples, int experimentNumber, int eventNumber) {
+		for (TripleContainer s : eventTriples) {
+			log.debug("tripleSet: " + Arrays.deepToString(s.getTriple()));
 		}
 		String id = "<http://example.org/" + experimentNumber + "/";
 		return processor.process(lastEvent = createEvent(id, eventTriples, experimentNumber, eventNumber));

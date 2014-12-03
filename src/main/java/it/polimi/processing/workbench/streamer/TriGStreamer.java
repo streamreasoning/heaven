@@ -3,6 +3,7 @@ package it.polimi.processing.workbench.streamer;
 import it.polimi.processing.collector.saver.data.TriG;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.streamer.Parser;
 import it.polimi.processing.streamer.RSPEventStreamer;
@@ -115,10 +116,10 @@ public class TriGStreamer extends RSPEventStreamer {
 	private boolean sendEvent(TriG trig, int eventNumber, int experimentNumber) {
 
 		String key = trig.getKey();
-		Set<String[]> triples = trig.getTriples();
+		Set<TripleContainer> triples = trig.getTriples();
 
 		if (trig != null && key != null && !key.isEmpty() && triples != null && triples.size() > 0) {
-			streamingEvent = createEvent(key, new HashSet<String[]>(triples), eventNumber, experimentNumber);
+			streamingEvent = createEvent(key, new HashSet<TripleContainer>(triples), eventNumber, experimentNumber);
 			return processor.process(streamingEvent);
 		}
 		return false;

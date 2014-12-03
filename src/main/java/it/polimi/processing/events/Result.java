@@ -14,7 +14,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class Result implements EventResult {
 
-	private Set<String[]> statements;
+	private Set<TripleContainer> statements;
 	private long from, to;
 	private long timestamp;
 	private Boolean completeSMPL, soundSMPL, completeRHODF, soundRHODF;;
@@ -30,7 +30,7 @@ public class Result implements EventResult {
 		return new CSV(s);
 	}
 
-	public Result(Set<String[]> statements, long from, long to, long timestamp) {
+	public Result(Set<TripleContainer> statements, long from, long to, long timestamp) {
 		this.statements = statements;
 		this.from = from;
 		this.to = to;

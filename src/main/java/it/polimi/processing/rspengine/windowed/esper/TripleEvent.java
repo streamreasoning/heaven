@@ -1,7 +1,9 @@
 package it.polimi.processing.rspengine.windowed.esper;
 
+import it.polimi.processing.events.TripleContainer;
+
 import java.util.Set;
 
 public interface TripleEvent {
-	public Set<String[]> getTriples();
+	public Set<TripleContainer> getTriples();
 }

@@ -18,7 +18,7 @@ public class TSResult implements EventResult {
 
 	private String id;
 	private int eventNumber;
-	private Set<String[]> statements;
+	private Set<TripleContainer> statements;
 	private long inputTimestamp, outputTimestamp;
 	private double memoryA;
 	private double memoryB;

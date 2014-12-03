@@ -1,6 +1,7 @@
 package it.polimi.processing.rspengine.windowed.esper.commons.listener;
 
 import it.polimi.processing.collector.ResultCollector;
+import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.windowed.esper.TripleEvent;
 
@@ -31,13 +32,13 @@ public class ResultCollectorListener implements UpdateListener {
 
 		log.debug("Run the Listener");
 
-		Set<String[]> statements = new HashSet<String[]>();
-		Set<String[]> ABoxTriples = new HashSet<String[]>();
+		Set<TripleContainer> statements = new HashSet<TripleContainer>();
+		Set<TripleContainer> ABoxTriples = new HashSet<TripleContainer>();
 		// TODO ottimizzazione duplicati lavorando su hashcode, struttura dati dedicata
 		for (EventBean eventBean : newEvents) {
 			System.out.println(eventBean.getUnderlying());
 			TripleEvent storableEvent = (TripleEvent) eventBean.getUnderlying();
-			for (String[] strings : storableEvent.getTriples()) {
+			for (TripleContainer strings : storableEvent.getTriples()) {
 				statements.add(strings);
 				if (eventBean.get("channel").equals("Input")) {
 					ABoxTriples.add(strings);

@@ -1,5 +1,6 @@
 package it.polimi.processing.rspengine.windowed.esper.plain.events;
 
+import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.rspengine.windowed.jena.JenaEsperEvent;
 import it.polimi.utils.RDFSUtils;
 
@@ -50,9 +51,9 @@ public class TEvent implements JenaEsperEvent {
 	}
 
 	@Override
-	public Set<String[]> serialize() {
-		HashSet<String[]> hashSet = new HashSet<String[]>();
-		hashSet.add(new String[] { getS().toString(), getP().toString(), getO().toString() });
+	public Set<TripleContainer> serialize() {
+		HashSet<TripleContainer> hashSet = new HashSet<TripleContainer>();
+		hashSet.add(new TripleContainer(getS().toString(), getP().toString(), getO().toString()));
 		return hashSet;
 	}
 }

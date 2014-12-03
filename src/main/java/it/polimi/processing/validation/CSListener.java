@@ -1,6 +1,7 @@
 package it.polimi.processing.validation;
 
 import it.polimi.processing.collector.ResultCollector;
+import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.windowed.esper.plain.events.Out;
 import it.polimi.utils.RDFSUtils;
@@ -38,8 +39,8 @@ public abstract class CSListener implements UpdateListener {
 	protected Reasoner reasoner;
 	protected final ResultCollector<EventResult> collector;
 	protected int eventNumber = 0;
-	protected Set<String[]> statements;
-	protected Set<String[]> ABoxTriples;
+	protected Set<TripleContainer> statements;
+	protected Set<TripleContainer> ABoxTriples;
 	protected boolean completeness;
 	protected boolean soundness;
 
@@ -54,13 +55,13 @@ public abstract class CSListener implements UpdateListener {
 
 		jenaABox = ModelFactory.createMemModelMaker().createDefaultModel();
 		esperResult = ModelFactory.createMemModelMaker().createDefaultModel();
-		ABoxTriples = new HashSet<String[]>();
-		statements = new HashSet<String[]>();
+		ABoxTriples = new HashSet<TripleContainer>();
+		statements = new HashSet<TripleContainer>();
 
 		for (EventBean e : newData) {
 
 			Out underlying = (Out) e.getUnderlying();
-			for (String[] triple : underlying.getTriples()) {
+			for (TripleContainer triple : underlying.getTriples()) {
 				statements.add(triple);
 				Statement createdStatement = createStatement(triple);
 				esperResult.add(createdStatement);
@@ -75,14 +76,14 @@ public abstract class CSListener implements UpdateListener {
 
 		evaluation();
 
-		Set<String[]> statements = new HashSet<String[]>();
+		Set<TripleContainer> statements = new HashSet<TripleContainer>();
 		StmtIterator iterator = jenaResult.difference(TBoxStar).listStatements();
 
 		Triple t;
-		String[] statementStrings;
+		TripleContainer statementStrings;
 		while (iterator.hasNext()) {
 			t = iterator.next().asTriple();
-			statementStrings = new String[] { t.getSubject().toString(), t.getPredicate().toString(), t.getObject().toString() };
+			statementStrings = new TripleContainer(t.getSubject().toString(), t.getPredicate().toString(), t.getObject().toString());
 			statements.add(statementStrings);
 		}
 
@@ -123,8 +124,8 @@ public abstract class CSListener implements UpdateListener {
 
 	protected abstract void sendResult() throws IOException;
 
-	private Statement createStatement(String[] t) {
-
+	private Statement createStatement(TripleContainer tc) {
+		String[] t = tc.getTriple();
 		Resource subject = ResourceFactory.createResource(t[0]);
 		Property predicate = (t[1] != RDFSUtils.TYPE_PROPERTY) ? ResourceFactory.createProperty(t[1]) : RDF.type;
 		RDFNode object = ResourceFactory.createResource(t[2]);

@@ -5,6 +5,7 @@ import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.Result;
 import it.polimi.processing.events.TSResult;
+import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.utils.FileUtils;
@@ -122,7 +123,7 @@ public class RSPTestStand extends TestStand<RSPEvent> {
 			int eventNumber = rspEngine.getEventNumber();
 			String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + "/" + engineResult.getFrom() + "/" + engineResult.getTo()
 					+ ">";
-			Set<String[]> statements = engineResult.getStatements();
+			Set<TripleContainer> statements = engineResult.getStatements();
 
 			TSResult r2 = new TSResult(id, eventNumber, statements, timestamp, resultTimestamp, memoryA, memoryB, engineResult.getCompleteSMPL(),
 					engineResult.getSoundSMPL(), engineResult.getCompleteRHODF(), engineResult.getSoundRHODF());
