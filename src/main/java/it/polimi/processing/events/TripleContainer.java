@@ -1,8 +1,10 @@
 package it.polimi.processing.events;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class TripleContainer {
 
 	private final String[] triple = new String[3];
@@ -21,7 +23,10 @@ public class TripleContainer {
 
 	@Override
 	public int hashCode() {
-		return (31 * this.triple[0].hashCode() + this.triple[1].hashCode() + this.triple[2].hashCode());
+		int hashCode0 = this.triple[0] != null ? this.triple[0].hashCode() : 0;
+		int hashCode1 = this.triple[1] != null ? this.triple[1].hashCode() : 0;
+		int hashCode2 = this.triple[2] != null ? this.triple[2].hashCode() : 0;
+		return (31 * (hashCode0 + hashCode1 + hashCode2));
 	}
 
 	@Override
