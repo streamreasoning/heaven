@@ -8,10 +8,12 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
+@NoArgsConstructor
 public class RSPEvent implements Event {
 
 	private String id;
@@ -21,6 +23,15 @@ public class RSPEvent implements Event {
 	private double memoryBR;
 
 	public RSPEvent(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber) {
+		this.id = id;
+		this.eventTriples = hashSet;
+		this.eventNumber = eventNumber;
+		this.experimentNumber = experimentNumber;
+		this.inputTimestamp = System.currentTimeMillis();
+		this.memoryBR = Memory.getMemoryUsage();
+	}
+
+	public void reset(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber) {
 		this.id = id;
 		this.eventTriples = hashSet;
 		this.eventNumber = eventNumber;

@@ -3,24 +3,24 @@ package it.polimi.processing.streamer;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.TripleContainer;
+import it.polimi.processing.events.factory.abstracts.EventBuilder;
 import it.polimi.processing.workbench.core.EventProcessor;
 
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @AllArgsConstructor
 public abstract class RSPEventStreamer implements Streamer<RSPEvent> {
 
 	protected final EventProcessor<RSPEvent> processor;
-	@Setter
+	protected EventBuilder<RSPEvent> builder;
 	protected ExecutionState status;
 
 	@Override
-	public RSPEvent createEvent(String key, Set<TripleContainer> triple, int eventNumber, int experimentNumber) {
-		return new RSPEvent(key, triple, eventNumber, experimentNumber);
+	public RSPEvent createEvent(Set<TripleContainer> triple, int eventNumber, int experimentNumber) {
+		return builder.getEvent();
 	}
 }

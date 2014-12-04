@@ -5,12 +5,11 @@ import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.workbench.core.Startable;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.Set;
 
-public interface Streamer<Event> extends Startable<ExecutionState> {
+public interface Streamer<T> extends Startable<ExecutionState> {
 
-	public void stream(BufferedReader br, int experimentNumber) throws IOException;
+	public void stream(BufferedReader br, int experimentNumber);
 
-	public Event createEvent(String key, Set<TripleContainer> triple, int eventNumber, int experimentNumber);
+	public T createEvent(Set<TripleContainer> triple, int eventNumber, int experimentNumber);
 }

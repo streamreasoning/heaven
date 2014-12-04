@@ -33,7 +33,7 @@ public class TriGStreamer extends RSPEventStreamer {
 
 	/**
 	 * Represents the core of the streaming procedure, is must publish the
-	 * sendEvent method through which is possibile to inject any kind of event
+	 * sendEvent method through which is possible to inject any kind of event
 	 * into the system
 	 */
 	private String line;
@@ -56,56 +56,62 @@ public class TriGStreamer extends RSPEventStreamer {
 	 *            system
 	 **/
 	@Override
-	public void stream(BufferedReader br, int experimentNumber) throws IOException {
+	public void stream(BufferedReader br, int experimentNumber) {
+		try {
+			if (!ExecutionState.READY.equals(status)) {
+				throw new WrongStatusTransitionException("Not Ready " + status);
+			} else {
+				int eventNumber = 0;
+				int graphSize = 0;
 
-		if (!ExecutionState.READY.equals(status)) {
-			throw new WrongStatusTransitionException("Not Ready " + status);
-		} else {
-			int eventNumber = 0;
-			int graphSize = 0;
-			while ((line = br.readLine()) != null && !line.isEmpty()) {
-				graphSize++;
-				if (currentTriG.equals(""))
-					// Status One
-					currentTriG += line;
-				else {
-					// Status Two
-					currentTriG += Parser.EOF + line;
-				}
+				while ((line = br.readLine()) != null && !line.isEmpty()) {
+					graphSize++;
+					if (currentTriG.equals(""))
+						// Status One
+						currentTriG += line;
+					else {
+						// Status Two
+						currentTriG += Parser.EOF + line;
+					}
 
-				if (!"}".equals(line)) {
-					continue;
-					// Control the good format of the received TriG vefore sending
-				} else if (Parser.triGMatch(currentTriG)) {
-					// Status Tree
+					if (!"}".equals(line)) {
+						continue;
+						// Control the good format of the received TriG vefore sending
+					} else if (Parser.triGMatch(currentTriG)) {
+						// Status Tree
 
-					eventTrig = Parser.parseTrigGraph(currentTriG);
-					status = ExecutionState.RUNNING;
+						eventTrig = Parser.parseTrigGraph(currentTriG);
+						status = ExecutionState.RUNNING;
 
-					if (sendEvent(eventTrig, eventNumber, experimentNumber)) {
-						log.debug("Send [ " + line + " ] as a New StreamEvent");
-						status = ExecutionState.READY;
-						eventNumber++;
-						resetCurrentTrig();
+						if (sendEvent(eventTrig, eventNumber, experimentNumber)) {
+							log.debug("Send [ " + line + " ] as a New StreamEvent");
+							status = ExecutionState.READY;
+							eventNumber++;
+							resetCurrentTrig();
 
-					} else {
-						status = ExecutionState.READY;
-						log.debug("Not Saved " + line);
+						} else {
+							status = ExecutionState.READY;
+							log.debug("Not Saved " + line);
+
+						}
+
+						log.debug("Total Graph Size " + graphSize);
+						graphSize = 0;
+
+						if (eventNumber % 1000 == 0) {
+							log.info("STREAMED " + eventNumber + "EVENTS");
+						}
 
 					}
 
-					log.debug("Total Graph Size " + graphSize);
-					graphSize = 0;
-
-					if (eventNumber % 1000 == 0) {
-						log.info("STREAMED " + eventNumber + "EVENTS");
-					}
-
 				}
+
+				br.close();
 
 			}
-			br.close();
-
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -119,7 +125,7 @@ public class TriGStreamer extends RSPEventStreamer {
 		Set<TripleContainer> triples = trig.getTriples();
 
 		if (trig != null && key != null && !key.isEmpty() && triples != null && triples.size() > 0) {
-			streamingEvent = createEvent(key, new HashSet<TripleContainer>(triples), eventNumber, experimentNumber);
+			streamingEvent = createEvent(new HashSet<TripleContainer>(triples), eventNumber, experimentNumber);
 			return processor.process(streamingEvent);
 		}
 		return false;
