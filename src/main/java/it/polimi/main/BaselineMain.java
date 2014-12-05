@@ -5,6 +5,11 @@ import it.polimi.processing.collector.saver.CSVEventSaver;
 import it.polimi.processing.collector.saver.SQLLiteEventSaver;
 import it.polimi.processing.collector.saver.TrigEventSaver;
 import it.polimi.processing.collector.saver.VoidSaver;
+import it.polimi.processing.enums.BuildingStrategy;
+import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.factory.ConstantEventBuilder;
+import it.polimi.processing.events.factory.StepEventBuilder;
+import it.polimi.processing.events.factory.abstracts.EventBuilder;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.rspengine.windowed.RSPEngine;
@@ -73,6 +78,7 @@ public class BaselineMain {
 	private static String whereOutput, whereWindow, outputFileName, windowFileName, experimentDescription;
 	private static RSPEventStreamer streamer;
 	private static int CURRENTREASONER;
+	private static BuildingStrategy MODE;
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
 		// String[] files = new String[] { "inputTrigINIT50D1GF0SN1R.trig" };
@@ -84,7 +90,8 @@ public class BaselineMain {
 		EXPERIMENTNUMBER = Integer.parseInt(args[0]);
 		CURRENTENGINE = Integer.parseInt(args[1]);
 		CURRENTREASONER = Integer.parseInt(args[2]);
-		comment = args.length > 2 ? args[3] : "";
+		MODE = BuildingStrategy.valueOf(args[3]);
+		comment = args.length > 2 ? args[4] : "";
 
 		exeperimentDate = FileUtils.d;
 
@@ -110,7 +117,20 @@ public class BaselineMain {
 
 		streamingEventResultCollector = ExecutionEnvirorment.isWritingProtected() ? noTrigSaver : completeSaver;
 
-		streamer = new NTStreamer(testStand);
+		EventBuilder<RSPEvent> eb;
+		switch (MODE) {
+			case CONSTANT:
+				eb = new ConstantEventBuilder(50);
+				break;
+			case STEP:
+				eb = new StepEventBuilder(10, 10, 10);
+				break;
+			default:
+				eb = new ConstantEventBuilder(50);
+				break;
+		}
+
+		streamer = new NTStreamer(testStand, eb);
 
 		log.info("Experiment [" + EXPERIMENTNUMBER + "] of [" + exeperimentDate + "]");
 

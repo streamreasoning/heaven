@@ -1,0 +1,1 @@
+System.out.println(it.polimi.processing.enums.BuildingStrategy.valueOf("CONSTANT")); (No explicit return value)An exception occurred during evaluation:  java.lang.IllegalArgumentException

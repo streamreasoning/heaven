@@ -45,6 +45,7 @@ public abstract class RSPEventBuilder implements EventBuilder<RSPEvent> {
 			throw new IllegalArgumentException("Event Size [" + triples.size() + "] out of range [" + roundSize + "]");
 		} else if (isFull) {
 			e = (e != null) ? e.rebuild(id, triples, eventNumber, experimentNumber) : new RSPEvent(id, triples, eventNumber, experimentNumber);
+			isFull = (e.size() == roundSize);
 			updateSize();
 		} else {
 			Set<TripleContainer> eventTriples = e.getEventTriples();
@@ -55,8 +56,9 @@ public abstract class RSPEventBuilder implements EventBuilder<RSPEvent> {
 				eventTriples.add(tripleContainer);
 			}
 			e.setEventTriples(eventTriples);
+			isFull = (e.size() == roundSize);
 		}
-		return isFull = (e.size() == roundSize);
+		return isFull;
 	}
 
 	public abstract void updateSize();

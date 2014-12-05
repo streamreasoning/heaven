@@ -1,12 +1,12 @@
-package processing.events;
+package processing.events.factory;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.factory.ConstantEventBuilder;
 import it.polimi.processing.events.factory.abstracts.EventBuilder;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-public class EventBuilderTest {
+public class ConstantEventBuilderTest {
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
@@ -71,49 +71,28 @@ public class EventBuilderTest {
 		set.add(tc2);
 
 		exception.expect(IllegalArgumentException.class);
-		eb.append(set, 2, 0);
+		eb.append(set, 1, 0);
 
 	}
 
-	public void emptyHashCodeTest() {
+	@Test
+	public void constantEventBuilderRealCaseTest() {
+		EventBuilder<RSPEvent> eb = new ConstantEventBuilder(1);
 
-		TripleContainer tc = new TripleContainer(new String[] { "", "", "" });
-		assertEquals(tc.hashCode(), 31 * ("".hashCode() * 3));
-	}
+		assertEquals(false, eb.canSend());
 
-	public void simpleHashCodeTest() {
-		// <http://www.Department1.University1.edu/AssociateProfessor2/Publication9>
-		// <http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor>
-		// <http://www.Department1.University1.edu/AssociateProfessor2> .
-		TripleContainer tc = new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
-		assertEquals(
-				tc.hashCode(),
-				31 * ("http://www.Department1.University1.edu/AssociateProfessor2/Publication9".hashCode()
-						+ "http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor".hashCode() + "http://www.Department1.University1.edu/AssociateProfessor2"
-						.hashCode()));
-	}
+		for (int i = 0; i < 10; i++) {
 
-	public void setUniqueTest() {
-		// <http://www.Department1.University1.edu/AssociateProfessor2/Publication9>
-		// <http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor>
-		// <http://www.Department1.University1.edu/AssociateProfessor2> .
-		TripleContainer tc1 = new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
+			eb.append(
+					new HashSet<TripleContainer>(Arrays.asList(new TripleContainer[] { new TripleContainer(new String[] {
+							"http://www.Department1.University1.edu/AssociateProfessor2/Publication" + i,
+							"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
+							"http://www.Department1.University1.edu/AssociateProfessor2" }) })), i, 0);
+			assertEquals(1, eb.getEvent().size());
+			assertEquals(true, eb.canSend());
 
-		TripleContainer tc2 = new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
-
-		Set<TripleContainer> set = new HashSet<TripleContainer>();
-
-		set.add(tc1);
-		set.add(tc2);
-
-		assertTrue(tc1.equals(tc2));
-
-		assertEquals(tc1.hashCode(), tc2.hashCode());
-
-		assertEquals(set.size(), 1);
+		}
 
 	}
+
 }
