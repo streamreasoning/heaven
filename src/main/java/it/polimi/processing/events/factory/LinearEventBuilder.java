@@ -7,11 +7,11 @@ public class LinearEventBuilder extends RSPEventBuilder {
 
 	public LinearEventBuilder(int height, int initSize) {
 		super(BuildingStrategy.LINEAR, height, 1, initSize);
-		actualSize = initSize;
+		eventNumber = initSize;
 	}
 
 	@Override
 	public void updateSize() {
-		size = size + x;
+		roundSize = roundSize + x;
 	}
 }

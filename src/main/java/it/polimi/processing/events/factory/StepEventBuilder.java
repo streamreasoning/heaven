@@ -11,7 +11,7 @@ public class StepEventBuilder extends RSPEventBuilder {
 
 	public StepEventBuilder(int height, int width, int initSize) {
 		super(BuildingStrategy.STEP, height, width, initSize);
-		actualSize = initSize;
+		eventNumber = initSize;
 
 	}
 
@@ -22,27 +22,26 @@ public class StepEventBuilder extends RSPEventBuilder {
 
 	@Override
 	public boolean canSend() {
-		return condition;
+		return isFull;
 	}
 
 	@Override
 	public boolean append(Set<TripleContainer> triples, int eventNumber, int experimentNumber) {
-		if (condition) {
-			e.reset("<http://example.org/" + experimentNumber + "/", triples, eventNumber, experimentNumber);
-			actualSize = 1;
-
+		if (isFull) {
+			e.rebuild("<http://example.org/" + experimentNumber + "/", triples, eventNumber, experimentNumber);
+			eventNumber = 1;
 		} else {
 			Set<TripleContainer> eventTriples = e.getEventTriples();
 			eventTriples.addAll(triples);
 			e.setEventTriples(eventTriples);
-			actualSize += triples.size();
+			eventNumber += triples.size();
 
 		}
-		return condition = (actualSize == size);
+		return isFull = (eventNumber == roundSize);
 	}
 
 	@Override
 	public void updateSize() {
-		size = size + x;
+		roundSize = roundSize + x;
 	}
 }

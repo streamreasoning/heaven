@@ -9,12 +9,12 @@ public class ExpEventBuilder extends RSPEventBuilder {
 
 	public ExpEventBuilder(int base, int initSize) {
 		super(BuildingStrategy.EXP, base, 1, initSize);
-		actualSize = initSize;
+		eventNumber = initSize;
 	}
 
 	@Override
 	public void updateSize() {
 		power++;
-		size = (int) Math.pow(x, power);
+		roundSize = (int) Math.pow(x, power);
 	}
 }

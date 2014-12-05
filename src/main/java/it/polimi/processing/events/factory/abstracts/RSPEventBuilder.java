@@ -15,17 +15,17 @@ public abstract class RSPEventBuilder implements EventBuilder<RSPEvent> {
 
 	protected RSPEvent e;
 	protected BuildingStrategy mode;
-	protected int initSize, size, actualSize;
+	protected int initSize, roundSize, eventNumber;
 	protected int x, y;
-	protected boolean condition;
+	protected boolean isFull;
 
 	public RSPEventBuilder(BuildingStrategy mode, int x, int y, int initSize) {
 		this.x = x;
 		this.y = y;
-		this.initSize = size = initSize;
-		this.actualSize = 0;
-		this.mode = BuildingStrategy.STEP;
-		e = new RSPEvent();
+		this.initSize = roundSize = initSize;
+		this.eventNumber = 0;
+		this.mode = mode;
+		this.isFull = true;
 	}
 
 	@Override
@@ -35,23 +35,28 @@ public abstract class RSPEventBuilder implements EventBuilder<RSPEvent> {
 
 	@Override
 	public boolean canSend() {
-		return condition;
+		return (e != null) && isFull;
 	}
 
 	@Override
 	public boolean append(Set<TripleContainer> triples, int eventNumber, int experimentNumber) {
-		if (condition) {
-			e.reset("<http://example.org/" + experimentNumber + "/", triples, eventNumber, experimentNumber);
-			actualSize = 1;
+		String id = "<http://example.org/" + experimentNumber + "/";
+		if (triples.size() > roundSize) {
+			throw new IllegalArgumentException("Event Size [" + triples.size() + "] out of range [" + roundSize + "]");
+		} else if (isFull) {
+			e = (e != null) ? e.rebuild(id, triples, eventNumber, experimentNumber) : new RSPEvent(id, triples, eventNumber, experimentNumber);
 			updateSize();
 		} else {
 			Set<TripleContainer> eventTriples = e.getEventTriples();
-			eventTriples.addAll(triples);
+			for (TripleContainer tripleContainer : triples) {
+				if (eventTriples.size() > roundSize) {
+					throw new IllegalArgumentException("Event Size [" + triples.size() + "][" + e.size() + "] out of range [" + roundSize + "]");
+				}
+				eventTriples.add(tripleContainer);
+			}
 			e.setEventTriples(eventTriples);
-			actualSize += triples.size();
-
 		}
-		return condition = (actualSize == size);
+		return isFull = (e.size() == roundSize);
 	}
 
 	public abstract void updateSize();

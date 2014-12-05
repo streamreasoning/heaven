@@ -4,6 +4,7 @@ import it.polimi.processing.collector.saver.data.TriG;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.TripleContainer;
+import it.polimi.processing.events.factory.abstracts.EventBuilder;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.streamer.Parser;
 import it.polimi.processing.streamer.RSPEventStreamer;
@@ -41,8 +42,8 @@ public class TriGStreamer extends RSPEventStreamer {
 	private String currentTriG = "";
 	private RSPEvent streamingEvent;
 
-	public TriGStreamer(EventProcessor<RSPEvent> processor) {
-		super(processor, ExecutionState.CLOSED);
+	public TriGStreamer(EventProcessor<RSPEvent> processor, EventBuilder<RSPEvent> builder) {
+		super(processor, builder, ExecutionState.CLOSED);
 	}
 
 	/**

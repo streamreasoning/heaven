@@ -7,11 +7,10 @@ public class ConstantEventBuilder extends RSPEventBuilder {
 
 	public ConstantEventBuilder(int initSize) {
 		super(BuildingStrategy.COSTANT, 0, 0, initSize);
-		actualSize = initSize;
+		roundSize = initSize;
 	}
 
 	@Override
 	public void updateSize() {
-		// Do nothing
 	}
 }

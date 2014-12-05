@@ -3,6 +3,7 @@ package it.polimi.processing.events;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.utils.Memory;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
@@ -17,10 +18,14 @@ import lombok.NoArgsConstructor;
 public class RSPEvent implements Event {
 
 	private String id;
-	private Set<TripleContainer> eventTriples;
+	private Set<TripleContainer> eventTriples = new HashSet<TripleContainer>();
 	private int eventNumber, experimentNumber;
 	private long inputTimestamp;
 	private double memoryBR;
+
+	public int size() {
+		return eventTriples.size();
+	}
 
 	public RSPEvent(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber) {
 		this.id = id;
@@ -31,13 +36,14 @@ public class RSPEvent implements Event {
 		this.memoryBR = Memory.getMemoryUsage();
 	}
 
-	public void reset(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber) {
+	public RSPEvent rebuild(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber) {
 		this.id = id;
 		this.eventTriples = hashSet;
 		this.eventNumber = eventNumber;
 		this.experimentNumber = experimentNumber;
 		this.inputTimestamp = System.currentTimeMillis();
 		this.memoryBR = Memory.getMemoryUsage();
+		return this;
 	}
 
 }
