@@ -73,22 +73,27 @@ public class BaselineMain {
 	private static UpdateListener listener;
 
 	private static final DateFormat dt = new SimpleDateFormat("yyyy_MM_dd");
+
+	private static int EXPERIMENTTYPE;
+	private static final int RESULT = 0;
+	private static final int LATENCY = 1;
+	private static final int MEMORY = 2;
+
 	private static CSVEventSaver csv = new CSVEventSaver();
-	private static CollectorEventResult completeSaver;
-	private static CollectorEventResult noTrigSaver;
 	private static String whereOutput, whereWindow, outputFileName, windowFileName, experimentDescription;
 	private static RSPEventStreamer streamer;
 	private static int CURRENTREASONER;
 	private static BuildingStrategy MODE;
+	private static String engineName;
+	private static String eventBuilderCodeName;
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
-		// String[] files = new String[] { "inputTrigINIT50D1GF0SN1R.trig" };
-		// String[] files = new String[] { "inputTrigINIT100D1GF0SN1R.trig" };
-		// String[] files = new String[] { "inputTrigINIT250D1GF0SN1R.trig" };
-
 		file = "_CLND_UNIV10INDEX0SEED0.nt";
+
+		boolean input = false;
 		Scanner in = new Scanner(System.in);
-		if (args.length < 5) {
+
+		if (args.length < 5 || input) {
 			log.info("Write Experiment Number: ");
 			EXPERIMENTNUMBER = in.nextInt();
 			log.info("Chose an Engine: 0:PLAIN 1:TRIPLE 2:STMT 3:GRAPH");
@@ -104,42 +109,48 @@ public class BaselineMain {
 			EXPERIMENTNUMBER = Integer.parseInt(args[0]);
 			CURRENTENGINE = Integer.parseInt(args[1]);
 			CURRENTREASONER = Integer.parseInt(args[2]);
-			MODE = BuildingStrategy.valueOf(args[3]);
-			comment = args.length > 2 ? args[4] : "";
+			MODE = BuildingStrategy.getById(Integer.parseInt(args[3]));
+			comment = "n".toUpperCase().equals(args[4].toUpperCase()) ? "" : args[4];
 		}
+
 		exeperimentDate = FileUtils.d;
+
+		log.info("Experiment [" + EXPERIMENTNUMBER + "] of [" + exeperimentDate + "]");
 
 		testStand = new RSPTestStand();
 
-		outputFileName = "Result_" + "EN" + EXPERIMENTNUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + file.split("\\.")[0];
-		windowFileName = "Window_" + "EN" + EXPERIMENTNUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + file.split("\\.")[0];
+		eventBuilderCodeName = input ? streamerSelection(in) : streamerSelection(args);
 
-		String engineName = engineNames[CURRENTENGINE];
+		engineName = engineNames[CURRENTENGINE];
+
+		experimentDescription = "EXPERIMENT_ON_" + file + "_WITH_ENGINE_" + engineName + "EVENT_" + CURRENTENGINE;
 
 		FileUtils.createOutputFolder("exp" + EXPERIMENTNUMBER + "/" + engineName);
 
-		streamerSelection(args, in);
+		String generalName = "EN" + EXPERIMENTNUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + file.split("\\.")[0] + "R"
+				+ CURRENTREASONER + "E" + CURRENTENGINE + eventBuilderCodeName;
+
+		outputFileName = "Result_" + generalName;
+		windowFileName = "Window_" + generalName;
 
 		whereOutput = "exp" + EXPERIMENTNUMBER + "/" + engineName + "/" + outputFileName;
 		whereWindow = "exp" + EXPERIMENTNUMBER + "/" + engineName + "/" + windowFileName;
 
-		experimentDescription = "EXPERIMENT_ON_" + file + "_WITH_ENGINE_" + engineName + "EVENT_" + CURRENTENGINE;
-
 		log.info("Output file name will be: [" + whereOutput + "]");
 		log.info("Window file name will be: [" + whereWindow + "]");
 
-		experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
+		if (input) {
+			log.info("Choose Experiment Type: 0:TRIGRESULT 1:LATENCY 2:MEMORY");
+			EXPERIMENTTYPE = in.nextInt();
+		} else {
+			EXPERIMENTTYPE = Integer.parseInt(args[args.length - 1]);
+		}
 
-		noTrigSaver = new CollectorEventResult(testStand, new VoidSaver(), csv, engineName + "/");
-		completeSaver = new CollectorEventResult(testStand, new TrigEventSaver(), csv, engineName + "/");
-
-		streamingEventResultCollector = ExecutionEnvirorment.isWritingProtected() ? noTrigSaver : completeSaver;
-
-		log.info("Experiment [" + EXPERIMENTNUMBER + "] of [" + exeperimentDate + "]");
+		collectorSelection();
 
 		reasonerSelection();
 
-		engineSelection(engineName);
+		engineSelection();
 
 		in.close();
 
@@ -147,28 +158,79 @@ public class BaselineMain {
 
 	}
 
-	protected static void streamerSelection(String[] args, Scanner in) {
+	protected static String streamerSelection(Scanner in) {
 		EventBuilder<RSPEvent> eb;
-		log.info("Event Builder insert RSPEvent init size");
-		int initSize = args.length < 5 ? in.nextInt() : 10;
-
+		log.debug("Event Builder insert RSPEvent init size");
+		int initSize = in.nextInt();
+		String code = "EB";
 		switch (MODE) {
 			case CONSTANT:
+				code += "C" + initSize;
 				log.info("CONSTANT Event Builder");
 				eb = new ConstantEventBuilder(initSize);
 				break;
 			case STEP:
 				log.info("STEP Event Builder, insert step height and width");
-				int height = args.length < 5 ? in.nextInt() : 10;
-				int width = args.length < 5 ? in.nextInt() : 10;
+				int height = in.nextInt();
+				int width = in.nextInt();
 				eb = new StepEventBuilder(height, width, initSize);
+				code += "S" + initSize + "H" + height + "W" + width;
 				break;
 			default:
 				eb = new ConstantEventBuilder(initSize);
 				break;
+
 		}
 
 		streamer = new NTStreamer(testStand, eb);
+		return code;
+	}
+
+	protected static String streamerSelection(String[] args) {
+		EventBuilder<RSPEvent> eb;
+		int initSize = Integer.parseInt(args[5]);
+		String code = "EB";
+		switch (MODE) {
+			case CONSTANT:
+				code += "C" + initSize;
+				log.info("CONSTANT Event Builder Initial Size [" + initSize + "]");
+				eb = new ConstantEventBuilder(initSize);
+				break;
+			case STEP:
+				int height = Integer.parseInt(args[6]);
+				int width = Integer.parseInt(args[7]);
+				log.info("STEP Event Builder, Initial Size [" + initSize + "] step height [" + height + "] and width[" + width + "]");
+				eb = new StepEventBuilder(height, width, initSize);
+				code += "S" + initSize + "H" + height + "W" + width;
+				break;
+			default:
+				eb = new ConstantEventBuilder(initSize);
+				break;
+
+		}
+
+		streamer = new NTStreamer(testStand, eb);
+		return code;
+	}
+
+	protected static void engineSelection() {
+		switch (CURRENTENGINE) {
+			case JENAPLAIN:
+				engine = new JenaEngine(engineName, testStand, listener);
+				break;
+			case JENATRIPLE:
+				engine = new JenaEngine(engineName, testStand, listener, TripleEvent.class);
+				break;
+			case JENASTMT:
+				engine = new JenaEngine(engineName, testStand, listener, StatementEvent.class);
+				break;
+			case JENAGRAPH:
+				engine = new JenaEngine(engineName, testStand, listener, GraphEvent.class);
+				break;
+			default:
+				engine = null;
+
+		}
 	}
 
 	protected static void reasonerSelection() {
@@ -187,23 +249,21 @@ public class BaselineMain {
 		}
 	}
 
-	protected static void engineSelection(String engineName) {
-		switch (CURRENTENGINE) {
-			case JENAPLAIN:
-				engine = new JenaEngine(engineName, testStand, listener);
-				break;
-			case JENATRIPLE:
-				engine = new JenaEngine(engineName, testStand, listener, TripleEvent.class);
-				break;
-			case JENASTMT:
-				engine = new JenaEngine(engineName, testStand, listener, StatementEvent.class);
-				break;
-			case JENAGRAPH:
-				engine = new JenaEngine(engineName, testStand, listener, GraphEvent.class);
-				break;
-			default:
-				engine = null;
+	protected static void collectorSelection() throws SQLException, ClassNotFoundException {
+		experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
 
+		switch (EXPERIMENTTYPE) {
+			case MEMORY:
+				ExecutionEnvirorment.memoryEnabled = true;
+				streamingEventResultCollector = new CollectorEventResult(testStand, new VoidSaver(), csv, engineName + "/");
+				break;
+			case LATENCY:
+				streamingEventResultCollector = new CollectorEventResult(testStand, new VoidSaver(), csv, engineName + "/");
+				break;
+			case RESULT:
+				streamingEventResultCollector = new CollectorEventResult(testStand, new TrigEventSaver(), csv, engineName + "/");
+			default:
+				streamingEventResultCollector = new CollectorEventResult(testStand, new TrigEventSaver(), csv, engineName + "/");
 		}
 	}
 

@@ -48,7 +48,7 @@ public class CollectorEventResult implements StartableCollector<EventResult>, St
 
 	@Override
 	public boolean store(EventResult r, String w) throws IOException {
-		log.info("Store [" + w + "]");
+		log.debug("Store [" + w + "]");
 		if (!ExecutionState.READY.equals(status)) {
 			return false;
 		} else {

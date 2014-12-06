@@ -4,10 +4,10 @@ import it.polimi.main.CommonMain;
 
 public class ExecutionEnvirorment {
 
+	public static boolean memoryEnabled = false;
+
 	public static boolean memoryAnalysisEnabled() {
-		return CommonMain.CURRENTENGINE != CommonMain.JENANM && CommonMain.CURRENTENGINE != CommonMain.JENANWM
-				&& CommonMain.CURRENTENGINE != CommonMain.JENARHODFNM && CommonMain.CURRENTENGINE != CommonMain.JENARHODFNWM
-				&& CommonMain.CURRENTENGINE != CommonMain.PLAIN2369NM && CommonMain.CURRENTENGINE != CommonMain.PLAIN2369NWM;
+		return memoryEnabled;
 	}
 
 	public static boolean isWritingProtected() {

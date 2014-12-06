@@ -43,7 +43,7 @@ public class TriGStreamer extends RSPEventStreamer {
 	private RSPEvent streamingEvent;
 
 	public TriGStreamer(EventProcessor<RSPEvent> processor, EventBuilder<RSPEvent> builder) {
-		super(processor, builder, ExecutionState.CLOSED);
+		super(processor, builder, ExecutionState.CLOSED, 1000);
 	}
 
 	/**

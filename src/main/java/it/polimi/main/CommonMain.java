@@ -121,10 +121,11 @@ public class CommonMain {
 		completeSaver = new CollectorEventResult(testStand, new TrigEventSaver(), csv, engineName + "/");
 
 		streamingEventResultCollector = ExecutionEnvirorment.isWritingProtected() ? noTrigSaver : completeSaver;
+
 		EventBuilder<RSPEvent> eb;
 		switch (MODE) {
 			case CONSTANT:
-				eb = new ConstantEventBuilder(1);
+				eb = new ConstantEventBuilder(50);
 				break;
 			case STEP:
 				eb = new StepEventBuilder(10, 10, 10);

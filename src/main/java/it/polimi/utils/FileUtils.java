@@ -80,7 +80,6 @@ public class FileUtils {
 	}
 
 	public static void createOutputFolder(String folder) {
-		System.out.println(folder);
 		new File(daypath + "/" + folder + "/").mkdirs();
 	}
 }

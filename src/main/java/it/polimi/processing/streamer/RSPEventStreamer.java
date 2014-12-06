@@ -18,6 +18,7 @@ public abstract class RSPEventStreamer implements Streamer<RSPEvent> {
 	protected final EventProcessor<RSPEvent> processor;
 	protected EventBuilder<RSPEvent> builder;
 	protected ExecutionState status;
+	protected int eventLimit;
 
 	@Override
 	public RSPEvent createEvent(Set<TripleContainer> triple, int eventNumber, int experimentNumber) {

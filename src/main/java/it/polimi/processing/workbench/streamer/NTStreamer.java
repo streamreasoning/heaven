@@ -39,8 +39,12 @@ public class NTStreamer extends RSPEventStreamer {
 	 */
 	private RSPEvent lastEvent;
 
+	public NTStreamer(EventProcessor<RSPEvent> processor, EventBuilder<RSPEvent> builder, int eventLimit) {
+		super(processor, builder, ExecutionState.CLOSED, eventLimit);
+	}
+
 	public NTStreamer(EventProcessor<RSPEvent> processor, EventBuilder<RSPEvent> builder) {
-		super(processor, builder, ExecutionState.CLOSED);
+		super(processor, builder, ExecutionState.CLOSED, 1000);
 	}
 
 	/**
@@ -65,7 +69,7 @@ public class NTStreamer extends RSPEventStreamer {
 				String line;
 				Set<TripleContainer> eventTriples = new HashSet<TripleContainer>();
 
-				while ((line = br.readLine()) != null && streamedEvents <= 1000) {
+				while ((line = br.readLine()) != null && streamedEvents <= eventLimit) {
 					status = ExecutionState.RUNNING;
 					String[] s = parse(line);
 					log.debug("S: " + Arrays.deepToString(s));
