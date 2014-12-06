@@ -8,9 +8,11 @@ import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.windowed.RSPEngine;
 import it.polimi.processing.streamer.RSPEventStreamer;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
+@Getter
 public abstract class TestStand<Event> extends Stand implements EventProcessor<Event>, ResultCollector<EventResult>, Startable<ExecutionState> {
 
 	protected StartableCollector<EventResult> resultCollector;

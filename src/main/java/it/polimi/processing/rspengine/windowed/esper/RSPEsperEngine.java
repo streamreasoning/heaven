@@ -44,6 +44,12 @@ public abstract class RSPEsperEngine extends RSPEngine {
 		log.debug("Sent time Event");
 	}
 
+	public void moveTimePortion(int portion) {
+		time += Queries.window / portion;
+		cepRT.sendEvent(new CurrentTimeEvent(time));
+		log.debug("Sent time Event");
+	}
+
 	protected void resetTime() {
 		time = 0;
 	}
@@ -63,6 +69,11 @@ public abstract class RSPEsperEngine extends RSPEngine {
 	@Override
 	public int getEventNumber() {
 		return getWindowShots();
+	}
+
+	@Override
+	public void progress(int i) {
+		moveTimePortion(i);
 	}
 
 }

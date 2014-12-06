@@ -130,7 +130,6 @@ public class Plain2369 extends RSPEsperEngine {
 			esperEvent = new TEvent(t[0], t[1], t[2], cepRT.getCurrentTime(), System.currentTimeMillis(), "Input");
 			cepRT.sendEvent(esperEvent);
 		}
-
 		log.debug("Status [" + status + "] Parsing done, return...");
 		status = ExecutionState.READY;
 		return true;
@@ -155,8 +154,8 @@ public class Plain2369 extends RSPEsperEngine {
 
 	@Override
 	public boolean processDone() {
-		moveWindow();
 		status = ExecutionState.READY;
 		return true;
 	}
+
 }

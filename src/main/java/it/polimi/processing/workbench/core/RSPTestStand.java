@@ -17,18 +17,27 @@ import java.text.SimpleDateFormat;
 import java.util.Set;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
 @Getter
+@Setter
 @Log4j
 public class RSPTestStand extends TestStand<RSPEvent> {
 
-	private int experimentNumber, numberEvents = 0;
+	private int experimentNumber;
+	private final int numberEvents = 0;
 	private long timestamp, resultTimestamp = 0L;
 	private double memoryA = 0D;
 	private double memoryB = 0D;
 	private final DateFormat dt = new SimpleDateFormat("yyyy_MM_dd");
 	private String outputFileName, windowFileName, inputFileNameWithPath, experimentDescription;
+	private final TimeStrategy timeStrategy;
+
+	public RSPTestStand(TimeStrategy strategy) {
+		super();
+		this.timeStrategy = strategy;
+	}
 
 	@Override
 	public int run(String f, int experimentNumber, String comment, String outputFileName, String windowFileName, String experimentDescription)
@@ -86,29 +95,13 @@ public class RSPTestStand extends TestStand<RSPEvent> {
 
 	@Override
 	public boolean process(RSPEvent e) {
-		se = e;
-		boolean process = false;
-		if (numberEvents == 0 || numberEvents % 50 == 1) {
-			memoryB = Memory.getMemoryUsage();
-			timestamp = System.currentTimeMillis();
-		}
+		return timeStrategy.apply(e, this);
 
-		if (numberEvents != 0 && numberEvents % 50 == 0) { // Stream 50 events at time
-			memoryA = Memory.getMemoryUsage();
-			process = processDone();
-			memoryA = memoryB = 0D;
-			timestamp = resultTimestamp = 0L;
-		} else {
-			process = rspEngine.process(e);
-		}
-
-		numberEvents++;
-		return process;
 	}
 
 	@Override
 	public boolean processDone() {
-		log.info("Move window");
+		log.debug("Move window");
 		resultTimestamp = System.currentTimeMillis();
 		memoryA = Memory.getMemoryUsage();
 		resultTimestamp = System.currentTimeMillis();
@@ -156,4 +149,5 @@ public class RSPTestStand extends TestStand<RSPEvent> {
 			return false;
 		}
 	}
+
 }

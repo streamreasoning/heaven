@@ -101,7 +101,6 @@ public class JenaEngine extends RSPEsperEngine {
 			String[] t = tc.getTriple();
 			cepRT.sendEvent(new TEvent(t[0], t[1], t[2], cepRT.getCurrentTime(), System.currentTimeMillis(), "Input"));
 		}
-
 		log.debug("Status[" + status + "] Parsing done, prepare time scheduling...");
 		status = ExecutionState.READY;
 		return true;
@@ -126,7 +125,6 @@ public class JenaEngine extends RSPEsperEngine {
 
 	@Override
 	public boolean processDone() {
-		moveWindow();
 		status = ExecutionState.READY;
 		return true;
 	}

@@ -23,9 +23,11 @@ import it.polimi.processing.streamer.RSPEventStreamer;
 import it.polimi.processing.workbench.collector.CollectorEventResult;
 import it.polimi.processing.workbench.collector.CollectorExperimentResult;
 import it.polimi.processing.workbench.core.RSPTestStand;
+import it.polimi.processing.workbench.core.TimeStrategy;
 import it.polimi.processing.workbench.streamer.NTStreamer;
 import it.polimi.utils.ExecutionEnvirorment;
 import it.polimi.utils.FileUtils;
+import it.polimi.utils.Memory;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -100,7 +102,32 @@ public class CommonMain {
 
 		exeperimentDate = FileUtils.d;
 
-		testStand = new RSPTestStand();
+		testStand = new RSPTestStand(new TimeStrategy() {
+
+			private int numberEvents = 0;
+
+			@Override
+			public boolean apply(RSPEvent e, RSPTestStand ts) {
+				boolean process = false;
+				if (numberEvents == 0 || numberEvents % 5 == 1) {
+					ts.setMemoryB(Memory.getMemoryUsage());
+					ts.setTimestamp(System.currentTimeMillis());
+				}
+
+				if (numberEvents != 0 && numberEvents % 5 == 0) { // Stream 50 events at time
+					ts.setMemoryA(Memory.getMemoryUsage());
+					process = ts.processDone();
+					ts.setMemoryA(0D);
+					ts.setMemoryB(0D);
+					ts.setTimestamp(0L);
+					ts.setResultTimestamp(0L);
+				} else {
+					process = ts.getRspEngine().process(e);
+				}
+				numberEvents++;
+				return process;
+			}
+		});
 
 		outputFileName = "Result_" + "EN" + EXPERIMENTNUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + file.split("\\.")[0];
 		windowFileName = "Window_" + "EN" + EXPERIMENTNUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + file.split("\\.")[0];

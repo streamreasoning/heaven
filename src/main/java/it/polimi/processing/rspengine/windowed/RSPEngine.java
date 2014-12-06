@@ -34,4 +34,6 @@ public abstract class RSPEngine implements EventProcessor<RSPEvent> {
 
 	public abstract int getEventNumber();
 
+	public abstract void progress(int i);
+
 }
