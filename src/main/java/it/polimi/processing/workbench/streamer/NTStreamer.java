@@ -65,7 +65,7 @@ public class NTStreamer extends RSPEventStreamer {
 				String line;
 				Set<TripleContainer> eventTriples = new HashSet<TripleContainer>();
 
-				while ((line = br.readLine()) != null) {
+				while ((line = br.readLine()) != null && streamedEvents <= 1000) {
 					status = ExecutionState.RUNNING;
 					String[] s = parse(line);
 					log.debug("S: " + Arrays.deepToString(s));
@@ -81,11 +81,7 @@ public class NTStreamer extends RSPEventStreamer {
 						}
 					} else {
 						status = ExecutionState.READY;
-						log.info("Still Processing " + line);
-					}
-
-					if (streamedEvents % 1000 == 0) {
-						log.info("STREAMED " + streamedEvents + "EVENTS");
+						log.debug("Still Processing " + line);
 					}
 
 					eventTriples = new HashSet<TripleContainer>();

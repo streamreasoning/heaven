@@ -33,6 +33,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -52,12 +53,12 @@ public class BaselineMain {
 	public static int CURRENTENGINE;
 	public static int EXPERIMENTNUMBER;
 
-	private static String JENANAME = "Jena";
+	private static String JENANAME = "jena";
 	private static String SMPL = "smpl";
 	private static String RHODF = "rhodf";
 	private static String FULL = "full";
 
-	public static String[] engineNames = new String[] { JENANAME + SMPL, };
+	public static String[] engineNames = new String[] { JENANAME + SMPL, JENANAME + RHODF, JENANAME + FULL };
 
 	public static final String ontologyClass = "Ontology";
 
@@ -85,14 +86,27 @@ public class BaselineMain {
 		// String[] files = new String[] { "inputTrigINIT100D1GF0SN1R.trig" };
 		// String[] files = new String[] { "inputTrigINIT250D1GF0SN1R.trig" };
 
-		file = "_CLND_UNIV10INDEX0SEED01000Lines.nt";
-
-		EXPERIMENTNUMBER = Integer.parseInt(args[0]);
-		CURRENTENGINE = Integer.parseInt(args[1]);
-		CURRENTREASONER = Integer.parseInt(args[2]);
-		MODE = BuildingStrategy.valueOf(args[3]);
-		comment = args.length > 2 ? args[4] : "";
-
+		file = "_CLND_UNIV10INDEX0SEED0.nt";
+		Scanner in = new Scanner(System.in);
+		if (args.length < 5) {
+			log.info("Write Experiment Number: ");
+			EXPERIMENTNUMBER = in.nextInt();
+			log.info("Chose an Engine: 0:PLAIN 1:TRIPLE 2:STMT 3:GRAPH");
+			CURRENTENGINE = in.nextInt();
+			log.info("Chose a Reasoner: 0:SMPL 1:RHODF 2:FULL ");
+			CURRENTREASONER = in.nextInt();
+			log.info("Chose Streaming Mode: 0:CONSTANT 1:LINEAR 2:STEP 3:EXP");
+			MODE = BuildingStrategy.getById(in.nextInt());
+			log.info("Add Some Comment?: n:NO or comment");
+			String next = in.next().toUpperCase();
+			comment = next != "n".toUpperCase() ? next : "";
+		} else {
+			EXPERIMENTNUMBER = Integer.parseInt(args[0]);
+			CURRENTENGINE = Integer.parseInt(args[1]);
+			CURRENTREASONER = Integer.parseInt(args[2]);
+			MODE = BuildingStrategy.valueOf(args[3]);
+			comment = args.length > 2 ? args[4] : "";
+		}
 		exeperimentDate = FileUtils.d;
 
 		testStand = new RSPTestStand();
@@ -102,13 +116,17 @@ public class BaselineMain {
 
 		String engineName = engineNames[CURRENTENGINE];
 
-		whereOutput = engineName + "/" + outputFileName;
-		whereWindow = engineName + "/" + windowFileName;
+		FileUtils.createOutputFolder("exp" + EXPERIMENTNUMBER + "/" + engineName);
 
-		experimentDescription = "EXPERIMENT_ON_" + file + "_WITH_ENGINE_" + engineName;
+		streamerSelection(args, in);
 
-		log.info("output file name will be: [" + whereOutput + "]");
-		log.info("window file name will be: [" + whereWindow + "]");
+		whereOutput = "exp" + EXPERIMENTNUMBER + "/" + engineName + "/" + outputFileName;
+		whereWindow = "exp" + EXPERIMENTNUMBER + "/" + engineName + "/" + windowFileName;
+
+		experimentDescription = "EXPERIMENT_ON_" + file + "_WITH_ENGINE_" + engineName + "EVENT_" + CURRENTENGINE;
+
+		log.info("Output file name will be: [" + whereOutput + "]");
+		log.info("Window file name will be: [" + whereWindow + "]");
 
 		experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
 
@@ -117,29 +135,40 @@ public class BaselineMain {
 
 		streamingEventResultCollector = ExecutionEnvirorment.isWritingProtected() ? noTrigSaver : completeSaver;
 
-		EventBuilder<RSPEvent> eb;
-		switch (MODE) {
-			case CONSTANT:
-				eb = new ConstantEventBuilder(50);
-				break;
-			case STEP:
-				eb = new StepEventBuilder(10, 10, 10);
-				break;
-			default:
-				eb = new ConstantEventBuilder(50);
-				break;
-		}
-
-		streamer = new NTStreamer(testStand, eb);
-
 		log.info("Experiment [" + EXPERIMENTNUMBER + "] of [" + exeperimentDate + "]");
 
 		reasonerSelection();
 
 		engineSelection(engineName);
 
+		in.close();
+
 		run(file, comment, EXPERIMENTNUMBER, exeperimentDate, experimentDescription);
 
+	}
+
+	protected static void streamerSelection(String[] args, Scanner in) {
+		EventBuilder<RSPEvent> eb;
+		log.info("Event Builder insert RSPEvent init size");
+		int initSize = args.length < 5 ? in.nextInt() : 10;
+
+		switch (MODE) {
+			case CONSTANT:
+				log.info("CONSTANT Event Builder");
+				eb = new ConstantEventBuilder(initSize);
+				break;
+			case STEP:
+				log.info("STEP Event Builder, insert step height and width");
+				int height = args.length < 5 ? in.nextInt() : 10;
+				int width = args.length < 5 ? in.nextInt() : 10;
+				eb = new StepEventBuilder(height, width, initSize);
+				break;
+			default:
+				eb = new ConstantEventBuilder(initSize);
+				break;
+		}
+
+		streamer = new NTStreamer(testStand, eb);
 	}
 
 	protected static void reasonerSelection() {

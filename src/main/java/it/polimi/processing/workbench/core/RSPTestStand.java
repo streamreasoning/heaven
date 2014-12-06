@@ -141,7 +141,7 @@ public class RSPTestStand extends TestStand<RSPEvent> {
 
 		try {
 			Result engineResult = (Result) r;
-			String w = rspEngine.getName() + "/" + (("Window".equals(where)) ? windowFileName : outputFileName);
+			String w = "exp" + experimentNumber + "/" + rspEngine.getName() + "/" + (("Window".equals(where)) ? windowFileName : outputFileName);
 			int eventNumber = rspEngine.getEventNumber();
 			resultTimestamp = engineResult.getTimestamp();
 			String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + "/" + engineResult.getFrom() + "/" + engineResult.getTo()

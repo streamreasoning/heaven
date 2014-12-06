@@ -64,7 +64,6 @@ public class TrigEventSaver implements EventSaver {
 	@Override
 	public ExecutionState close() {
 		log.info("Closing TrigSaver... Nothing to do");
-
 		status = ExecutionState.CLOSED;
 		return status;
 	}

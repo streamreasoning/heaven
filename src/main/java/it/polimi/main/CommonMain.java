@@ -95,8 +95,8 @@ public class CommonMain {
 
 		EXPERIMENTNUMBER = Integer.parseInt(args[0]);
 		CURRENTENGINE = Integer.parseInt(args[1]);
-		MODE = BuildingStrategy.valueOf(args[3]);
-		comment = args.length > 2 ? args[4] : "";
+		MODE = BuildingStrategy.valueOf(args[2]);
+		comment = args.length > 3 ? args[3] : "";
 
 		exeperimentDate = FileUtils.d;
 
@@ -124,7 +124,7 @@ public class CommonMain {
 		EventBuilder<RSPEvent> eb;
 		switch (MODE) {
 			case CONSTANT:
-				eb = new ConstantEventBuilder(50);
+				eb = new ConstantEventBuilder(1);
 				break;
 			case STEP:
 				eb = new StepEventBuilder(10, 10, 10);
