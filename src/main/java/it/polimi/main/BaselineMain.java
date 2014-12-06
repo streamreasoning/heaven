@@ -144,7 +144,7 @@ public class BaselineMain {
 				}
 				numberEvents++;
 				rspEngine.progress(5); // for rspesperengine move times forward according to the
-										// size of the current window
+				// size of the current window
 				return process;
 			}
 		});
