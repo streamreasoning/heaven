@@ -1,10 +1,10 @@
 package it.polimi.processing.rspengine.windowed.jena;
 
-import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.interfaces.EventResult;
+import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.windowed.jena.events.GraphEvent;
+import it.polimi.processing.workbench.core.EventProcessor;
 import it.polimi.utils.RDFSUtils;
 
 import com.espertech.esper.client.UpdateListener;
@@ -33,7 +33,7 @@ public class JenaEngineGraph extends JenaEngine {
 
 	Graph abox;
 
-	public JenaEngineGraph(String name, ResultCollector<EventResult> collector, UpdateListener listener) {
+	public JenaEngineGraph(String name, EventProcessor<Event> collector, UpdateListener listener) {
 		super(name, collector, listener, GraphEvent.class);
 	}
 

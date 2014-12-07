@@ -1,9 +1,9 @@
 package it.polimi.processing.rspengine.windowed.esper.commons.listener;
 
-import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.interfaces.EventResult;
+import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.windowed.esper.TripleEvent;
+import it.polimi.processing.workbench.core.EventProcessor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +22,7 @@ import com.espertech.esper.client.UpdateListener;
 @EqualsAndHashCode(callSuper = false)
 public class ResultCollectorListener implements UpdateListener {
 
-	private final ResultCollector<EventResult> resultCollector;
+	private final EventProcessor<Event> resultCollector;
 	private String name;
 
 	private int eventNumber = 0;

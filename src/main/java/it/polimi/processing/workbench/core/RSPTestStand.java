@@ -5,8 +5,7 @@ import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.Result;
 import it.polimi.processing.events.TSResult;
-import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.interfaces.EventResult;
+import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.utils.FileUtils;
 import it.polimi.utils.Memory;
@@ -14,7 +13,6 @@ import it.polimi.utils.Memory;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Set;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +21,7 @@ import lombok.extern.log4j.Log4j;
 @Getter
 @Setter
 @Log4j
-public class RSPTestStand extends TestStand<RSPEvent> {
+public class RSPTestStand extends TestStand<Event> {
 
 	private int experimentNumber;
 	private final int numberEvents = 0;
@@ -94,6 +92,10 @@ public class RSPTestStand extends TestStand<RSPEvent> {
 	}
 
 	@Override
+	public boolean process(Event e) {
+		return (e instanceof RSPEvent) ? process((RSPEvent) e) : process((Result) e);
+	}
+
 	public boolean process(RSPEvent e) {
 		return timeStrategy.apply(e, this);
 
@@ -108,33 +110,9 @@ public class RSPTestStand extends TestStand<RSPEvent> {
 		return rspEngine.processDone();
 	}
 
-	@Override
-	public boolean process(EventResult r) {
+	public boolean process(Result engineResult) {
 		try {
-			Result engineResult = (Result) r;
-			resultTimestamp = engineResult.getTimestamp();
-			int eventNumber = rspEngine.getEventNumber();
-			String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + "/" + engineResult.getFrom() + "/" + engineResult.getTo()
-					+ ">";
-			Set<TripleContainer> statements = engineResult.getStatements();
-
-			TSResult r2 = new TSResult(id, eventNumber, statements, timestamp, resultTimestamp, memoryA, memoryB, engineResult.getCompleteSMPL(),
-					engineResult.getSoundSMPL(), engineResult.getCompleteRHODF(), engineResult.getSoundRHODF());
-			boolean ret = resultCollector.process(r2);
-
-			return ret;
-
-		} catch (IOException e) {
-			return false;
-		}
-	}
-
-	@Override
-	public boolean process(EventResult r, String where) throws IOException {
-
-		try {
-			Result engineResult = (Result) r;
-			String w = "exp" + experimentNumber + "/" + rspEngine.getName() + "/" + (("Window".equals(where)) ? windowFileName : outputFileName);
+			String w = "exp" + experimentNumber + "/" + rspEngine.getName() + "/" + ((engineResult.isAbox()) ? windowFileName : outputFileName);
 			int eventNumber = rspEngine.getEventNumber();
 			resultTimestamp = engineResult.getTimestamp();
 			String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + "/" + engineResult.getFrom() + "/" + engineResult.getTo()

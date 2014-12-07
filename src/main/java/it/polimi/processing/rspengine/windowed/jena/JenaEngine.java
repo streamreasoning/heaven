@@ -1,11 +1,11 @@
 package it.polimi.processing.rspengine.windowed.jena;
 
-import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPEvent;
-import it.polimi.processing.events.interfaces.EventResult;
+import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.windowed.esper.RSPEsperEngine;
 import it.polimi.processing.rspengine.windowed.esper.plain.events.TEvent;
+import it.polimi.processing.workbench.core.EventProcessor;
 import lombok.extern.log4j.Log4j;
 
 import com.espertech.esper.client.Configuration;
@@ -33,13 +33,13 @@ public abstract class JenaEngine extends RSPEsperEngine {
 	private final UpdateListener listener;
 	private final Class<?> eventClass;
 
-	public JenaEngine(String name, ResultCollector<EventResult> collector, UpdateListener listener, Class<?> eventClass) {
+	public JenaEngine(String name, EventProcessor<Event> collector, UpdateListener listener, Class<?> eventClass) {
 		super(name, collector);
 		this.listener = listener;
 		this.eventClass = eventClass;
 	}
 
-	public JenaEngine(String name, ResultCollector<EventResult> collector, UpdateListener listener) {
+	public JenaEngine(String name, EventProcessor<Event> collector, UpdateListener listener) {
 		super(name, collector);
 		this.listener = listener;
 		this.eventClass = TEvent.class;

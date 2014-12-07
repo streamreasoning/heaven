@@ -1,7 +1,7 @@
 package it.polimi.processing.rspengine.windowed.jena.listener;
 
-import it.polimi.processing.collector.ResultCollector;
-import it.polimi.processing.events.interfaces.EventResult;
+import it.polimi.processing.events.interfaces.Event;
+import it.polimi.processing.workbench.core.EventProcessor;
 
 import com.hp.hpl.jena.reasoner.Reasoner;
 import com.hp.hpl.jena.reasoner.rulesys.GenericRuleReasoner;
@@ -11,7 +11,7 @@ public class JenaRhoDFListener extends JenaCEPListener {
 
 	private final String aBoxRuleset;
 
-	public JenaRhoDFListener(String tbox, String aBoxRuleset, ResultCollector<EventResult> collector) {
+	public JenaRhoDFListener(String tbox, String aBoxRuleset, EventProcessor<Event> collector) {
 		super(tbox, collector);
 		this.aBoxRuleset = aBoxRuleset;
 	}

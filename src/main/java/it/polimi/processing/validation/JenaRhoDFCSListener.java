@@ -1,8 +1,8 @@
 package it.polimi.processing.validation;
 
-import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.events.Result;
-import it.polimi.processing.events.interfaces.EventResult;
+import it.polimi.processing.events.interfaces.Event;
+import it.polimi.processing.workbench.core.EventProcessor;
 
 import java.io.IOException;
 
@@ -14,7 +14,7 @@ public class JenaRhoDFCSListener extends CSListener {
 
 	private final String aBoxRuleset;
 
-	public JenaRhoDFCSListener(String tbox, String aBoxRuleset, ResultCollector<EventResult> collector) {
+	public JenaRhoDFCSListener(String tbox, String aBoxRuleset, EventProcessor<Event> collector) {
 		super(tbox, collector);
 		this.aBoxRuleset = aBoxRuleset;
 	}
@@ -26,10 +26,11 @@ public class JenaRhoDFCSListener extends CSListener {
 
 	@Override
 	protected void sendResult() throws IOException {
-		collector.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), null, null, completeness,
-				soundness), "Result");
+		boolean abox = true;
+		collector.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), null, null,
+				completeness, soundness, !abox));
 		collector.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), null, null,
-				completeness, soundness), "Window");
+				completeness, soundness, abox));
 
 	}
 

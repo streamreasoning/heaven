@@ -1,9 +1,9 @@
 package it.polimi.processing.validation;
 
-import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.interfaces.EventResult;
+import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.windowed.esper.plain.events.Out;
+import it.polimi.processing.workbench.core.EventProcessor;
 import it.polimi.utils.RDFSUtils;
 
 import java.io.IOException;
@@ -37,14 +37,14 @@ public abstract class CSListener implements UpdateListener {
 	protected Model esperResult, jenaABox;
 	protected InfModel jenaResult;
 	protected Reasoner reasoner;
-	protected final ResultCollector<EventResult> collector;
+	protected final EventProcessor<Event> collector;
 	protected int eventNumber = 0;
 	protected Set<TripleContainer> statements;
 	protected Set<TripleContainer> ABoxTriples;
 	protected boolean completeness;
 	protected boolean soundness;
 
-	public CSListener(String tbox, ResultCollector<EventResult> collector) {
+	public CSListener(String tbox, EventProcessor<Event> collector) {
 		FileManager.get().addLocatorClassLoader(this.getClass().getClassLoader());
 		this.TBoxStar = FileManager.get().loadModel(tbox, null, "RDF/XML");
 		this.collector = collector;

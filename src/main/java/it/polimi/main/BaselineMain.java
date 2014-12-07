@@ -10,6 +10,7 @@ import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.factory.ConstantEventBuilder;
 import it.polimi.processing.events.factory.StepEventBuilder;
 import it.polimi.processing.events.factory.abstracts.EventBuilder;
+import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.rspengine.windowed.RSPEngine;
@@ -24,6 +25,7 @@ import it.polimi.processing.streamer.RSPEventStreamer;
 import it.polimi.processing.workbench.collector.CollectorEventResult;
 import it.polimi.processing.workbench.collector.CollectorExperimentResult;
 import it.polimi.processing.workbench.core.RSPTestStand;
+import it.polimi.processing.workbench.core.TestStand;
 import it.polimi.processing.workbench.core.TimeStrategy;
 import it.polimi.processing.workbench.streamer.NTStreamer;
 import it.polimi.utils.ExecutionEnvirorment;
@@ -69,7 +71,7 @@ public class BaselineMain {
 	private static Date exeperimentDate;
 	private static String file, comment;
 
-	private static RSPTestStand testStand;
+	private static TestStand<Event> testStand;
 	private static StartableCollector<EventResult> streamingEventResultCollector;
 	private static StartableCollector<ExperimentResult> experimentResultCollector;
 	private static UpdateListener listener;
@@ -92,7 +94,7 @@ public class BaselineMain {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
 		file = "_CLND_UNIV10INDEX0SEED0.nt";
 
-		boolean input = true;
+		boolean input = false;
 		Scanner in = new Scanner(System.in);
 
 		if (args.length < 5 || input) {
@@ -190,7 +192,7 @@ public class BaselineMain {
 
 	protected static String streamerSelection(Scanner in) {
 		EventBuilder<RSPEvent> eb;
-		log.debug("Event Builder insert RSPEvent init size");
+		log.info("Event Builder insert RSPEvent init size");
 		int initSize = in.nextInt();
 		String code = "EB";
 		switch (MODE) {

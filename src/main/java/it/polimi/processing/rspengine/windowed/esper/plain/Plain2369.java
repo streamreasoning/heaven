@@ -1,13 +1,13 @@
 package it.polimi.processing.rspengine.windowed.esper.plain;
 
-import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.interfaces.EventResult;
+import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.windowed.esper.RSPEsperEngine;
 import it.polimi.processing.rspengine.windowed.esper.plain.events.Out;
 import it.polimi.processing.rspengine.windowed.esper.plain.events.TEvent;
+import it.polimi.processing.workbench.core.EventProcessor;
 
 import java.util.Set;
 
@@ -40,7 +40,7 @@ public class Plain2369 extends RSPEsperEngine {
 	private TEvent esperEvent = null;
 	private final String ontologyClass;
 
-	public Plain2369(String name, ResultCollector<EventResult> collector, String runtimeOnto, String ontologyClass, UpdateListener listener) {
+	public Plain2369(String name, EventProcessor<Event> collector, String runtimeOnto, String ontologyClass, UpdateListener listener) {
 		super(name, collector);
 		this.runtimeOnto = runtimeOnto;
 		this.ontologyClass = ontologyClass;

@@ -1,12 +1,11 @@
 package it.polimi.processing.rspengine.windowed.jena.listener;
 
-import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.events.Result;
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.interfaces.EventResult;
+import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.windowed.jena.events.JenaEsperEvent;
+import it.polimi.processing.workbench.core.EventProcessor;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,11 +31,11 @@ public abstract class JenaCEPListener implements UpdateListener {
 	private Graph abox;
 	private InfModel ABoxStar;
 	private Reasoner reasoner;
-	private final ResultCollector<EventResult> collector;
+	private final EventProcessor<Event> collector;
 	private int eventNumber = 0;
 	private Set<TripleContainer> ABoxTriples;
 
-	public JenaCEPListener(String tbox, ResultCollector<EventResult> collector) {
+	public JenaCEPListener(String tbox, EventProcessor<Event> collector) {
 		FileManager.get().addLocatorClassLoader(this.getClass().getClassLoader());
 		this.TBoxStar = FileManager.get().loadModel(tbox, null, "RDF/XML");
 		this.collector = collector;
@@ -68,18 +67,13 @@ public abstract class JenaCEPListener implements UpdateListener {
 			statementStrings = new TripleContainer(t.getSubject().toString(), t.getPredicate().toString(), t.getObject().toString());
 			statements.add(statementStrings);
 		}
-
-		try {
-			if (collector != null) {
-				log.debug("Send Event to the StoreCollector");
-				collector.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis()), "Result");
-				collector.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis()), "Window");
-			}
-			eventNumber += ABoxTriples.size() + 1;
-
-		} catch (IOException e1) {
-			log.error(e1.getMessage());
+		if (collector != null) {
+			log.debug("Send Event to the StoreCollector");
+			collector.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), false));
+			collector.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), true));
 		}
+		eventNumber += ABoxTriples.size() + 1;
+
 	}
 
 	protected abstract Reasoner getReasoner();

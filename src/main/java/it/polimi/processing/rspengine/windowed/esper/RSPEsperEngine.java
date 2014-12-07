@@ -1,10 +1,10 @@
 package it.polimi.processing.rspengine.windowed.esper;
 
-import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.events.interfaces.EventResult;
+import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.windowed.RSPEngine;
 import it.polimi.processing.rspengine.windowed.esper.plain.Queries;
+import it.polimi.processing.workbench.core.EventProcessor;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
@@ -27,7 +27,7 @@ public abstract class RSPEsperEngine extends RSPEngine {
 
 	protected int windowShots, time = 0;
 
-	public RSPEsperEngine(String name, ResultCollector<EventResult> collector) {
+	public RSPEsperEngine(String name, EventProcessor<Event> collector) {
 		super(name, collector);
 	}
 

@@ -4,6 +4,7 @@ import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.factory.abstracts.EventBuilder;
+import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.streamer.Parser;
 import it.polimi.processing.streamer.RSPEventStreamer;
@@ -39,11 +40,11 @@ public class NTStreamer extends RSPEventStreamer {
 	 */
 	private RSPEvent lastEvent;
 
-	public NTStreamer(EventProcessor<RSPEvent> processor, EventBuilder<RSPEvent> builder, int eventLimit) {
+	public NTStreamer(EventProcessor<Event> processor, EventBuilder<RSPEvent> builder, int eventLimit) {
 		super(processor, builder, ExecutionState.CLOSED, eventLimit);
 	}
 
-	public NTStreamer(EventProcessor<RSPEvent> processor, EventBuilder<RSPEvent> builder) {
+	public NTStreamer(EventProcessor<Event> processor, EventBuilder<RSPEvent> builder) {
 		super(processor, builder, ExecutionState.CLOSED, 1000);
 	}
 

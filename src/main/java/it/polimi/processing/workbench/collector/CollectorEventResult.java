@@ -3,9 +3,10 @@ package it.polimi.processing.workbench.collector;
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.collector.saver.EventSaver;
 import it.polimi.processing.enums.ExecutionState;
+import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.EventResult;
-import it.polimi.processing.workbench.core.RSPTestStand;
 import it.polimi.processing.workbench.core.Startable;
+import it.polimi.processing.workbench.core.TestStand;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -26,9 +27,10 @@ public class CollectorEventResult implements StartableCollector<EventResult>, St
 	private ExecutionState status;
 	private String where;
 
-	private RSPTestStand stand;
+	private TestStand<Event> stand;
+	private EventResult currentResult;
 
-	public CollectorEventResult(RSPTestStand stand, EventSaver trig, EventSaver csv, String where) throws SQLException, ClassNotFoundException {
+	public CollectorEventResult(TestStand<Event> stand, EventSaver trig, EventSaver csv, String where) throws SQLException, ClassNotFoundException {
 		this.stand = stand;
 		this.trigSaver = trig;
 		this.csvSaver = csv;
@@ -38,12 +40,18 @@ public class CollectorEventResult implements StartableCollector<EventResult>, St
 	}
 
 	@Override
-	public boolean process(EventResult r) throws IOException {
+	public boolean process(EventResult r) {
+		this.currentResult = r;
 		if (!ExecutionState.READY.equals(status)) {
 			return false;
 		} else {
-			return trigSaver.save(r.getTrig(), this.where) && csvSaver.save(r.getCSV(), this.where);
+			return processDone();
 		}
+	}
+
+	@Override
+	public boolean processDone() {
+		return trigSaver.save(currentResult.getTrig(), this.where) && csvSaver.save(currentResult.getCSV(), this.where);
 	}
 
 	@Override

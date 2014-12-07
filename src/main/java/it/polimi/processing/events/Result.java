@@ -17,7 +17,8 @@ public class Result implements EventResult {
 	private Set<TripleContainer> statements;
 	private long from, to;
 	private long timestamp;
-	private Boolean completeSMPL, soundSMPL, completeRHODF, soundRHODF;;
+	private Boolean completeSMPL, soundSMPL, completeRHODF, soundRHODF;
+	private boolean abox;
 
 	@Override
 	public CollectableData getTrig() {
@@ -30,11 +31,12 @@ public class Result implements EventResult {
 		return new CSV(s);
 	}
 
-	public Result(Set<TripleContainer> statements, long from, long to, long timestamp) {
+	public Result(Set<TripleContainer> statements, long from, long to, long timestamp, boolean abox) {
 		this.statements = statements;
 		this.from = from;
 		this.to = to;
 		this.timestamp = timestamp;
-	}
+		this.abox = abox;
 
+	}
 }

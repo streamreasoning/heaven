@@ -1,10 +1,10 @@
 package it.polimi.processing.rspengine.windowed.jena;
 
-import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.interfaces.EventResult;
+import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.windowed.esper.plain.events.TEvent;
+import it.polimi.processing.workbench.core.EventProcessor;
 
 import com.espertech.esper.client.UpdateListener;
 
@@ -22,7 +22,7 @@ import com.espertech.esper.client.UpdateListener;
  * **/
 public class JenaEngineTEvent extends JenaEngine {
 
-	public JenaEngineTEvent(String name, ResultCollector<EventResult> collector, UpdateListener listener) {
+	public JenaEngineTEvent(String name, EventProcessor<Event> collector, UpdateListener listener) {
 		super(name, collector, listener, TEvent.class);
 	}
 

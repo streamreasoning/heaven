@@ -3,8 +3,9 @@ package it.polimi.processing.workbench.collector;
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.collector.saver.EventSaver;
 import it.polimi.processing.enums.ExecutionState;
+import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.ExperimentResult;
-import it.polimi.processing.workbench.core.RSPTestStand;
+import it.polimi.processing.workbench.core.TestStand;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -18,11 +19,12 @@ public class CollectorExperimentResult implements StartableCollector<ExperimentR
 
 	private long timestamp;
 	private EventSaver sqlLiteSaver;
-	private RSPTestStand stand;
+	private TestStand<Event> stand;
 	private ExecutionState status;
 	private String where;
+	private ExperimentResult currentExperiment;
 
-	public CollectorExperimentResult(RSPTestStand stand, EventSaver saver) throws SQLException, ClassNotFoundException {
+	public CollectorExperimentResult(TestStand<Event> stand, EventSaver saver) throws SQLException, ClassNotFoundException {
 		this.stand = stand;
 		this.sqlLiteSaver = saver;
 		this.timestamp = System.currentTimeMillis();
@@ -30,13 +32,19 @@ public class CollectorExperimentResult implements StartableCollector<ExperimentR
 	}
 
 	@Override
-	public boolean process(ExperimentResult r) throws IOException {
+	public boolean process(ExperimentResult r) {
+		this.currentExperiment = r;
 		if (!ExecutionState.READY.equals(status)) {
 			return false;
 		} else {
-			return sqlLiteSaver.save(r.getSQL(), this.where);
+			return processDone();
 
 		}
+	}
+
+	@Override
+	public boolean processDone() {
+		return sqlLiteSaver.save(currentExperiment.getSQL(), this.where);
 	}
 
 	@Override
