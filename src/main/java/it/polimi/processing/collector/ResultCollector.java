@@ -6,8 +6,8 @@ import java.io.IOException;
 
 public interface ResultCollector<T extends Event> {
 
-	public boolean store(T r) throws IOException;
+	public boolean process(T r) throws IOException;
 
-	public boolean store(T r, String where) throws IOException;
+	public boolean process(T r, String where) throws IOException;
 
 }

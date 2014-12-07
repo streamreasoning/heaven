@@ -25,9 +25,9 @@ public class JenaSMPLCSListener extends CSListener {
 
 	@Override
 	protected void sendResult() throws IOException {
-		collector.store(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), completeness, soundness,
+		collector.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), completeness, soundness,
 				null, null), "Result");
-		collector.store(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), completeness, soundness,
+		collector.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), completeness, soundness,
 				null, null), "Window");
 
 	}

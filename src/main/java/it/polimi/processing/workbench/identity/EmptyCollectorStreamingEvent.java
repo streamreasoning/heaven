@@ -29,7 +29,7 @@ public class EmptyCollectorStreamingEvent implements StartableCollector<EventRes
 	}
 
 	@Override
-	public boolean store(EventResult r) throws IOException {
+	public boolean process(EventResult r) throws IOException {
 		return true;
 	}
 
@@ -46,7 +46,7 @@ public class EmptyCollectorStreamingEvent implements StartableCollector<EventRes
 	}
 
 	@Override
-	public boolean store(EventResult r, String where) throws IOException {
+	public boolean process(EventResult r, String where) throws IOException {
 		return true;
 	}
 

@@ -282,18 +282,20 @@ public class BaselineMain {
 	protected static void collectorSelection() throws SQLException, ClassNotFoundException {
 		experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
 
+		TrigEventSaver trig = new TrigEventSaver();
+		VoidSaver voids = new VoidSaver();
 		switch (EXPERIMENTTYPE) {
 			case MEMORY:
 				ExecutionEnvirorment.memoryEnabled = true;
-				streamingEventResultCollector = new CollectorEventResult(testStand, new VoidSaver(), csv, engineName + "/");
+				streamingEventResultCollector = new CollectorEventResult(testStand, voids, csv, engineName + "/");
 				break;
 			case LATENCY:
-				streamingEventResultCollector = new CollectorEventResult(testStand, new VoidSaver(), csv, engineName + "/");
+				streamingEventResultCollector = new CollectorEventResult(testStand, voids, csv, engineName + "/");
 				break;
 			case RESULT:
-				streamingEventResultCollector = new CollectorEventResult(testStand, new TrigEventSaver(), csv, engineName + "/");
+				streamingEventResultCollector = new CollectorEventResult(testStand, trig, csv, engineName + "/");
 			default:
-				streamingEventResultCollector = new CollectorEventResult(testStand, new TrigEventSaver(), csv, engineName + "/");
+				streamingEventResultCollector = new CollectorEventResult(testStand, trig, csv, engineName + "/");
 		}
 	}
 

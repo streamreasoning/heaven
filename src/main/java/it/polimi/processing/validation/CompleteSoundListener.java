@@ -27,8 +27,8 @@ public class CompleteSoundListener extends CSListener {
 	@Override
 	protected void sendResult() throws IOException {
 		collector
-				.store(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), cs, ss, cr, sr), "Result");
-		collector.store(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), cs, ss, cr, sr),
+				.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), cs, ss, cr, sr), "Result");
+		collector.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), cs, ss, cr, sr),
 				"Window");
 	}
 

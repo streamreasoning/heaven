@@ -38,7 +38,7 @@ public class CollectorEventResult implements StartableCollector<EventResult>, St
 	}
 
 	@Override
-	public boolean store(EventResult r) throws IOException {
+	public boolean process(EventResult r) throws IOException {
 		if (!ExecutionState.READY.equals(status)) {
 			return false;
 		} else {
@@ -47,7 +47,7 @@ public class CollectorEventResult implements StartableCollector<EventResult>, St
 	}
 
 	@Override
-	public boolean store(EventResult r, String w) throws IOException {
+	public boolean process(EventResult r, String w) throws IOException {
 		log.debug("Store [" + w + "]");
 		if (!ExecutionState.READY.equals(status)) {
 			return false;

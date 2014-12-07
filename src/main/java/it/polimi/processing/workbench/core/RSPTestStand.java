@@ -79,7 +79,7 @@ public class RSPTestStand extends TestStand<RSPEvent> {
 			log.debug("Status [" + status + "] Processing is ended");
 
 			currentExperiment.setTimestampEnd(System.currentTimeMillis());
-			experimentResultCollector.store(currentExperiment);
+			experimentResultCollector.process(currentExperiment);
 
 			if (ExecutionState.CLOSED.equals(engineStatus)) {
 				status = ExecutionState.READY;
@@ -109,7 +109,7 @@ public class RSPTestStand extends TestStand<RSPEvent> {
 	}
 
 	@Override
-	public boolean store(EventResult r) {
+	public boolean process(EventResult r) {
 		try {
 			Result engineResult = (Result) r;
 			resultTimestamp = engineResult.getTimestamp();
@@ -120,7 +120,7 @@ public class RSPTestStand extends TestStand<RSPEvent> {
 
 			TSResult r2 = new TSResult(id, eventNumber, statements, timestamp, resultTimestamp, memoryA, memoryB, engineResult.getCompleteSMPL(),
 					engineResult.getSoundSMPL(), engineResult.getCompleteRHODF(), engineResult.getSoundRHODF());
-			boolean ret = resultCollector.store(r2);
+			boolean ret = resultCollector.process(r2);
 
 			return ret;
 
@@ -130,7 +130,7 @@ public class RSPTestStand extends TestStand<RSPEvent> {
 	}
 
 	@Override
-	public boolean store(EventResult r, String where) throws IOException {
+	public boolean process(EventResult r, String where) throws IOException {
 
 		try {
 			Result engineResult = (Result) r;
@@ -143,7 +143,7 @@ public class RSPTestStand extends TestStand<RSPEvent> {
 			TSResult r2 = new TSResult(id, eventNumber, engineResult.getStatements(), timestamp, resultTimestamp, memoryA, memoryB,
 					engineResult.getCompleteSMPL(), engineResult.getSoundSMPL(), engineResult.getCompleteRHODF(), engineResult.getSoundRHODF());
 
-			boolean ret = resultCollector.store(r2, w);
+			boolean ret = resultCollector.process(r2, w);
 			return ret;
 		} catch (IOException e) {
 			return false;

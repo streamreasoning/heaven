@@ -26,9 +26,9 @@ public class JenaRhoDFCSListener extends CSListener {
 
 	@Override
 	protected void sendResult() throws IOException {
-		collector.store(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), null, null, completeness,
+		collector.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), null, null, completeness,
 				soundness), "Result");
-		collector.store(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), null, null,
+		collector.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), null, null,
 				completeness, soundness), "Window");
 
 	}

@@ -30,7 +30,7 @@ public class CollectorExperimentResult implements StartableCollector<ExperimentR
 	}
 
 	@Override
-	public boolean store(ExperimentResult r) throws IOException {
+	public boolean process(ExperimentResult r) throws IOException {
 		if (!ExecutionState.READY.equals(status)) {
 			return false;
 		} else {
@@ -40,7 +40,7 @@ public class CollectorExperimentResult implements StartableCollector<ExperimentR
 	}
 
 	@Override
-	public boolean store(ExperimentResult r, String where) throws IOException {
+	public boolean process(ExperimentResult r, String where) throws IOException {
 
 		if (!ExecutionState.READY.equals(status)) {
 			return false;
