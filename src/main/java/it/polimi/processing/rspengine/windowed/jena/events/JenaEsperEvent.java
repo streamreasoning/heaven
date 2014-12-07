@@ -1,4 +1,4 @@
-package it.polimi.processing.rspengine.windowed.jena;
+package it.polimi.processing.rspengine.windowed.jena.events;
 
 import it.polimi.processing.events.TripleContainer;
 

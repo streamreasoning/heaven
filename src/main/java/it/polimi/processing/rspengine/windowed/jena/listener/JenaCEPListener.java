@@ -1,10 +1,10 @@
-package it.polimi.processing.rspengine.windowed.jena.listener.plain;
+package it.polimi.processing.rspengine.windowed.jena.listener;
 
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.events.Result;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.EventResult;
-import it.polimi.processing.rspengine.windowed.jena.JenaEsperEvent;
+import it.polimi.processing.rspengine.windowed.jena.events.JenaEsperEvent;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -70,10 +70,11 @@ public abstract class JenaCEPListener implements UpdateListener {
 		}
 
 		try {
-
-			log.debug("Send Event to the StoreCollector");
-			collector.store(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis()), "Result");
-			collector.store(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis()), "Window");
+			if (collector != null) {
+				log.debug("Send Event to the StoreCollector");
+				collector.store(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis()), "Result");
+				collector.store(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis()), "Window");
+			}
 			eventNumber += ABoxTriples.size() + 1;
 
 		} catch (IOException e1) {

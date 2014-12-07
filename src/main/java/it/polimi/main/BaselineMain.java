@@ -13,13 +13,13 @@ import it.polimi.processing.events.factory.abstracts.EventBuilder;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.rspengine.windowed.RSPEngine;
-import it.polimi.processing.rspengine.windowed.jena.JenaEngine;
-import it.polimi.processing.rspengine.windowed.jena.events.GraphEvent;
-import it.polimi.processing.rspengine.windowed.jena.events.StatementEvent;
-import it.polimi.processing.rspengine.windowed.jena.events.TripleEvent;
-import it.polimi.processing.rspengine.windowed.jena.listener.plain.JenaFullListener;
-import it.polimi.processing.rspengine.windowed.jena.listener.plain.JenaRhoDFListener;
-import it.polimi.processing.rspengine.windowed.jena.listener.plain.JenaSMPLListener;
+import it.polimi.processing.rspengine.windowed.jena.JenaEngineGraph;
+import it.polimi.processing.rspengine.windowed.jena.JenaEngineStmt;
+import it.polimi.processing.rspengine.windowed.jena.JenaEngineTEvent;
+import it.polimi.processing.rspengine.windowed.jena.JenaEngineTriple;
+import it.polimi.processing.rspengine.windowed.jena.listener.JenaFullListener;
+import it.polimi.processing.rspengine.windowed.jena.listener.JenaRhoDFListener;
+import it.polimi.processing.rspengine.windowed.jena.listener.JenaSMPLListener;
 import it.polimi.processing.streamer.RSPEventStreamer;
 import it.polimi.processing.workbench.collector.CollectorEventResult;
 import it.polimi.processing.workbench.collector.CollectorExperimentResult;
@@ -92,7 +92,7 @@ public class BaselineMain {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
 		file = "_CLND_UNIV10INDEX0SEED0.nt";
 
-		boolean input = false;
+		boolean input = true;
 		Scanner in = new Scanner(System.in);
 
 		if (args.length < 5 || input) {
@@ -246,16 +246,16 @@ public class BaselineMain {
 	protected static void engineSelection() {
 		switch (CURRENTENGINE) {
 			case JENAPLAIN:
-				engine = new JenaEngine(engineName, testStand, listener);
+				engine = new JenaEngineTEvent(engineName, testStand, listener);
 				break;
 			case JENATRIPLE:
-				engine = new JenaEngine(engineName, testStand, listener, TripleEvent.class);
+				engine = new JenaEngineTriple(engineName, testStand, listener);
 				break;
 			case JENASTMT:
-				engine = new JenaEngine(engineName, testStand, listener, StatementEvent.class);
+				engine = new JenaEngineStmt(engineName, testStand, listener);
 				break;
 			case JENAGRAPH:
-				engine = new JenaEngine(engineName, testStand, listener, GraphEvent.class);
+				engine = new JenaEngineGraph(engineName, testStand, listener);
 				break;
 			default:
 				engine = null;

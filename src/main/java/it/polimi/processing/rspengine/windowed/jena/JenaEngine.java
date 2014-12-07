@@ -3,13 +3,9 @@ package it.polimi.processing.rspengine.windowed.jena;
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPEvent;
-import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.rspengine.windowed.esper.RSPEsperEngine;
 import it.polimi.processing.rspengine.windowed.esper.plain.events.TEvent;
-
-import java.util.Set;
-
 import lombok.extern.log4j.Log4j;
 
 import com.espertech.esper.client.Configuration;
@@ -32,7 +28,7 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
  * 
  * **/
 @Log4j
-public class JenaEngine extends RSPEsperEngine {
+public abstract class JenaEngine extends RSPEsperEngine {
 
 	private final UpdateListener listener;
 	private final Class<?> eventClass;
@@ -60,6 +56,7 @@ public class JenaEngine extends RSPEsperEngine {
 		ref = new ConfigurationMethodRef();
 		cepConfig = new Configuration();
 
+		log.info("Added [" + eventClass.getName() + "] as TEvent");
 		cepConfig.addEventType("TEvent", eventClass.getName());
 
 		cepConfig.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
@@ -90,21 +87,15 @@ public class JenaEngine extends RSPEsperEngine {
 	public boolean process(RSPEvent e) {
 		setCurrentEvent(e);
 		status = ExecutionState.RUNNING;
-		Set<TripleContainer> eventTriples = e.getEventTriples();
-		int count = 0;
-		for (TripleContainer tc : eventTriples) {
-			count++;
-			if (count % 1000 == 0) {
-				log.debug("Sent [" + count + "] events");
-			}
-			// Esper events must be immutable
-			String[] t = tc.getTriple();
-			cepRT.sendEvent(new TEvent(t[0], t[1], t[2], cepRT.getCurrentTime(), System.currentTimeMillis(), "Input"));
-		}
-		log.debug("Status[" + status + "] Parsing done, prepare time scheduling...");
-		status = ExecutionState.READY;
+
+		handleEvent(e);
+
+		log.debug("Status[" + (status = ExecutionState.READY) + "] Parsing done, prepare time scheduling...");
+
 		return true;
 	}
+
+	protected abstract void handleEvent(RSPEvent e);
 
 	@Override
 	public ExecutionState stopProcessing() {

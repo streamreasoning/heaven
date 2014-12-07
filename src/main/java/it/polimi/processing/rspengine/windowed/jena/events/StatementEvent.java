@@ -1,11 +1,11 @@
 package it.polimi.processing.rspengine.windowed.jena.events;
 
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.rspengine.windowed.jena.JenaEsperEvent;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import com.hp.hpl.jena.graph.Graph;
@@ -15,6 +15,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 
 @Data
+@AllArgsConstructor
 public class StatementEvent implements JenaEsperEvent {
 
 	private Statement statement;
@@ -35,8 +36,8 @@ public class StatementEvent implements JenaEsperEvent {
 
 	@Override
 	public Graph update(Graph abox) {
-		// TODO Auto-generated method stub
-		return null;
+		abox.add(statement.asTriple());
+		return abox;
 	}
 
 	@Override

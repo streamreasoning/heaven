@@ -1,4 +1,4 @@
-package it.polimi.processing.rspengine.windowed.jena.listener.plain;
+package it.polimi.processing.rspengine.windowed.jena.listener;
 
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.events.interfaces.EventResult;

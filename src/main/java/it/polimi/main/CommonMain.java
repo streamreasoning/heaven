@@ -15,11 +15,10 @@ import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.rspengine.windowed.RSPEngine;
 import it.polimi.processing.rspengine.windowed.esper.commons.listener.ResultCollectorListener;
 import it.polimi.processing.rspengine.windowed.esper.plain.Plain2369;
-import it.polimi.processing.rspengine.windowed.jena.JenaEngine;
-import it.polimi.processing.rspengine.windowed.jena.listener.plain.JenaFullListener;
-import it.polimi.processing.rspengine.windowed.jena.listener.plain.JenaRhoDFListener;
-import it.polimi.processing.rspengine.windowed.jena.listener.plain.JenaSMPLListener;
 import it.polimi.processing.streamer.RSPEventStreamer;
+import it.polimi.processing.validation.CompleteSoundListener;
+import it.polimi.processing.validation.JenaRhoDFCSListener;
+import it.polimi.processing.validation.JenaSMPLCSListener;
 import it.polimi.processing.workbench.collector.CollectorEventResult;
 import it.polimi.processing.workbench.collector.CollectorExperimentResult;
 import it.polimi.processing.workbench.core.RSPTestStand;
@@ -34,6 +33,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -44,11 +44,7 @@ import com.espertech.esper.client.UpdateListener;
 @Log4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommonMain {
-	public static final int PLAIN2369 = 0, JENA = 1, JENARHODF = 2;
-	public static final int PLAIN2369NW = 3, JENANW = 4, JENARHODFNW = 5;
-	public static final int PLAIN2369NM = 6, JENANM = 7, JENARHODFNM = 8;
-	public static final int PLAIN2369NWM = 9, JENANWM = 10, JENARHODFNWM = 11;
-	public static final int JENAFULL = 12, JENAFULLNW = 13, JENAFULLNWM = 14;
+	public static final int PLAIN2369 = 0, PLAIN2369CnS = 1, PLAIN2369SMPL = 2, PLAIN2369RHODF = 3;
 
 	public static int CURRENTENGINE;
 	public static int EXPERIMENTNUMBER;
@@ -82,25 +78,46 @@ public class CommonMain {
 
 	private static final DateFormat dt = new SimpleDateFormat("yyyy_MM_dd");
 	private static CSVEventSaver csv = new CSVEventSaver();
-	private static CollectorEventResult completeSaver;
-	private static CollectorEventResult noTrigSaver;
 	private static String whereOutput, whereWindow, outputFileName, windowFileName, experimentDescription;
 	private static RSPEventStreamer streamer;
 	private static BuildingStrategy MODE;
 
+	private static int EXPERIMENTTYPE;
+
+	private static String engineName;
+
+	private static String eventBuilderCodeName;
+	private static final int RESULT = 0;
+	private static final int LATENCY = 1;
+	private static final int MEMORY = 2;
+
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
-		// String[] files = new String[] { "inputTrigINIT50D1GF0SN1R.trig" };
-		// String[] files = new String[] { "inputTrigINIT100D1GF0SN1R.trig" };
-		// String[] files = new String[] { "inputTrigINIT250D1GF0SN1R.trig" };
 
-		file = "_CLND_UNIV10INDEX0SEED01000Lines.nt";
+		file = "_CLND_UNIV10INDEX0SEED0.nt";
 
-		EXPERIMENTNUMBER = Integer.parseInt(args[0]);
-		CURRENTENGINE = Integer.parseInt(args[1]);
-		MODE = BuildingStrategy.valueOf(args[2]);
-		comment = args.length > 3 ? args[3] : "";
+		boolean input = false;
+		Scanner in = new Scanner(System.in);
+
+		if (args.length < 5 || input) {
+			log.info("Write Experiment Number: ");
+			EXPERIMENTNUMBER = in.nextInt();
+			log.info("Chose an Engine: 0:PLAIN2369 1:CS 2:CSSMPL 3:CSRHODF");
+			CURRENTENGINE = in.nextInt();
+			log.info("Chose Streaming Mode: 0:CONSTANT 1:LINEAR 2:STEP 3:EXP");
+			MODE = BuildingStrategy.getById(in.nextInt());
+			log.info("Add Some Comment?: n:NO or comment");
+			String next = in.next().toUpperCase();
+			comment = next != "n".toUpperCase() ? next : "";
+		} else {
+			EXPERIMENTNUMBER = Integer.parseInt(args[0]);
+			CURRENTENGINE = Integer.parseInt(args[1]);
+			MODE = BuildingStrategy.getById(Integer.parseInt(args[2]));
+			comment = "n".toUpperCase().equals(args[3].toUpperCase()) ? "" : args[3];
+		}
 
 		exeperimentDate = FileUtils.d;
+
+		log.info("Experiment [" + EXPERIMENTNUMBER + "] of [" + exeperimentDate + "]");
 
 		testStand = new RSPTestStand(new TimeStrategy() {
 
@@ -129,72 +146,136 @@ public class CommonMain {
 			}
 		});
 
-		outputFileName = "Result_" + "EN" + EXPERIMENTNUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + file.split("\\.")[0];
-		windowFileName = "Window_" + "EN" + EXPERIMENTNUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + file.split("\\.")[0];
+		eventBuilderCodeName = input ? streamerSelection(in) : streamerSelection(args);
 
-		String engineName = engineNames[CURRENTENGINE];
+		engineName = engineNames[CURRENTENGINE];
 
-		whereOutput = engineName + "/" + outputFileName;
-		whereWindow = engineName + "/" + windowFileName;
+		experimentDescription = "EXPERIMENT_ON_" + file + "_WITH_ENGINE_" + engineName + "EVENT_" + CURRENTENGINE;
 
-		experimentDescription = "EXPERIMENT_ON_" + file + "_WITH_ENGINE_" + engineName;
+		FileUtils.createOutputFolder("exp" + EXPERIMENTNUMBER + "/" + engineName);
 
-		log.info("output file name will be: [" + whereOutput + "]");
-		log.info("window file name will be: [" + whereWindow + "]");
+		String generalName = "EN" + EXPERIMENTNUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + file.split("\\.")[0] + "_"
+				+ eventBuilderCodeName;
 
-		experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
+		outputFileName = "Result_" + generalName;
+		windowFileName = "Window_" + generalName;
 
-		noTrigSaver = new CollectorEventResult(testStand, new VoidSaver(), csv, engineName + "/");
-		completeSaver = new CollectorEventResult(testStand, new TrigEventSaver(), csv, engineName + "/");
+		whereOutput = "exp" + EXPERIMENTNUMBER + "/" + engineName + "/" + outputFileName;
+		whereWindow = "exp" + EXPERIMENTNUMBER + "/" + engineName + "/" + windowFileName;
 
-		streamingEventResultCollector = ExecutionEnvirorment.isWritingProtected() ? noTrigSaver : completeSaver;
+		log.info("Output file name will be: [" + whereOutput + "]");
+		log.info("Window file name will be: [" + whereWindow + "]");
 
-		EventBuilder<RSPEvent> eb;
-		switch (MODE) {
-			case CONSTANT:
-				eb = new ConstantEventBuilder(50);
-				break;
-			case STEP:
-				eb = new StepEventBuilder(10, 10, 10);
-				break;
-			default:
-				eb = new ConstantEventBuilder(50);
-				break;
+		if (input) {
+			log.info("Choose Experiment Type: 0:TRIGRESULT 1:LATENCY 2:MEMORY");
+			EXPERIMENTTYPE = in.nextInt();
+		} else {
+			EXPERIMENTTYPE = Integer.parseInt(args[args.length - 1]);
 		}
-		streamer = new NTStreamer(testStand, eb);
 
-		log.info("Experiment [" + EXPERIMENTNUMBER + "] of [" + exeperimentDate + "]");
+		collectorSelection();
 
-		switch (CURRENTENGINE) {
-			case JENA:
-				listener = new JenaSMPLListener(FileUtils.UNIV_BENCH_RDFS_MODIFIED, testStand);
-				engine = new JenaEngine(engineName, testStand, listener);
-				break;
-			case JENARHODF:
-				listener = new JenaRhoDFListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
-				engine = new JenaEngine(engineName, testStand, listener);
+		engineSelection();
 
-				break;
-			case JENAFULL:
-				listener = new JenaFullListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED, testStand);
-				engine = new JenaEngine(engineName, testStand, listener);
-				break;
-			case PLAIN2369:
-				listener = new ResultCollectorListener(testStand, engineName, 0);
-				// listener = new CompleteSoundListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED,
-				// FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
-				// listener = new JenaRhoDFCSListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED,
-				// FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
-				engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass, listener);
-				break;
-
-			default:
-				engine = null;
-
-		}
+		in.close();
 
 		run(file, comment, EXPERIMENTNUMBER, exeperimentDate, experimentDescription);
 
+	}
+
+	protected static void engineSelection() {
+		switch (CURRENTENGINE) {
+			case PLAIN2369:
+				listener = new ResultCollectorListener(testStand, engineName, 0);
+				engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass, listener);
+				break;
+			case PLAIN2369CnS:
+				listener = new CompleteSoundListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
+				engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass, listener);
+				break;
+			case PLAIN2369RHODF:
+				listener = new JenaRhoDFCSListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
+				engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass, listener);
+				break;
+			case PLAIN2369SMPL:
+				listener = new JenaSMPLCSListener(FileUtils.UNIV_BENCH_RDFS_MODIFIED, testStand);
+				engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass, listener);
+				break;
+			default:
+				engine = null;
+		}
+	}
+
+	protected static String streamerSelection(Scanner in) {
+		EventBuilder<RSPEvent> eb;
+		log.debug("Event Builder insert RSPEvent init size");
+		int initSize = in.nextInt();
+		String code = "EB";
+		switch (MODE) {
+			case CONSTANT:
+				code += "C" + initSize;
+				log.info("CONSTANT Event Builder");
+				eb = new ConstantEventBuilder(initSize);
+				break;
+			case STEP:
+				log.info("STEP Event Builder, insert step height and width");
+				int height = in.nextInt();
+				int width = in.nextInt();
+				eb = new StepEventBuilder(height, width, initSize);
+				code += "S" + initSize + "H" + height + "W" + width;
+				break;
+			default:
+				eb = new ConstantEventBuilder(initSize);
+				break;
+
+		}
+
+		streamer = new NTStreamer(testStand, eb);
+		return code;
+	}
+
+	protected static String streamerSelection(String[] args) {
+		EventBuilder<RSPEvent> eb;
+		int initSize = Integer.parseInt(args[5]);
+		String code = "EB";
+		switch (MODE) {
+			case CONSTANT:
+				code += "C" + initSize;
+				log.info("CONSTANT Event Builder Initial Size [" + initSize + "]");
+				eb = new ConstantEventBuilder(initSize);
+				break;
+			case STEP:
+				int height = Integer.parseInt(args[6]);
+				int width = Integer.parseInt(args[7]);
+				log.info("STEP Event Builder, Initial Size [" + initSize + "] step height [" + height + "] and width[" + width + "]");
+				eb = new StepEventBuilder(height, width, initSize);
+				code += "S" + initSize + "H" + height + "W" + width;
+				break;
+			default:
+				eb = new ConstantEventBuilder(initSize);
+				break;
+
+		}
+		streamer = new NTStreamer(testStand, eb);
+		return code;
+	}
+
+	protected static void collectorSelection() throws SQLException, ClassNotFoundException {
+		experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
+
+		switch (EXPERIMENTTYPE) {
+			case MEMORY:
+				ExecutionEnvirorment.memoryEnabled = true;
+				streamingEventResultCollector = new CollectorEventResult(testStand, new VoidSaver(), csv, engineName + "/");
+				break;
+			case LATENCY:
+				streamingEventResultCollector = new CollectorEventResult(testStand, new VoidSaver(), csv, engineName + "/");
+				break;
+			case RESULT:
+				streamingEventResultCollector = new CollectorEventResult(testStand, new TrigEventSaver(), csv, engineName + "/");
+			default:
+				streamingEventResultCollector = new CollectorEventResult(testStand, new TrigEventSaver(), csv, engineName + "/");
+		}
 	}
 
 	private static void run(String f, String comment, int experimentNumber, Date d, String experimentDescription) throws ClassNotFoundException,

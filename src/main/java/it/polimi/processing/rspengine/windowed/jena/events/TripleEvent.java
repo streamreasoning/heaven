@@ -1,11 +1,11 @@
 package it.polimi.processing.rspengine.windowed.jena.events;
 
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.rspengine.windowed.jena.JenaEsperEvent;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import com.hp.hpl.jena.graph.Graph;
@@ -15,6 +15,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 @Data
+@AllArgsConstructor
 public class TripleEvent implements JenaEsperEvent {
 
 	private Resource s;
