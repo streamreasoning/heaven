@@ -46,10 +46,10 @@ import com.espertech.esper.client.UpdateListener;
 @Log4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommonMain {
-	public static final int PLAIN2369 = 0, PLAIN2369CnS = 1, PLAIN2369SMPL = 2, PLAIN2369RHODF = 3;
+	private static final int PLAIN2369 = 0, PLAIN2369CnS = 1, PLAIN2369SMPL = 2, PLAIN2369RHODF = 3;
 
-	public static int CURRENT_ENGINE;
-	public static int EXPERIMENT_NUMBER;
+	private static int CURRENT_ENGINE;
+	private static int EXPERIMENT_NUMBER;
 
 	private static String JENASMPLNAME = "jenasmpl";
 	private static String JENARHODFNAME = "jenarhodf";
@@ -114,7 +114,7 @@ public class CommonMain {
 			EXPERIMENT_NUMBER = Integer.parseInt(args[CommonInputOrder.EXPERIMENT_NUMBER]);
 			CURRENT_ENGINE = Integer.parseInt(args[CommonInputOrder.CURRENT_ENGINE]);
 			EVENT_BUILDER = BuildingStrategy.getById(Integer.parseInt(args[CommonInputOrder.EVENTBUILDER]));
-			comment = "n".toUpperCase().equals(args[CommonInputOrder.COMMENTS].toUpperCase()) ? "" : args[CommonInputOrder.COMMENTS];
+			comment = "n".equalsIgnoreCase(args[CommonInputOrder.COMMENTS].toUpperCase()) ? "" : args[CommonInputOrder.COMMENTS];
 		}
 
 		exeperimentDate = FileUtils.d;
@@ -281,6 +281,7 @@ public class CommonMain {
 				break;
 			case RESULT:
 				streamingEventResultCollector = new CollectorEventResult(testStand, new TrigEventSaver(), csv, engineName + "/");
+				break;
 			default:
 				streamingEventResultCollector = new CollectorEventResult(testStand, new TrigEventSaver(), csv, engineName + "/");
 		}

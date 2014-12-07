@@ -13,14 +13,10 @@ import it.polimi.processing.events.factory.abstracts.EventBuilder;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.rspengine.windowed.RSPEngine;
-import it.polimi.processing.rspengine.windowed.esper.plain.events.TEvent;
 import it.polimi.processing.rspengine.windowed.jena.JenaEngineGraph;
 import it.polimi.processing.rspengine.windowed.jena.JenaEngineStmt;
 import it.polimi.processing.rspengine.windowed.jena.JenaEngineTEvent;
 import it.polimi.processing.rspengine.windowed.jena.JenaEngineTriple;
-import it.polimi.processing.rspengine.windowed.jena.events.GraphEvent;
-import it.polimi.processing.rspengine.windowed.jena.events.StatementEvent;
-import it.polimi.processing.rspengine.windowed.jena.events.TripleEvent;
 import it.polimi.processing.rspengine.windowed.jena.listener.JenaFullListener;
 import it.polimi.processing.rspengine.windowed.jena.listener.JenaRhoDFListener;
 import it.polimi.processing.rspengine.windowed.jena.listener.JenaSMPLListener;
@@ -53,23 +49,21 @@ import com.espertech.esper.client.UpdateListener;
 public class BaselineMain {
 
 	// EVENT TYPES
-	public static final int JENAPLAIN = 0, JENATRIPLE = 1, JENASTMT = 2, JENAGRAPH = 3;
+	private static final int JENAPLAIN = 0, JENATRIPLE = 1, JENASTMT = 2, JENAGRAPH = 3;
 	// REASONER
-	public static final int JENAFULL = 0, JENARHODF = 1, JENASMPL = 2;
+	private static final int JENAFULL = 0, JENARHODF = 1, JENASMPL = 2;
 
-	public static int CURRENTENGINE;
-	public static int EXPERIMENT_NUMBER;
+	private static int CURRENTENGINE;
+	private static int EXPERIMENT_NUMBER;
 
 	private static String JENANAME = "jena";
 	private static String SMPL = "smpl";
 	private static String RHODF = "rhodf";
 	private static String FULL = "full";
 
-	public static String[] engineNames = new String[] { JENANAME + SMPL, JENANAME + RHODF, JENANAME + FULL };
-	public static String[] eventTypes = new String[] { TEvent.class.getName(), TripleEvent.class.getName(), StatementEvent.class.getName(),
-			GraphEvent.class.getName() };
+	private static String[] engineNames = new String[] { JENANAME + SMPL, JENANAME + RHODF, JENANAME + FULL };
 
-	public static final String ontologyClass = "Ontology";
+	public static final String ONTOLOGYCLASS = "Ontology";
 
 	private static RSPEngine engine;
 
@@ -81,7 +75,7 @@ public class BaselineMain {
 	private static StartableCollector<ExperimentResult> experimentResultCollector;
 	private static UpdateListener listener;
 
-	private static final DateFormat dt = new SimpleDateFormat("yyyy_MM_dd");
+	private static final DateFormat DT = new SimpleDateFormat("yyyy_MM_dd");
 
 	private static int EXPERIMENTTYPE;
 	private static final int RESULT = 0;
@@ -98,7 +92,7 @@ public class BaselineMain {
 	private static String engineName;
 	private static String eventBuilderCodeName;
 
-	private static int eventLimit = 5000;;
+	private static int eventLimit = 5000;
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
 		file = "_CLND_UNIV10INDEX0SEED0.nt";
@@ -127,7 +121,7 @@ public class BaselineMain {
 			CURRENTENGINE = Integer.parseInt(args[BaseLineInputOrder.JENA_CURRENTENGINE]);
 			CURRENTREASONER = Integer.parseInt(args[BaseLineInputOrder.CURRENTREASONER]);
 			EBMODE = BuildingStrategy.getById(Integer.parseInt(args[BaseLineInputOrder.EVENTBUILDER]));
-			comment = "n".toUpperCase().equals(args[BaseLineInputOrder.COMMENTS].toUpperCase()) ? "" : args[BaseLineInputOrder.COMMENTS];
+			comment = "n".equalsIgnoreCase(args[BaseLineInputOrder.COMMENTS].toUpperCase()) ? "" : args[BaseLineInputOrder.COMMENTS];
 		}
 
 		exeperimentDate = FileUtils.d;
@@ -149,7 +143,8 @@ public class BaselineMain {
 					ts.setMemoryB(memoryUsage);
 					ts.setTimestamp(System.currentTimeMillis());
 					process = rspEngine.process(e);
-				} else if (numberEvents % 5 == 0) { // Stream 50 events at time
+				} else if (numberEvents % 5 == 0) {
+					// Stream 50 events at time
 					double memoryUsage = Memory.getMemoryUsage();
 					log.debug("Memory After Sending [" + memoryUsage + "] On Event " + numberEvents);
 					ts.setMemoryA(memoryUsage);
@@ -159,7 +154,8 @@ public class BaselineMain {
 
 				}
 				numberEvents++;
-				rspEngine.progress(5); // for rspesperengine move times forward according to the
+				rspEngine.progress(5);
+				// for rspesperengine move times forward according to the
 				// size of the current window
 				return process;
 			}
@@ -173,7 +169,7 @@ public class BaselineMain {
 
 		FileUtils.createOutputFolder("exp" + EXPERIMENT_NUMBER + "/" + engineName);
 
-		String generalName = "EN" + EXPERIMENT_NUMBER + "_" + "EXE" + EXECUTION + "_" + comment + "_" + dt.format(exeperimentDate) + "_"
+		String generalName = "EN" + EXPERIMENT_NUMBER + "_" + "EXE" + EXECUTION + "_" + comment + "_" + DT.format(exeperimentDate) + "_"
 				+ file.split("\\.")[0] + "R" + CURRENTREASONER + "E" + CURRENTENGINE + eventBuilderCodeName;
 
 		if (input) {
@@ -310,13 +306,13 @@ public class BaselineMain {
 				break;
 			case RESULT:
 				streamingEventResultCollector = new CollectorEventResult(testStand, trig, csv, engineName + "/");
+				break;
 			default:
 				streamingEventResultCollector = new CollectorEventResult(testStand, trig, csv, engineName + "/");
 		}
 	}
 
-	private static void run(String f, String comment, int experimentNumber, Date d, String experimentDescription) throws ClassNotFoundException,
-			SQLException {
+	private static void run(String f, String comment, int experimentNumber, Date d, String experimentDescription) {
 
 		testStand.build(streamingEventResultCollector, experimentResultCollector, engine, streamer);
 
@@ -324,7 +320,6 @@ public class BaselineMain {
 		try {
 			experimentNumber += testStand.run(f, experimentNumber, comment, outputFileName, windowFileName, experimentDescription);
 		} catch (Exception e) {
-
 			log.error(e.getMessage());
 			testStand.stop();
 		}

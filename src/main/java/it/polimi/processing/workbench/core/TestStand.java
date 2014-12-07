@@ -19,7 +19,7 @@ public abstract class TestStand extends Stand implements EventProcessor<Event>, 
 	protected StartableCollector<ExperimentResult> experimentResultCollector;
 
 	protected RSPEngine rspEngine;
-	protected RSPEventStreamer RSPEventStreamer;
+	protected RSPEventStreamer rspEventStreamer;
 	protected Event se;
 
 	public TestStand() {
@@ -27,11 +27,11 @@ public abstract class TestStand extends Stand implements EventProcessor<Event>, 
 	}
 
 	public void build(StartableCollector<EventResult> resultCollector, StartableCollector<ExperimentResult> experimentResultCollector,
-			RSPEngine rspEngine, RSPEventStreamer RSPEventStreamer) {
+			RSPEngine rspEngine, RSPEventStreamer rspEventStreamer) {
 		this.experimentResultCollector = experimentResultCollector;
 		this.resultCollector = resultCollector;
 		this.rspEngine = rspEngine;
-		this.RSPEventStreamer = RSPEventStreamer;
+		this.rspEventStreamer = rspEventStreamer;
 	}
 
 	@Override
@@ -39,17 +39,17 @@ public abstract class TestStand extends Stand implements EventProcessor<Event>, 
 		if (!isOn()) {
 			throw new WrongStatusTransitionException("Can't Switch from Status [" + status + "] to [" + ExecutionState.CLOSED + "]");
 		} else {
-			ExecutionState RSPEventStreamerStatus = RSPEventStreamer.close();
+			ExecutionState rspEventStreamerStatus = rspEventStreamer.close();
 			ExecutionState engineStatus = rspEngine.close();
 			ExecutionState collectorStatus = resultCollector.close();
 			ExecutionState experimenTcollectorStatus = experimentResultCollector.close();
 
-			if (ExecutionState.CLOSED.equals(RSPEventStreamerStatus) && ExecutionState.CLOSED.equals(experimenTcollectorStatus)
+			if (ExecutionState.CLOSED.equals(rspEventStreamerStatus) && ExecutionState.CLOSED.equals(experimenTcollectorStatus)
 					&& ExecutionState.CLOSED.equals(collectorStatus) && ExecutionState.CLOSED.equals(engineStatus)) {
 				status = ExecutionState.CLOSED;
 				log.debug("Status [" + status + "] Closing the TestStand");
 			} else {
-				log.error("RSPEventStreamerStatus: " + RSPEventStreamerStatus);
+				log.error("RSPEventStreamerStatus: " + rspEventStreamerStatus);
 				log.error("collectorStatus: " + collectorStatus);
 				log.error("experimentCollectorStatus: " + experimenTcollectorStatus);
 				log.error("engineStatus: " + engineStatus);
@@ -64,7 +64,7 @@ public abstract class TestStand extends Stand implements EventProcessor<Event>, 
 		if (!isStartable()) {
 			throw new WrongStatusTransitionException("Can't Switch from Status [" + status + "] to [" + ExecutionState.READY + "]");
 		} else {
-			ExecutionState streamerStatus = RSPEventStreamer.init();
+			ExecutionState streamerStatus = rspEventStreamer.init();
 			ExecutionState engineStatus = rspEngine.init();
 			ExecutionState collectorStatus = resultCollector.init();
 			ExecutionState experimenTcollectorStatus = experimentResultCollector.init();
@@ -82,6 +82,5 @@ public abstract class TestStand extends Stand implements EventProcessor<Event>, 
 
 	}
 
-	public abstract int run(String f, int experimentNumber, String comment, String outputFileName, String windowFileName, String experimentDescription)
-			throws Exception;
+	public abstract int run(String f, int experimentNumber, String comment, String outputFileName, String windowFileName, String experimentDescription);
 }

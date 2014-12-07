@@ -41,6 +41,7 @@ public abstract class Stand {
 	 * @return
 	 */
 	public ExecutionState stop() {
-		return status = ExecutionState.OFF;
+		status = ExecutionState.OFF;
+		return status;
 	}
 }

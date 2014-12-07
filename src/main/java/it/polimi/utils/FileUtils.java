@@ -17,7 +17,7 @@ public class FileUtils {
 	static {
 		DateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
 		try {
-			d = dt.parse("2014-12-06");
+			d = dt.parse("2014-12-10");
 		} catch (java.text.ParseException e) {
 			log.info("Wrong parsing");
 			d = new Date();

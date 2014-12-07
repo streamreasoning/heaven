@@ -71,23 +71,22 @@ public class NTStreamer extends RSPEventStreamer {
 					String[] s = parse(line);
 					log.debug("S: " + Arrays.deepToString(s));
 					triples++;
-					if (builder.append(new TripleContainer(s))) {
-						if (builder.canSend()) {
-							processor.process(lastEvent = builder.getEvent());
-							status = ExecutionState.READY;
-							streamedEvents++;
-							log.info("Send Event [" + streamedEvents + "] triples [" + triples + "] of size [" + lastEvent.size() + "]");
-						}
+					boolean append = builder.append(new TripleContainer(s));
+					if (append && builder.canSend()) {
+						lastEvent = builder.getEvent();
+						processor.process(lastEvent);
+						streamedEvents++;
+						log.debug("Send Event [" + streamedEvents + "] triples [" + triples + "] of size [" + lastEvent.size() + "]");
 					} else {
-						status = ExecutionState.READY;
 						log.debug("Still Processing " + line);
 					}
+					status = ExecutionState.READY;
 				}
 				log.info("Triples: [" + triples + "] " + "Events: [" + streamedEvents + "]");
 				br.close();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 	}
 
@@ -110,11 +109,13 @@ public class NTStreamer extends RSPEventStreamer {
 
 	@Override
 	public ExecutionState init() {
-		return status = ExecutionState.READY;
+		status = ExecutionState.READY;
+		return status;
 	}
 
 	@Override
 	public ExecutionState close() {
-		return status = ExecutionState.CLOSED;
+		status = ExecutionState.CLOSED;
+		return status;
 	}
 }

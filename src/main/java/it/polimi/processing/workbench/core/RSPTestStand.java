@@ -11,8 +11,6 @@ import it.polimi.utils.FileUtils;
 import it.polimi.utils.Memory;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,11 +22,9 @@ import lombok.extern.log4j.Log4j;
 public class RSPTestStand extends TestStand {
 
 	private int experimentNumber;
-	private final int numberEvents = 0;
 	private long timestamp, resultTimestamp = 0L;
 	private double memoryA = 0D;
 	private double memoryB = 0D;
-	private final DateFormat dt = new SimpleDateFormat("yyyy_MM_dd");
 	private String outputFileName, windowFileName, inputFileNameWithPath, experimentDescription;
 	private final TimeStrategy timeStrategy;
 
@@ -38,8 +34,7 @@ public class RSPTestStand extends TestStand {
 	}
 
 	@Override
-	public int run(String f, int experimentNumber, String comment, String outputFileName, String windowFileName, String experimentDescription)
-			throws Exception {
+	public int run(String f, int experimentNumber, String comment, String outputFileName, String windowFileName, String experimentDescription) {
 		this.experimentNumber = experimentNumber;
 		this.experimentDescription = experimentDescription;
 		this.inputFileNameWithPath = FileUtils.INPUT_FILE_PATH + f;
@@ -64,7 +59,7 @@ public class RSPTestStand extends TestStand {
 
 			if (ExecutionState.READY.equals(engineStatus)) {
 				try {
-					RSPEventStreamer.stream(getBuffer(inputFileNameWithPath), experimentNumber);
+					rspEventStreamer.stream(getBuffer(inputFileNameWithPath), experimentNumber);
 				} catch (IOException ex) {
 					status = ExecutionState.ERROR;
 					log.error(ex.getMessage());

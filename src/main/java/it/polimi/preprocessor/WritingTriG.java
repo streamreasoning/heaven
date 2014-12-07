@@ -19,7 +19,7 @@ public class WritingTriG {
 		w.close();
 	}
 
-	public void EOF() throws IOException {
+	public void eof() throws IOException {
 		w.write(EOF);
 	}
 

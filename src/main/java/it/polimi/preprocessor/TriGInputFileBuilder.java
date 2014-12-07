@@ -119,7 +119,7 @@ public class TriGInputFileBuilder {
 						currentGraphSize += fillGraph(inputIterator.next());
 						// considering this plus the two typeOf statmenets for a U graph
 					} else {
-						trig.EOF();
+						trig.eof();
 						trig.write("}");
 						endWriting("No more statemens..");
 						return;
@@ -272,12 +272,12 @@ public class TriGInputFileBuilder {
 	private static void completeGraph() throws IOException {
 		log.info("complete the graph");
 		for (Statement nextStatement : tempStatementGraph) {
-			trig.EOF();
+			trig.eof();
 			trig.write("<" + nextStatement.getSubject() + "> <" + nextStatement.getPredicate() + "> <" + nextStatement.getObject() + "> .");
 		}
-		trig.EOF();
+		trig.eof();
 		trig.write("}");
-		trig.EOF();
+		trig.eof();
 	}
 
 	private static void writeHeader(String eventIDBase, int eventNumber) throws IOException {

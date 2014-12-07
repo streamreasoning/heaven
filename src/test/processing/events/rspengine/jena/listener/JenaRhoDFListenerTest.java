@@ -60,7 +60,6 @@ public class JenaRhoDFListenerTest {
 
 			@Override
 			public Object get(String propertyExpression) throws PropertyAccessException {
-				// TODO Auto-generated method stub
 				return null;
 			}
 		} }, null);
@@ -100,7 +99,6 @@ public class JenaRhoDFListenerTest {
 
 			@Override
 			public Object get(String propertyExpression) throws PropertyAccessException {
-				// TODO Auto-generated method stub
 				return null;
 			}
 		} }, null);
@@ -146,7 +144,6 @@ public class JenaRhoDFListenerTest {
 
 			@Override
 			public Object get(String propertyExpression) throws PropertyAccessException {
-				// TODO Auto-generated method stub
 				return null;
 			}
 		} }, null);

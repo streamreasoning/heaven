@@ -52,7 +52,6 @@ public class EmptyCollectorExperimentEvent implements StartableCollector<EventRe
 
 	@Override
 	public boolean processDone() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

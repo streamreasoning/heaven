@@ -34,9 +34,7 @@ public class ResultCollectorListener implements UpdateListener {
 
 		Set<TripleContainer> statements = new HashSet<TripleContainer>();
 		Set<TripleContainer> ABoxTriples = new HashSet<TripleContainer>();
-		// TODO ottimizzazione duplicati lavorando su hashcode, struttura dati dedicata
 		for (EventBean eventBean : newEvents) {
-			System.out.println(eventBean.getUnderlying());
 			TripleEvent storableEvent = (TripleEvent) eventBean.getUnderlying();
 			for (TripleContainer strings : storableEvent.getTriples()) {
 				statements.add(strings);

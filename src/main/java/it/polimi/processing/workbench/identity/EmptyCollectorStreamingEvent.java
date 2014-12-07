@@ -52,7 +52,6 @@ public class EmptyCollectorStreamingEvent implements StartableCollector<EventRes
 
 	@Override
 	public boolean processDone() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

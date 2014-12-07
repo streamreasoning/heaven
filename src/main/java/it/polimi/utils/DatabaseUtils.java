@@ -2,6 +2,10 @@ package it.polimi.utils;
 
 public class DatabaseUtils {
 
+	private DatabaseUtils() {
+
+	}
+
 	public static final String EXPERIMENT_TABLE = "CREATE TABLE IF NOT EXISTS EXPERIMENT " + "(" + " EXP_ID       TEXT                 NOT NULL, "
 			+ "	TS_INIT      TEXT                 NOT NULL, " + "	TS_END       TEXT                 NOT NULL, "
 			+ " ENGINE       TEXT   			  NOT NULL, " + " INPUT_FILE   TEXT   			  NOT NULL, " + " RESULT_FILE  TEXT                 NOT NULL, "

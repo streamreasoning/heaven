@@ -112,8 +112,7 @@ public class TriGStreamer extends RSPEventStreamer {
 
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.info(e.getMessage());
 		}
 	}
 
