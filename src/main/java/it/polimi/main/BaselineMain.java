@@ -10,7 +10,6 @@ import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.factory.ConstantEventBuilder;
 import it.polimi.processing.events.factory.StepEventBuilder;
 import it.polimi.processing.events.factory.abstracts.EventBuilder;
-import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.rspengine.windowed.RSPEngine;
@@ -25,11 +24,11 @@ import it.polimi.processing.streamer.RSPEventStreamer;
 import it.polimi.processing.workbench.collector.CollectorEventResult;
 import it.polimi.processing.workbench.collector.CollectorExperimentResult;
 import it.polimi.processing.workbench.core.RSPTestStand;
-import it.polimi.processing.workbench.core.TestStand;
 import it.polimi.processing.workbench.core.TimeStrategy;
 import it.polimi.processing.workbench.streamer.NTStreamer;
 import it.polimi.utils.ExecutionEnvirorment;
 import it.polimi.utils.FileUtils;
+import it.polimi.utils.BaseLineInputOrder;
 import it.polimi.utils.Memory;
 
 import java.sql.SQLException;
@@ -71,7 +70,7 @@ public class BaselineMain {
 	private static Date exeperimentDate;
 	private static String file, comment;
 
-	private static TestStand<Event> testStand;
+	private static RSPTestStand testStand;
 	private static StartableCollector<EventResult> streamingEventResultCollector;
 	private static StartableCollector<ExperimentResult> experimentResultCollector;
 	private static UpdateListener listener;
@@ -87,14 +86,15 @@ public class BaselineMain {
 	private static String whereOutput, whereWindow, outputFileName, windowFileName, experimentDescription;
 	private static RSPEventStreamer streamer;
 	private static int CURRENTREASONER;
-	private static BuildingStrategy MODE;
+	private static BuildingStrategy EBMODE;
 	private static String engineName;
 	private static String eventBuilderCodeName;
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
 		file = "_CLND_UNIV10INDEX0SEED0.nt";
 
-		boolean input = false;
+		boolean input = Boolean.parseBoolean(args[BaseLineInputOrder.CLI]);
+
 		Scanner in = new Scanner(System.in);
 
 		if (args.length < 5 || input) {
@@ -105,16 +105,16 @@ public class BaselineMain {
 			log.info("Chose a Reasoner: 0:SMPL 1:RHODF 2:FULL ");
 			CURRENTREASONER = in.nextInt();
 			log.info("Chose Streaming Mode: 0:CONSTANT 1:LINEAR 2:STEP 3:EXP");
-			MODE = BuildingStrategy.getById(in.nextInt());
+			EBMODE = BuildingStrategy.getById(in.nextInt());
 			log.info("Add Some Comment?: n:NO or comment");
 			String next = in.next().toUpperCase();
 			comment = next != "n".toUpperCase() ? next : "";
 		} else {
-			EXPERIMENTNUMBER = Integer.parseInt(args[0]);
-			CURRENTENGINE = Integer.parseInt(args[1]);
-			CURRENTREASONER = Integer.parseInt(args[2]);
-			MODE = BuildingStrategy.getById(Integer.parseInt(args[3]));
-			comment = "n".toUpperCase().equals(args[4].toUpperCase()) ? "" : args[4];
+			EXPERIMENTNUMBER = Integer.parseInt(args[BaseLineInputOrder.EXPERIMENTNUMBER]);
+			CURRENTENGINE = Integer.parseInt(args[BaseLineInputOrder.JENA_CURRENTENGINE]);
+			CURRENTREASONER = Integer.parseInt(args[BaseLineInputOrder.CURRENTREASONER]);
+			EBMODE = BuildingStrategy.getById(Integer.parseInt(args[BaseLineInputOrder.EVENTBUILDER]));
+			comment = "n".toUpperCase().equals(args[BaseLineInputOrder.COMMENTS].toUpperCase()) ? "" : args[BaseLineInputOrder.COMMENTS];
 		}
 
 		exeperimentDate = FileUtils.d;
@@ -195,7 +195,7 @@ public class BaselineMain {
 		log.info("Event Builder insert RSPEvent init size");
 		int initSize = in.nextInt();
 		String code = "EB";
-		switch (MODE) {
+		switch (EBMODE) {
 			case CONSTANT:
 				code += "C" + initSize;
 				log.info("CONSTANT Event Builder");
@@ -220,17 +220,17 @@ public class BaselineMain {
 
 	protected static String streamerSelection(String[] args) {
 		EventBuilder<RSPEvent> eb;
-		int initSize = Integer.parseInt(args[5]);
+		int initSize = Integer.parseInt(args[BaseLineInputOrder.INITSIZE]);
 		String code = "EB";
-		switch (MODE) {
+		switch (EBMODE) {
 			case CONSTANT:
 				code += "C" + initSize;
 				log.info("CONSTANT Event Builder Initial Size [" + initSize + "]");
 				eb = new ConstantEventBuilder(initSize);
 				break;
 			case STEP:
-				int height = Integer.parseInt(args[6]);
-				int width = Integer.parseInt(args[7]);
+				int height = Integer.parseInt(args[BaseLineInputOrder.HEIGHT]);
+				int width = Integer.parseInt(args[BaseLineInputOrder.WIDTH]);
 				log.info("STEP Event Builder, Initial Size [" + initSize + "] step height [" + height + "] and width[" + width + "]");
 				eb = new StepEventBuilder(height, width, initSize);
 				code += "S" + initSize + "H" + height + "W" + width;

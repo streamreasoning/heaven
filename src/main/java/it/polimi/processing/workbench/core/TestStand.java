@@ -2,6 +2,7 @@ package it.polimi.processing.workbench.core;
 
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.enums.ExecutionState;
+import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
@@ -12,7 +13,7 @@ import lombok.extern.log4j.Log4j;
 
 @Log4j
 @Getter
-public abstract class TestStand<Event> extends Stand implements EventProcessor<Event>, Startable<ExecutionState> {
+public abstract class TestStand extends Stand implements EventProcessor<Event>, Startable<ExecutionState> {
 
 	protected StartableCollector<EventResult> resultCollector;
 	protected StartableCollector<ExperimentResult> experimentResultCollector;

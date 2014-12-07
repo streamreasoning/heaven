@@ -5,7 +5,7 @@ import it.polimi.processing.collector.saver.EventSaver;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.ExperimentResult;
-import it.polimi.processing.workbench.core.TestStand;
+import it.polimi.processing.workbench.core.EventProcessor;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,12 +19,12 @@ public class CollectorExperimentResult implements StartableCollector<ExperimentR
 
 	private long timestamp;
 	private EventSaver sqlLiteSaver;
-	private TestStand<Event> stand;
+	private EventProcessor<Event> stand;
 	private ExecutionState status;
 	private String where;
 	private ExperimentResult currentExperiment;
 
-	public CollectorExperimentResult(TestStand<Event> stand, EventSaver saver) throws SQLException, ClassNotFoundException {
+	public CollectorExperimentResult(EventProcessor<Event> stand, EventSaver saver) throws SQLException, ClassNotFoundException {
 		this.stand = stand;
 		this.sqlLiteSaver = saver;
 		this.timestamp = System.currentTimeMillis();

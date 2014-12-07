@@ -21,7 +21,7 @@ import lombok.extern.log4j.Log4j;
 @Getter
 @Setter
 @Log4j
-public class RSPTestStand extends TestStand<Event> {
+public class RSPTestStand extends TestStand {
 
 	private int experimentNumber;
 	private final int numberEvents = 0;

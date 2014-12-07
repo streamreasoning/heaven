@@ -24,6 +24,8 @@ import it.polimi.processing.workbench.collector.CollectorExperimentResult;
 import it.polimi.processing.workbench.core.RSPTestStand;
 import it.polimi.processing.workbench.core.TimeStrategy;
 import it.polimi.processing.workbench.streamer.NTStreamer;
+import it.polimi.utils.BaseLineInputOrder;
+import it.polimi.utils.CommonInputOrder;
 import it.polimi.utils.ExecutionEnvirorment;
 import it.polimi.utils.FileUtils;
 import it.polimi.utils.Memory;
@@ -46,8 +48,8 @@ import com.espertech.esper.client.UpdateListener;
 public class CommonMain {
 	public static final int PLAIN2369 = 0, PLAIN2369CnS = 1, PLAIN2369SMPL = 2, PLAIN2369RHODF = 3;
 
-	public static int CURRENTENGINE;
-	public static int EXPERIMENTNUMBER;
+	public static int CURRENT_ENGINE;
+	public static int EXPERIMENT_NUMBER;
 
 	private static String JENASMPLNAME = "jenasmpl";
 	private static String JENARHODFNAME = "jenarhodf";
@@ -80,7 +82,7 @@ public class CommonMain {
 	private static CSVEventSaver csv = new CSVEventSaver();
 	private static String whereOutput, whereWindow, outputFileName, windowFileName, experimentDescription;
 	private static RSPEventStreamer streamer;
-	private static BuildingStrategy MODE;
+	private static BuildingStrategy EVENT_BUILDER;
 
 	private static int EXPERIMENTTYPE;
 
@@ -95,29 +97,29 @@ public class CommonMain {
 
 		file = "_CLND_UNIV10INDEX0SEED0.nt";
 
-		boolean input = false;
+		boolean input = Boolean.parseBoolean(args[BaseLineInputOrder.CLI]);
 		Scanner in = new Scanner(System.in);
 
 		if (args.length < 5 || input) {
 			log.info("Write Experiment Number: ");
-			EXPERIMENTNUMBER = in.nextInt();
+			EXPERIMENT_NUMBER = in.nextInt();
 			log.info("Chose an Engine: 0:PLAIN2369 1:CS 2:CSSMPL 3:CSRHODF");
-			CURRENTENGINE = in.nextInt();
+			CURRENT_ENGINE = in.nextInt();
 			log.info("Chose Streaming Mode: 0:CONSTANT 1:LINEAR 2:STEP 3:EXP");
-			MODE = BuildingStrategy.getById(in.nextInt());
+			EVENT_BUILDER = BuildingStrategy.getById(in.nextInt());
 			log.info("Add Some Comment?: n:NO or comment");
 			String next = in.next().toUpperCase();
 			comment = next != "n".toUpperCase() ? next : "";
 		} else {
-			EXPERIMENTNUMBER = Integer.parseInt(args[0]);
-			CURRENTENGINE = Integer.parseInt(args[1]);
-			MODE = BuildingStrategy.getById(Integer.parseInt(args[2]));
-			comment = "n".toUpperCase().equals(args[3].toUpperCase()) ? "" : args[3];
+			EXPERIMENT_NUMBER = Integer.parseInt(args[CommonInputOrder.EXPERIMENT_NUMBER]);
+			CURRENT_ENGINE = Integer.parseInt(args[CommonInputOrder.CURRENT_ENGINE]);
+			EVENT_BUILDER = BuildingStrategy.getById(Integer.parseInt(args[CommonInputOrder.EVENTBUILDER]));
+			comment = "n".toUpperCase().equals(args[CommonInputOrder.COMMENTS].toUpperCase()) ? "" : args[CommonInputOrder.COMMENTS];
 		}
 
 		exeperimentDate = FileUtils.d;
 
-		log.info("Experiment [" + EXPERIMENTNUMBER + "] of [" + exeperimentDate + "]");
+		log.info("Experiment [" + EXPERIMENT_NUMBER + "] of [" + exeperimentDate + "]");
 
 		testStand = new RSPTestStand(new TimeStrategy() {
 
@@ -148,20 +150,20 @@ public class CommonMain {
 
 		eventBuilderCodeName = input ? streamerSelection(in) : streamerSelection(args);
 
-		engineName = engineNames[CURRENTENGINE];
+		engineName = engineNames[CURRENT_ENGINE];
 
-		experimentDescription = "EXPERIMENT_ON_" + file + "_WITH_ENGINE_" + engineName + "EVENT_" + CURRENTENGINE;
+		experimentDescription = "EXPERIMENT_ON_" + file + "_WITH_ENGINE_" + engineName + "EVENT_" + CURRENT_ENGINE;
 
-		FileUtils.createOutputFolder("exp" + EXPERIMENTNUMBER + "/" + engineName);
+		FileUtils.createOutputFolder("exp" + EXPERIMENT_NUMBER + "/" + engineName);
 
-		String generalName = "EN" + EXPERIMENTNUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + file.split("\\.")[0] + "_"
+		String generalName = "EN" + EXPERIMENT_NUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + file.split("\\.")[0] + "_"
 				+ eventBuilderCodeName;
 
 		outputFileName = "Result_" + generalName;
 		windowFileName = "Window_" + generalName;
 
-		whereOutput = "exp" + EXPERIMENTNUMBER + "/" + engineName + "/" + outputFileName;
-		whereWindow = "exp" + EXPERIMENTNUMBER + "/" + engineName + "/" + windowFileName;
+		whereOutput = "exp" + EXPERIMENT_NUMBER + "/" + engineName + "/" + outputFileName;
+		whereWindow = "exp" + EXPERIMENT_NUMBER + "/" + engineName + "/" + windowFileName;
 
 		log.info("Output file name will be: [" + whereOutput + "]");
 		log.info("Window file name will be: [" + whereWindow + "]");
@@ -179,12 +181,12 @@ public class CommonMain {
 
 		in.close();
 
-		run(file, comment, EXPERIMENTNUMBER, exeperimentDate, experimentDescription);
+		run(file, comment, EXPERIMENT_NUMBER, exeperimentDate, experimentDescription);
 
 	}
 
 	protected static void engineSelection() {
-		switch (CURRENTENGINE) {
+		switch (CURRENT_ENGINE) {
 			case PLAIN2369:
 				listener = new ResultCollectorListener(testStand, engineName, 0);
 				engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, ontologyClass, listener);
@@ -211,7 +213,7 @@ public class CommonMain {
 		log.debug("Event Builder insert RSPEvent init size");
 		int initSize = in.nextInt();
 		String code = "EB";
-		switch (MODE) {
+		switch (EVENT_BUILDER) {
 			case CONSTANT:
 				code += "C" + initSize;
 				log.info("CONSTANT Event Builder");
@@ -236,17 +238,17 @@ public class CommonMain {
 
 	protected static String streamerSelection(String[] args) {
 		EventBuilder<RSPEvent> eb;
-		int initSize = Integer.parseInt(args[5]);
+		int initSize = Integer.parseInt(args[CommonInputOrder.INITSIZE]);
 		String code = "EB";
-		switch (MODE) {
+		switch (EVENT_BUILDER) {
 			case CONSTANT:
 				code += "C" + initSize;
 				log.info("CONSTANT Event Builder Initial Size [" + initSize + "]");
 				eb = new ConstantEventBuilder(initSize);
 				break;
 			case STEP:
-				int height = Integer.parseInt(args[6]);
-				int width = Integer.parseInt(args[7]);
+				int height = Integer.parseInt(args[CommonInputOrder.HEIGHT]);
+				int width = Integer.parseInt(args[CommonInputOrder.WIDTH]);
 				log.info("STEP Event Builder, Initial Size [" + initSize + "] step height [" + height + "] and width[" + width + "]");
 				eb = new StepEventBuilder(height, width, initSize);
 				code += "S" + initSize + "H" + height + "W" + width;
