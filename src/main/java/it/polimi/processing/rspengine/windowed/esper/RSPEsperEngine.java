@@ -46,6 +46,7 @@ public abstract class RSPEsperEngine extends RSPEngine {
 
 	public void moveTimePortion(int portion) {
 		time += Queries.window / portion;
+		windowShots += time % 1000 == 0 ? 1 : 0;
 		cepRT.sendEvent(new CurrentTimeEvent(time));
 		log.debug("Sent time Event");
 	}

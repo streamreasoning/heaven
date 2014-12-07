@@ -7,8 +7,8 @@ public class ExpEventBuilder extends RSPEventBuilder {
 
 	private int power = 0;
 
-	public ExpEventBuilder(int base, int initSize) {
-		super(BuildingStrategy.EXP, base, 1, initSize);
+	public ExpEventBuilder(int base, int initSize, int experiment) {
+		super(BuildingStrategy.EXP, base, 1, initSize, experiment);
 		eventNumber = initSize;
 	}
 

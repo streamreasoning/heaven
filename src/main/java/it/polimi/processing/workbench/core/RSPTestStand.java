@@ -98,15 +98,13 @@ public class RSPTestStand extends TestStand {
 
 	public boolean process(RSPEvent e) {
 		return timeStrategy.apply(e, this);
-
 	}
 
 	@Override
 	public boolean processDone() {
-		log.debug("Move window");
+		log.debug("Process is Done, Window Shosts");
 		resultTimestamp = System.currentTimeMillis();
 		memoryA = Memory.getMemoryUsage();
-		resultTimestamp = System.currentTimeMillis();
 		return rspEngine.processDone();
 	}
 
@@ -117,15 +115,19 @@ public class RSPTestStand extends TestStand {
 			resultTimestamp = engineResult.getTimestamp();
 			String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + "/" + engineResult.getFrom() + "/" + engineResult.getTo()
 					+ ">";
-
-			TSResult r2 = new TSResult(id, eventNumber, engineResult.getStatements(), timestamp, resultTimestamp, memoryA, memoryB,
+			TSResult r2 = new TSResult(id, eventNumber, engineResult.getStatements(), timestamp, resultTimestamp, memoryB, memoryA,
 					engineResult.getCompleteSMPL(), engineResult.getSoundSMPL(), engineResult.getCompleteRHODF(), engineResult.getSoundRHODF());
 
 			boolean ret = resultCollector.process(r2, w);
+
+			if (engineResult.isAbox()) {
+				this.memoryA = this.memoryB = 0D;
+				this.timestamp = this.resultTimestamp = 0L;
+			}
+
 			return ret;
 		} catch (IOException e) {
 			return false;
 		}
 	}
-
 }

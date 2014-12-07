@@ -5,8 +5,8 @@ import it.polimi.processing.events.factory.abstracts.RSPEventBuilder;
 
 public class ConstantEventBuilder extends RSPEventBuilder {
 
-	public ConstantEventBuilder(int initSize) {
-		super(BuildingStrategy.CONSTANT, 0, 0, initSize);
+	public ConstantEventBuilder(int initSize, int experiment) {
+		super(BuildingStrategy.CONSTANT, 0, 0, initSize, experiment);
 		roundSize = initSize;
 	}
 

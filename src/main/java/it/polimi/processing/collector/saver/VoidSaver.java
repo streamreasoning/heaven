@@ -9,7 +9,7 @@ public class VoidSaver implements EventSaver {
 
 	@Override
 	public boolean save(CollectableData d, String where) {
-		log.info("Save Protected");
+		log.debug("Save Protected");
 		return true;
 	}
 

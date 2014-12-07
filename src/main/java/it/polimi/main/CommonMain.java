@@ -159,8 +159,12 @@ public class CommonMain {
 		String generalName = "EN" + EXPERIMENT_NUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + file.split("\\.")[0] + "_"
 				+ eventBuilderCodeName;
 
-		outputFileName = "Result_" + generalName;
-		windowFileName = "Window_" + generalName;
+		if (input) {
+			log.info("Choose Experiment Type: 0:TRIGRESULT 1:LATENCY 2:MEMORY");
+			EXPERIMENTTYPE = in.nextInt();
+		} else {
+			EXPERIMENTTYPE = Integer.parseInt(args[args.length - 1]);
+		}
 
 		whereOutput = "exp" + EXPERIMENT_NUMBER + "/" + engineName + "/" + outputFileName;
 		whereWindow = "exp" + EXPERIMENT_NUMBER + "/" + engineName + "/" + windowFileName;
@@ -168,12 +172,14 @@ public class CommonMain {
 		log.info("Output file name will be: [" + whereOutput + "]");
 		log.info("Window file name will be: [" + whereWindow + "]");
 
-		if (input) {
-			log.info("Choose Experiment Type: 0:TRIGRESULT 1:LATENCY 2:MEMORY");
-			EXPERIMENTTYPE = in.nextInt();
-		} else {
-			EXPERIMENTTYPE = Integer.parseInt(args[args.length - 1]);
-		}
+		outputFileName = EXPERIMENTTYPE + "Result_" + generalName;
+		windowFileName = EXPERIMENTTYPE + "Window_" + generalName;
+
+		whereOutput = "exp" + EXPERIMENT_NUMBER + "/" + engineName + "/" + outputFileName;
+		whereWindow = "exp" + EXPERIMENT_NUMBER + "/" + engineName + "/" + windowFileName;
+
+		log.info("Output file name will be: [" + whereOutput + "]");
+		log.info("Window file name will be: [" + whereWindow + "]");
 
 		collectorSelection();
 
@@ -217,17 +223,17 @@ public class CommonMain {
 			case CONSTANT:
 				code += "C" + initSize;
 				log.info("CONSTANT Event Builder");
-				eb = new ConstantEventBuilder(initSize);
+				eb = new ConstantEventBuilder(initSize, EXPERIMENT_NUMBER);
 				break;
 			case STEP:
 				log.info("STEP Event Builder, insert step height and width");
 				int height = in.nextInt();
 				int width = in.nextInt();
-				eb = new StepEventBuilder(height, width, initSize);
+				eb = new StepEventBuilder(height, width, initSize, EXPERIMENT_NUMBER);
 				code += "S" + initSize + "H" + height + "W" + width;
 				break;
 			default:
-				eb = new ConstantEventBuilder(initSize);
+				eb = new ConstantEventBuilder(initSize, EXPERIMENT_NUMBER);
 				break;
 
 		}
@@ -244,17 +250,17 @@ public class CommonMain {
 			case CONSTANT:
 				code += "C" + initSize;
 				log.info("CONSTANT Event Builder Initial Size [" + initSize + "]");
-				eb = new ConstantEventBuilder(initSize);
+				eb = new ConstantEventBuilder(initSize, EXPERIMENT_NUMBER);
 				break;
 			case STEP:
 				int height = Integer.parseInt(args[CommonInputOrder.HEIGHT]);
 				int width = Integer.parseInt(args[CommonInputOrder.WIDTH]);
 				log.info("STEP Event Builder, Initial Size [" + initSize + "] step height [" + height + "] and width[" + width + "]");
-				eb = new StepEventBuilder(height, width, initSize);
+				eb = new StepEventBuilder(height, width, initSize, EXPERIMENT_NUMBER);
 				code += "S" + initSize + "H" + height + "W" + width;
 				break;
 			default:
-				eb = new ConstantEventBuilder(initSize);
+				eb = new ConstantEventBuilder(initSize, EXPERIMENT_NUMBER);
 				break;
 
 		}

@@ -51,7 +51,11 @@ public class CSVEventSaver implements EventSaver {
 	public boolean save(CollectableData dt, String where) {
 		try {
 			if (ExecutionState.READY.equals(status)) {
-				String path = outputPath + where.replace("Result", "RESLOG").replace("Window", "WINLOG") + FileUtils.CSV;
+
+				String replace = where.replace("0Result", "RESLOG").replace("0Window", "WINLOG").replace("1Result", "LATLOG")
+						.replace("1Window", "WINLATLOG").replace("2Result", "MEMLOG").replace("2Window", "WINMEMLOG");
+
+				String path = outputPath + replace + FileUtils.CSV;
 				file = new File(path);
 				writer = new FileWriter(file, true);
 

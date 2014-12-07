@@ -20,8 +20,8 @@ public class TSResult implements EventResult {
 	private int eventNumber;
 	private Set<TripleContainer> statements;
 	private long inputTimestamp, outputTimestamp;
-	private double memoryA;
 	private double memoryB;
+	private double memoryA;
 	private Boolean cs, ss, cr, sr;
 
 	@Override

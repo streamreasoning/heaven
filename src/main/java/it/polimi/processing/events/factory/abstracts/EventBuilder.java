@@ -10,6 +10,8 @@ public interface EventBuilder<T> {
 
 	public boolean canSend();
 
-	public boolean append(Set<TripleContainer> triple, int eventNumber, int experimentNumber);
+	public boolean append(Set<TripleContainer> triple);
+
+	public boolean append(TripleContainer triple);
 
 }

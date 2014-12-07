@@ -5,8 +5,8 @@ import it.polimi.processing.events.factory.abstracts.RSPEventBuilder;
 
 public class LinearEventBuilder extends RSPEventBuilder {
 
-	public LinearEventBuilder(int height, int initSize) {
-		super(BuildingStrategy.LINEAR, height, 1, initSize);
+	public LinearEventBuilder(int height, int initSize, int experiment) {
+		super(BuildingStrategy.LINEAR, height, 1, initSize, experiment);
 		eventNumber = initSize;
 	}
 

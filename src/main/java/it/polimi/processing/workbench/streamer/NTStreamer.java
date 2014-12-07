@@ -13,8 +13,6 @@ import it.polimi.processing.workbench.core.EventProcessor;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
@@ -66,37 +64,29 @@ public class NTStreamer extends RSPEventStreamer {
 			if (!ExecutionState.READY.equals(status)) {
 				throw new WrongStatusTransitionException("Not Ready " + status);
 			} else {
-				int streamedEvents = 0;
+				int streamedEvents = 0, triples = 0;
 				String line;
-				Set<TripleContainer> eventTriples = new HashSet<TripleContainer>();
-
-				while ((line = br.readLine()) != null && streamedEvents <= eventLimit) {
+				while ((line = br.readLine()) != null && streamedEvents <= eventLimit - 1) {
 					status = ExecutionState.RUNNING;
 					String[] s = parse(line);
 					log.debug("S: " + Arrays.deepToString(s));
-					eventTriples.add(new TripleContainer(s));
-
-					if (builder.append(eventTriples, streamedEvents, experimentNumber)) {
-						if (processor.process(lastEvent = builder.getEvent())) {
+					triples++;
+					if (builder.append(new TripleContainer(s))) {
+						if (builder.canSend()) {
+							processor.process(lastEvent = builder.getEvent());
 							status = ExecutionState.READY;
 							streamedEvents++;
-							log.debug("Sent [" + eventTriples.size() + "] New Events " + line);
-						} else {
-							log.error("Event Not Sent");
+							log.info("Send Event [" + streamedEvents + "] triples [" + triples + "] of size [" + lastEvent.size() + "]");
 						}
 					} else {
 						status = ExecutionState.READY;
 						log.debug("Still Processing " + line);
 					}
-
-					eventTriples = new HashSet<TripleContainer>();
 				}
-
-				log.info("Number of Events: " + streamedEvents);
+				log.info("Triples: [" + triples + "] " + "Events: [" + streamedEvents + "]");
 				br.close();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
