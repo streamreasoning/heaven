@@ -20,6 +20,7 @@
 .project
 .settings/
 src/main/resources/data/preprocessing/
+.launch
 
 #Maven
 target
