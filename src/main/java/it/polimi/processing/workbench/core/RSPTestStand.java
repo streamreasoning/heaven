@@ -27,6 +27,7 @@ public class RSPTestStand extends TestStand {
 	private double memoryB = 0D;
 	private String outputFileName, windowFileName, inputFileNameWithPath, experimentDescription;
 	private final TimeStrategy timeStrategy;
+	private TSResult currentResult;
 
 	public RSPTestStand(TimeStrategy strategy) {
 		super();
@@ -92,7 +93,7 @@ public class RSPTestStand extends TestStand {
 	}
 
 	public boolean process(RSPEvent e) {
-		return timeStrategy.apply(e, this);
+		return timeStrategy.apply(e, this); // TODO bisogna rivedere il significato di strategy
 	}
 
 	@Override
@@ -114,11 +115,6 @@ public class RSPTestStand extends TestStand {
 					engineResult.getCompleteSMPL(), engineResult.getSoundSMPL(), engineResult.getCompleteRHODF(), engineResult.getSoundRHODF());
 
 			boolean ret = resultCollector.process(r2, w);
-
-			if (engineResult.isAbox()) {
-				this.memoryA = this.memoryB = 0D;
-				this.timestamp = this.resultTimestamp = 0L;
-			}
 
 			return ret;
 		} catch (IOException e) {

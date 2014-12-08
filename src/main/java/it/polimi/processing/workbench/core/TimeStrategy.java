@@ -4,6 +4,6 @@ import it.polimi.processing.events.RSPEvent;
 
 public interface TimeStrategy {
 
-	public boolean apply(RSPEvent e, RSPTestStand ts);
+	public boolean apply(RSPEvent e, RSPTestStand teststand);
 
 }

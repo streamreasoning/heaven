@@ -1,6 +1,5 @@
-package it.polimi.main;
+package it.polimi.main.cli;
 
-import it.polimi.main.strategies.AggregationStrategy;
 import it.polimi.main.strategies.OneToOneStrategy;
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.collector.saver.CSVEventSaver;
@@ -24,9 +23,7 @@ import it.polimi.processing.validation.JenaSMPLCSListener;
 import it.polimi.processing.workbench.collector.CollectorEventResult;
 import it.polimi.processing.workbench.collector.CollectorExperimentResult;
 import it.polimi.processing.workbench.core.RSPTestStand;
-import it.polimi.processing.workbench.core.TimeStrategy;
 import it.polimi.processing.workbench.streamer.NTStreamer;
-import it.polimi.utils.CommonInputOrder;
 import it.polimi.utils.ExecutionEnvirorment;
 import it.polimi.utils.FileUtils;
 
@@ -35,6 +32,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -91,37 +89,31 @@ public class CommonMain {
 	private static final int RESULT = 0;
 	private static final int LATENCY = 1;
 	private static final int MEMORY = 2;
-
-	private static int EXECUTION;
-	private static int X;
-	private static int Y;
-	private static int INITSIZE;
-	private static int EVENTS = 1000;
+	private static int eventLimit = 1000;
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
 
-		file = args[CommonInputOrder.FILE];// _CLND_UNIV10INDEX0SEED0.nt
-		EVENTS = Integer.parseInt(args[CommonInputOrder.EVENTS]);
-		EXPERIMENTTYPE = Integer.parseInt(args[CommonInputOrder.EXPERIMENT_TYPE]);
-		EXPERIMENT_NUMBER = Integer.parseInt(args[CommonInputOrder.EXPERIMENTNUMBER]);
-		EXECUTION = Integer.parseInt(args[CommonInputOrder.EXECUTIONNUMBER]);
-		CURRENT_ENGINE = Integer.parseInt(args[CommonInputOrder.CURRENT_ENGINE]);
-		comment = "n".equalsIgnoreCase(args[CommonInputOrder.COMMENTS].toUpperCase()) ? "" : args[CommonInputOrder.COMMENTS];
-		EVENT_BUILDER = BuildingStrategy.getById(Integer.parseInt(args[CommonInputOrder.EVENTBUILDER]));
-		INITSIZE = Integer.parseInt(args[CommonInputOrder.INITSIZE]);
-		X = Integer.parseInt(args[CommonInputOrder.X]);
-		Y = Integer.parseInt(args[CommonInputOrder.Y]);
+		file = "_CLND_UNIV10INDEX0SEED0.nt";
+
+		Scanner in = new Scanner(System.in);
+
+		log.info("Write Experiment Number: ");
+		EXPERIMENT_NUMBER = in.nextInt();
+		log.info("Chose an Engine: 0:PLAIN2369 1:CS 2:CSSMPL 3:CSRHODF");
+		CURRENT_ENGINE = in.nextInt();
+		log.info("Chose Streaming Mode: 0:CONSTANT 1:LINEAR 2:STEP 3:EXP");
+		EVENT_BUILDER = BuildingStrategy.getById(in.nextInt());
+		log.info("Add Some Comment?: n:NO or comment");
+		String next = in.next().toUpperCase();
+		comment = next != "n".toUpperCase() ? next : "";
 
 		exeperimentDate = FileUtils.d;
 
 		log.info("Experiment [" + EXPERIMENT_NUMBER + "] of [" + exeperimentDate + "]");
 
-		TimeStrategy strategy = (INITSIZE == 1) ? new OneToOneStrategy() : new AggregationStrategy(5);
-		testStand = new RSPTestStand(strategy);
+		testStand = new RSPTestStand(new OneToOneStrategy());
 
-		log.info("Experiment [" + EXPERIMENT_NUMBER + "] of [" + exeperimentDate + "]");
-
-		eventBuilderCodeName = streamerSelection();
+		eventBuilderCodeName = streamerSelection(in);
 
 		engineName = engineNames[CURRENT_ENGINE];
 
@@ -129,8 +121,11 @@ public class CommonMain {
 
 		FileUtils.createOutputFolder("exp" + EXPERIMENT_NUMBER + "/" + engineName);
 
-		String generalName = "EN" + EXPERIMENT_NUMBER + "_" + "EXE" + EXECUTION + "_" + comment + "_" + dt.format(exeperimentDate) + "_"
-				+ file.split("\\.")[0] + "_" + eventBuilderCodeName;
+		String generalName = "EN" + EXPERIMENT_NUMBER + "_" + comment + "_" + dt.format(exeperimentDate) + "_" + file.split("\\.")[0] + "_"
+				+ eventBuilderCodeName;
+
+		log.info("Choose Experiment Type: 0:TRIGRESULT 1:LATENCY 2:MEMORY");
+		EXPERIMENTTYPE = in.nextInt();
 
 		whereOutput = "exp" + EXPERIMENT_NUMBER + "/" + engineName + "/" + outputFileName;
 		whereWindow = "exp" + EXPERIMENT_NUMBER + "/" + engineName + "/" + windowFileName;
@@ -150,6 +145,8 @@ public class CommonMain {
 		collectorSelection();
 
 		engineSelection();
+
+		in.close();
 
 		run(file, comment, EXPERIMENT_NUMBER, exeperimentDate, experimentDescription);
 
@@ -178,27 +175,31 @@ public class CommonMain {
 		}
 	}
 
-	protected static String streamerSelection() {
+	protected static String streamerSelection(Scanner in) {
 		EventBuilder<RSPEvent> eb;
+		log.debug("Event Builder insert RSPEvent init size");
+		int initSize = in.nextInt();
 		String code = "EB";
 		switch (EVENT_BUILDER) {
 			case CONSTANT:
-				code += "C" + INITSIZE;
-				log.info("CONSTANT Event Builder Initial Size [" + INITSIZE + "]");
-				eb = new ConstantEventBuilder(INITSIZE, EXPERIMENT_NUMBER);
+				code += "C" + initSize;
+				log.info("CONSTANT Event Builder");
+				eb = new ConstantEventBuilder(initSize, EXPERIMENT_NUMBER);
 				break;
 			case STEP:
-
-				log.info("STEP Event Builder, Initial Size [" + INITSIZE + "] step height [" + X + "] and width[" + Y + "]");
-				eb = new StepEventBuilder(X, Y, INITSIZE, EXPERIMENT_NUMBER);
-				code += "S" + INITSIZE + "H" + X + "W" + Y;
+				log.info("STEP Event Builder, insert step height and width");
+				int height = in.nextInt();
+				int width = in.nextInt();
+				eb = new StepEventBuilder(height, width, initSize, EXPERIMENT_NUMBER);
+				code += "S" + initSize + "H" + height + "W" + width;
 				break;
 			default:
-				eb = new ConstantEventBuilder(INITSIZE, EXPERIMENT_NUMBER);
+				eb = null;
 				break;
 
 		}
-		streamer = new NTStreamer(testStand, eb);
+
+		streamer = new NTStreamer(testStand, eb, eventLimit);
 		return code;
 	}
 
