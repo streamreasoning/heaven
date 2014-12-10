@@ -82,7 +82,7 @@ public class NTStreamer extends RSPEventStreamer {
 					}
 					status = ExecutionState.READY;
 				}
-				log.info("Triples: [" + triples + "] " + "Events: [" + streamedEvents + "]");
+				log.info("Triples: [" + triples + "] " + "RSPEvents: [" + streamedEvents + "]");
 				br.close();
 			}
 		} catch (IOException e) {
