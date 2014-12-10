@@ -21,6 +21,7 @@ public abstract class TestStand extends Stand implements EventProcessor<Event>, 
 	protected RSPEngine rspEngine;
 	protected RSPEventStreamer rspEventStreamer;
 	protected Event se;
+	protected int eventNumber, tsResultEvents = 0;
 
 	public TestStand() {
 		super(ExecutionState.NOT_READY, null);
@@ -55,6 +56,8 @@ public abstract class TestStand extends Stand implements EventProcessor<Event>, 
 				log.error("engineStatus: " + engineStatus);
 				status = ExecutionState.ERROR;
 			}
+
+			log.info("Processed [" + tsResultEvents + "] TSREsult Events");
 			return status;
 		}
 	}

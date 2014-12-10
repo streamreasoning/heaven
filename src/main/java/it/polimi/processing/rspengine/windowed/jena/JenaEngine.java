@@ -47,7 +47,7 @@ public abstract class JenaEngine extends RSPEsperEngine {
 
 	protected void initQueries() {
 
-		EPStatement out = cepAdm.createEPL(" select irstream * from TEvent.win:time(1000 msec) output every 100msec");
+		EPStatement out = cepAdm.createEPL(" select irstream * from TEvent.win:time(1000 msec) output every 100 msec");
 		out.addListener(listener);
 		// out.setSubscriber(new MySubscriber(out));
 	}
@@ -90,7 +90,6 @@ public abstract class JenaEngine extends RSPEsperEngine {
 		status = ExecutionState.RUNNING;
 		rspEventsNumber++;
 		handleEvent(e);
-
 		log.debug("Status[" + (status = ExecutionState.READY) + "] Parsing done, prepare time scheduling...");
 
 		return true;

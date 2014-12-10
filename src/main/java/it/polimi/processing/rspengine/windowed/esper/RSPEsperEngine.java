@@ -25,7 +25,7 @@ public abstract class RSPEsperEngine extends RSPEngine {
 	protected static EPAdministrator cepAdm;
 	protected static ConfigurationMethodRef ref;
 
-	protected int windowShots, time = 0;
+	protected int windowShots, time = 0, rspEventsNumber = 0, esperEventsNumber = 0;
 
 	public RSPEsperEngine(String name, EventProcessor<Event> collector) {
 		super(name, collector);
@@ -69,7 +69,7 @@ public abstract class RSPEsperEngine extends RSPEngine {
 
 	@Override
 	public int getEventNumber() {
-		return getWindowShots();
+		return rspEventsNumber;
 	}
 
 	@Override
