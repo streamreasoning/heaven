@@ -25,6 +25,7 @@ public class JenaEngineStmt extends JenaEngine {
 	protected void handleEvent(RSPEvent e) {
 		for (TripleContainer tc : e.getEventTriples()) {
 			String[] t = tc.getTriple();
+			esperEventsNumber++;
 			cepRT.sendEvent(new StatementEvent(createStatement(t), cepRT.getCurrentTime(), System.currentTimeMillis()));
 		}
 	}

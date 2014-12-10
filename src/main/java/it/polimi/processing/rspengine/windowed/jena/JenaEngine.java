@@ -47,8 +47,9 @@ public abstract class JenaEngine extends RSPEsperEngine {
 
 	protected void initQueries() {
 
-		EPStatement out = cepAdm.createEPL("insert into Out select * from TEvent.win:time(1000 msec) output all every 1000msec ");
+		EPStatement out = cepAdm.createEPL(" select irstream * from TEvent.win:time(1000 msec) output every 100msec");
 		out.addListener(listener);
+		// out.setSubscriber(new MySubscriber(out));
 	}
 
 	@Override
@@ -87,7 +88,7 @@ public abstract class JenaEngine extends RSPEsperEngine {
 	public boolean process(RSPEvent e) {
 		setCurrentEvent(e);
 		status = ExecutionState.RUNNING;
-
+		rspEventsNumber++;
 		handleEvent(e);
 
 		log.debug("Status[" + (status = ExecutionState.READY) + "] Parsing done, prepare time scheduling...");
@@ -110,7 +111,8 @@ public abstract class JenaEngine extends RSPEsperEngine {
 	@Override
 	public ExecutionState close() {
 		status = ExecutionState.CLOSED;
-		log.info("Status[" + status + "] Nothing to do...Turing Off");
+		log.info("Status[" + status + "] Turing Off Processed RSPEvents [" + rspEventsNumber + "]  EsperEvents [" + esperEventsNumber + "] Windows ["
+				+ windowShots + "] ");
 		return status;
 	}
 

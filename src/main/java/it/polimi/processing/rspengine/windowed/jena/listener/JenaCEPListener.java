@@ -44,36 +44,43 @@ public abstract class JenaCEPListener implements UpdateListener {
 	@Override
 	public void update(EventBean[] newData, EventBean[] oldData) {
 
-		abox = ModelFactory.createMemModelMaker().createDefaultModel().getGraph();
-		ABoxTriples = new HashSet<TripleContainer>();
-
-		for (EventBean e : newData) {
-			JenaEsperEvent underlying = (JenaEsperEvent) e.getUnderlying();
-			ABoxTriples.addAll(underlying.serialize());
-			abox = underlying.update(abox);
+		if (oldData != null) {
+			log.debug("[" + oldData.length + "] Old Events are still here");
 		}
 
-		reasoner = getReasoner();
-		InfGraph graph = reasoner.bindSchema(TBoxStar.getGraph()).bind(abox);
-		ABoxStar = new InfModelImpl(graph);
+		if (newData != null) {
+			log.debug("[" + newData.length + "] New Events");
 
-		Set<TripleContainer> statements = new HashSet<TripleContainer>();
-		StmtIterator iterator = ABoxStar.difference(TBoxStar).listStatements();
+			abox = ModelFactory.createMemModelMaker().createDefaultModel().getGraph();
+			ABoxTriples = new HashSet<TripleContainer>();
 
-		Triple t;
-		TripleContainer statementStrings;
-		while (iterator.hasNext()) {
-			t = iterator.next().asTriple();
-			statementStrings = new TripleContainer(t.getSubject().toString(), t.getPredicate().toString(), t.getObject().toString());
-			statements.add(statementStrings);
+			for (EventBean e : newData) {
+				JenaEsperEvent underlying = (JenaEsperEvent) e.getUnderlying();
+				ABoxTriples.addAll(underlying.serialize());
+				abox = underlying.update(abox);
+			}
+
+			reasoner = getReasoner();
+			InfGraph graph = reasoner.bindSchema(TBoxStar.getGraph()).bind(abox);
+			ABoxStar = new InfModelImpl(graph);
+
+			Set<TripleContainer> statements = new HashSet<TripleContainer>();
+			StmtIterator iterator = ABoxStar.difference(TBoxStar).listStatements();
+
+			Triple t;
+			TripleContainer statementStrings;
+			while (iterator.hasNext()) {
+				t = iterator.next().asTriple();
+				statementStrings = new TripleContainer(t.getSubject().toString(), t.getPredicate().toString(), t.getObject().toString());
+				statements.add(statementStrings);
+			}
+			if (collector != null) {
+				log.debug("Send Event to the StoreCollector");
+				collector.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), false));
+				collector.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), true));
+			}
+			eventNumber += ABoxTriples.size() + 1;
 		}
-		if (collector != null) {
-			log.debug("Send Event to the StoreCollector");
-			collector.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), false));
-			collector.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), true));
-		}
-		eventNumber += ABoxTriples.size() + 1;
-
 	}
 
 	protected abstract Reasoner getReasoner();

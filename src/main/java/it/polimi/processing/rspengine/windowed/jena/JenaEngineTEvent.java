@@ -5,6 +5,7 @@ import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.windowed.esper.plain.events.TEvent;
 import it.polimi.processing.workbench.core.EventProcessor;
+import lombok.extern.log4j.Log4j;
 
 import com.espertech.esper.client.UpdateListener;
 
@@ -20,6 +21,7 @@ import com.espertech.esper.client.UpdateListener;
  * by refering statements
  * 
  * **/
+@Log4j
 public class JenaEngineTEvent extends JenaEngine {
 
 	public JenaEngineTEvent(String name, EventProcessor<Event> collector, UpdateListener listener) {
@@ -30,6 +32,7 @@ public class JenaEngineTEvent extends JenaEngine {
 	protected void handleEvent(RSPEvent e) {
 		for (TripleContainer tc : e.getEventTriples()) {
 			String[] t = tc.getTriple();
+			esperEventsNumber++;
 			cepRT.sendEvent(new TEvent(t[0], t[1], t[2], cepRT.getCurrentTime(), System.currentTimeMillis(), "Input"));
 		}
 	}

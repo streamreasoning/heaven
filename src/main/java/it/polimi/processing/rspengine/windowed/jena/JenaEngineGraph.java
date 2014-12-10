@@ -44,6 +44,7 @@ public class JenaEngineGraph extends JenaEngine {
 			String[] t = tc.getTriple();
 			abox.add(createTriple(t));
 		}
+		esperEventsNumber++;
 		cepRT.sendEvent(new GraphEvent(abox, cepRT.getCurrentTime(), System.currentTimeMillis()));
 	}
 

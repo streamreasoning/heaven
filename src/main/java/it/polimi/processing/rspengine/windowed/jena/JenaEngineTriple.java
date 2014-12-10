@@ -28,6 +28,7 @@ public class JenaEngineTriple extends JenaEngine {
 			Resource subject = ResourceFactory.createResource(t[0]);
 			Property predicate = (t[1] != RDFSUtils.TYPE_PROPERTY) ? ResourceFactory.createProperty(t[1]) : RDF.type;
 			RDFNode object = ResourceFactory.createResource(t[2]);
+			esperEventsNumber++;
 			cepRT.sendEvent(new TripleEvent(subject, predicate, object, cepRT.getCurrentTime(), System.currentTimeMillis()));
 		}
 	}
