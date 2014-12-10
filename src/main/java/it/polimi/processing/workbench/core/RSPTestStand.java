@@ -8,7 +8,6 @@ import it.polimi.processing.events.TSResult;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.utils.FileUtils;
-import it.polimi.utils.Memory;
 
 import java.io.IOException;
 
@@ -99,15 +98,13 @@ public class RSPTestStand extends TestStand {
 	@Override
 	public boolean processDone() {
 		log.debug("Process is Done, Window Shosts");
-		resultTimestamp = System.currentTimeMillis();
-		memoryA = Memory.getMemoryUsage();
 		return rspEngine.processDone();
 	}
 
 	public boolean process(Result engineResult) {
 		try {
 			String w = "exp" + experimentNumber + "/" + rspEngine.getName() + "/" + ((engineResult.isAbox()) ? windowFileName : outputFileName);
-			int eventNumber = rspEngine.getEventNumber();
+			eventNumber = rspEngine.getEventNumber();
 			resultTimestamp = engineResult.getTimestamp();
 			String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + "/" + engineResult.getFrom() + "/" + engineResult.getTo()
 					+ ">";
@@ -115,7 +112,7 @@ public class RSPTestStand extends TestStand {
 					engineResult.getCompleteSMPL(), engineResult.getSoundSMPL(), engineResult.getCompleteRHODF(), engineResult.getSoundRHODF());
 
 			boolean ret = resultCollector.process(r2, w);
-
+			tsResultEvents++;
 			return ret;
 		} catch (IOException e) {
 			return false;

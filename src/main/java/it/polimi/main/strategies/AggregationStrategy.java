@@ -21,29 +21,31 @@ public class AggregationStrategy implements TimeStrategy {
 
 	@Override
 	public boolean apply(RSPEvent e, RSPTestStand ts) {
-		boolean process = false;
 		RSPEngine rspEngine = ts.getRspEngine();
-
+		rspEngine.progress(aggregation);
+		boolean process = false;
+		double memoryUsage = Memory.getMemoryUsage();
+		long currentTimeMillis = System.currentTimeMillis();
 		if (i == 0) {
-			double memoryUsage = Memory.getMemoryUsage();
 			log.debug("Memory Before Sending [" + memoryUsage + "] On Event " + numberEvents);
 			ts.setMemoryB(memoryUsage);
-			ts.setTimestamp(System.currentTimeMillis());
+			ts.setTimestamp(currentTimeMillis);
 			process = rspEngine.process(e);
 			i++;
 		} else if (i == aggregation - 1) {
-			double memoryUsage = Memory.getMemoryUsage();
 			log.debug("Memory After Sending [" + memoryUsage + "] On Event " + numberEvents);
+			ts.setMemoryA(memoryUsage);
+			ts.setResultTimestamp(currentTimeMillis);
 			process = rspEngine.process(e);
 			process = ts.processDone();
-			i = aggregation;
+			i = 0;
 		} else {
 			process = rspEngine.process(e);
 			i++;
 		}
 
 		numberEvents++;
-		rspEngine.progress(aggregation);
+
 		// for rspesperengine move times forward according to the
 		// size of the current window
 		return process;
