@@ -1,13 +1,11 @@
 package it.polimi.main;
 
-import it.polimi.main.strategies.AggregationStrategy;
-import it.polimi.main.strategies.OneToOneStrategy;
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.collector.saver.CSVEventSaver;
 import it.polimi.processing.collector.saver.SQLLiteEventSaver;
 import it.polimi.processing.collector.saver.TrigEventSaver;
 import it.polimi.processing.collector.saver.VoidSaver;
-import it.polimi.processing.enums.BuildingStrategy;
+import it.polimi.processing.enums.EventBuilderMode;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.factory.ConstantEventBuilder;
 import it.polimi.processing.events.factory.StepEventBuilder;
@@ -24,8 +22,10 @@ import it.polimi.processing.validation.JenaSMPLCSListener;
 import it.polimi.processing.workbench.collector.CollectorEventResult;
 import it.polimi.processing.workbench.collector.CollectorExperimentResult;
 import it.polimi.processing.workbench.core.RSPTestStand;
-import it.polimi.processing.workbench.core.TimeStrategy;
 import it.polimi.processing.workbench.streamer.NTStreamer;
+import it.polimi.processing.workbench.timecontrol.AggregationStrategy;
+import it.polimi.processing.workbench.timecontrol.OneToOneStrategy;
+import it.polimi.processing.workbench.timecontrol.TimeStrategy;
 import it.polimi.utils.CommonInputOrder;
 import it.polimi.utils.ExecutionEnvirorment;
 import it.polimi.utils.FileUtils;
@@ -81,7 +81,7 @@ public class CommonMain {
 	private static CSVEventSaver csv = new CSVEventSaver();
 	private static String whereOutput, whereWindow, outputFileName, windowFileName, experimentDescription;
 	private static RSPEventStreamer streamer;
-	private static BuildingStrategy EVENT_BUILDER;
+	private static EventBuilderMode EVENT_BUILDER;
 
 	private static int EXPERIMENTTYPE;
 
@@ -107,7 +107,7 @@ public class CommonMain {
 		EXECUTION = Integer.parseInt(args[CommonInputOrder.EXECUTIONNUMBER]);
 		CURRENT_ENGINE = Integer.parseInt(args[CommonInputOrder.CURRENT_ENGINE]);
 		comment = "n".equalsIgnoreCase(args[CommonInputOrder.COMMENTS].toUpperCase()) ? "" : args[CommonInputOrder.COMMENTS];
-		EVENT_BUILDER = BuildingStrategy.getById(Integer.parseInt(args[CommonInputOrder.EVENTBUILDER]));
+		EVENT_BUILDER = EventBuilderMode.getById(Integer.parseInt(args[CommonInputOrder.EVENTBUILDER]));
 		INITSIZE = Integer.parseInt(args[CommonInputOrder.INITSIZE]);
 		X = Integer.parseInt(args[CommonInputOrder.X]);
 		Y = Integer.parseInt(args[CommonInputOrder.Y]);

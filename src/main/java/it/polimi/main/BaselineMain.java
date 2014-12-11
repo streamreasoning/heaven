@@ -1,13 +1,12 @@
 package it.polimi.main;
 
-import it.polimi.main.strategies.AggregationStrategy;
-import it.polimi.main.strategies.OneToOneStrategy;
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.collector.saver.CSVEventSaver;
 import it.polimi.processing.collector.saver.SQLLiteEventSaver;
 import it.polimi.processing.collector.saver.TrigEventSaver;
 import it.polimi.processing.collector.saver.VoidSaver;
-import it.polimi.processing.enums.BuildingStrategy;
+import it.polimi.processing.enums.EventBuilderMode;
+import it.polimi.processing.enums.ExperimentType;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.factory.ConstantEventBuilder;
 import it.polimi.processing.events.factory.StepEventBuilder;
@@ -18,7 +17,8 @@ import it.polimi.processing.rspengine.windowed.RSPEngine;
 import it.polimi.processing.rspengine.windowed.jena.JenaEngineGraph;
 import it.polimi.processing.rspengine.windowed.jena.JenaEngineStmt;
 import it.polimi.processing.rspengine.windowed.jena.JenaEngineTEvent;
-import it.polimi.processing.rspengine.windowed.jena.JenaEngineTriple;
+import it.polimi.processing.rspengine.windowed.jena.enums.JenaEventType;
+import it.polimi.processing.rspengine.windowed.jena.enums.Reasoner;
 import it.polimi.processing.rspengine.windowed.jena.listener.JenaFullListener;
 import it.polimi.processing.rspengine.windowed.jena.listener.JenaRhoDFListener;
 import it.polimi.processing.rspengine.windowed.jena.listener.JenaSMPLListener;
@@ -26,9 +26,12 @@ import it.polimi.processing.streamer.RSPEventStreamer;
 import it.polimi.processing.workbench.collector.CollectorEventResult;
 import it.polimi.processing.workbench.collector.CollectorExperimentResult;
 import it.polimi.processing.workbench.core.RSPTestStand;
-import it.polimi.processing.workbench.core.TimeStrategy;
 import it.polimi.processing.workbench.streamer.NTStreamer;
-import it.polimi.utils.BaseLineInputOrder;
+import it.polimi.processing.workbench.timecontrol.AggregationStrategy;
+import it.polimi.processing.workbench.timecontrol.InternalTiming;
+import it.polimi.processing.workbench.timecontrol.OneToOneStrategy;
+import it.polimi.processing.workbench.timecontrol.TimeStrategy;
+import it.polimi.properties.GetPropertyValues;
 import it.polimi.utils.ExecutionEnvirorment;
 import it.polimi.utils.FileUtils;
 
@@ -53,7 +56,7 @@ public class BaselineMain {
 	// REASONER
 	private static final int JENAFULL = 2, JENARHODF = 1, JENASMPL = 0;
 
-	private static int CURRENT_ENGINE;
+	private static JenaEventType CEP_EVENT_TYPE;
 	private static int EXPERIMENT_NUMBER;
 
 	private static String JENANAME = "jena";
@@ -67,7 +70,7 @@ public class BaselineMain {
 
 	private static RSPEngine engine;
 
-	private static Date exeperimentDate;
+	private static Date EXPERIMENT_DATE;
 	private static String file, COMMENT;
 
 	private static RSPTestStand testStand;
@@ -77,62 +80,68 @@ public class BaselineMain {
 
 	private static final DateFormat DT = new SimpleDateFormat("yyyy_MM_dd");
 
-	private static int EXPERIMENT_TYPE;
+	private static ExperimentType EXPERIMENT_TYPE;
 	private static final int RESULT = 0;
 	private static final int LATENCY = 1;
 	private static final int MEMORY = 2;
 	private static final boolean AGGR = false;
 
-	private static int EXECUTION;
+	private static int EXECUTION_NUMBER;
 
 	private static CSVEventSaver csv = new CSVEventSaver();
 	private static String whereOutput, whereWindow, outputFileName, windowFileName, experimentDescription;
 	private static RSPEventStreamer streamer;
-	private static int CURRENT_REASONER;
-	private static BuildingStrategy EVENT_BUILDER;
+	private static Reasoner CURRENT_REASONER;
+	private static EventBuilderMode STREAMING_MODE;
 	private static String engineName;
 	private static String eventBuilderCodeName;
 	private static int X;
 	private static int Y;
-	private static int INITSIZE;
+	private static int INIT_SIZE;
 	private static int EVENTS = 1000;
+	private static String RSPENGINE;
+	private static Integer X_SIZE;
+	private static Integer Y_SIZE;
+	private static Integer AGGREGATION = 10;
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
-		int aggreation = 10;
-		file = args[BaseLineInputOrder.FILE];// _CLND_UNIV10INDEX0SEED0.nt
-		EVENTS = Integer.parseInt(args[BaseLineInputOrder.EVENTS]);
-		EXPERIMENT_TYPE = Integer.parseInt(args[BaseLineInputOrder.EXPERIMENT_TYPE]);
-		EXPERIMENT_NUMBER = Integer.parseInt(args[BaseLineInputOrder.EXPERIMENTNUMBER]);
-		EXECUTION = Integer.parseInt(args[BaseLineInputOrder.EXECUTIONNUMBER]);
-		CURRENT_ENGINE = Integer.parseInt(args[BaseLineInputOrder.JENA_CURRENTENGINE]);
-		CURRENT_REASONER = Integer.parseInt(args[BaseLineInputOrder.CURRENTREASONER]);
-		COMMENT = "n".equalsIgnoreCase(args[BaseLineInputOrder.COMMENTS].toUpperCase()) ? "" : args[BaseLineInputOrder.COMMENTS];
-		EVENT_BUILDER = BuildingStrategy.getById(Integer.parseInt(args[BaseLineInputOrder.EVENTBUILDER]));
-		INITSIZE = Integer.parseInt(args[BaseLineInputOrder.INITSIZE]);
-		if (args.length > BaseLineInputOrder.X)
-			X = Integer.parseInt(args[BaseLineInputOrder.X]);
-		if (args.length > BaseLineInputOrder.Y)
-			Y = Integer.parseInt(args[BaseLineInputOrder.Y]);
-		exeperimentDate = FileUtils.d;
 
-		log.info("Experiment [" + EXPERIMENT_NUMBER + "] on [" + file + "] of [" + exeperimentDate + "] Number of Events [" + EVENTS + "]");
+		file = GetPropertyValues.getProperty(GetPropertyValues.INPUT_FILE);// _CLND_UNIV10INDEX0SEED0.nt
 
-		TimeStrategy strategy = (AGGR) ? new OneToOneStrategy() : new AggregationStrategy(aggreation);
+		EXPERIMENT_TYPE = GetPropertyValues.getEnumProperty(ExperimentType.class, "experiment_type");
+		EXPERIMENT_NUMBER = GetPropertyValues.getIntegerProperty("experiment_number");
+		EXPERIMENT_DATE = GetPropertyValues.contains("experiment_date") ? GetPropertyValues.getDateProperty("experiment_date") : FileUtils.d;
+		EXECUTION_NUMBER = GetPropertyValues.getIntegerProperty("execution_number");
+		COMMENT = GetPropertyValues.contains("comment") ? GetPropertyValues.getProperty("comment") : "";
+
+		RSPENGINE = GetPropertyValues.getProperty("current_engine");
+		CEP_EVENT_TYPE = GetPropertyValues.getEnumProperty(JenaEventType.class, "cep_event_type");
+		CURRENT_REASONER = GetPropertyValues.getEnumProperty(Reasoner.class, "jena_current_reasoner");
+
+		EVENTS = GetPropertyValues.getIntegerProperty("rspevent_number");
+		STREAMING_MODE = GetPropertyValues.getEnumProperty(EventBuilderMode.class, "streaming_mode");
+		INIT_SIZE = GetPropertyValues.getIntegerProperty("init_size");
+		X_SIZE = GetPropertyValues.getIntegerProperty("x_size");
+		Y_SIZE = GetPropertyValues.getIntegerProperty("y_size");
+
+		log.info("Experiment [" + EXPERIMENT_NUMBER + "] on [" + file + "] of [" + EXPERIMENT_DATE + "] Number of Events [" + EVENTS + "]");
+
+		TimeStrategy strategy = (GetPropertyValues.getBooleanProperty("external_time_control_on")) ? timeStrategySelection() : new InternalTiming();
 		testStand = new RSPTestStand(strategy);
 
 		eventBuilderCodeName = streamerSelection();
 
-		engineName = engineNames[CURRENT_REASONER];
+		engineName = CURRENT_REASONER.name().toLowerCase();
 
-		experimentDescription = "EXPERIMENT_ON_" + file + "_WITH_ENGINE_" + engineName + "EVENT_" + CURRENT_ENGINE;
+		experimentDescription = "EXPERIMENT_ON_" + file + "_WITH_ENGINE_" + engineName + "EVENT_" + CEP_EVENT_TYPE;
 
 		FileUtils.createOutputFolder("exp" + EXPERIMENT_NUMBER + "/" + engineName);
 
-		String generalName = "EN" + EXPERIMENT_NUMBER + "_" + "EXE" + EXECUTION + "_" + COMMENT + "_" + DT.format(exeperimentDate) + "_"
-				+ file.split("\\.")[0] + "_R" + CURRENT_REASONER + "E" + CURRENT_ENGINE + eventBuilderCodeName;
+		String generalName = "EN" + EXPERIMENT_NUMBER + "_" + "EXE" + EXECUTION_NUMBER + "_" + COMMENT + "_" + DT.format(EXPERIMENT_DATE) + "_"
+				+ file.split("\\.")[0] + "_R" + CURRENT_REASONER + "E" + CEP_EVENT_TYPE + eventBuilderCodeName;
 
-		outputFileName = EXPERIMENT_TYPE + "Result_" + generalName;
-		windowFileName = EXPERIMENT_TYPE + "Window_" + generalName;
+		outputFileName = EXPERIMENT_TYPE.ordinal() + "Result_" + generalName;
+		windowFileName = EXPERIMENT_TYPE.ordinal() + "Window_" + generalName;
 
 		whereOutput = "exp" + EXPERIMENT_NUMBER + "/" + engineName + "/" + outputFileName;
 		whereWindow = "exp" + EXPERIMENT_NUMBER + "/" + engineName + "/" + windowFileName;
@@ -146,25 +155,30 @@ public class BaselineMain {
 
 		engineSelection();
 
-		run(file, COMMENT, EXPERIMENT_NUMBER, exeperimentDate, experimentDescription);
+		run(file, COMMENT, EXPERIMENT_NUMBER, EXPERIMENT_DATE, experimentDescription);
 
+	}
+
+	private static TimeStrategy timeStrategySelection() {
+		return (GetPropertyValues.getProperty("time_strategy").equals("AGGREGATION")) ? new AggregationStrategy(
+				(GetPropertyValues.getIntegerProperty("aggregation"))) : new OneToOneStrategy();
 	}
 
 	protected static String streamerSelection() {
 		EventBuilder<RSPEvent> eb;
 
 		String code = "_EB";
-		switch (EVENT_BUILDER) {
+		switch (STREAMING_MODE) {
 			case CONSTANT:
-				log.info("Event Builder Selection: Constant [" + INITSIZE + "] ");
-				code += "K" + INITSIZE;
-				log.info("CONSTANT Event Builder Initial Size [" + INITSIZE + "]");
-				eb = new ConstantEventBuilder(INITSIZE, EXPERIMENT_NUMBER);
+				log.info("Event Builder Selection: Constant [" + INIT_SIZE + "] ");
+				code += "K" + INIT_SIZE;
+				log.info("CONSTANT Event Builder Initial Size [" + INIT_SIZE + "]");
+				eb = new ConstantEventBuilder(INIT_SIZE, EXPERIMENT_NUMBER);
 				break;
 			case STEP:
-				log.info("Event Builder Selection: Step [" + INITSIZE + "] Heigh [" + X + "] Width [" + Y + "] ");
-				eb = new StepEventBuilder(X, Y, INITSIZE, EXPERIMENT_NUMBER);
-				code += "S" + INITSIZE + "H" + X + "W" + Y;
+				log.info("Event Builder Selection: Step [" + INIT_SIZE + "] Heigh [" + X + "] Width [" + Y + "] ");
+				eb = new StepEventBuilder(X, Y, INIT_SIZE, EXPERIMENT_NUMBER);
+				code += "S" + INIT_SIZE + "H" + X + "W" + Y;
 				break;
 			default:
 				eb = null;
@@ -176,20 +190,16 @@ public class BaselineMain {
 	}
 
 	protected static void engineSelection() {
-		switch (CURRENT_ENGINE) {
-			case JENAPLAIN:
+		switch (CEP_EVENT_TYPE) {
+			case TEVENT:
 				log.info("Engine Selection: JenaPlain [" + engineName + "] ");
 				engine = new JenaEngineTEvent(engineName, testStand, listener);
 				break;
-			case JENATRIPLE:
-				log.info("Engine Selection: JenaTriple [" + engineName + "] ");
-				engine = new JenaEngineTriple(engineName, testStand, listener);
-				break;
-			case JENASTMT:
+			case STMT:
 				log.info("Engine Selection: Jena Stmt [" + engineName + "] ");
 				engine = new JenaEngineStmt(engineName, testStand, listener);
 				break;
-			case JENAGRAPH:
+			case GRAPH:
 				log.info("Engine Selection: JenaGraph [" + engineName + "] ");
 				engine = new JenaEngineGraph(engineName, testStand, listener);
 				break;
@@ -201,15 +211,15 @@ public class BaselineMain {
 
 	protected static void reasonerSelection() {
 		switch (CURRENT_REASONER) {
-			case JENARHODF:
-				log.info("Reasoner Selection: RHODF");
-				listener = new JenaRhoDFListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
-				break;
-			case JENASMPL:
+			case SMPL:
 				log.info("Reasoner Selection: SMPL");
 				listener = new JenaSMPLListener(FileUtils.UNIV_BENCH_RDFS_MODIFIED, testStand);
 				break;
-			case JENAFULL:
+			case RHODF:
+				log.info("Reasoner Selection: RHODF");
+				listener = new JenaRhoDFListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
+				break;
+			case FULL:
 				log.info("Reasoner Selection: FULL");
 				listener = new JenaFullListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED, testStand);
 				break;
@@ -220,22 +230,22 @@ public class BaselineMain {
 
 	protected static void collectorSelection() throws SQLException, ClassNotFoundException {
 		experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
-
+		// TODO gestire dalla properties
 		TrigEventSaver trig = new TrigEventSaver();
 		VoidSaver voids = new VoidSaver();
 		switch (EXPERIMENT_TYPE) {
-			case MEMORY:
-				log.info("Execution of Memory Experiment");
-				ExecutionEnvirorment.memoryEnabled = true;
-				streamingEventResultCollector = new CollectorEventResult(testStand, voids, csv, engineName + "/");
+			case RESULT:
+				log.info("Execution of Result C&S Experiment");
+				streamingEventResultCollector = new CollectorEventResult(testStand, trig, csv, engineName + "/");
 				break;
 			case LATENCY:
 				log.info("Execution of Latency Experiment");
 				streamingEventResultCollector = new CollectorEventResult(testStand, voids, csv, engineName + "/");
 				break;
-			case RESULT:
-				log.info("Execution of Result C&S Experiment");
-				streamingEventResultCollector = new CollectorEventResult(testStand, trig, csv, engineName + "/");
+			case MEMORY:
+				log.info("Execution of Memory Experiment");
+				ExecutionEnvirorment.memoryEnabled = true;
+				streamingEventResultCollector = new CollectorEventResult(testStand, voids, csv, engineName + "/");
 				break;
 			default:
 				streamingEventResultCollector = null;

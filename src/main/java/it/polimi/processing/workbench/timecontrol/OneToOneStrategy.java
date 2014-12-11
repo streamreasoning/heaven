@@ -1,9 +1,8 @@
-package it.polimi.main.strategies;
+package it.polimi.processing.workbench.timecontrol;
 
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.rspengine.windowed.RSPEngine;
 import it.polimi.processing.workbench.core.RSPTestStand;
-import it.polimi.processing.workbench.core.TimeStrategy;
 import it.polimi.utils.Memory;
 
 public class OneToOneStrategy implements TimeStrategy {

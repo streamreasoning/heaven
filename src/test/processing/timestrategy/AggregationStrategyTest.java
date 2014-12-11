@@ -1,8 +1,8 @@
 package processing.timestrategy;
 
-import it.polimi.main.strategies.AggregationStrategy;
 import it.polimi.processing.workbench.core.RSPTestStand;
-import it.polimi.processing.workbench.core.TimeStrategy;
+import it.polimi.processing.workbench.timecontrol.AggregationStrategy;
+import it.polimi.processing.workbench.timecontrol.TimeStrategy;
 
 public class AggregationStrategyTest {
 

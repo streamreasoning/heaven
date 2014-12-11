@@ -1,6 +1,6 @@
 package it.polimi.processing.events.factory;
 
-import it.polimi.processing.enums.BuildingStrategy;
+import it.polimi.processing.enums.EventBuilderMode;
 import it.polimi.processing.events.factory.abstracts.RSPEventBuilder;
 
 public class ExpEventBuilder extends RSPEventBuilder {
@@ -8,7 +8,7 @@ public class ExpEventBuilder extends RSPEventBuilder {
 	private int power = 0;
 
 	public ExpEventBuilder(int base, int initSize, int experiment) {
-		super(BuildingStrategy.EXP, base, 1, initSize, experiment);
+		super(EventBuilderMode.EXP, base, 1, initSize, experiment);
 		eventNumber = initSize;
 	}
 

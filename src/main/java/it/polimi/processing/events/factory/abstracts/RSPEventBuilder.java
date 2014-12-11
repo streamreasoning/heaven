@@ -1,6 +1,6 @@
 package it.polimi.processing.events.factory.abstracts;
 
-import it.polimi.processing.enums.BuildingStrategy;
+import it.polimi.processing.enums.EventBuilderMode;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.TripleContainer;
 
@@ -17,13 +17,13 @@ import lombok.extern.log4j.Log4j;
 public abstract class RSPEventBuilder implements EventBuilder<RSPEvent> {
 
 	protected RSPEvent e;
-	protected BuildingStrategy mode;
+	protected EventBuilderMode mode;
 	protected int initSize, roundSize, eventNumber;
 	protected int x, y;
 	protected boolean sizeReached;
 	protected int experimentNumber;
 
-	public RSPEventBuilder(BuildingStrategy mode, int x, int y, int initSize, int experimentNumber) {
+	public RSPEventBuilder(EventBuilderMode mode, int x, int y, int initSize, int experimentNumber) {
 		this.x = x;
 		this.y = y;
 		this.initSize = roundSize = initSize;
