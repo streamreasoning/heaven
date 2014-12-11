@@ -44,11 +44,17 @@ public class GetPropertyValues {
 		return property != null ? Integer.parseInt(property) : null;
 	}
 
-	public static Date getDateProperty(String propertyName) throws ParseException {
+	public static Date getDateProperty(String propertyName) {
 		String property = getProperty(propertyName).trim();
 		log.debug("Property: [" + propertyName + "] Value [" + property + "]");
-		return property != null ? DT.parse(prop.getProperty(propertyName)) : null;
 
+		try {
+			Date parse = DT.parse(prop.getProperty(propertyName));
+			return property != null ? parse : new Date();
+		} catch (ParseException e) {
+			log.error(e.getMessage());
+			return new Date();
+		}
 	}
 
 	public static <T> T getTypedProperty(String propertyName, Class<T> type) {

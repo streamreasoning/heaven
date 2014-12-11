@@ -8,6 +8,7 @@ import it.polimi.processing.events.TSResult;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.workbench.timecontrol.TimeStrategy;
+import it.polimi.properties.GetPropertyValues;
 import it.polimi.utils.FileUtils;
 
 import java.io.IOException;
@@ -47,8 +48,8 @@ public class RSPTestStand extends TestStand {
 		if (!isOn()) {
 			throw new WrongStatusTransitionException("Not ON");
 		} else {
-			log.info("Status [" + status + "]" + " Start Running The Experiment [" + experimentNumber + "] of date [" + FileUtils.d + "] "
-					+ "Results will be named as [" + outputFileName + "]");
+			log.info("Status [" + status + "]" + " Start Running The Experiment [" + experimentNumber + "] of date ["
+					+ GetPropertyValues.getDateProperty("experiment_date") + "] " + "Results will be named as [" + outputFileName + "]");
 
 			status = ExecutionState.RUNNING;
 			currentExperiment = new Experiment(experimentNumber, experimentDescription, rspEngine.getName(), inputFileNameWithPath, outputFileName,

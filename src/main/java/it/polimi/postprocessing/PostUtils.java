@@ -1,5 +1,7 @@
 package it.polimi.postprocessing;
 
+import it.polimi.properties.GetPropertyValues;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,9 +15,8 @@ public class PostUtils {
 
 	private static Date d;
 	private static String today;
-	private static String yesterday = "2014-11-11";
 	static {
-		d = it.polimi.utils.FileUtils.d;
+		d = GetPropertyValues.getDateProperty("experiment_date");
 		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
 		today = dt.format(d).toString();
 		daypath = "src/main/resources/" + dt.format(d) + "/comparation/";

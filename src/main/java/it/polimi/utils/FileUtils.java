@@ -1,48 +1,47 @@
 package it.polimi.utils;
 
+import it.polimi.properties.GetPropertyValues;
+
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
 public class FileUtils {
 
 	private static String daypath;
-	@Getter
-	public static Date d;
 	static {
+
 		DateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
 		try {
-			d = dt.parse("2014-12-10");
+
+			Date d = dt.parse(GetPropertyValues.getProperty("experiment_date"));
+
+			daypath = "src/main/resources/data/output/" + dt.format(d) + "/";
+
+			new File(daypath).mkdirs();
+
+			// new File(daypath + "plain2369/").mkdirs();
+			// new File(daypath + "plain2369NW/").mkdirs();
+			// new File(daypath + "plain2369NWM/").mkdirs();
+			// new File(daypath + "plain2369NM/").mkdirs();
+			// new File(daypath + "jenasmpl/").mkdirs();
+			// new File(daypath + "jenasmplNW/").mkdirs();
+			// new File(daypath + "jenasmplNWM/").mkdirs();
+			// new File(daypath + "jenasmplNM/").mkdirs();
+			// new File(daypath + "jenarhodf/").mkdirs();
+			// new File(daypath + "jenarhodfNW/").mkdirs();
+			// new File(daypath + "jenarhodfNM/").mkdirs();
+			// new File(daypath + "jenarhodfNWM/").mkdirs();
+			// new File(daypath + "jenafull/").mkdirs();
+
+			new File(daypath + "database/").mkdirs();
 		} catch (java.text.ParseException e) {
-			log.info("Wrong parsing");
-			d = new Date();
+			log.error("Wrong parsing");
 		}
-
-		daypath = "src/main/resources/data/output/" + dt.format(d) + "/";
-
-		new File(daypath).mkdirs();
-
-		// new File(daypath + "plain2369/").mkdirs();
-		// new File(daypath + "plain2369NW/").mkdirs();
-		// new File(daypath + "plain2369NWM/").mkdirs();
-		// new File(daypath + "plain2369NM/").mkdirs();
-		// new File(daypath + "jenasmpl/").mkdirs();
-		// new File(daypath + "jenasmplNW/").mkdirs();
-		// new File(daypath + "jenasmplNWM/").mkdirs();
-		// new File(daypath + "jenasmplNM/").mkdirs();
-		// new File(daypath + "jenarhodf/").mkdirs();
-		// new File(daypath + "jenarhodfNW/").mkdirs();
-		// new File(daypath + "jenarhodfNM/").mkdirs();
-		// new File(daypath + "jenarhodfNWM/").mkdirs();
-		// new File(daypath + "jenafull/").mkdirs();
-
-		new File(daypath + "database/").mkdirs();
-
 	}
 
 	public static final String MODEL_FILE_PATH = "";
