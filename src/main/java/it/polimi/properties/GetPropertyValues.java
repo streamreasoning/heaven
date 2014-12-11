@@ -17,6 +17,7 @@ public class GetPropertyValues {
 	private static final DateFormat DT = new SimpleDateFormat("yyyy-MM-dd");
 
 	public static final String INPUT_FILE = "input_file";
+
 	static {
 		InputStream inputStream = GetPropertyValues.class.getClassLoader().getResourceAsStream(propFileName);
 

@@ -1,11 +1,11 @@
 package it.polimi.utils;
 
+import it.polimi.properties.GetPropertyValues;
+
 public class ExecutionEnvirorment {
 
-	public static boolean memoryEnabled = false;
-
 	public static boolean memoryAnalysisEnabled() {
-		return memoryEnabled;
+		return GetPropertyValues.getBooleanProperty("memory_log_enabled");
 	}
 
 }

@@ -2,6 +2,7 @@ package it.polimi.main;
 
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.collector.saver.CSVEventSaver;
+import it.polimi.processing.collector.saver.EventSaver;
 import it.polimi.processing.collector.saver.SQLLiteEventSaver;
 import it.polimi.processing.collector.saver.TrigEventSaver;
 import it.polimi.processing.collector.saver.VoidSaver;
@@ -14,6 +15,8 @@ import it.polimi.processing.events.factory.abstracts.EventBuilder;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.rspengine.windowed.RSPEngine;
+import it.polimi.processing.rspengine.windowed.esper.commons.listener.ResultCollectorListener;
+import it.polimi.processing.rspengine.windowed.esper.plain.Plain2369;
 import it.polimi.processing.rspengine.windowed.jena.JenaEngineGraph;
 import it.polimi.processing.rspengine.windowed.jena.JenaEngineStmt;
 import it.polimi.processing.rspengine.windowed.jena.JenaEngineTEvent;
@@ -32,7 +35,6 @@ import it.polimi.processing.workbench.timecontrol.InternalTiming;
 import it.polimi.processing.workbench.timecontrol.OneToOneStrategy;
 import it.polimi.processing.workbench.timecontrol.TimeStrategy;
 import it.polimi.properties.GetPropertyValues;
-import it.polimi.utils.ExecutionEnvirorment;
 import it.polimi.utils.FileUtils;
 
 import java.sql.SQLException;
@@ -52,21 +54,9 @@ import com.espertech.esper.client.UpdateListener;
 public class BaselineMain {
 
 	// EVENT TYPES
-	private static final int JENAPLAIN = 0, JENATRIPLE = 1, JENASTMT = 2, JENAGRAPH = 3;
-	// REASONER
-	private static final int JENAFULL = 2, JENARHODF = 1, JENASMPL = 0;
 
 	private static JenaEventType CEP_EVENT_TYPE;
 	private static int EXPERIMENT_NUMBER;
-
-	private static String JENANAME = "jena";
-	private static String SMPL = "smpl";
-	private static String RHODF = "rhodf";
-	private static String FULL = "full";
-
-	private static String[] engineNames = new String[] { JENANAME + SMPL, JENANAME + RHODF, JENANAME + FULL };
-
-	public static final String ONTOLOGYCLASS = "Ontology";
 
 	private static RSPEngine engine;
 
@@ -81,10 +71,6 @@ public class BaselineMain {
 	private static final DateFormat DT = new SimpleDateFormat("yyyy_MM_dd");
 
 	private static ExperimentType EXPERIMENT_TYPE;
-	private static final int RESULT = 0;
-	private static final int LATENCY = 1;
-	private static final int MEMORY = 2;
-	private static final boolean AGGR = false;
 
 	private static int EXECUTION_NUMBER;
 
@@ -98,25 +84,31 @@ public class BaselineMain {
 	private static int X;
 	private static int Y;
 	private static int INIT_SIZE;
-	private static int EVENTS = 1000;
+	private static int EVENTS;
 	private static String RSPENGINE;
 	private static Integer X_SIZE;
 	private static Integer Y_SIZE;
-	private static Integer AGGREGATION = 10;
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
 
 		file = GetPropertyValues.getProperty(GetPropertyValues.INPUT_FILE);// _CLND_UNIV10INDEX0SEED0.nt
 
-		EXPERIMENT_TYPE = GetPropertyValues.getEnumProperty(ExperimentType.class, "experiment_type");
 		EXPERIMENT_NUMBER = GetPropertyValues.getIntegerProperty("experiment_number");
-		EXPERIMENT_DATE = GetPropertyValues.contains("experiment_date") ? GetPropertyValues.getDateProperty("experiment_date") : FileUtils.d;
+		EXPERIMENT_DATE = GetPropertyValues.getDateProperty("experiment_date");
+
 		EXECUTION_NUMBER = GetPropertyValues.getIntegerProperty("execution_number");
 		COMMENT = GetPropertyValues.contains("comment") ? GetPropertyValues.getProperty("comment") : "";
 
 		RSPENGINE = GetPropertyValues.getProperty("current_engine");
-		CEP_EVENT_TYPE = GetPropertyValues.getEnumProperty(JenaEventType.class, "cep_event_type");
-		CURRENT_REASONER = GetPropertyValues.getEnumProperty(Reasoner.class, "jena_current_reasoner");
+		if (RSPENGINE.equals("JENA")) {
+			CURRENT_REASONER = GetPropertyValues.getEnumProperty(Reasoner.class, "jena_current_reasoner");
+			engineName = CURRENT_REASONER.name().toLowerCase();
+			CEP_EVENT_TYPE = GetPropertyValues.getEnumProperty(JenaEventType.class, "cep_event_type");
+		} else {
+			engineName = Plain2369.class.getSimpleName().toLowerCase();
+			genearlEngineSelection();
+
+		}
 
 		EVENTS = GetPropertyValues.getIntegerProperty("rspevent_number");
 		STREAMING_MODE = GetPropertyValues.getEnumProperty(EventBuilderMode.class, "streaming_mode");
@@ -131,15 +123,13 @@ public class BaselineMain {
 
 		eventBuilderCodeName = streamerSelection();
 
-		engineName = CURRENT_REASONER.name().toLowerCase();
-
 		experimentDescription = "EXPERIMENT_ON_" + file + "_WITH_ENGINE_" + engineName + "EVENT_" + CEP_EVENT_TYPE;
 
 		FileUtils.createOutputFolder("exp" + EXPERIMENT_NUMBER + "/" + engineName);
 
 		String generalName = "EN" + EXPERIMENT_NUMBER + "_" + "EXE" + EXECUTION_NUMBER + "_" + COMMENT + "_" + DT.format(EXPERIMENT_DATE) + "_"
 				+ file.split("\\.")[0] + "_R" + CURRENT_REASONER + "E" + CEP_EVENT_TYPE + eventBuilderCodeName;
-
+		EXPERIMENT_TYPE = GetPropertyValues.getEnumProperty(ExperimentType.class, "experiment_type");
 		outputFileName = EXPERIMENT_TYPE.ordinal() + "Result_" + generalName;
 		windowFileName = EXPERIMENT_TYPE.ordinal() + "Window_" + generalName;
 
@@ -153,7 +143,7 @@ public class BaselineMain {
 
 		reasonerSelection();
 
-		engineSelection();
+		jenaEngineSelection();
 
 		run(file, COMMENT, EXPERIMENT_NUMBER, EXPERIMENT_DATE, experimentDescription);
 
@@ -189,7 +179,7 @@ public class BaselineMain {
 		return code;
 	}
 
-	protected static void engineSelection() {
+	protected static void jenaEngineSelection() {
 		switch (CEP_EVENT_TYPE) {
 			case TEVENT:
 				log.info("Engine Selection: JenaPlain [" + engineName + "] ");
@@ -207,6 +197,28 @@ public class BaselineMain {
 				engine = null;
 
 		}
+	}
+
+	protected static void genearlEngineSelection() {
+		listener = new ResultCollectorListener(testStand, engineName, 0);
+		engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, GetPropertyValues.getProperty("ontology_class"), listener);
+		// case PLAIN2369CnS:
+		// listener = new CompleteSoundListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED,
+		// FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
+		// engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED,
+		// ontologyClass, listener);
+		// break;
+		// case PLAIN2369RHODF:
+		// listener = new JenaRhoDFCSListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED,
+		// FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
+		// engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED,
+		// ontologyClass, listener);
+		// break;
+		// case PLAIN2369SMPL:
+		// listener = new JenaSMPLCSListener(FileUtils.UNIV_BENCH_RDFS_MODIFIED, testStand);
+		// engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED,
+		// ontologyClass, listener);
+		// break;
 	}
 
 	protected static void reasonerSelection() {
@@ -230,26 +242,19 @@ public class BaselineMain {
 
 	protected static void collectorSelection() throws SQLException, ClassNotFoundException {
 		experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
-		// TODO gestire dalla properties
-		TrigEventSaver trig = new TrigEventSaver();
-		VoidSaver voids = new VoidSaver();
-		switch (EXPERIMENT_TYPE) {
-			case RESULT:
-				log.info("Execution of Result C&S Experiment");
-				streamingEventResultCollector = new CollectorEventResult(testStand, trig, csv, engineName + "/");
-				break;
-			case LATENCY:
-				log.info("Execution of Latency Experiment");
-				streamingEventResultCollector = new CollectorEventResult(testStand, voids, csv, engineName + "/");
-				break;
-			case MEMORY:
-				log.info("Execution of Memory Experiment");
-				ExecutionEnvirorment.memoryEnabled = true;
-				streamingEventResultCollector = new CollectorEventResult(testStand, voids, csv, engineName + "/");
-				break;
-			default:
-				streamingEventResultCollector = null;
-		}
+		boolean RESULT_LOG_ENABLED = GetPropertyValues.getBooleanProperty("result_log_enabled");
+		boolean MEMORY_LOG_ENABLED = GetPropertyValues.getBooleanProperty("memory_log_enabled");
+		boolean LATENCY_LOG_ENABLED = GetPropertyValues.getBooleanProperty("latency_log_enabled");
+
+		EventSaver saver = RESULT_LOG_ENABLED ? new TrigEventSaver() : new VoidSaver();
+		streamingEventResultCollector = new CollectorEventResult(testStand, saver, csv, engineName + "/");
+
+		if (RESULT_LOG_ENABLED)
+			log.info("Execution of Result C&S Experiment");
+		if (MEMORY_LOG_ENABLED)
+			log.info("Execution of Memory Experiment");
+		if (LATENCY_LOG_ENABLED)
+			log.info("Execution of Latency Experiment");
 	}
 
 	private static void run(String f, String comment, int experimentNumber, Date d, String experimentDescription) {
