@@ -105,20 +105,15 @@ public class RSPTestStand extends TestStand {
 	}
 
 	public boolean process(Result engineResult) {
-		try {
-			String w = "exp" + experimentNumber + "/" + rspEngine.getName() + "/" + ((engineResult.isAbox()) ? windowFileName : outputFileName);
-			eventNumber = rspEngine.getEventNumber();
-			resultTimestamp = engineResult.getTimestamp();
-			String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + "/" + engineResult.getFrom() + "/" + engineResult.getTo()
-					+ ">";
-			TSResult r2 = new TSResult(id, eventNumber, engineResult.getStatements(), timestamp, resultTimestamp, memoryB, memoryA,
-					engineResult.getCompleteSMPL(), engineResult.getSoundSMPL(), engineResult.getCompleteRHODF(), engineResult.getSoundRHODF());
+		String w = "exp" + experimentNumber + "/" + rspEngine.getName() + "/" + ((engineResult.isAbox()) ? windowFileName : outputFileName);
+		eventNumber = rspEngine.getEventNumber();
+		resultTimestamp = engineResult.getTimestamp();
+		String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + "/" + engineResult.getFrom() + "/" + engineResult.getTo() + ">";
+		TSResult r2 = new TSResult(id, eventNumber, engineResult.getStatements(), timestamp, resultTimestamp, memoryB, memoryA,
+				engineResult.getCompleteSMPL(), engineResult.getSoundSMPL(), engineResult.getCompleteRHODF(), engineResult.getSoundRHODF());
 
-			boolean ret = resultCollector.process(r2, w);
-			tsResultEvents++;
-			return ret;
-		} catch (IOException e) {
-			return false;
-		}
+		boolean ret = resultCollector.process(r2, w);
+		tsResultEvents++;
+		return ret;
 	}
 }
