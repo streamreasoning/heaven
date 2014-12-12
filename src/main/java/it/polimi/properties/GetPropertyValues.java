@@ -8,9 +8,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GetPropertyValues {
 	private static Properties prop = new Properties();
 	private static final String propFileName = "properties/config.properties";
