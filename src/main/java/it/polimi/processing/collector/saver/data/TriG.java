@@ -44,7 +44,7 @@ public class TriG extends WritableData {
 
 	@Override
 	public boolean save(String where) {
-		log.info("Save Data [" + ExecutionEnvirorment.finalresultTrigLogEnabled + "]");
+		log.debug("Save Data [" + ExecutionEnvirorment.finalresultTrigLogEnabled + "]");
 		return ExecutionEnvirorment.finalresultTrigLogEnabled ? super.save(where) : !ExecutionEnvirorment.finalresultTrigLogEnabled;
 	}
 
