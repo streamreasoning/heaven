@@ -1,7 +1,6 @@
 package it.polimi.main;
 
 import it.polimi.processing.collector.StartableCollector;
-import it.polimi.processing.collector.saver.SQLLiteEventSaver;
 import it.polimi.processing.enums.EventBuilderMode;
 import it.polimi.processing.enums.ExperimentType;
 import it.polimi.processing.events.RSPEvent;
@@ -236,7 +235,7 @@ public class BaselineMain {
 	}
 
 	protected static void collectorSelection() throws SQLException, ClassNotFoundException {
-		experimentResultCollector = new CollectorExperimentResult(testStand, new SQLLiteEventSaver());
+		experimentResultCollector = new CollectorExperimentResult(testStand);
 		boolean RESULT_LOG_ENABLED = GetPropertyValues.getBooleanProperty("result_log_enabled");
 		boolean MEMORY_LOG_ENABLED = GetPropertyValues.getBooleanProperty("memory_log_enabled");
 		boolean LATENCY_LOG_ENABLED = GetPropertyValues.getBooleanProperty("latency_log_enabled");

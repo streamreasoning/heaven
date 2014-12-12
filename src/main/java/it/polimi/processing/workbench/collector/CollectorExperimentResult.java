@@ -1,7 +1,6 @@
 package it.polimi.processing.workbench.collector;
 
 import it.polimi.processing.collector.StartableCollector;
-import it.polimi.processing.collector.saver.EventSaver;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.ExperimentResult;
@@ -17,15 +16,13 @@ import lombok.Setter;
 public class CollectorExperimentResult implements StartableCollector<ExperimentResult> {
 
 	private long timestamp;
-	private EventSaver sqlLiteSaver;
 	private EventProcessor<Event> stand;
 	private ExecutionState status;
 	private String where;
 	private ExperimentResult currentExperiment;
 
-	public CollectorExperimentResult(EventProcessor<Event> stand, EventSaver saver) throws SQLException, ClassNotFoundException {
+	public CollectorExperimentResult(EventProcessor<Event> stand) throws SQLException, ClassNotFoundException {
 		this.stand = stand;
-		this.sqlLiteSaver = saver;
 		this.timestamp = System.currentTimeMillis();
 		this.status = ExecutionState.READY;
 	}
@@ -38,31 +35,23 @@ public class CollectorExperimentResult implements StartableCollector<ExperimentR
 
 	@Override
 	public boolean processDone() {
-		return sqlLiteSaver.save(currentExperiment.getSQL(), this.where);
+		return currentExperiment.getSQL().save(where);
 	}
 
 	@Override
 	public boolean process(ExperimentResult r, String where) {
-		return !ExecutionState.READY.equals(status) ? false : sqlLiteSaver.save(r.getSQL(), where);
+		return !ExecutionState.READY.equals(status) ? false : r.getSQL().save(where);
 	}
 
 	@Override
 	public ExecutionState init() {
-		if (ExecutionState.READY.equals(sqlLiteSaver.init())) {
-			status = ExecutionState.READY;
-		} else {
-			status = ExecutionState.ERROR;
-		}
+		status = ExecutionState.READY;
 		return status;
 	}
 
 	@Override
 	public ExecutionState close() {
-		if (ExecutionState.CLOSED.equals(sqlLiteSaver.close())) {
-			status = ExecutionState.CLOSED;
-		} else {
-			status = ExecutionState.ERROR;
-		}
+		status = ExecutionState.CLOSED;
 		return status;
 	}
 
