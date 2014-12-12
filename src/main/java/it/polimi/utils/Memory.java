@@ -29,7 +29,7 @@ public class Memory {
 	private static int mb = 1024 * 1024;
 
 	public static double getTotalMemory() {
-		if (ExecutionEnvirorment.memoryAnalysisEnabled()) {
+		if (ExecutionEnvirorment.memoryLogEnabled) {
 			return runtime.totalMemory() / mb;
 		} else {
 			return 0D;
@@ -37,7 +37,7 @@ public class Memory {
 	}
 
 	public static double getFreeMemory() {
-		if (ExecutionEnvirorment.memoryAnalysisEnabled()) {
+		if (ExecutionEnvirorment.memoryLogEnabled) {
 			return runtime.freeMemory() / mb;
 
 		} else {
@@ -46,7 +46,7 @@ public class Memory {
 	}
 
 	public static double getMemoryUsage() {
-		if (ExecutionEnvirorment.memoryAnalysisEnabled()) {
+		if (ExecutionEnvirorment.memoryLogEnabled) {
 			return (runtime.totalMemory() - runtime.freeMemory()) / mb;
 		} else {
 			return 0D;
