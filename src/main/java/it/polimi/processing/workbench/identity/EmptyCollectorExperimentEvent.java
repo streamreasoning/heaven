@@ -6,7 +6,6 @@ import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.workbench.core.RSPTestStand;
 import it.polimi.processing.workbench.core.Startable;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 import lombok.Getter;
@@ -46,7 +45,7 @@ public class EmptyCollectorExperimentEvent implements StartableCollector<EventRe
 	}
 
 	@Override
-	public boolean process(EventResult r, String where) throws IOException {
+	public boolean process(EventResult r, String where) {
 		return true;
 	}
 
