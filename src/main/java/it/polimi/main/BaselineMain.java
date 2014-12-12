@@ -1,11 +1,7 @@
 package it.polimi.main;
 
 import it.polimi.processing.collector.StartableCollector;
-import it.polimi.processing.collector.saver.CSVEventSaver;
-import it.polimi.processing.collector.saver.EventSaver;
 import it.polimi.processing.collector.saver.SQLLiteEventSaver;
-import it.polimi.processing.collector.saver.TrigEventSaver;
-import it.polimi.processing.collector.saver.VoidSaver;
 import it.polimi.processing.enums.EventBuilderMode;
 import it.polimi.processing.enums.ExperimentType;
 import it.polimi.processing.events.RSPEvent;
@@ -74,7 +70,6 @@ public class BaselineMain {
 
 	private static int EXECUTION_NUMBER;
 
-	private static CSVEventSaver csv = new CSVEventSaver();
 	private static String whereOutput, whereWindow, outputFileName, windowFileName, experimentDescription;
 	private static RSPEventStreamer streamer;
 	private static Reasoner CURRENT_REASONER;
@@ -246,8 +241,7 @@ public class BaselineMain {
 		boolean MEMORY_LOG_ENABLED = GetPropertyValues.getBooleanProperty("memory_log_enabled");
 		boolean LATENCY_LOG_ENABLED = GetPropertyValues.getBooleanProperty("latency_log_enabled");
 
-		EventSaver saver = RESULT_LOG_ENABLED ? new TrigEventSaver() : new VoidSaver();
-		streamingEventResultCollector = new CollectorEventResult(testStand, saver, csv, engineName + "/");
+		streamingEventResultCollector = new CollectorEventResult(testStand, engineName + "/");
 
 		if (RESULT_LOG_ENABLED)
 			log.info("Execution of Result C&S Experiment");
