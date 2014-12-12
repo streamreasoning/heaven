@@ -1,28 +1,21 @@
 package it.polimi.processing.workbench.collector;
 
 import it.polimi.processing.collector.StartableCollector;
-import it.polimi.processing.collector.saver.EventSaver;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.workbench.core.EventProcessor;
 import it.polimi.processing.workbench.core.Startable;
+import it.polimi.utils.FileUtils;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j;
 
 @Getter
 @Setter
-@Log4j
 public class CollectorEventResult implements StartableCollector<EventResult>, Startable<ExecutionState> {
-
-	private long timestamp;
-	private EventSaver trigSaver;
-	private EventSaver csvSaver;
 
 	private ExecutionState status;
 	private String where;
@@ -30,12 +23,8 @@ public class CollectorEventResult implements StartableCollector<EventResult>, St
 	private EventProcessor<Event> stand;
 	private EventResult currentResult;
 
-	public CollectorEventResult(EventProcessor<Event> stand, EventSaver trig, EventSaver csv, String where) throws SQLException,
-			ClassNotFoundException {
-		this.stand = stand;
-		this.trigSaver = trig;
-		this.csvSaver = csv;
-		this.timestamp = System.currentTimeMillis();
+	public CollectorEventResult(EventProcessor<Event> processor, String where) throws SQLException, ClassNotFoundException {
+		this.stand = processor;
 		this.status = ExecutionState.READY;
 		this.where = where;
 	}
@@ -43,46 +32,38 @@ public class CollectorEventResult implements StartableCollector<EventResult>, St
 	@Override
 	public boolean process(EventResult r) {
 		this.currentResult = r;
-		if (!ExecutionState.READY.equals(status)) {
-			return false;
-		} else {
-			return processDone();
-		}
+		return !ExecutionState.READY.equals(status) ? false : processDone();
 	}
 
 	@Override
 	public boolean processDone() {
-		return trigSaver.save(currentResult.getTrig(), this.where) && csvSaver.save(currentResult.getCSV(), this.where);
+		return currentResult.getTrig().save(getTrigPath(this.where)) && currentResult.getCSV().save(getCSVpath(this.where));
 	}
 
 	@Override
-	public boolean process(EventResult r, String w) throws IOException {
-		log.debug("Store [" + w + "]");
-		if (!ExecutionState.READY.equals(status)) {
-			return false;
-		} else {
-			return trigSaver.save(r.getTrig(), w) && csvSaver.save(r.getCSV(), w);
-		}
+	public boolean process(EventResult r, String w) {
+		return !ExecutionState.READY.equals(status) ? false : r.getTrig().save(getTrigPath(w)) && r.getCSV().save(getCSVpath(w));
 	}
 
 	@Override
 	public ExecutionState init() {
-		if (ExecutionState.READY.equals(trigSaver.init()) && ExecutionState.READY.equals(csvSaver.init())) {
-			status = ExecutionState.READY;
-		} else {
-			status = ExecutionState.ERROR;
-		}
+		status = ExecutionState.READY;
 		return status;
 	}
 
 	@Override
 	public ExecutionState close() {
-		if (ExecutionState.CLOSED.equals(trigSaver.close()) && ExecutionState.CLOSED.equals(csvSaver.close())) {
-			status = ExecutionState.CLOSED;
-		} else {
-			status = ExecutionState.ERROR;
-		}
+		status = ExecutionState.CLOSED;
 		return status;
 	}
 
+	private String getTrigPath(String w) {
+		return FileUtils.TRIG_OUTPUT_FILE_PATH + w + FileUtils.TRIG_FILE_EXTENSION;
+	}
+
+	private String getCSVpath(String w) {
+		String csvLog = w.replace("0Result", "RESLOG").replace("0Window", "WINLOG").replace("1Result", "LATLOG").replace("1Window", "WINLATLOG")
+				.replace("2Result", "MEMLOG").replace("2Window", "WINMEMLOG");
+		return FileUtils.CSV_OUTPUT_FILE_PATH + csvLog + FileUtils.CSV;
+	}
 }

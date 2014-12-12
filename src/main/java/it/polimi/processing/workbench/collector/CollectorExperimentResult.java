@@ -7,7 +7,6 @@ import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.workbench.core.EventProcessor;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 import lombok.Getter;
@@ -34,12 +33,7 @@ public class CollectorExperimentResult implements StartableCollector<ExperimentR
 	@Override
 	public boolean process(ExperimentResult r) {
 		this.currentExperiment = r;
-		if (!ExecutionState.READY.equals(status)) {
-			return false;
-		} else {
-			return processDone();
-
-		}
+		return !ExecutionState.READY.equals(status) ? false : processDone();
 	}
 
 	@Override
@@ -48,14 +42,8 @@ public class CollectorExperimentResult implements StartableCollector<ExperimentR
 	}
 
 	@Override
-	public boolean process(ExperimentResult r, String where) throws IOException {
-
-		if (!ExecutionState.READY.equals(status)) {
-			return false;
-		} else {
-			return sqlLiteSaver.save(r.getSQL(), where);
-
-		}
+	public boolean process(ExperimentResult r, String where) {
+		return !ExecutionState.READY.equals(status) ? false : sqlLiteSaver.save(r.getSQL(), where);
 	}
 
 	@Override
