@@ -2,15 +2,21 @@ package it.polimi.processing.collector.saver.data;
 
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.streamer.Parser;
+import it.polimi.utils.ExecutionEnvirorment;
 
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.extern.log4j.Log4j;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
-public class TriG implements CollectableData {
+@Log4j
+public class TriG extends WritableData {
+
 	private String key;
 	private Set<TripleContainer> triples;
 
@@ -35,4 +41,11 @@ public class TriG implements CollectableData {
 		triples.add(new TripleContainer(Parser.parseTriple(triple)));
 		return new TriG(key, triples2);
 	}
+
+	@Override
+	public boolean save(String where) {
+		log.info("Save Data [" + ExecutionEnvirorment.finalresultTrigLogEnabled + "]");
+		return ExecutionEnvirorment.finalresultTrigLogEnabled ? super.save(where) : !ExecutionEnvirorment.finalresultTrigLogEnabled;
+	}
+
 }
