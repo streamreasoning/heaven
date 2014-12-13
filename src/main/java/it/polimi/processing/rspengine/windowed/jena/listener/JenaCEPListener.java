@@ -72,6 +72,7 @@ public abstract class JenaCEPListener implements UpdateListener {
 				statementStrings = new TripleContainer(t.getSubject().toString(), t.getPredicate().toString(), t.getObject().toString());
 				statements.add(statementStrings);
 			}
+
 			if (next != null) {
 				log.debug("Send Event to the StoreCollector");
 				// TODO add memory
