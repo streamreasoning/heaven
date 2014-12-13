@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface Streamer<T> extends Startable<ExecutionState> {
 
-	public void stream(BufferedReader br, int experimentNumber);
+	public void startStreamimng(BufferedReader br, int experimentNumber);
 
 	public T createEvent(Set<TripleContainer> triple, int eventNumber, int experimentNumber);
 }

@@ -1,7 +1,7 @@
 package it.polimi.processing.events;
 
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.utils.Memory;
+import it.polimi.processing.system.Memory;
 
 import java.util.HashSet;
 import java.util.Set;
