@@ -155,22 +155,23 @@ public class BaselineMain {
 		EventBuilder<RSPEvent> eb = null;
 
 		String code = "_EB";
+		String message = "Event Builder Selection: [" + STREAMING_MODE + "] [" + INIT_SIZE + "] ";
+
 		switch (STREAMING_MODE) {
 			case CONSTANT:
-				log.info("Event Builder Selection: Constant [" + INIT_SIZE + "] ");
 				code += "K" + INIT_SIZE;
-				log.info("CONSTANT Event Builder Initial Size [" + INIT_SIZE + "]");
 				eb = new ConstantEventBuilder(INIT_SIZE, EXPERIMENT_NUMBER);
 				break;
 			case STEP:
-				log.info("Event Builder Selection: Step [" + INIT_SIZE + "] Heigh [" + X + "] Width [" + Y + "] ");
+				message += " Heigh [" + X + "] Width [" + Y + "] ";
 				eb = new StepEventBuilder(X, Y, INIT_SIZE, EXPERIMENT_NUMBER);
 				code += "S" + INIT_SIZE + "H" + X + "W" + Y;
 				break;
 			default:
-				log.error("Not valid case [" + STREAMING_MODE + "]");
+				message = "Not valid case [" + STREAMING_MODE + "]";
 		}
 
+		log.info(message);
 		if (eb != null) {
 			streamer = new NTStreamer(testStand, eb, EVENTS);
 			return code;
@@ -179,22 +180,21 @@ public class BaselineMain {
 	}
 
 	protected static void jenaEngineSelection() {
+		String message = "Engine Selection: [" + CEP_EVENT_TYPE + "] [" + engineName.toUpperCase() + "] ";
 		switch (CEP_EVENT_TYPE) {
 			case TEVENT:
-				log.info("Engine Selection: JenaPlain [" + engineName + "] ");
 				engine = new JenaEngineTEvent(engineName, testStand, listener);
 				return;
 			case STMT:
-				log.info("Engine Selection: Jena Stmt [" + engineName + "] ");
 				engine = new JenaEngineStmt(engineName, testStand, listener);
 				return;
 			case GRAPH:
-				log.info("Engine Selection: JenaGraph [" + engineName + "] ");
 				engine = new JenaEngineGraph(engineName, testStand, listener);
 				return;
 			default:
-				log.error("Not valid case [" + CEP_EVENT_TYPE + "]");
+				message = "Not valid case [" + CEP_EVENT_TYPE + "]";
 		}
+		log.info(message);
 		throw new IllegalArgumentException("Not valid case [" + CEP_EVENT_TYPE + "]");
 	}
 
@@ -246,13 +246,15 @@ public class BaselineMain {
 
 		experimentResultCollector = new CollectorExperimentResult();
 		streamingEventResultCollector = new CollectorEventResult(engineName + "/");
-
+		String exp = "";
 		if (ExecutionEnvirorment.finalresultTrigLogEnabled)
-			log.info("Execution of Result C&S Experiment");
+			exp += "Result C&S ";
 		if (ExecutionEnvirorment.memoryLogEnabled)
-			log.info("Execution of Memory Experiment");
+			exp += "Memory ";
 		if (ExecutionEnvirorment.latencyLogEnabled)
-			log.info("Execution of Latency Experiment");
+			exp += "Latency ";
+
+		log.info("Execution of " + exp + "Experiment");
 	}
 
 	private static void run(String f, String comment, int experimentNumber, Date d, String experimentDescription) {

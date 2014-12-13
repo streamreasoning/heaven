@@ -58,12 +58,13 @@ public class NTStreamer extends RSPEventStreamer {
 	 **/
 	@Override
 	public void startStreamimng(BufferedReader br, int experimentNumber) {
-
-		log.debug("Start Streaming");
 		try {
 			if (!ExecutionState.READY.equals(status)) {
 				throw new WrongStatusTransitionException("Not Ready " + status);
 			} else {
+
+				log.info("Start Streaming");
+
 				int streamedEvents = 0, triples = 0;
 				String line;
 				while ((line = br.readLine()) != null && streamedEvents <= eventLimit - 1) {
@@ -82,7 +83,7 @@ public class NTStreamer extends RSPEventStreamer {
 					}
 					status = ExecutionState.READY;
 				}
-				log.info("Triples: [" + triples + "] " + "RSPEvents: [" + streamedEvents + "]");
+				log.info("End Streaming: Triples: [" + triples + "] " + "RSPEvents: [" + streamedEvents + "]");
 				br.close();
 			}
 		} catch (IOException e) {

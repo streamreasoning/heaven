@@ -69,7 +69,7 @@ public class GetPropertyValues {
 
 	public static <T extends Enum<T>> T getEnumProperty(Class<T> enumType, String propertyName) {
 		String property = prop.getProperty(propertyName).trim();
-		log.info("Property: [" + propertyName + "] Value [" + property + "]");
+		log.debug("Property: [" + propertyName + "] Value [" + property + "]");
 		return Enum.valueOf(enumType, property);
 	}
 

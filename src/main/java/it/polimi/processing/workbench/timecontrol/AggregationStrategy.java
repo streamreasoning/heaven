@@ -41,6 +41,7 @@ public class AggregationStrategy implements TimeStrategy {
 			tsEventNumber++;
 		}
 
+		currentResult.setEventNumber(eventNumber);
 		currentResult.setId("<http://example.org/" + experiment + "/" + eventNumber + ">");
 		process = rspEngine.process(e);
 		rspEngine.progress(aggregation);

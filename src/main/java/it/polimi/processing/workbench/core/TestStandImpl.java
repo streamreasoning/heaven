@@ -29,6 +29,10 @@ public abstract class TestStandImpl extends Stand implements EventProcessor<Even
 
 	protected int eventNumber, tsResultEvents = 0;
 
+	protected int resultEvent;
+	protected int rspEvent;
+	protected int totalEvent;
+
 	public void build(StartableCollector<EventResult> resultCollector, StartableCollector<ExperimentResult> experimentResultCollector,
 			RSPEngine rspEngine, RSPEventStreamer rspEventStreamer) {
 		this.experimentResultCollector = experimentResultCollector;
@@ -82,7 +86,8 @@ public abstract class TestStandImpl extends Stand implements EventProcessor<Even
 				status = ExecutionState.ERROR;
 			}
 
-			log.info("Processed [" + tsResultEvents + "] TSREsult Events");
+			log.info("Status [" + status + "] Processed RSPEvents [" + rspEvent + "]  ResultEvents [" + resultEvent + "]  Total [" + totalEvent
+					+ "] Produced [" + tsResultEvents + "] TSResult Events");
 			return status;
 		}
 	}

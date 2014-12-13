@@ -46,7 +46,7 @@ public class RSPTestStand extends TestStandImpl {
 		this.outputFileName = outputFileName;
 		this.windowFileName = windowFileName;
 
-		log.info("Start Streaming " + System.currentTimeMillis());
+		long startTime = System.currentTimeMillis();
 
 		if (!isOn()) {
 			throw new WrongStatusTransitionException("Not ON");
@@ -56,7 +56,8 @@ public class RSPTestStand extends TestStandImpl {
 
 			status = ExecutionState.RUNNING;
 			currentExperiment = new Experiment(experimentNumber, experimentDescription, rspEngine.getName(), inputFileNameWithPath, outputFileName,
-					System.currentTimeMillis(), comment, 0L);
+					startTime, comment, 0L);
+
 			log.debug("Status [" + status + "] Experiment Created");
 
 			ExecutionState engineStatus = rspEngine.startProcessing();
@@ -83,7 +84,7 @@ public class RSPTestStand extends TestStandImpl {
 
 			log.debug("Status [" + status + "] Processing is ended");
 
-			currentExperiment.setTimestampEnd(System.currentTimeMillis());
+			currentExperiment.setTimestampEnd(startTime);
 
 			experimentResultCollector.process(currentExperiment);
 
@@ -93,7 +94,7 @@ public class RSPTestStand extends TestStandImpl {
 				status = ExecutionState.ERROR;
 			}
 
-			log.info("Status [" + status + "] Stop the Streaming " + System.currentTimeMillis());
+			log.info("Status [" + status + "] Stop the experiment, duration " + (System.currentTimeMillis() - startTime) + "ms");
 
 		}
 
@@ -102,22 +103,23 @@ public class RSPTestStand extends TestStandImpl {
 
 	@Override
 	public boolean process(Event e) {
+		totalEvent++;
 		return (e instanceof RSPEvent) ? process((RSPEvent) e) : process((Result) e);
 	}
 
 	public boolean process(RSPEvent e) {
+		rspEvent++;
 		return timeStrategy.apply(e);
 	}
 
 	public boolean process(Result engineResult) {
 
-		this.where = "exp" + experimentNumber + "/" + rspEngine.getName() + "/" + ((engineResult.isAbox()) ? windowFileName : outputFileName);
+		resultEvent++;
 
-		this.eventNumber = rspEngine.getEventNumber();
+		this.where = "exp" + experimentNumber + "/" + rspEngine.getName() + "/" + ((engineResult.isAbox()) ? windowFileName : outputFileName);
 
 		this.currentResult = timeStrategy.getResult();
 		this.currentResult.setStatements(engineResult.getStatements());
-		this.currentResult.setEventNumber(eventNumber);
 		this.currentResult.setMemoryA(Memory.getMemoryUsage());
 		this.currentResult.setOutputTimestamp(System.currentTimeMillis());
 		this.currentResult.setCr(engineResult.getCompleteRHODF());

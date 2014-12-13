@@ -4,6 +4,7 @@ import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.abstracts.RSPEsperEngine;
+import it.polimi.processing.rspengine.shared.events.EsperUtils;
 import it.polimi.processing.rspengine.windowed.esper.plain.events.TEvent;
 import it.polimi.processing.workbench.core.EventProcessor;
 import lombok.extern.log4j.Log4j;
@@ -47,7 +48,7 @@ public abstract class JenaEngine extends RSPEsperEngine {
 
 	protected void initQueries() {
 
-		EPStatement out = cepAdm.createEPL(" select irstream * from TEvent.win:time(1000 msec) output snapshot every 100 msec");
+		EPStatement out = cepAdm.createEPL(EsperUtils.JENA_INPUT_QUERY);
 		out.addListener(listener);
 	}
 
@@ -56,7 +57,7 @@ public abstract class JenaEngine extends RSPEsperEngine {
 		ref = new ConfigurationMethodRef();
 		cepConfig = new Configuration();
 
-		log.info("Added [" + eventClass.getName() + "] as TEvent");
+		log.info("Added [" + eventClass.getSimpleName() + "] as TEvent");
 		cepConfig.addEventType("TEvent", eventClass.getName());
 
 		cepConfig.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
@@ -108,8 +109,8 @@ public abstract class JenaEngine extends RSPEsperEngine {
 	@Override
 	public ExecutionState close() {
 		status = ExecutionState.CLOSED;
-		log.info("Status[" + status + "] Turing Off Processed RSPEvents [" + rspEventsNumber + "]  EsperEvents [" + esperEventsNumber + "] Windows ["
-				+ windowShots + "] ");
+		log.info("Status [" + status + "] Turing Off Processed RSPEvents [" + rspEventsNumber + "]  EsperEvents [" + esperEventsNumber
+				+ "] Windows [" + windowShots + "] Snapshots [" + (time / EsperUtils.OUTPUT_RATE) + "]");
 		return status;
 	}
 

@@ -2,7 +2,7 @@ package it.polimi.processing.rspengine.abstracts;
 
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.rspengine.windowed.esper.plain.utils.Queries;
+import it.polimi.processing.rspengine.shared.events.EsperUtils;
 import it.polimi.processing.workbench.core.EventProcessor;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
@@ -24,7 +24,7 @@ public abstract class RSPEsperEngine extends RSPEngine {
 	protected static EPAdministrator cepAdm;
 	protected static ConfigurationMethodRef ref;
 
-	protected int windowShots, time = 0, rspEventsNumber = 0, esperEventsNumber = 0;
+	protected int windowShots = 0, snapshots = 0, time = 0, rspEventsNumber = 0, esperEventsNumber = 0;
 
 	public RSPEsperEngine(String name, EventProcessor<Event> collector) {
 		super(name, collector);
@@ -37,15 +37,22 @@ public abstract class RSPEsperEngine extends RSPEngine {
 	}
 
 	public void moveWindow() {
-		time += Queries.window;
+		time += EsperUtils.WINDOW_SIZE;
 		windowShots++;
 		cepRT.sendEvent(new CurrentTimeEvent(time));
 		log.debug("Sent time Event");
 	}
 
+	public void moveSnapshot() {
+		time += EsperUtils.OUTPUT_RATE;
+		snapshots++;
+		cepRT.sendEvent(new CurrentTimeEvent(time));
+		log.debug("Sent time Event");
+	}
+
 	public void moveTimePortion(int portion) {
-		time += Queries.window / portion;
-		windowShots += time % 1000 == 0 ? 1 : 0;
+		time += EsperUtils.WINDOW_SIZE / portion;
+		windowShots += time % EsperUtils.WINDOW_SIZE == 0 ? 1 : 0;
 		cepRT.sendEvent(new CurrentTimeEvent(time));
 		log.debug("Sent time Event");
 	}

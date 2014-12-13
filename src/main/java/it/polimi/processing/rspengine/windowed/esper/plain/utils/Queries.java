@@ -1,11 +1,12 @@
 package it.polimi.processing.rspengine.windowed.esper.plain.utils;
 
+import it.polimi.processing.rspengine.shared.events.EsperUtils;
 import it.polimi.processing.system.GetPropertyValues;
 
 public class Queries {
 
 	private static final String EXTERNAL = "it.polimi.processing.rspengine.esper.plain." + GetPropertyValues.getProperty("ontology_class");
-	public static final long window = 1000;
+	public static final long window = EsperUtils.WINDOW_SIZE;
 
 	public static final String INPUT = "insert into InputEvent select * from  TEvent";
 

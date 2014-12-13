@@ -35,12 +35,13 @@ public class SQLListeService {
 		try {
 			Class.forName(ORG_SQLITE_JDBC);
 			c = DriverManager.getConnection(JDBC_SQLITE_OBQAATCEP_DB);
-			log.info("Opened database successfully");
+			log.info("Database successfully opened");
 			stmt = c.createStatement();
 			stmt.executeUpdate(EXPERIMENT_TABLE);
+			log.info("Experiment Table successfully created ");
 			stmt.executeUpdate(COMPARATION_TABLE);
 			stmt.close();
-			log.info("Table created successfully");
+			log.info("Comparison Table successfully created ");
 		} catch (ClassNotFoundException e) {
 			log.error(e.getMessage());
 		} catch (SQLException e) {
@@ -52,7 +53,7 @@ public class SQLListeService {
 		try {
 			stmt = c.createStatement();
 			String sql = d.getData();
-			log.info(sql);
+			log.debug(sql);
 			if (sql != null && stmt != null && c != null && !c.isClosed()) {
 				stmt.executeUpdate(EXPERIMENT_INSERT + sql);
 				stmt.close();
@@ -67,6 +68,7 @@ public class SQLListeService {
 	public static boolean close() {
 		try {
 			c.close();
+			log.info("Database successfully closed");
 			return true;
 		} catch (SQLException e) {
 			log.error(e.getMessage());
