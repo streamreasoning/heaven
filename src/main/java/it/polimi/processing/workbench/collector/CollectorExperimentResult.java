@@ -2,12 +2,7 @@ package it.polimi.processing.workbench.collector;
 
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.ExperimentResult;
-import it.polimi.processing.workbench.core.EventProcessor;
-
-import java.sql.SQLException;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,13 +11,11 @@ import lombok.Setter;
 public class CollectorExperimentResult implements StartableCollector<ExperimentResult> {
 
 	private long timestamp;
-	private EventProcessor<Event> stand;
 	private ExecutionState status;
 	private String where;
 	private ExperimentResult currentExperiment;
 
-	public CollectorExperimentResult(EventProcessor<Event> stand) throws SQLException, ClassNotFoundException {
-		this.stand = stand;
+	public CollectorExperimentResult() {
 		this.timestamp = System.currentTimeMillis();
 		this.status = ExecutionState.READY;
 	}

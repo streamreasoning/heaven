@@ -2,14 +2,9 @@ package it.polimi.processing.workbench.collector;
 
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.EventResult;
-import it.polimi.processing.workbench.core.EventProcessor;
 import it.polimi.processing.workbench.core.Startable;
 import it.polimi.utils.FileUtils;
-
-import java.sql.SQLException;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,11 +15,9 @@ public class CollectorEventResult implements StartableCollector<EventResult>, St
 	private ExecutionState status;
 	private String where;
 
-	private EventProcessor<Event> stand;
 	private EventResult currentResult;
 
-	public CollectorEventResult(EventProcessor<Event> processor, String where) throws SQLException, ClassNotFoundException {
-		this.stand = processor;
+	public CollectorEventResult(String where) {
 		this.status = ExecutionState.READY;
 		this.where = where;
 	}
@@ -37,12 +30,15 @@ public class CollectorEventResult implements StartableCollector<EventResult>, St
 
 	@Override
 	public boolean processDone() {
-		return currentResult.getTrig().save(getTrigPath(this.where)) && currentResult.getCSV().save(getCSVpath(this.where));
+		return !ExecutionState.READY.equals(status) ? false : currentResult.getTrig().save(getTrigPath(where))
+				&& currentResult.getCSV().save(getCSVpath(where));
 	}
 
 	@Override
 	public boolean process(EventResult r, String w) {
-		return !ExecutionState.READY.equals(status) ? false : r.getTrig().save(getTrigPath(w)) && r.getCSV().save(getCSVpath(w));
+		currentResult = r;
+		this.where = w;
+		return processDone();
 	}
 
 	@Override
