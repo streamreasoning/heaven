@@ -39,6 +39,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 import lombok.AccessLevel;
@@ -86,10 +87,17 @@ public class BaselineMain {
 	private static String RSPENGINE;
 	private static Integer X_SIZE;
 	private static Integer Y_SIZE;
+	public static String INPUT_PROPERTIES;
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
 
-		file = GetPropertyValues.getProperty(GetPropertyValues.INPUT_FILE);// _CLND_UNIV10INDEX0SEED0.nt
+		if (args.length >= 2) {
+			INPUT_PROPERTIES = args[0];
+			file = args[1];
+			log.info(Arrays.deepToString(args));
+		} else {
+			file = GetPropertyValues.getProperty(GetPropertyValues.DEFAULT_INPUT_FILE);
+		}
 
 		EXPERIMENT_NUMBER = GetPropertyValues.getIntegerProperty("experiment_number");
 		EXPERIMENT_DATE = GetPropertyValues.getDateProperty("experiment_date");

@@ -1,5 +1,7 @@
 package it.polimi.processing.system;
 
+import it.polimi.main.BaselineMain;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -16,13 +18,21 @@ import lombok.extern.log4j.Log4j;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GetPropertyValues {
 	private static Properties prop = new Properties();
-	private static final String propFileName = "properties/config.properties";
+	public static String inputPropertiesFileName = null;
+	private static final String defaultPropertiesFileName = "properties/default_teststand.properties";
 	private static final DateFormat DT = new SimpleDateFormat("yyyy-MM-dd");
 
-	public static final String INPUT_FILE = "input_file";
+	public static final String DEFAULT_INPUT_FILE = "input_file";
 
 	static {
-		InputStream inputStream = GetPropertyValues.class.getClassLoader().getResourceAsStream(propFileName);
+		InputStream inputStream;
+
+		if (BaselineMain.INPUT_PROPERTIES != null) {
+			inputStream = GetPropertyValues.class.getClassLoader().getResourceAsStream(BaselineMain.INPUT_PROPERTIES);
+			log.info("Input Properties Accepted");
+		} else {
+			inputStream = GetPropertyValues.class.getClassLoader().getResourceAsStream(defaultPropertiesFileName);
+		}
 
 		if (inputStream != null) {
 			try {
@@ -32,7 +42,7 @@ public class GetPropertyValues {
 
 			}
 		} else {
-			log.error("property file '" + propFileName + "' not found in the classpath");
+			log.error("property file '" + defaultPropertiesFileName + "' not found in the classpath");
 		}
 	}
 
