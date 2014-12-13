@@ -29,7 +29,7 @@ public class JenaFullListenerTest {
 	@Test
 	public void stmtEventTest() {
 
-		listener = new JenaFullListener(FileUtils.UNIV_BENCH_RDFS_MODIFIED, null);
+		listener = new JenaFullListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RDFS_MODIFIED), null);
 
 		String[] eventTriple = new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" };
@@ -69,7 +69,7 @@ public class JenaFullListenerTest {
 	@Test
 	public void tripleEventTest() {
 
-		listener = new JenaFullListener(FileUtils.UNIV_BENCH_RDFS_MODIFIED, null);
+		listener = new JenaFullListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RDFS_MODIFIED), null);
 
 		String[] eventTriple = new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" };
@@ -108,7 +108,7 @@ public class JenaFullListenerTest {
 	@Test
 	public void graphEventTest() {
 
-		listener = new JenaFullListener(FileUtils.UNIV_BENCH_RDFS_MODIFIED, null);
+		listener = new JenaFullListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RDFS_MODIFIED), null);
 
 		String[] eventTriple = new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor" };

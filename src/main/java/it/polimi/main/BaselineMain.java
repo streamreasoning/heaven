@@ -33,6 +33,7 @@ import it.polimi.processing.workbench.timecontrol.InternalTiming;
 import it.polimi.processing.workbench.timecontrol.NoAggregationStrategy;
 import it.polimi.processing.workbench.timecontrol.TimeStrategy;
 import it.polimi.utils.FileUtils;
+import it.polimi.utils.RDFSUtils;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -46,7 +47,6 @@ import lombok.extern.log4j.Log4j;
 
 import com.espertech.esper.client.UpdateListener;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.util.FileManager;
 
 @Log4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -223,22 +223,21 @@ public class BaselineMain {
 	}
 
 	protected static void reasonerSelection() {
-		FileManager.get().addLocatorClassLoader(BaselineMain.class.getClassLoader());
 		Model tbox;
 		switch (CURRENT_REASONER) {
 			case SMPL:
 				log.info("Reasoner Selection: SMPL");
-				tbox = FileManager.get().loadModel(FileUtils.UNIV_BENCH_RDFS_MODIFIED, null, "RDF/XML");
+				tbox = RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RDFS_MODIFIED);
 				listener = new JenaSMPLListener(tbox, testStand);
 				break;
 			case RHODF:
 				log.info("Reasoner Selection: RHODF");
-				tbox = FileManager.get().loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED, null, "RDF/XML");
+				tbox = RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED);
 				listener = new JenaRhoDFListener(tbox, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
 				break;
 			case FULL:
 				log.info("Reasoner Selection: FULL");
-				tbox = FileManager.get().loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED, null, "RDF/XML");
+				tbox = RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED);
 				listener = new JenaFullListener(tbox, testStand);
 				break;
 			default:

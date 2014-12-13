@@ -1,5 +1,10 @@
 package it.polimi.utils;
 
+import it.polimi.main.BaselineMain;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.util.FileManager;
+
 public class RDFSUtils {
 
 	public static final String UNIV_BENCH_RDFS = "src/main/resources/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
@@ -65,5 +70,10 @@ public class RDFSUtils {
 				return true;
 		}
 		return false;
+	}
+
+	public static Model loadModel(String path) {
+		FileManager.get().addLocatorClassLoader(BaselineMain.class.getClassLoader());
+		return FileManager.get().loadModel(path, null, "RDF/XML");
 	}
 }

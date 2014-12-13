@@ -29,7 +29,7 @@ public class JenaRhoDFListenerTest {
 	@Test
 	public void stmtEventTest() {
 
-		listener = new JenaRhoDFListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, null);
+		listener = new JenaRhoDFListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED), FileUtils.RHODF_RULE_SET_RUNTIME, null);
 
 		String[] eventTriple = new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" };
@@ -69,7 +69,7 @@ public class JenaRhoDFListenerTest {
 	@Test
 	public void tripleEventTest() {
 
-		listener = new JenaRhoDFListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, null);
+		listener = new JenaRhoDFListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED), FileUtils.RHODF_RULE_SET_RUNTIME, null);
 
 		String[] eventTriple = new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" };
@@ -108,7 +108,7 @@ public class JenaRhoDFListenerTest {
 	@Test
 	public void graphEventTest() {
 
-		listener = new JenaRhoDFListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, null);
+		listener = new JenaRhoDFListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED), FileUtils.RHODF_RULE_SET_RUNTIME, null);
 
 		String[] eventTriple = new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor" };
