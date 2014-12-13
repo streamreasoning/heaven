@@ -21,6 +21,7 @@
 .settings/
 src/main/resources/data/preprocessing/
 .launch
+.zip
 
 #Maven
 target
