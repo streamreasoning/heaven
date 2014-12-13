@@ -47,7 +47,7 @@ public abstract class JenaCEPListener implements UpdateListener {
 		}
 
 		if (newData != null) {
-			log.debug("[" + newData.length + "] New Events");
+			log.d("[" + newData.length + "] New Events");
 
 			abox = ModelFactory.createMemModelMaker().createDefaultModel().getGraph();
 			ABoxTriples = new HashSet<TripleContainer>();
@@ -74,6 +74,7 @@ public abstract class JenaCEPListener implements UpdateListener {
 			}
 			if (next != null) {
 				log.debug("Send Event to the StoreCollector");
+				// TODO add memory
 				next.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), false));
 				next.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), true));
 			}
