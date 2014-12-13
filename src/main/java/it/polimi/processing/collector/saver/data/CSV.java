@@ -1,6 +1,6 @@
 package it.polimi.processing.collector.saver.data;
 
-import it.polimi.utils.ExecutionEnvirorment;
+import it.polimi.processing.system.ExecutionEnvirorment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

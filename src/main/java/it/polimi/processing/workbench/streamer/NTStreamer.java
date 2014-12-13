@@ -57,7 +57,7 @@ public class NTStreamer extends RSPEventStreamer {
 	 *            system
 	 **/
 	@Override
-	public void stream(BufferedReader br, int experimentNumber) {
+	public void startStreamimng(BufferedReader br, int experimentNumber) {
 
 		log.debug("Start Streaming");
 		try {

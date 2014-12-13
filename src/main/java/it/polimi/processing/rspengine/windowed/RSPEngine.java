@@ -12,14 +12,14 @@ import lombok.Setter;
 public abstract class RSPEngine implements EventProcessor<RSPEvent> {
 
 	protected ExecutionState status;
-	protected EventProcessor<Event> collector;
+	protected EventProcessor<Event> next;
 	protected String name;
 
 	@Getter
 	protected RSPEvent currentEvent = null;
 
-	public RSPEngine(String name, EventProcessor<Event> stand) {
-		this.collector = stand;
+	public RSPEngine(String name, EventProcessor<Event> next) {
+		this.next = next;
 		this.name = name;
 	}
 

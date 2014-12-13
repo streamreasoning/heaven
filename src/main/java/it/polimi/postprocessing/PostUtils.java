@@ -1,6 +1,6 @@
 package it.polimi.postprocessing;
 
-import it.polimi.properties.GetPropertyValues;
+import it.polimi.processing.system.GetPropertyValues;
 
 import java.io.BufferedReader;
 import java.io.File;

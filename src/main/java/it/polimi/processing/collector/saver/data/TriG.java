@@ -2,7 +2,7 @@ package it.polimi.processing.collector.saver.data;
 
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.streamer.Parser;
-import it.polimi.utils.ExecutionEnvirorment;
+import it.polimi.processing.system.ExecutionEnvirorment;
 
 import java.util.Set;
 

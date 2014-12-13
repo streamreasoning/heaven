@@ -58,7 +58,7 @@ public class TriGStreamer extends RSPEventStreamer {
 	 *            system
 	 **/
 	@Override
-	public void stream(BufferedReader br, int experimentNumber) {
+	public void startStreamimng(BufferedReader br, int experimentNumber) {
 		try {
 			if (!ExecutionState.READY.equals(status)) {
 				throw new WrongStatusTransitionException("Not Ready " + status);

@@ -1,6 +1,6 @@
 package it.polimi.utils;
 
-import it.polimi.properties.GetPropertyValues;
+import it.polimi.processing.system.GetPropertyValues;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -12,7 +12,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class FileUtils {
 
-	private static String daypath;
+	public static String daypath;
 	static {
 
 		DateFormat dt = new SimpleDateFormat("yyyy-MM-dd");

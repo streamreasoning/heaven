@@ -1,6 +1,6 @@
 package it.polimi.processing.rspengine.windowed.esper.plain;
 
-import it.polimi.properties.GetPropertyValues;
+import it.polimi.processing.system.GetPropertyValues;
 
 public class Queries {
 

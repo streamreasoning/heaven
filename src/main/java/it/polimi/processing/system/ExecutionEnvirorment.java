@@ -1,6 +1,5 @@
-package it.polimi.utils;
+package it.polimi.processing.system;
 
-import it.polimi.properties.GetPropertyValues;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -10,9 +9,5 @@ public class ExecutionEnvirorment {
 	public static final boolean memoryLogEnabled = GetPropertyValues.getBooleanProperty("memory_log_enabled");
 	public static final boolean latencyLogEnabled = GetPropertyValues.getBooleanProperty("latency_log_enabled");
 	public static final boolean finalresultTrigLogEnabled = GetPropertyValues.getBooleanProperty("result_log_enabled");
-
-	static {
-
-	}
 
 }
