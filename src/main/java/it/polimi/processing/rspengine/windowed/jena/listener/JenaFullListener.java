@@ -3,13 +3,14 @@ package it.polimi.processing.rspengine.windowed.jena.listener;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.workbench.core.EventProcessor;
 
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.reasoner.Reasoner;
 import com.hp.hpl.jena.reasoner.ReasonerRegistry;
 import com.hp.hpl.jena.vocabulary.ReasonerVocabulary;
 
 public class JenaFullListener extends JenaCEPListener {
 
-	public JenaFullListener(String tbox, EventProcessor<Event> collector) {
+	public JenaFullListener(Model tbox, EventProcessor<Event> collector) {
 		super(tbox, collector);
 	}
 

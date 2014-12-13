@@ -22,7 +22,6 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.rdf.model.impl.InfModelImpl;
 import com.hp.hpl.jena.reasoner.InfGraph;
 import com.hp.hpl.jena.reasoner.Reasoner;
-import com.hp.hpl.jena.util.FileManager;
 
 @Log4j
 public abstract class JenaCEPListener implements UpdateListener {
@@ -31,14 +30,13 @@ public abstract class JenaCEPListener implements UpdateListener {
 	private Graph abox;
 	private InfModel ABoxStar;
 	private Reasoner reasoner;
-	private final EventProcessor<Event> collector;
+	private final EventProcessor<Event> next;
 	private int eventNumber = 0;
 	private Set<TripleContainer> ABoxTriples;
 
-	public JenaCEPListener(String tbox, EventProcessor<Event> collector) {
-		FileManager.get().addLocatorClassLoader(this.getClass().getClassLoader());
-		this.TBoxStar = FileManager.get().loadModel(tbox, null, "RDF/XML");
-		this.collector = collector;
+	public JenaCEPListener(Model tbox, EventProcessor<Event> next) {
+		this.TBoxStar = tbox;
+		this.next = next;
 	}
 
 	@Override
@@ -74,10 +72,10 @@ public abstract class JenaCEPListener implements UpdateListener {
 				statementStrings = new TripleContainer(t.getSubject().toString(), t.getPredicate().toString(), t.getObject().toString());
 				statements.add(statementStrings);
 			}
-			if (collector != null) {
+			if (next != null) {
 				log.debug("Send Event to the StoreCollector");
-				collector.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), false));
-				collector.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), true));
+				next.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), false));
+				next.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), true));
 			}
 			eventNumber += ABoxTriples.size() + 1;
 		}

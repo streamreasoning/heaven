@@ -91,8 +91,7 @@ public abstract class JenaEngine extends RSPEsperEngine {
 		rspEventsNumber++;
 		handleEvent(e);
 		log.debug("Status[" + (status = ExecutionState.READY) + "] Parsing done, prepare time scheduling...");
-
-		return true;
+		return processDone();
 	}
 
 	protected abstract void handleEvent(RSPEvent e);
