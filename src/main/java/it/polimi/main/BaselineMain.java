@@ -20,16 +20,18 @@ import it.polimi.processing.rspengine.windowed.jena.enums.Reasoner;
 import it.polimi.processing.rspengine.windowed.jena.listener.JenaFullListener;
 import it.polimi.processing.rspengine.windowed.jena.listener.JenaRhoDFListener;
 import it.polimi.processing.rspengine.windowed.jena.listener.JenaSMPLListener;
+import it.polimi.processing.services.FileService;
 import it.polimi.processing.streamer.RSPEventStreamer;
+import it.polimi.processing.system.ExecutionEnvirorment;
+import it.polimi.processing.system.GetPropertyValues;
 import it.polimi.processing.workbench.collector.CollectorEventResult;
 import it.polimi.processing.workbench.collector.CollectorExperimentResult;
 import it.polimi.processing.workbench.core.RSPTestStand;
 import it.polimi.processing.workbench.streamer.NTStreamer;
 import it.polimi.processing.workbench.timecontrol.AggregationStrategy;
 import it.polimi.processing.workbench.timecontrol.InternalTiming;
-import it.polimi.processing.workbench.timecontrol.OneToOneStrategy;
+import it.polimi.processing.workbench.timecontrol.NoAggregationStrategy;
 import it.polimi.processing.workbench.timecontrol.TimeStrategy;
-import it.polimi.properties.GetPropertyValues;
 import it.polimi.utils.FileUtils;
 
 import java.sql.SQLException;
@@ -43,6 +45,8 @@ import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 import com.espertech.esper.client.UpdateListener;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.util.FileManager;
 
 @Log4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -117,12 +121,15 @@ public class BaselineMain {
 
 		eventBuilderCodeName = streamerSelection();
 
+		reasonerSelection();
+
 		experimentDescription = "EXPERIMENT_ON_" + file + "_WITH_ENGINE_" + engineName + "EVENT_" + CEP_EVENT_TYPE;
 
-		FileUtils.createOutputFolder("exp" + EXPERIMENT_NUMBER + "/" + engineName);
+		FileService.createOutputFolder(FileUtils.daypath + "/exp" + EXPERIMENT_NUMBER + "/" + engineName);
 
 		String generalName = "EN" + EXPERIMENT_NUMBER + "_" + "EXE" + EXECUTION_NUMBER + "_" + COMMENT + "_" + DT.format(EXPERIMENT_DATE) + "_"
 				+ file.split("\\.")[0] + "_R" + CURRENT_REASONER + "E" + CEP_EVENT_TYPE + eventBuilderCodeName;
+
 		EXPERIMENT_TYPE = GetPropertyValues.getEnumProperty(ExperimentType.class, "experiment_type");
 		outputFileName = EXPERIMENT_TYPE.ordinal() + "Result_" + generalName;
 		windowFileName = EXPERIMENT_TYPE.ordinal() + "Window_" + generalName;
@@ -135,8 +142,6 @@ public class BaselineMain {
 
 		collectorSelection();
 
-		reasonerSelection();
-
 		jenaEngineSelection();
 
 		run(file, COMMENT, EXPERIMENT_NUMBER, EXPERIMENT_DATE, experimentDescription);
@@ -145,11 +150,11 @@ public class BaselineMain {
 
 	private static TimeStrategy timeStrategySelection() {
 		return (GetPropertyValues.getProperty("time_strategy").equals("AGGREGATION")) ? new AggregationStrategy(
-				(GetPropertyValues.getIntegerProperty("aggregation"))) : new OneToOneStrategy();
+				(GetPropertyValues.getIntegerProperty("aggregation"))) : new NoAggregationStrategy();
 	}
 
 	protected static String streamerSelection() {
-		EventBuilder<RSPEvent> eb;
+		EventBuilder<RSPEvent> eb = null;
 
 		String code = "_EB";
 		switch (STREAMING_MODE) {
@@ -165,12 +170,14 @@ public class BaselineMain {
 				code += "S" + INIT_SIZE + "H" + X + "W" + Y;
 				break;
 			default:
-				eb = null;
-
+				log.error("Not valid case [" + STREAMING_MODE + "]");
 		}
 
-		streamer = new NTStreamer(testStand, eb, EVENTS);
-		return code;
+		if (eb != null) {
+			streamer = new NTStreamer(testStand, eb, EVENTS);
+			return code;
+		}
+		throw new IllegalArgumentException("Not valid case [" + STREAMING_MODE + "]");
 	}
 
 	protected static void jenaEngineSelection() {
@@ -188,9 +195,9 @@ public class BaselineMain {
 				engine = new JenaEngineGraph(engineName, testStand, listener);
 				break;
 			default:
-				engine = null;
-
+				log.error("Not valid case [" + CEP_EVENT_TYPE + "]");
 		}
+		throw new IllegalArgumentException("Not valid case [" + CEP_EVENT_TYPE + "]");
 	}
 
 	protected static void genearlEngineSelection() {
@@ -216,37 +223,40 @@ public class BaselineMain {
 	}
 
 	protected static void reasonerSelection() {
+		FileManager.get().addLocatorClassLoader(BaselineMain.class.getClassLoader());
+		Model tbox;
 		switch (CURRENT_REASONER) {
 			case SMPL:
 				log.info("Reasoner Selection: SMPL");
-				listener = new JenaSMPLListener(FileUtils.UNIV_BENCH_RDFS_MODIFIED, testStand);
+				tbox = FileManager.get().loadModel(FileUtils.UNIV_BENCH_RDFS_MODIFIED, null, "RDF/XML");
+				listener = new JenaSMPLListener(tbox, testStand);
 				break;
 			case RHODF:
 				log.info("Reasoner Selection: RHODF");
-				listener = new JenaRhoDFListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
+				tbox = FileManager.get().loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED, null, "RDF/XML");
+				listener = new JenaRhoDFListener(tbox, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
 				break;
 			case FULL:
 				log.info("Reasoner Selection: FULL");
-				listener = new JenaFullListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED, testStand);
+				tbox = FileManager.get().loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED, null, "RDF/XML");
+				listener = new JenaFullListener(tbox, testStand);
 				break;
 			default:
-				listener = null;
+				log.error("Not valid case [" + CURRENT_REASONER + "]");
 		}
+		throw new IllegalArgumentException("Not valid case [" + CURRENT_REASONER + "]");
 	}
 
-	protected static void collectorSelection() throws SQLException, ClassNotFoundException {
-		experimentResultCollector = new CollectorExperimentResult(testStand);
-		boolean RESULT_LOG_ENABLED = GetPropertyValues.getBooleanProperty("result_log_enabled");
-		boolean MEMORY_LOG_ENABLED = GetPropertyValues.getBooleanProperty("memory_log_enabled");
-		boolean LATENCY_LOG_ENABLED = GetPropertyValues.getBooleanProperty("latency_log_enabled");
+	protected static void collectorSelection() {
 
-		streamingEventResultCollector = new CollectorEventResult(testStand, engineName + "/");
+		experimentResultCollector = new CollectorExperimentResult();
+		streamingEventResultCollector = new CollectorEventResult(engineName + "/");
 
-		if (RESULT_LOG_ENABLED)
+		if (ExecutionEnvirorment.finalresultTrigLogEnabled)
 			log.info("Execution of Result C&S Experiment");
-		if (MEMORY_LOG_ENABLED)
+		if (ExecutionEnvirorment.memoryLogEnabled)
 			log.info("Execution of Memory Experiment");
-		if (LATENCY_LOG_ENABLED)
+		if (ExecutionEnvirorment.latencyLogEnabled)
 			log.info("Execution of Latency Experiment");
 	}
 
