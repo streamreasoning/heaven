@@ -121,7 +121,7 @@ public class RSPTestStand extends TestStandImpl {
 		this.currentResult = timeStrategy.getResult();
 		this.currentResult.setStatements(engineResult.getStatements());
 		this.currentResult.setMemoryA(Memory.getMemoryUsage());
-		this.currentResult.setOutputTimestamp(System.currentTimeMillis());
+		this.currentResult.setOutputTimestamp(engineResult.getTimestamp());
 		this.currentResult.setCr(engineResult.getCompleteRHODF());
 		this.currentResult.setSr(engineResult.getSoundRHODF());
 		this.currentResult.setCs(engineResult.getCompleteSMPL());
