@@ -2,6 +2,8 @@ package it.polimi.processing.workbench.core;
 
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.enums.ExecutionState;
+import it.polimi.processing.events.Experiment;
+import it.polimi.processing.events.TSResult;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
@@ -13,19 +15,19 @@ import lombok.extern.log4j.Log4j;
 
 @Log4j
 @Getter
-public abstract class TestStand extends Stand implements EventProcessor<Event>, Startable<ExecutionState> {
+public abstract class TestStandImpl extends Stand implements EventProcessor<Event>, Startable<ExecutionState> {
 
 	protected StartableCollector<EventResult> resultCollector;
 	protected StartableCollector<ExperimentResult> experimentResultCollector;
 
 	protected RSPEngine rspEngine;
 	protected RSPEventStreamer rspEventStreamer;
-	protected Event se;
-	protected int eventNumber, tsResultEvents = 0;
 
-	public TestStand() {
-		super(ExecutionState.NOT_READY, null);
-	}
+	protected Experiment currentExperiment;
+	protected Event se;
+	protected TSResult currentResult;
+
+	protected int eventNumber, tsResultEvents = 0;
 
 	public void build(StartableCollector<EventResult> resultCollector, StartableCollector<ExperimentResult> experimentResultCollector,
 			RSPEngine rspEngine, RSPEventStreamer rspEventStreamer) {
@@ -33,6 +35,29 @@ public abstract class TestStand extends Stand implements EventProcessor<Event>, 
 		this.resultCollector = resultCollector;
 		this.rspEngine = rspEngine;
 		this.rspEventStreamer = rspEventStreamer;
+	}
+
+	@Override
+	public ExecutionState init() {
+		if (!isStartable()) {
+			throw new WrongStatusTransitionException("Can't Switch from Status [" + status + "] to [" + ExecutionState.READY + "]");
+		} else {
+			ExecutionState streamerStatus = rspEventStreamer.init();
+			ExecutionState engineStatus = rspEngine.init();
+			ExecutionState collectorStatus = resultCollector.init();
+			ExecutionState experimenTcollectorStatus = experimentResultCollector.init();
+			if (ExecutionState.READY.equals(streamerStatus) && ExecutionState.READY.equals(collectorStatus)
+					&& ExecutionState.READY.equals(engineStatus) && ExecutionState.READY.equals(experimenTcollectorStatus)) {
+				status = ExecutionState.READY;
+				log.debug("Status [" + status + "] Initializing the TestStand");
+			} else {
+				log.error("RSPEventStreamerStatus [" + streamerStatus + "] collectorStatus [" + collectorStatus + "] experimentCollectorStatus ["
+						+ experimenTcollectorStatus + "] engineStatus [" + engineStatus + "]");
+				status = ExecutionState.ERROR;
+			}
+			return status;
+		}
+
 	}
 
 	@Override
@@ -60,29 +85,6 @@ public abstract class TestStand extends Stand implements EventProcessor<Event>, 
 			log.info("Processed [" + tsResultEvents + "] TSREsult Events");
 			return status;
 		}
-	}
-
-	@Override
-	public ExecutionState init() {
-		if (!isStartable()) {
-			throw new WrongStatusTransitionException("Can't Switch from Status [" + status + "] to [" + ExecutionState.READY + "]");
-		} else {
-			ExecutionState streamerStatus = rspEventStreamer.init();
-			ExecutionState engineStatus = rspEngine.init();
-			ExecutionState collectorStatus = resultCollector.init();
-			ExecutionState experimenTcollectorStatus = experimentResultCollector.init();
-			if (ExecutionState.READY.equals(streamerStatus) && ExecutionState.READY.equals(collectorStatus)
-					&& ExecutionState.READY.equals(engineStatus) && ExecutionState.READY.equals(experimenTcollectorStatus)) {
-				status = ExecutionState.READY;
-				log.debug("Status [" + status + "] Initializing the TestStand");
-			} else {
-				log.error("RSPEventStreamerStatus [" + streamerStatus + "] collectorStatus [" + collectorStatus + "] experimentCollectorStatus ["
-						+ experimenTcollectorStatus + "] engineStatus [" + engineStatus + "]");
-				status = ExecutionState.ERROR;
-			}
-			return status;
-		}
-
 	}
 
 	public abstract int run(String f, int experimentNumber, String comment, String outputFileName, String windowFileName, String experimentDescription);

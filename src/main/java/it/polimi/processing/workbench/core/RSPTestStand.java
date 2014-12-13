@@ -1,17 +1,22 @@
 package it.polimi.processing.workbench.core;
 
+import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.Result;
-import it.polimi.processing.events.TSResult;
 import it.polimi.processing.events.interfaces.Event;
+import it.polimi.processing.events.interfaces.EventResult;
+import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
+import it.polimi.processing.rspengine.windowed.RSPEngine;
+import it.polimi.processing.services.FileService;
+import it.polimi.processing.streamer.RSPEventStreamer;
+import it.polimi.processing.system.GetPropertyValues;
 import it.polimi.processing.workbench.timecontrol.TimeStrategy;
-import it.polimi.properties.GetPropertyValues;
 import it.polimi.utils.FileUtils;
 
-import java.io.IOException;
+import java.io.BufferedReader;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,18 +25,15 @@ import lombok.extern.log4j.Log4j;
 @Getter
 @Setter
 @Log4j
-public class RSPTestStand extends TestStand {
+public class RSPTestStand extends TestStandImpl {
 
 	private int experimentNumber;
-	private long timestamp, resultTimestamp = 0L;
-	private double memoryA = 0D;
-	private double memoryB = 0D;
 	private String outputFileName, windowFileName, inputFileNameWithPath, experimentDescription;
+	private String where;
+
 	private final TimeStrategy timeStrategy;
-	private TSResult currentResult;
 
 	public RSPTestStand(TimeStrategy strategy) {
-		super();
 		this.timeStrategy = strategy;
 	}
 
@@ -57,16 +59,23 @@ public class RSPTestStand extends TestStand {
 			log.debug("Status [" + status + "] Experiment Created");
 
 			ExecutionState engineStatus = rspEngine.startProcessing();
+
 			log.debug("Status [" + status + "] Processing is started");
 
+			BufferedReader buffer = FileService.getBuffer(inputFileNameWithPath);
+
 			if (ExecutionState.READY.equals(engineStatus)) {
-				try {
-					rspEventStreamer.stream(getBuffer(inputFileNameWithPath), experimentNumber);
-				} catch (IOException ex) {
+				if (buffer != null) {
+					rspEventStreamer.startStreamimng(buffer, experimentNumber);
+				} else {
+					log.error("Status [" + status + "] Can't start streaming processing");
 					status = ExecutionState.ERROR;
-					log.error(ex.getMessage());
 					return 0;
 				}
+			} else {
+				String msg = "Can't start streaming on status [" + status + "]";
+				status = ExecutionState.ERROR;
+				throw new WrongStatusTransitionException(msg);
 			}
 
 			engineStatus = rspEngine.stopProcessing();
@@ -74,6 +83,7 @@ public class RSPTestStand extends TestStand {
 			log.debug("Status [" + status + "] Processing is ended");
 
 			currentExperiment.setTimestampEnd(System.currentTimeMillis());
+
 			experimentResultCollector.process(currentExperiment);
 
 			if (ExecutionState.CLOSED.equals(engineStatus)) {
@@ -85,6 +95,7 @@ public class RSPTestStand extends TestStand {
 			log.info("Status [" + status + "] Stop the Streaming " + System.currentTimeMillis());
 
 		}
+
 		return 1;
 	}
 
@@ -94,26 +105,38 @@ public class RSPTestStand extends TestStand {
 	}
 
 	public boolean process(RSPEvent e) {
-		return timeStrategy.apply(e, this); // TODO bisogna rivedere il significato di strategy
+		return timeStrategy.apply(e);
 	}
 
 	@Override
 	public boolean processDone() {
-		log.debug("Process is Done, Window Shosts");
-		// TODO never called
-		return rspEngine.processDone();
+		boolean ret = resultCollector.process(currentResult, where);
+		this.tsResultEvents += ret ? 1 : 0;
+		return ret;
 	}
 
 	public boolean process(Result engineResult) {
-		String w = "exp" + experimentNumber + "/" + rspEngine.getName() + "/" + ((engineResult.isAbox()) ? windowFileName : outputFileName);
-		eventNumber = rspEngine.getEventNumber();
-		resultTimestamp = engineResult.getTimestamp();
-		String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + "/" + engineResult.getFrom() + "/" + engineResult.getTo() + ">";
-		TSResult r2 = new TSResult(id, eventNumber, engineResult.getStatements(), timestamp, resultTimestamp, memoryB, memoryA,
-				engineResult.getCompleteSMPL(), engineResult.getSoundSMPL(), engineResult.getCompleteRHODF(), engineResult.getSoundRHODF());
 
-		boolean ret = resultCollector.process(r2, w);
-		tsResultEvents++;
-		return ret;
+		this.where = "exp" + experimentNumber + "/" + rspEngine.getName() + "/" + ((engineResult.isAbox()) ? windowFileName : outputFileName);
+
+		this.eventNumber = rspEngine.getEventNumber();
+
+		this.currentResult = timeStrategy.getResult();
+		this.currentResult.setId(currentResult.getId() + engineResult.getFrom() + "/" + engineResult.getTo() + ">");
+
+		this.currentResult.setStatements(engineResult.getStatements());
+		this.currentResult.setCr(engineResult.getCompleteRHODF());
+		this.currentResult.setSr(engineResult.getSoundRHODF());
+		this.currentResult.setCs(engineResult.getCompleteSMPL());
+		this.currentResult.setSs(engineResult.getSoundSMPL());
+
+		return processDone();
+	}
+
+	@Override
+	public void build(StartableCollector<EventResult> resultCollector, StartableCollector<ExperimentResult> experimentResultCollector,
+			RSPEngine rspEngine, RSPEventStreamer rspEventStreamer) {
+		this.timeStrategy.setRSPEngine(rspEngine);
+		super.build(resultCollector, experimentResultCollector, rspEngine, rspEventStreamer);
 	}
 }
