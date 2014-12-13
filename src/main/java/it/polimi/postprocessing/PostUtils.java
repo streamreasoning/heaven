@@ -21,8 +21,8 @@ public class PostUtils {
 		today = dt.format(d).toString();
 		daypath = "src/main/resources/" + dt.format(d) + "/comparation/";
 
-		new File(daypath).mkdirs();
-		new File(daypath + "database/").mkdirs();
+		// new File(daypath).mkdirs();
+		// new File(daypath + "database/").mkdirs();
 	}
 	public static final String COMPARATION_OUT_PATH = daypath;
 	public static final String CSV_OUT_PATH = daypath + "";
