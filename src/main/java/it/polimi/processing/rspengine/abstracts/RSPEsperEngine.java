@@ -1,8 +1,7 @@
-package it.polimi.processing.rspengine.windowed.esper;
+package it.polimi.processing.rspengine.abstracts;
 
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.rspengine.windowed.RSPEngine;
 import it.polimi.processing.rspengine.windowed.esper.plain.Queries;
 import it.polimi.processing.workbench.core.EventProcessor;
 import lombok.Getter;

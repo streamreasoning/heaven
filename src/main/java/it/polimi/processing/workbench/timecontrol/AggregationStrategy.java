@@ -2,7 +2,7 @@ package it.polimi.processing.workbench.timecontrol;
 
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.TSResult;
-import it.polimi.processing.rspengine.windowed.RSPEngine;
+import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.processing.system.GetPropertyValues;
 import it.polimi.processing.system.Memory;
 import lombok.extern.log4j.Log4j;

@@ -4,7 +4,7 @@ import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPEvent;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.rspengine.windowed.esper.RSPEsperEngine;
+import it.polimi.processing.rspengine.abstracts.RSPEsperEngine;
 import it.polimi.processing.rspengine.windowed.esper.plain.events.Out;
 import it.polimi.processing.rspengine.windowed.esper.plain.events.TEvent;
 import it.polimi.processing.workbench.core.EventProcessor;

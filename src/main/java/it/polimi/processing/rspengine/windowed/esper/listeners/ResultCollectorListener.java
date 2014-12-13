@@ -1,8 +1,8 @@
-package it.polimi.processing.rspengine.windowed.esper.commons.listener;
+package it.polimi.processing.rspengine.windowed.esper.listeners;
 
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.rspengine.windowed.esper.TripleEvent;
+import it.polimi.processing.rspengine.windowed.esper.plain.events.TripleEvent;
 import it.polimi.processing.workbench.core.EventProcessor;
 
 import java.util.HashSet;

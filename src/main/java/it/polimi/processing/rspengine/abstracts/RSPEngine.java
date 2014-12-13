@@ -1,4 +1,4 @@
-package it.polimi.processing.rspengine.windowed;
+package it.polimi.processing.rspengine.abstracts;
 
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPEvent;

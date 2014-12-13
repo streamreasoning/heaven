@@ -1,7 +1,6 @@
 package it.polimi.processing.rspengine.windowed.esper.plain.events;
 
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.rspengine.windowed.esper.TripleEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;

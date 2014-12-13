@@ -9,7 +9,7 @@ import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
-import it.polimi.processing.rspengine.windowed.RSPEngine;
+import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.processing.services.FileService;
 import it.polimi.processing.streamer.RSPEventStreamer;
 import it.polimi.processing.system.GetPropertyValues;
