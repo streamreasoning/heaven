@@ -10,52 +10,39 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class AggregationStrategy implements TimeStrategy {
 
-	private int numberEvents = 0;
+	private int tsEventNumber;
 	private final int aggregation;
-	int i;
 	private RSPEngine rspEngine;
 	private TSResult currentResult;
 	private final int experiment;
+	private final int tsEventMax;
 
-	public AggregationStrategy(int aggreation) {
-		this.aggregation = aggreation;
+	public AggregationStrategy() {
+		this.aggregation = GetPropertyValues.getIntegerProperty("aggregation");
 		this.experiment = GetPropertyValues.getIntegerProperty("experiment_number");
-		this.i = 0;
+		this.tsEventNumber = 0;
+		this.tsEventMax = aggregation - 1;
 	}
 
 	@Override
 	public boolean apply(RSPEvent e) {
 
 		boolean process = false;
-		double memoryUsage = Memory.getMemoryUsage();
-		long currentTimeMillis = System.currentTimeMillis();
-		if (i == 0) {
+		int eventNumber = rspEngine.getEventNumber();
 
-			log.debug("Memory Before Sending [" + memoryUsage + "] On Event " + numberEvents);
-			currentResult = new TSResult();
-			currentResult.setMemoryB(memoryUsage);
-			currentResult.setInputTimestamp(currentTimeMillis);
-
-			process = rspEngine.process(e);
-
-			i++;
-		} else if (i == aggregation - 1) {
-			log.debug("Memory After Sending [" + memoryUsage + "] On Event " + numberEvents);
-
-			int eventNumber = rspEngine.getEventNumber();
-			String id = "<http://example.org/" + experiment + "/" + eventNumber + "/";
-			currentResult.setId(id);
-			currentResult.setEventNumber(eventNumber);
-			currentResult.setMemoryA(memoryUsage);
-			currentResult.setOutputTimestamp(currentTimeMillis);
-			process = rspEngine.process(e);
-			i = 0;
+		if (tsEventNumber == 0) {
+			currentResult = new TSResult(System.currentTimeMillis(), Memory.getMemoryUsage());
+			tsEventNumber++;
+		} else if (tsEventNumber == tsEventMax) {
+			tsEventNumber = 0;
 		} else {
-			process = rspEngine.process(e);
-			i++;
+			currentResult.setInputTimestamp(System.currentTimeMillis());
+			currentResult.setMemoryB(Memory.getMemoryUsage());
+			tsEventNumber++;
 		}
 
-		numberEvents++;
+		currentResult.setId("<http://example.org/" + experiment + "/" + eventNumber + ">");
+		process = rspEngine.process(e);
 		rspEngine.progress(aggregation);
 		return process;
 	}

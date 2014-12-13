@@ -47,9 +47,8 @@ public abstract class JenaEngine extends RSPEsperEngine {
 
 	protected void initQueries() {
 
-		EPStatement out = cepAdm.createEPL(" select irstream * from TEvent.win:time(1000 msec) output every 100 msec");
+		EPStatement out = cepAdm.createEPL(" select irstream * from TEvent.win:time(1000 msec) output snapshot every 100 msec");
 		out.addListener(listener);
-		// out.setSubscriber(new MySubscriber(out));
 	}
 
 	@Override

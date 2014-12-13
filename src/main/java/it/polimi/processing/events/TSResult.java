@@ -16,6 +16,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TSResult implements EventResult {
 
+	public TSResult(long inputTimestamp, double memoryB) {
+		this.inputTimestamp = inputTimestamp;
+		this.memoryB = memoryB;
+	}
+
 	private String id;
 	private int eventNumber;
 	private Set<TripleContainer> statements;
@@ -37,5 +42,9 @@ public class TSResult implements EventResult {
 		String s = id + "," + eventNumber + "," + memoryB + "," + memoryA + "," + (outputTimestamp - inputTimestamp) + compleAndSoundSIMPL
 				+ compleAndSoundRHODF;
 		return new CSV(s);
+	}
+
+	public int size() {
+		return statements.size();
 	}
 }

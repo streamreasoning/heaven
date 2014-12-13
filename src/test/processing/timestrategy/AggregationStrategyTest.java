@@ -8,7 +8,7 @@ public class AggregationStrategyTest {
 
 	public void simpleTest() {
 
-		TimeStrategy strategy = new AggregationStrategy(5);
+		TimeStrategy strategy = new AggregationStrategy();
 
 		RSPTestStand teststand = new RSPTestStand(null);
 	}

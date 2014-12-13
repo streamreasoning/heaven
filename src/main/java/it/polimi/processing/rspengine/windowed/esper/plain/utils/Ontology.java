@@ -1,4 +1,4 @@
-package it.polimi.processing.rspengine.windowed.esper.plain;
+package it.polimi.processing.rspengine.windowed.esper.plain.utils;
 
 import it.polimi.utils.RDFSUtils;
 

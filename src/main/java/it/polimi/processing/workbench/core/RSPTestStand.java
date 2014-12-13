@@ -13,6 +13,7 @@ import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.processing.services.FileService;
 import it.polimi.processing.streamer.RSPEventStreamer;
 import it.polimi.processing.system.GetPropertyValues;
+import it.polimi.processing.system.Memory;
 import it.polimi.processing.workbench.timecontrol.TimeStrategy;
 import it.polimi.utils.FileUtils;
 
@@ -108,13 +109,6 @@ public class RSPTestStand extends TestStandImpl {
 		return timeStrategy.apply(e);
 	}
 
-	@Override
-	public boolean processDone() {
-		boolean ret = resultCollector.process(currentResult, where);
-		this.tsResultEvents += ret ? 1 : 0;
-		return ret;
-	}
-
 	public boolean process(Result engineResult) {
 
 		this.where = "exp" + experimentNumber + "/" + rspEngine.getName() + "/" + ((engineResult.isAbox()) ? windowFileName : outputFileName);
@@ -122,15 +116,23 @@ public class RSPTestStand extends TestStandImpl {
 		this.eventNumber = rspEngine.getEventNumber();
 
 		this.currentResult = timeStrategy.getResult();
-		this.currentResult.setId(currentResult.getId() + engineResult.getFrom() + "/" + engineResult.getTo() + ">");
-
 		this.currentResult.setStatements(engineResult.getStatements());
+		this.currentResult.setEventNumber(eventNumber);
+		this.currentResult.setMemoryA(Memory.getMemoryUsage());
+		this.currentResult.setOutputTimestamp(System.currentTimeMillis());
 		this.currentResult.setCr(engineResult.getCompleteRHODF());
 		this.currentResult.setSr(engineResult.getSoundRHODF());
 		this.currentResult.setCs(engineResult.getCompleteSMPL());
 		this.currentResult.setSs(engineResult.getSoundSMPL());
 
 		return processDone();
+	}
+
+	@Override
+	public boolean processDone() {
+		boolean ret = resultCollector.process(currentResult, where);
+		this.tsResultEvents += ret ? 1 : 0;
+		return ret;
 	}
 
 	@Override

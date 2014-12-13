@@ -7,6 +7,8 @@ import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.abstracts.RSPEsperEngine;
 import it.polimi.processing.rspengine.windowed.esper.plain.events.Out;
 import it.polimi.processing.rspengine.windowed.esper.plain.events.TEvent;
+import it.polimi.processing.rspengine.windowed.esper.plain.utils.Ontology;
+import it.polimi.processing.rspengine.windowed.esper.plain.utils.Queries;
 import it.polimi.processing.workbench.core.EventProcessor;
 
 import java.util.Set;

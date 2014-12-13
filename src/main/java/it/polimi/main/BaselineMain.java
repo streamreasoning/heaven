@@ -105,7 +105,6 @@ public class BaselineMain {
 		} else {
 			engineName = Plain2369.class.getSimpleName().toLowerCase();
 			genearlEngineSelection();
-
 		}
 
 		EVENTS = GetPropertyValues.getIntegerProperty("rspevent_number");
@@ -120,8 +119,6 @@ public class BaselineMain {
 		testStand = new RSPTestStand(strategy);
 
 		eventBuilderCodeName = streamerSelection();
-
-		reasonerSelection();
 
 		experimentDescription = "EXPERIMENT_ON_" + file + "_WITH_ENGINE_" + engineName + "EVENT_" + CEP_EVENT_TYPE;
 
@@ -140,6 +137,8 @@ public class BaselineMain {
 		log.info("Output file name will be: [" + whereOutput + "]");
 		log.info("Window file name will be: [" + whereWindow + "]");
 
+		reasonerSelection();
+
 		collectorSelection();
 
 		jenaEngineSelection();
@@ -149,8 +148,7 @@ public class BaselineMain {
 	}
 
 	private static TimeStrategy timeStrategySelection() {
-		return (GetPropertyValues.getProperty("time_strategy").equals("AGGREGATION")) ? new AggregationStrategy(
-				(GetPropertyValues.getIntegerProperty("aggregation"))) : new NoAggregationStrategy();
+		return (GetPropertyValues.getProperty("time_strategy").equals("AGGREGATION")) ? new AggregationStrategy() : new NoAggregationStrategy();
 	}
 
 	protected static String streamerSelection() {
@@ -185,15 +183,15 @@ public class BaselineMain {
 			case TEVENT:
 				log.info("Engine Selection: JenaPlain [" + engineName + "] ");
 				engine = new JenaEngineTEvent(engineName, testStand, listener);
-				break;
+				return;
 			case STMT:
 				log.info("Engine Selection: Jena Stmt [" + engineName + "] ");
 				engine = new JenaEngineStmt(engineName, testStand, listener);
-				break;
+				return;
 			case GRAPH:
 				log.info("Engine Selection: JenaGraph [" + engineName + "] ");
 				engine = new JenaEngineGraph(engineName, testStand, listener);
-				break;
+				return;
 			default:
 				log.error("Not valid case [" + CEP_EVENT_TYPE + "]");
 		}
@@ -224,26 +222,24 @@ public class BaselineMain {
 
 	protected static void reasonerSelection() {
 		Model tbox;
+		log.info("Reasoner Selection: [" + CURRENT_REASONER + "]");
 		switch (CURRENT_REASONER) {
 			case SMPL:
-				log.info("Reasoner Selection: SMPL");
 				tbox = RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RDFS_MODIFIED);
 				listener = new JenaSMPLListener(tbox, testStand);
 				break;
 			case RHODF:
-				log.info("Reasoner Selection: RHODF");
 				tbox = RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED);
 				listener = new JenaRhoDFListener(tbox, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
 				break;
 			case FULL:
-				log.info("Reasoner Selection: FULL");
 				tbox = RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED);
 				listener = new JenaFullListener(tbox, testStand);
 				break;
 			default:
 				log.error("Not valid case [" + CURRENT_REASONER + "]");
+				throw new IllegalArgumentException("Not valid case [" + CURRENT_REASONER + "]");
 		}
-		throw new IllegalArgumentException("Not valid case [" + CURRENT_REASONER + "]");
 	}
 
 	protected static void collectorSelection() {
