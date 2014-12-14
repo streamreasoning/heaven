@@ -17,6 +17,7 @@ public class Result implements EventResult {
 	private Set<TripleContainer> statements;
 	private long from, to;
 	private long timestamp;
+	private double memory;
 	private Boolean completeSMPL, soundSMPL, completeRHODF, soundRHODF;
 	private boolean abox;
 
@@ -31,11 +32,12 @@ public class Result implements EventResult {
 		return new CSV(s);
 	}
 
-	public Result(Set<TripleContainer> statements, long from, long to, long timestamp, boolean abox) {
+	public Result(Set<TripleContainer> statements, long from, long to, long timestamp, double memory, boolean abox) {
 		this.statements = statements;
 		this.from = from;
 		this.to = to;
 		this.timestamp = timestamp;
+		this.memory = memory;
 		this.abox = abox;
 
 	}
