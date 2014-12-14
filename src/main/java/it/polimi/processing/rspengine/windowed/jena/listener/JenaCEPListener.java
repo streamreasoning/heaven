@@ -4,6 +4,7 @@ import it.polimi.processing.events.Result;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.windowed.jena.events.JenaEsperEvent;
+import it.polimi.processing.system.ExecutionEnvirorment;
 import it.polimi.processing.system.Memory;
 import it.polimi.processing.workbench.core.EventProcessor;
 
@@ -51,15 +52,15 @@ public abstract class JenaCEPListener implements UpdateListener {
 
 		if (newData != null) {
 
-			log.info("[" + newData.length + "] New Events");
+			log.debug("[" + newData.length + "] New Events");
 
 			abox = ModelFactory.createMemModelMaker().createDefaultModel().getGraph();
 			ABoxTriples = new HashSet<TripleContainer>();
 
 			for (EventBean e : newData) {
 				JenaEsperEvent underlying = (JenaEsperEvent) e.getUnderlying();
-				ABoxTriples.addAll(underlying.serialize());
 				abox = underlying.update(abox);
+				ABoxTriples.addAll(underlying.serialize());
 			}
 
 			reasoner = getReasoner();
@@ -80,7 +81,9 @@ public abstract class JenaCEPListener implements UpdateListener {
 			if (next != null) {
 				log.debug("Send Event to the StoreCollector");
 				next.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), outputTimestamp, ouputMemoryUsage, false));
-				next.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), outputTimestamp, ouputMemoryUsage, true));
+				if (ExecutionEnvirorment.aboxLogEnabled) {
+					next.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), outputTimestamp, ouputMemoryUsage, true));
+				}
 			}
 			eventNumber += ABoxTriples.size() + 1;
 		}
