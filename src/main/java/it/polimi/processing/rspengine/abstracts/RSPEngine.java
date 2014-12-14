@@ -17,6 +17,8 @@ public abstract class RSPEngine implements EventProcessor<RSPEvent> {
 
 	@Getter
 	protected RSPEvent currentEvent = null;
+	@Getter
+	protected long sentTimestamp;
 
 	public RSPEngine(String name, EventProcessor<Event> next) {
 		this.next = next;
