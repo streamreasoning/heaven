@@ -94,7 +94,15 @@ public abstract class JenaEngine extends RSPEsperEngine {
 		return processDone();
 	}
 
-	protected abstract void handleEvent(RSPEvent e);
+	@Override
+	public boolean processDone() {
+		status = ExecutionState.READY;
+		return true;
+	}
+
+	protected void handleEvent(RSPEvent e) {
+		this.sentTimestamp = System.currentTimeMillis();
+	}
 
 	@Override
 	public ExecutionState stopProcessing() {
@@ -114,9 +122,4 @@ public abstract class JenaEngine extends RSPEsperEngine {
 		return status;
 	}
 
-	@Override
-	public boolean processDone() {
-		status = ExecutionState.READY;
-		return true;
-	}
 }
