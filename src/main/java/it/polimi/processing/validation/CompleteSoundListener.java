@@ -27,8 +27,11 @@ public class CompleteSoundListener extends CSListener {
 	@Override
 	protected void sendResult() throws IOException {
 		boolean abox = true;
-		collector.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), cs, ss, cr, sr, !abox));
-		collector.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), cs, ss, cr, sr, abox));
+
+		collector.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), ouputcurrentTimeMillis, outputmemoryUsage, cs, ss,
+				cr, sr, !abox));
+		collector.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), ouputcurrentTimeMillis, outputmemoryUsage, cs, ss,
+				cr, sr, abox));
 	}
 
 	@Override

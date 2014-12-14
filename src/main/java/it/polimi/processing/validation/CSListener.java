@@ -3,6 +3,7 @@ package it.polimi.processing.validation;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.windowed.esper.plain.events.Out;
+import it.polimi.processing.system.Memory;
 import it.polimi.processing.workbench.core.EventProcessor;
 import it.polimi.utils.RDFSUtils;
 
@@ -44,6 +45,9 @@ public abstract class CSListener implements UpdateListener {
 	protected boolean completeness;
 	protected boolean soundness;
 
+	protected long ouputcurrentTimeMillis;
+	protected double outputmemoryUsage;
+
 	public CSListener(String tbox, EventProcessor<Event> collector) {
 		FileManager.get().addLocatorClassLoader(this.getClass().getClassLoader());
 		this.TBoxStar = FileManager.get().loadModel(tbox, null, "RDF/XML");
@@ -57,7 +61,8 @@ public abstract class CSListener implements UpdateListener {
 		esperResult = ModelFactory.createMemModelMaker().createDefaultModel();
 		ABoxTriples = new HashSet<TripleContainer>();
 		statements = new HashSet<TripleContainer>();
-
+		ouputcurrentTimeMillis = System.currentTimeMillis();
+		outputmemoryUsage = Memory.getMemoryUsage();
 		for (EventBean e : newData) {
 
 			Out underlying = (Out) e.getUnderlying();

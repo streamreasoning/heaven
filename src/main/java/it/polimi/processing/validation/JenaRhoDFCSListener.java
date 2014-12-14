@@ -27,10 +27,10 @@ public class JenaRhoDFCSListener extends CSListener {
 	@Override
 	protected void sendResult() throws IOException {
 		boolean abox = true;
-		collector.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), null, null,
-				completeness, soundness, !abox));
-		collector.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), System.currentTimeMillis(), null, null,
-				completeness, soundness, abox));
+		collector.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), ouputcurrentTimeMillis, outputmemoryUsage, null,
+				null, completeness, soundness, !abox));
+		collector.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), ouputcurrentTimeMillis, outputmemoryUsage, null,
+				null, completeness, soundness, abox));
 
 	}
 
