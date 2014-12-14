@@ -13,7 +13,6 @@ import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.processing.services.FileService;
 import it.polimi.processing.streamer.RSPEventStreamer;
 import it.polimi.processing.system.GetPropertyValues;
-import it.polimi.processing.system.Memory;
 import it.polimi.processing.workbench.timecontrol.TimeStrategy;
 import it.polimi.utils.FileUtils;
 
@@ -33,6 +32,8 @@ public class RSPTestStand extends TestStandImpl {
 	private String where;
 
 	private final TimeStrategy timeStrategy;
+	int aggregation;
+	private Integer experiment;
 
 	public RSPTestStand(TimeStrategy strategy) {
 		this.timeStrategy = strategy;
@@ -113,19 +114,22 @@ public class RSPTestStand extends TestStandImpl {
 	}
 
 	public boolean process(Result engineResult) {
+		this.where = "exp" + experimentNumber + "/" + rspEngine.getName() + "/";
 
-		resultEvent++;
-
-		this.where = "exp" + experimentNumber + "/" + rspEngine.getName() + "/" + ((engineResult.isAbox()) ? windowFileName : outputFileName);
-
-		this.currentResult = timeStrategy.getResult();
-		this.currentResult.setStatements(engineResult.getStatements());
-		this.currentResult.setMemoryA(Memory.getMemoryUsage());
-		this.currentResult.setOutputTimestamp(engineResult.getTimestamp());
-		this.currentResult.setCr(engineResult.getCompleteRHODF());
-		this.currentResult.setSr(engineResult.getSoundRHODF());
-		this.currentResult.setCs(engineResult.getCompleteSMPL());
-		this.currentResult.setSs(engineResult.getSoundSMPL());
+		if (engineResult.isAbox()) {
+			this.where += windowFileName;
+		} else {
+			resultEvent++;
+			this.where += outputFileName;
+			this.currentResult = timeStrategy.getResult();
+			this.currentResult.setStatements(engineResult.getStatements());
+			this.currentResult.setMemoryA(engineResult.getMemory());
+			this.currentResult.setOutputTimestamp(engineResult.getTimestamp());
+			this.currentResult.setCr(engineResult.getCompleteRHODF());
+			this.currentResult.setSr(engineResult.getSoundRHODF());
+			this.currentResult.setCs(engineResult.getCompleteSMPL());
+			this.currentResult.setSs(engineResult.getSoundSMPL());
+		}
 
 		return processDone();
 	}
