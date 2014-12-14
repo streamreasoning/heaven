@@ -29,6 +29,7 @@ public class JenaEngineTEvent extends JenaEngine {
 
 	@Override
 	protected void handleEvent(RSPEvent e) {
+		super.handleEvent(e);
 		for (TripleContainer tc : e.getEventTriples()) {
 			String[] t = tc.getTriple();
 			esperEventsNumber++;

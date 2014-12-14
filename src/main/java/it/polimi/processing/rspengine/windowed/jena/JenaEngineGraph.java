@@ -40,6 +40,7 @@ public class JenaEngineGraph extends JenaEngine {
 
 	@Override
 	protected void handleEvent(RSPEvent e) {
+		super.handleEvent(e);
 		abox = ModelFactory.createMemModelMaker().createDefaultModel().getGraph();
 		for (TripleContainer tc : e.getEventTriples()) {
 			String[] t = tc.getTriple();
@@ -47,6 +48,7 @@ public class JenaEngineGraph extends JenaEngine {
 		}
 		esperEventsNumber++;
 		cepRT.sendEvent(new GraphEvent(abox, cepRT.getCurrentTime(), System.currentTimeMillis()));
+
 	}
 
 	private Triple createTriple(String[] eventTriple) {

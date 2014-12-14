@@ -51,7 +51,7 @@ public abstract class JenaCEPListener implements UpdateListener {
 
 		if (newData != null) {
 
-			log.debug("[" + newData.length + "] New Events");
+			log.info("[" + newData.length + "] New Events");
 
 			abox = ModelFactory.createMemModelMaker().createDefaultModel().getGraph();
 			ABoxTriples = new HashSet<TripleContainer>();

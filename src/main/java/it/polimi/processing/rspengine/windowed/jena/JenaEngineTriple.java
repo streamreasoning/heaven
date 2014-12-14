@@ -24,6 +24,9 @@ public class JenaEngineTriple extends JenaEngine {
 
 	@Override
 	protected void handleEvent(RSPEvent e) {
+
+		super.handleEvent(e);
+
 		for (TripleContainer tc : e.getEventTriples()) {
 			String[] t = tc.getTriple();
 			Resource subject = ResourceFactory.createResource(t[0]);
@@ -32,6 +35,7 @@ public class JenaEngineTriple extends JenaEngine {
 			esperEventsNumber++;
 			cepRT.sendEvent(new TripleEvent(subject, predicate, object, cepRT.getCurrentTime(), System.currentTimeMillis()));
 		}
+
 	}
 
 }
