@@ -47,6 +47,7 @@ public abstract class RSPEsperEngine extends RSPEngine {
 		time += EsperUtils.OUTPUT_RATE;
 		snapshots++;
 		cepRT.sendEvent(new CurrentTimeEvent(time));
+		windowShots += time % EsperUtils.WINDOW_SIZE == 0 ? 1 : 0;
 		log.debug("Sent time Event");
 	}
 
@@ -80,6 +81,6 @@ public abstract class RSPEsperEngine extends RSPEngine {
 
 	@Override
 	public void progress(int i) {
-		moveSnapshot();
+		moveTimePortion(i);
 	}
 }
