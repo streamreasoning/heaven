@@ -23,7 +23,7 @@ public class CSV extends WritableData {
 
 	@Override
 	public boolean save(String where) {
-		return ExecutionEnvirorment.latencyLogEnabled ? super.save(where) : !ExecutionEnvirorment.latencyLogEnabled;
+		return ExecutionEnvirorment.latencyLogEnabled || ExecutionEnvirorment.memoryLogEnabled ? super.save(where) : false;
 	}
 
 }
