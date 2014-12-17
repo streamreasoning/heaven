@@ -20,7 +20,7 @@ public class FileUtils {
 
 			Date d = dt.parse(GetPropertyValues.getProperty("experiment_date"));
 
-			daypath = "src/main/resources/data/output/" + dt.format(d) + "/";
+			daypath = "./data/output/" + dt.format(d) + "/";
 
 			new File(daypath).mkdirs();
 
@@ -45,9 +45,9 @@ public class FileUtils {
 	}
 
 	public static final String MODEL_FILE_PATH = "";
-	public static final String INPUT_FILE_PATH = "src/main/resources/data/input/";
+	public static final String INPUT_FILE_PATH = "./data/input/";
 	public static final String OUTPUT_FILE_PATH = daypath;
-	public static final String PREPROCESSING_FILE_PATH = "src/main/resources/data/preprocessing/";
+	public static final String PREPROCESSING_FILE_PATH = "./data/preprocessing/";
 	public static final String PREPROCESSING_EXCLUDED_FILE_PATH = PREPROCESSING_FILE_PATH + "excluded/";
 	public static final String PREPROCESSING_DATATYPE_FILE_PATH = PREPROCESSING_FILE_PATH + "datatype/";
 	public static final String CSV_OUTPUT_FILE_PATH = OUTPUT_FILE_PATH + "/";
@@ -58,16 +58,16 @@ public class FileUtils {
 	public static final String TRIG_OUTPUT_FILE_PATH = OUTPUT_FILE_PATH + "/";
 	public static final String TRIG_FILE_EXTENSION = ".trig";
 
-	public static final String RHODF_RULE_SET = "src/main/resources/data/inference/rules/rdfs-rules-rhodf.rules";
-	public static final String RHODF_RULE_SET_RUNTIME = "src/main/resources/data/inference/rules/rdfs-rules-rhodf-runtime.rules";
+	public static final String RHODF_RULE_SET = "./data/inference/rules/rdfs-rules-rhodf.rules";
+	public static final String RHODF_RULE_SET_RUNTIME = "./data/inference/rules/rdfs-rules-rhodf-runtime.rules";
 
-	public static final String UNIV_BENCH = "src/main/resources/data/inference/univ-bench-rdfs.rdf";
+	public static final String UNIV_BENCH = "./data/inference/univ-bench-rdfs.rdf";
 
-	public static final String UNIV_BENCH_RDFS = "src/main/resources/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
-	public static final String UNIV_BENCH_RDFS_MODIFIED = "src/main/resources/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
+	public static final String UNIV_BENCH_RDFS = "./data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
+	public static final String UNIV_BENCH_RDFS_MODIFIED = "./data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
 
-	public static final String UNIV_BENCH_RHODF = "src/main/resources/data/inference/univ-bench-rdfs-materialized-rhodf.rdf";
-	public static final String UNIV_BENCH_RHODF_MODIFIED = "src/main/resources/data/inference/univ-bench-rdfs-materialized-rhodf-modified.rdf";
+	public static final String UNIV_BENCH_RHODF = "./data/inference/univ-bench-rdfs-materialized-rhodf.rdf";
+	public static final String UNIV_BENCH_RHODF_MODIFIED = "./data/inference/univ-bench-rdfs-materialized-rhodf-modified.rdf";
 	public static final String DATABASEPATH = daypath + "database/";
 
 	public static void createFolders(String vsfolder) {

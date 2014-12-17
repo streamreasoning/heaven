@@ -27,7 +27,8 @@ public class FileService {
 			writer.close();
 			return true;
 		} catch (IOException e) {
-			log.info(e.getMessage());
+			log.error(where);
+			log.error(e.getMessage());
 			return false;
 		}
 	}
@@ -45,6 +46,7 @@ public class FileService {
 	}
 
 	public static BufferedReader getBuffer(String fileName) {
+		log.info("Try to load [" + fileName + "]");
 		try {
 			File file = new File(fileName);
 			return new BufferedReader(new FileReader(file));

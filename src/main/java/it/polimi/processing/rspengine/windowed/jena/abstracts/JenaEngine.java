@@ -1,7 +1,7 @@
 package it.polimi.processing.rspengine.windowed.jena.abstracts;
 
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.abstracts.RSPEsperEngine;
 import it.polimi.processing.rspengine.shared.events.EsperUtils;
@@ -85,7 +85,7 @@ public abstract class JenaEngine extends RSPEsperEngine {
 	}
 
 	@Override
-	public boolean process(RSPEvent e) {
+	public boolean process(RSPTripleSet e) {
 		setCurrentEvent(e);
 		status = ExecutionState.RUNNING;
 		rspEventsNumber++;
@@ -100,7 +100,7 @@ public abstract class JenaEngine extends RSPEsperEngine {
 		return true;
 	}
 
-	protected void handleEvent(RSPEvent e) {
+	protected void handleEvent(RSPTripleSet e) {
 		this.sentTimestamp = System.currentTimeMillis();
 	}
 

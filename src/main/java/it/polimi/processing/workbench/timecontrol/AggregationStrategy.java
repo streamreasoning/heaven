@@ -1,6 +1,6 @@
 package it.polimi.processing.workbench.timecontrol;
 
-import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TSResult;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.processing.rspengine.shared.events.EsperUtils;
@@ -27,7 +27,7 @@ public class AggregationStrategy implements TimeStrategy {
 	}
 
 	@Override
-	public boolean apply(RSPEvent e) {
+	public boolean apply(RSPTripleSet e) {
 
 		boolean process = false;
 		int eventNumber = rspEngine.getEventNumber();

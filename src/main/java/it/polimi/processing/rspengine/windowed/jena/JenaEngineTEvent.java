@@ -1,6 +1,6 @@
 package it.polimi.processing.rspengine.windowed.jena;
 
-import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.windowed.jena.abstracts.JenaEngine;
@@ -28,7 +28,7 @@ public class JenaEngineTEvent extends JenaEngine {
 	}
 
 	@Override
-	protected void handleEvent(RSPEvent e) {
+	protected void handleEvent(RSPTripleSet e) {
 		super.handleEvent(e);
 		for (TripleContainer tc : e.getEventTriples()) {
 			String[] t = tc.getTriple();

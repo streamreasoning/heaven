@@ -26,7 +26,7 @@ public class ExperimentGenerator {
 			sourceProp.load(inputStream);
 
 		for (int i = 0; i < 5; i++) {
-			File f = new File("src/main/resources/" + pathToClone + outputName + i + ".properties");
+			File f = new File("./src/main/resources/" + pathToClone + outputName + i + ".properties");
 			if (!f.exists())
 				f.createNewFile();
 

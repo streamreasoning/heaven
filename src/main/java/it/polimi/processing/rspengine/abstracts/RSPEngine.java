@@ -1,7 +1,7 @@
 package it.polimi.processing.rspengine.abstracts;
 
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.workbench.core.EventProcessor;
 import lombok.Getter;
@@ -9,14 +9,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class RSPEngine implements EventProcessor<RSPEvent> {
+public abstract class RSPEngine implements EventProcessor<RSPTripleSet> {
 
 	protected ExecutionState status;
 	protected EventProcessor<Event> next;
 	protected String name;
 
 	@Getter
-	protected RSPEvent currentEvent = null;
+	protected RSPTripleSet currentEvent = null;
 	@Getter
 	protected long sentTimestamp;
 

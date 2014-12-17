@@ -1,13 +1,13 @@
 package it.polimi.processing.workbench.streamer;
 
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.factory.abstracts.EventBuilder;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.streamer.Parser;
-import it.polimi.processing.streamer.RSPEventStreamer;
+import it.polimi.processing.streamer.RSPTripleSetStreamer;
 import it.polimi.processing.workbench.core.EventProcessor;
 
 import java.io.BufferedReader;
@@ -29,20 +29,20 @@ import lombok.extern.log4j.Log4j;
 
 @Getter
 @Log4j
-public class NTStreamer extends RSPEventStreamer {
+public class NTStreamer extends RSPTripleSetStreamer {
 
 	/**
 	 * Represents the core of the streaming procedure, is must publish the
 	 * sendEvent method through which is possibile to inject any kind of event
 	 * into the system
 	 */
-	private RSPEvent lastEvent;
+	private RSPTripleSet lastEvent;
 
-	public NTStreamer(EventProcessor<Event> processor, EventBuilder<RSPEvent> builder, int eventLimit) {
+	public NTStreamer(EventProcessor<Event> processor, EventBuilder<RSPTripleSet> builder, int eventLimit) {
 		super(processor, builder, ExecutionState.CLOSED, eventLimit);
 	}
 
-	public NTStreamer(EventProcessor<Event> processor, EventBuilder<RSPEvent> builder) {
+	public NTStreamer(EventProcessor<Event> processor, EventBuilder<RSPTripleSet> builder) {
 		super(processor, builder, ExecutionState.CLOSED, 1000);
 	}
 

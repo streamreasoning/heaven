@@ -2,13 +2,13 @@ package it.polimi.processing.workbench.streamer;
 
 import it.polimi.processing.collector.saver.data.TriG;
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.factory.abstracts.EventBuilder;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.streamer.Parser;
-import it.polimi.processing.streamer.RSPEventStreamer;
+import it.polimi.processing.streamer.RSPTripleSetStreamer;
 import it.polimi.processing.workbench.core.EventProcessor;
 
 import java.io.BufferedReader;
@@ -31,7 +31,7 @@ import lombok.extern.log4j.Log4j;
 
 @Getter
 @Log4j
-public class TriGStreamer extends RSPEventStreamer {
+public class TriGStreamer extends RSPTripleSetStreamer {
 
 	/**
 	 * Represents the core of the streaming procedure, is must publish the
@@ -41,9 +41,9 @@ public class TriGStreamer extends RSPEventStreamer {
 	private String line;
 	private TriG eventTrig = null;
 	private String currentTriG = "";
-	private RSPEvent streamingEvent;
+	private RSPTripleSet streamingEvent;
 
-	public TriGStreamer(EventProcessor<Event> processor, EventBuilder<RSPEvent> builder) {
+	public TriGStreamer(EventProcessor<Event> processor, EventBuilder<RSPTripleSet> builder) {
 		super(processor, builder, ExecutionState.CLOSED, 1000);
 	}
 

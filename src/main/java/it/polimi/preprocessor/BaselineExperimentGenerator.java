@@ -39,17 +39,25 @@ public class BaselineExperimentGenerator {
 			sourceProp.load(inputStream);
 		int experimentNumber = 0;
 		for (Reasoner reasoner : Reasoner.values()) {
+			if (reasoner.equals(Reasoner.FULL)) {
+				continue;
+			}
 			for (JenaEventType engine : JenaEventType.values()) {
 				for (int tripleInWindow = 100; tripleInWindow < 10000000; tripleInWindow *= 10) {
 					for (String kind : new String[] { "memory", "latency" }) {
 						for (int i = 0; i < 5; i++) {
 							outputName = kind.toUpperCase() + "_" + tripleInWindow + "_" + engine + "_" + reasoner + "_EXEN";
-							String pathname = "src/main/resources/" + pathToClone + "baseline/constant/" + reasoner.toString().toLowerCase() + "/"
-									+ engine.toString().toLowerCase() + "/" + tripleInWindow + "/" + kind + "/";
-							File folder = new File(pathname);
+							String rootPath = "./" + pathToClone + "baseline/constant/";
+							String pathname = rootPath + reasoner.toString().toLowerCase() + "/" + engine.toString().toLowerCase() + "/"
+									+ tripleInWindow + "/" + kind + "/";
+
+							File folder = new File(rootPath + "experiments/" + kind + "/");
+							folder.mkdirs();
+							folder = new File(pathname);
 							folder.mkdirs();
 
-							File f = new File(pathname + outputName + i + ".properties");
+							String outputFileName = outputName + i + ".properties";
+							File f = new File(pathname + outputFileName);
 							if (!f.exists())
 								f.createNewFile();
 
@@ -64,14 +72,20 @@ public class BaselineExperimentGenerator {
 
 							if ("memory".equals(kind)) {
 								dest_prop.setProperty("latency_log_enabled", "false");
-								dest_prop.setProperty("experiment_type", "false");
+								dest_prop.setProperty("memory_log_enabled", "true");
+								dest_prop.setProperty("experiment_type", "MEMORY");
 
 							} else if ("latency".equals(kind)) {
 								dest_prop.setProperty("memory_log_enabled", "false");
 								dest_prop.setProperty("latency_log_enabled", "true");
+								dest_prop.setProperty("experiment_type", "LATENCY");
+
 							}
 
 							dest_prop.setProperty("experiment_type", kind.toUpperCase());
+
+							dest_prop.setProperty("cep_event_type", engine.toString());
+							dest_prop.setProperty("input_file", "BIG_FILE.nt");
 
 							switch (mode) {
 								case CONSTANT:
@@ -85,11 +99,13 @@ public class BaselineExperimentGenerator {
 
 							dest_prop.setProperty("execution_number", i + "");
 							dest_prop.setProperty("experiment_number", experimentNumber + "");
-
 							dest_prop.setProperty("experiment_date", dt.format(experimentDate));
 
 							OutputStream out = new FileOutputStream(f);
-							dest_prop.store(out, "This is an optional header comment string");
+							dest_prop.store(out, outputName + i);
+
+							// Big folder for scripting
+							dest_prop.store(new FileOutputStream(new File(rootPath + "experiments/" + kind + "/" + outputFileName)), outputName + i);
 						}
 					}
 					experimentNumber++;

@@ -1,7 +1,7 @@
 package it.polimi.processing.streamer;
 
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.factory.abstracts.EventBuilder;
 import it.polimi.processing.events.interfaces.Event;
@@ -14,15 +14,15 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public abstract class RSPEventStreamer implements Streamer<RSPEvent> {
+public abstract class RSPTripleSetStreamer implements Streamer<RSPTripleSet> {
 
 	protected final EventProcessor<Event> processor;
-	protected EventBuilder<RSPEvent> builder;
+	protected EventBuilder<RSPTripleSet> builder;
 	protected ExecutionState status;
 	protected int eventLimit;
 
 	@Override
-	public RSPEvent createEvent(Set<TripleContainer> triple, int eventNumber, int experimentNumber) {
+	public RSPTripleSet createEvent(Set<TripleContainer> triple, int eventNumber, int experimentNumber) {
 		return builder.getEvent();
 	}
 }

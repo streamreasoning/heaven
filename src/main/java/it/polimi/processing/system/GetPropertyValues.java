@@ -2,6 +2,7 @@ package it.polimi.processing.system;
 
 import it.polimi.main.BaselineMain;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -26,23 +27,25 @@ public class GetPropertyValues {
 
 	static {
 		InputStream inputStream;
-
-		if (BaselineMain.INPUT_PROPERTIES != null) {
-			inputStream = GetPropertyValues.class.getClassLoader().getResourceAsStream(BaselineMain.INPUT_PROPERTIES);
-			log.info("Input Properties Accepted");
-		} else {
-			inputStream = GetPropertyValues.class.getClassLoader().getResourceAsStream(defaultPropertiesFileName);
-		}
-
-		if (inputStream != null) {
-			try {
-				prop.load(inputStream);
-			} catch (IOException e) {
-				log.error(e.getMessage());
-
+		try {
+			String fileToFind;
+			if (BaselineMain.INPUT_PROPERTIES != null) {
+				fileToFind = BaselineMain.INPUT_PROPERTIES;
+				log.info("Input Properties Accepted");
+				inputStream = new FileInputStream(fileToFind);
+			} else {
+				fileToFind = defaultPropertiesFileName;
+				inputStream = GetPropertyValues.class.getClassLoader().getResourceAsStream(defaultPropertiesFileName);
 			}
-		} else {
-			log.error("property file '" + defaultPropertiesFileName + "' not found in the classpath");
+
+			if (inputStream != null) {
+				prop.load(inputStream);
+			} else {
+				log.error("property file '" + fileToFind + "' not found in the classpath");
+			}
+
+		} catch (IOException e) {
+			log.error(e.getMessage());
 		}
 	}
 

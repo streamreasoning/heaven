@@ -1,7 +1,7 @@
 package it.polimi.processing.events.factory.abstracts;
 
 import it.polimi.processing.enums.EventBuilderMode;
-import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 
 import java.util.HashSet;
@@ -14,9 +14,9 @@ import lombok.extern.log4j.Log4j;
 @Setter
 @Getter
 @Log4j
-public abstract class RSPEventBuilder implements EventBuilder<RSPEvent> {
+public abstract class RSPEventBuilder implements EventBuilder<RSPTripleSet> {
 
-	protected RSPEvent e;
+	protected RSPTripleSet e;
 	protected EventBuilderMode mode;
 	protected int initSize, roundSize, eventNumber;
 	protected int x, y;
@@ -33,7 +33,7 @@ public abstract class RSPEventBuilder implements EventBuilder<RSPEvent> {
 	}
 
 	@Override
-	public RSPEvent getEvent() {
+	public RSPTripleSet getEvent() {
 		return sizeReached ? e : null;
 	}
 
@@ -48,7 +48,7 @@ public abstract class RSPEventBuilder implements EventBuilder<RSPEvent> {
 			throw new IllegalArgumentException("Event Size [" + triples.size() + "] out of range [" + roundSize + "]");
 		} else if (sizeReached || e == null) {
 			String id = "<http://example.org/" + experimentNumber + "/";
-			e = (e != null) ? e.rebuild(id, triples, eventNumber, experimentNumber) : new RSPEvent(id, triples, eventNumber, experimentNumber);
+			e = (e != null) ? e.rebuild(id, triples, eventNumber, experimentNumber) : new RSPTripleSet(id, triples, eventNumber, experimentNumber);
 			sizeReached = (e.size() == roundSize);
 			eventNumber++;
 			updateSize();
@@ -73,7 +73,7 @@ public abstract class RSPEventBuilder implements EventBuilder<RSPEvent> {
 		if (e == null) {
 			set = new HashSet<TripleContainer>();
 			set.add(triple);
-			e = new RSPEvent(id, set, eventNumber, experimentNumber);
+			e = new RSPTripleSet(id, set, eventNumber, experimentNumber);
 			log.debug("isNull Event Size [" + e.size() + "] roundSize [" + roundSize + "]");
 		} else if (sizeReached) {
 			eventNumber++;

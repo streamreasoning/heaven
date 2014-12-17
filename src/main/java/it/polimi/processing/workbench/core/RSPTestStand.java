@@ -3,7 +3,7 @@ package it.polimi.processing.workbench.core;
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.Experiment;
-import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.Result;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.EventResult;
@@ -11,7 +11,7 @@ import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.processing.services.FileService;
-import it.polimi.processing.streamer.RSPEventStreamer;
+import it.polimi.processing.streamer.RSPTripleSetStreamer;
 import it.polimi.processing.system.GetPropertyValues;
 import it.polimi.processing.workbench.timecontrol.TimeStrategy;
 import it.polimi.utils.FileUtils;
@@ -105,10 +105,10 @@ public class RSPTestStand extends TestStandImpl {
 	@Override
 	public boolean process(Event e) {
 		totalEvent++;
-		return (e instanceof RSPEvent) ? process((RSPEvent) e) : process((Result) e);
+		return (e instanceof RSPTripleSet) ? process((RSPTripleSet) e) : process((Result) e);
 	}
 
-	public boolean process(RSPEvent e) {
+	public boolean process(RSPTripleSet e) {
 		rspEvent++;
 		return timeStrategy.apply(e);
 	}
@@ -143,7 +143,7 @@ public class RSPTestStand extends TestStandImpl {
 
 	@Override
 	public void build(StartableCollector<EventResult> resultCollector, StartableCollector<ExperimentResult> experimentResultCollector,
-			RSPEngine rspEngine, RSPEventStreamer rspEventStreamer) {
+			RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
 		this.timeStrategy.setRSPEngine(rspEngine);
 		super.build(resultCollector, experimentResultCollector, rspEngine, rspEventStreamer);
 	}

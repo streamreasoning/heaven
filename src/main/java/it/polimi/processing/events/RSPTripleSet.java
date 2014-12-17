@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-public class RSPEvent implements Event {
+public class RSPTripleSet implements Event {
 
 	private String id;
 	private Set<TripleContainer> eventTriples = new HashSet<TripleContainer>();
@@ -27,7 +27,7 @@ public class RSPEvent implements Event {
 		return eventTriples.size();
 	}
 
-	public RSPEvent(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber) {
+	public RSPTripleSet(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber) {
 		this.id = id;
 		this.eventTriples = hashSet;
 		this.eventNumber = eventNumber;
@@ -36,7 +36,7 @@ public class RSPEvent implements Event {
 		this.memoryBR = Memory.getMemoryUsage();
 	}
 
-	public RSPEvent rebuild(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber) {
+	public RSPTripleSet rebuild(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber) {
 		this.id = id;
 		this.eventTriples = hashSet;
 		this.eventNumber = eventNumber;

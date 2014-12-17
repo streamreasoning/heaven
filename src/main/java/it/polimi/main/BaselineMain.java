@@ -3,7 +3,7 @@ package it.polimi.main;
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.enums.EventBuilderMode;
 import it.polimi.processing.enums.ExperimentType;
-import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.factory.ConstantEventBuilder;
 import it.polimi.processing.events.factory.StepEventBuilder;
 import it.polimi.processing.events.factory.abstracts.EventBuilder;
@@ -21,7 +21,7 @@ import it.polimi.processing.rspengine.windowed.jena.listener.JenaFullListener;
 import it.polimi.processing.rspengine.windowed.jena.listener.JenaRhoDFListener;
 import it.polimi.processing.rspengine.windowed.jena.listener.JenaSMPLListener;
 import it.polimi.processing.services.FileService;
-import it.polimi.processing.streamer.RSPEventStreamer;
+import it.polimi.processing.streamer.RSPTripleSetStreamer;
 import it.polimi.processing.system.ExecutionEnvirorment;
 import it.polimi.processing.system.GetPropertyValues;
 import it.polimi.processing.workbench.collector.CollectorEventResult;
@@ -75,7 +75,7 @@ public class BaselineMain {
 	private static int EXECUTION_NUMBER;
 
 	private static String whereOutput, whereWindow, outputFileName, windowFileName, experimentDescription;
-	private static RSPEventStreamer streamer;
+	private static RSPTripleSetStreamer streamer;
 	private static Reasoner CURRENT_REASONER;
 	private static EventBuilderMode STREAMING_MODE;
 	private static String engineName;
@@ -91,13 +91,12 @@ public class BaselineMain {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
 
-		if (args.length >= 2) {
+		if (args.length >= 1) {
 			INPUT_PROPERTIES = args[0];
-			file = args[1];
 			log.info(Arrays.deepToString(args));
-		} else {
-			file = GetPropertyValues.getProperty(GetPropertyValues.DEFAULT_INPUT_FILE);
 		}
+
+		file = GetPropertyValues.getProperty(GetPropertyValues.DEFAULT_INPUT_FILE);
 
 		EXPERIMENT_NUMBER = GetPropertyValues.getIntegerProperty("experiment_number");
 		EXPERIMENT_DATE = GetPropertyValues.getDateProperty("experiment_date");
@@ -160,7 +159,7 @@ public class BaselineMain {
 	}
 
 	protected static String streamerSelection() {
-		EventBuilder<RSPEvent> eb = null;
+		EventBuilder<RSPTripleSet> eb = null;
 
 		String code = "_EB";
 		String message = "Event Builder Selection: [" + STREAMING_MODE + "] [" + INIT_SIZE + "] ";

@@ -1,6 +1,6 @@
 package it.polimi.processing.workbench.timecontrol;
 
-import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TSResult;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.processing.system.GetPropertyValues;
@@ -17,7 +17,7 @@ public class NoAggregationStrategy implements TimeStrategy {
 	}
 
 	@Override
-	public boolean apply(RSPEvent e) {
+	public boolean apply(RSPTripleSet e) {
 		int eventNumber = rspEngine.getEventNumber();
 		String id = "<http://example.org/" + experiment + "/" + eventNumber + "/";
 

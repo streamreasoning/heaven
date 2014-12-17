@@ -1,12 +1,12 @@
 package it.polimi.processing.workbench.timecontrol;
 
-import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TSResult;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
 
 public interface TimeStrategy {
 
-	public boolean apply(RSPEvent e);
+	public boolean apply(RSPTripleSet e);
 
 	public void setRSPEngine(RSPEngine rspEngine);
 

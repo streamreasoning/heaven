@@ -35,6 +35,7 @@ public class NTInputFileCleaner {
 	static Model temp;
 	private static long datatypeSize, inputSize, typeOfSizeBefore, typeOfSizeAfter, excludedSize = 0;
 	private static int finalSize = 0;
+	private static final boolean uniqueFile = true;
 
 	public static void main(String[] args) throws IOException {
 		datatypeSize = inputSize = typeOfSizeBefore = typeOfSizeAfter = excludedSize = finalSize = 0;
@@ -42,7 +43,7 @@ public class NTInputFileCleaner {
 		int index = 0;
 		for (int seed = 0; seed < 10; seed++) {
 
-			String filenameOrURI = "src/main/resources/data/lubm/UNIV10IGEN/_UNIV" + univNumber + "INDEX" + index + "SEED" + seed + ".nt";
+			String filenameOrURI = "./lubm/UNIV10IGEN/_UNIV" + univNumber + "INDEX" + index + "SEED" + seed + ".nt";
 			String outputFile = "_CLND_UNIV" + univNumber + "INDEX" + index + "SEED" + seed;
 			cleanFile(filenameOrURI, outputFile, FileUtils.PREPROCESSING_FILE_PATH + "UNIV10IGEN/");
 			index += univNumber;
@@ -68,12 +69,17 @@ public class NTInputFileCleaner {
 		log.info("Datatype removed");
 		input = removeSpecicifProperties(outputPath + "excluded/" + outputFile, inputOriginal, input);
 		log.info("Excluded Properties removed");
-		writeCleanedFile(outputPath + outputFile, typeOfBefore, input);
-		log.info("CLeand File Build and Written");
+		if (uniqueFile) {
+			writeCleanedFile(outputPath + "BIG_FILE", typeOfBefore, input);
+		} else {
+			writeCleanedFile(outputPath + outputFile, typeOfBefore, input);
+			log.info("CLeand File Build and Written");
+		}
 
 		typeOfSizeAfter = input.query(new SimpleSelector(null, RDF.type, (RDFNode) null)).size();
 
-		writeLogFile(inputFileWithPath, outputPath + outputFile);
+		writeLogFile(inputFileWithPath, outputPath + "logs/" + "+Big_" + outputFile);
+
 		log.info("Log File Avaliable");
 	}
 

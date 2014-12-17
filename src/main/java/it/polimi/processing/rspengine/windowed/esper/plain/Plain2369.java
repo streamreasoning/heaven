@@ -1,7 +1,7 @@
 package it.polimi.processing.rspengine.windowed.esper.plain;
 
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.abstracts.RSPEsperEngine;
@@ -116,7 +116,7 @@ public class Plain2369 extends RSPEsperEngine {
 	}
 
 	@Override
-	public boolean process(RSPEvent e) {
+	public boolean process(RSPTripleSet e) {
 		setCurrentEvent(e);
 		status = ExecutionState.RUNNING;
 		Set<TripleContainer> eventTriples = e.getEventTriples();

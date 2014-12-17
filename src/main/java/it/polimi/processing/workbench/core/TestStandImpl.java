@@ -9,7 +9,7 @@ import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
-import it.polimi.processing.streamer.RSPEventStreamer;
+import it.polimi.processing.streamer.RSPTripleSetStreamer;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
@@ -21,7 +21,7 @@ public abstract class TestStandImpl extends Stand implements EventProcessor<Even
 	protected StartableCollector<ExperimentResult> experimentResultCollector;
 
 	protected RSPEngine rspEngine;
-	protected RSPEventStreamer rspEventStreamer;
+	protected RSPTripleSetStreamer rspEventStreamer;
 
 	protected Experiment currentExperiment;
 	protected Event se;
@@ -34,7 +34,7 @@ public abstract class TestStandImpl extends Stand implements EventProcessor<Even
 	protected int totalEvent;
 
 	public void build(StartableCollector<EventResult> resultCollector, StartableCollector<ExperimentResult> experimentResultCollector,
-			RSPEngine rspEngine, RSPEventStreamer rspEventStreamer) {
+			RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
 		this.experimentResultCollector = experimentResultCollector;
 		this.resultCollector = resultCollector;
 		this.rspEngine = rspEngine;
