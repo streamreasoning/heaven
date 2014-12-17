@@ -1,7 +1,7 @@
 package processing.events.factory;
 
 import static org.junit.Assert.assertEquals;
-import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.factory.ConstantEventBuilder;
 import it.polimi.processing.events.factory.abstracts.EventBuilder;
@@ -20,7 +20,7 @@ public class ConstantEventBuilderTest {
 
 	@Test
 	public void constantEventBuilderTest() {
-		EventBuilder<RSPEvent> eb = new ConstantEventBuilder(1, 0);
+		EventBuilder<RSPTripleSet> eb = new ConstantEventBuilder(1, 0);
 
 		TripleContainer tc1 = new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
@@ -38,7 +38,7 @@ public class ConstantEventBuilderTest {
 
 		assertEquals(true, eb.canSend());
 
-		RSPEvent event = eb.getEvent();
+		RSPTripleSet event = eb.getEvent();
 
 		assertEquals(1, event.getEventTriples().size());
 
@@ -58,7 +58,7 @@ public class ConstantEventBuilderTest {
 
 	@Test
 	public void constantEventBuilderNotFullIAETest() {
-		EventBuilder<RSPEvent> eb = new ConstantEventBuilder(1, 0);
+		EventBuilder<RSPTripleSet> eb = new ConstantEventBuilder(1, 0);
 
 		TripleContainer tc1 = new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
@@ -77,7 +77,7 @@ public class ConstantEventBuilderTest {
 
 	@Test
 	public void constantEventBuilderRealCaseTest() {
-		EventBuilder<RSPEvent> eb = new ConstantEventBuilder(1, 0);
+		EventBuilder<RSPTripleSet> eb = new ConstantEventBuilder(1, 0);
 
 		assertEquals(false, eb.canSend());
 
@@ -96,7 +96,7 @@ public class ConstantEventBuilderTest {
 
 	@Test
 	public void constantEventBuilderTestSingleAdd() {
-		EventBuilder<RSPEvent> eb = new ConstantEventBuilder(1, 0);
+		EventBuilder<RSPTripleSet> eb = new ConstantEventBuilder(1, 0);
 
 		TripleContainer tc1 = new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
@@ -110,7 +110,7 @@ public class ConstantEventBuilderTest {
 
 		assertEquals(true, eb.canSend());
 
-		RSPEvent event = eb.getEvent();
+		RSPTripleSet event = eb.getEvent();
 
 		assertEquals(1, event.getEventTriples().size());
 
@@ -127,7 +127,7 @@ public class ConstantEventBuilderTest {
 
 	@Test
 	public void constantEventBuilderRealCaseTestSingleAdd() {
-		EventBuilder<RSPEvent> eb = new ConstantEventBuilder(1, 0);
+		EventBuilder<RSPTripleSet> eb = new ConstantEventBuilder(1, 0);
 
 		assertEquals(false, eb.canSend());
 

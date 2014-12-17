@@ -1,7 +1,7 @@
 package processing.events.factory;
 
 import static org.junit.Assert.assertEquals;
-import it.polimi.processing.events.RSPEvent;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.factory.StepEventBuilder;
 import it.polimi.processing.events.factory.abstracts.EventBuilder;
@@ -27,7 +27,7 @@ public class StepEventBuilderTest {
 		int width = 1;
 		int initSize = 1;
 
-		EventBuilder<RSPEvent> eb = new StepEventBuilder(height, width, initSize, 0); // 1 5 10 15
+		EventBuilder<RSPTripleSet> eb = new StepEventBuilder(height, width, initSize, 0); // 1 5 10 15
 																						// 20
 
 		assertEquals(false, eb.canSend()); // The first RSPEvent
@@ -40,7 +40,7 @@ public class StepEventBuilderTest {
 
 		assertEquals(true, eb.canSend()); // The first RSPEvent
 
-		RSPEvent event = eb.getEvent();
+		RSPTripleSet event = eb.getEvent();
 		assertEquals(initSize, event.size());
 
 		for (int eventNumber = 1; eventNumber < 5; eventNumber++) {
@@ -66,7 +66,7 @@ public class StepEventBuilderTest {
 		int initSize = 1;
 		int wrongHeight = 9;
 
-		EventBuilder<RSPEvent> eb = new StepEventBuilder(height, width, initSize, 0); // 1 5 10 15
+		EventBuilder<RSPTripleSet> eb = new StepEventBuilder(height, width, initSize, 0); // 1 5 10 15
 																						// 20
 
 		assertEquals(false, eb.canSend()); // The first RSPEvent
@@ -76,7 +76,7 @@ public class StepEventBuilderTest {
 		set.add(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication0",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" }));
 		eb.append(set);
-		RSPEvent event = eb.getEvent();
+		RSPTripleSet event = eb.getEvent();
 		assertEquals(initSize, event.size());
 
 		for (int eventNumber = 1; eventNumber < 5; eventNumber++) {
@@ -101,14 +101,14 @@ public class StepEventBuilderTest {
 		int width = 1;
 		int initSize = 1;
 
-		EventBuilder<RSPEvent> eb = new StepEventBuilder(height, width, initSize, 0); // 1 5 10 15
+		EventBuilder<RSPTripleSet> eb = new StepEventBuilder(height, width, initSize, 0); // 1 5 10 15
 																						// 20
 
 		assertEquals(false, eb.canSend()); // The first RSPEvent
 
 		eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication0",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" }));
-		RSPEvent event = eb.getEvent();
+		RSPTripleSet event = eb.getEvent();
 		assertEquals(true, eb.canSend());
 		assertEquals(initSize, event.size());
 
@@ -143,7 +143,7 @@ public class StepEventBuilderTest {
 
 		eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication0",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" }));
-		RSPEvent event = eb.getEvent();
+		RSPTripleSet event = eb.getEvent();
 		assertEquals(initSize, event.size());
 		int eventNumber = 1;
 		for (eventNumber = 1; eventNumber < 5; eventNumber++) {
