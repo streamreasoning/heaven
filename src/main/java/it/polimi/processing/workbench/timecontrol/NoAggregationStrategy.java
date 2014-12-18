@@ -3,6 +3,7 @@ package it.polimi.processing.workbench.timecontrol;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TSResult;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
+import it.polimi.processing.rspengine.shared.events.EsperUtils;
 import it.polimi.processing.system.GetPropertyValues;
 import it.polimi.processing.system.Memory;
 
@@ -30,7 +31,7 @@ public class NoAggregationStrategy implements TimeStrategy {
 		currentResult.setMemoryA(Memory.getMemoryUsage());
 
 		boolean process = rspEngine.process(e);
-		rspEngine.progress(1);
+		rspEngine.progress(EsperUtils.WINDOW_SIZE / EsperUtils.OUTPUT_RATE);
 		return process;
 	}
 

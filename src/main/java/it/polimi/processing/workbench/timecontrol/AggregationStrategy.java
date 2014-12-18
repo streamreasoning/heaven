@@ -32,20 +32,32 @@ public class AggregationStrategy implements TimeStrategy {
 		boolean process = false;
 		int eventNumber = rspEngine.getEventNumber();
 
-		if (tsEventNumber == 0) {
+		int divider = EsperUtils.OUTPUT_RATE;
+		if (tsEventMax == 0 && tsEventNumber == 0) {
+			currentResult.setInputTimestamp(System.currentTimeMillis());
+			currentResult.setMemoryB(Memory.getMemoryUsage());
+			currentResult.setEventNumber(eventNumber / aggregation);
+			currentResult.setId("<http://example.org/" + experiment + "/" + eventNumber / aggregation + ">");
+			process = rspEngine.process(e);
+			rspEngine.progress(divider);
+
+		} else if (tsEventNumber == 0) {
 			currentResult.setInputTimestamp(System.currentTimeMillis());
 			currentResult.setMemoryB(Memory.getMemoryUsage());
 			currentResult.setEventNumber(eventNumber / aggregation);
 			currentResult.setId("<http://example.org/" + experiment + "/" + eventNumber / aggregation + ">");
 			tsEventNumber++;
+			process = rspEngine.process(e);
 		} else if (tsEventNumber == tsEventMax) {
 			tsEventNumber = 0;
-			rspEngine.progress(EsperUtils.WINDOW_SIZE / EsperUtils.OUTPUT_RATE);
+			process = rspEngine.process(e);
+			rspEngine.progress(divider);
 		} else {
 			tsEventNumber++;
+			process = rspEngine.process(e);
 		}
 
-		return rspEngine.process(e);
+		return process;
 	}
 
 	@Override

@@ -47,17 +47,18 @@ public abstract class JenaCEPListener implements UpdateListener {
 		double ouputMemoryUsage = Memory.getMemoryUsage();
 
 		if (oldData != null) {
-			log.debug("[" + oldData.length + "] Old Events are still here");
+			log.info("[" + oldData.length + "] Old Events are still here");
 		}
 
 		if (newData != null) {
 
-			log.debug("[" + newData.length + "] New Events");
+			log.info("[" + newData.length + "] New Events");
 
 			abox = ModelFactory.createMemModelMaker().createDefaultModel().getGraph();
 			ABoxTriples = new HashSet<TripleContainer>();
 
 			for (EventBean e : newData) {
+				log.info(e.getUnderlying().toString());
 				JenaEsperEvent underlying = (JenaEsperEvent) e.getUnderlying();
 				abox = underlying.update(abox);
 				ABoxTriples.addAll(underlying.serialize());

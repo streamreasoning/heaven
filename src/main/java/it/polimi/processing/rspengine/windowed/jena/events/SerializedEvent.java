@@ -27,7 +27,7 @@ public class SerializedEvent extends SerializedTripleEvent implements JenaEsperE
 
 	@Override
 	public String toString() {
-		return "SerializedEvent [s=" + s + ", p=" + p + ", o=" + o + "ts=" + timestamp + "app_ts=" + app_timestamp + "]";
+		return "SerializedEvent [s=" + s + ", p=" + p + ", o=" + o + " ,ts=" + timestamp + " ,app_ts=" + app_timestamp + "]";
 	}
 
 	@Override
