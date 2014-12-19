@@ -66,6 +66,7 @@ public abstract class JenaEngine extends RSPEsperEngine {
 		// We register an EPL statement
 		cepAdm = cep.getEPAdministrator();
 		cepRT = cep.getEPRuntime();
+		resetTime();
 		initQueries();
 		status = ExecutionState.READY;
 		log.debug("Status[" + status + "] Initizalized the RSPEngine");
@@ -75,8 +76,7 @@ public abstract class JenaEngine extends RSPEsperEngine {
 	@Override
 	public ExecutionState startProcessing() {
 		if (isStartable()) {
-			resetTime();
-			cepRT.sendEvent(new CurrentTimeEvent(time));
+			cepRT.sendEvent(new CurrentTimeEvent(registrationTime + 1));
 			status = ExecutionState.READY;
 		} else {
 			status = ExecutionState.ERROR;

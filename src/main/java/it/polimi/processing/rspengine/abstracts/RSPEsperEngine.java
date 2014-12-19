@@ -24,7 +24,7 @@ public abstract class RSPEsperEngine extends RSPEngine {
 	protected static EPAdministrator cepAdm;
 	protected static ConfigurationMethodRef ref;
 
-	protected int windowShots = 0, snapshots = 0, time = 0, rspEventsNumber = 0, esperEventsNumber = 0;
+	protected int windowShots = 0, snapshots = 0, time = 1, registrationTime = 0, rspEventsNumber = 0, esperEventsNumber = 0;
 
 	public RSPEsperEngine(String name, EventProcessor<Event> collector) {
 		super(name, collector);
@@ -33,14 +33,14 @@ public abstract class RSPEsperEngine extends RSPEngine {
 	public void sendTimeEvent(long delta) {
 		this.time += delta;
 		cepRT.sendEvent(new CurrentTimeEvent(time));
-		log.debug("Sent time Event");
+		log.info("Sent time Event current runtime ts [" + time + "]");
 	}
 
 	public void moveWindow() {
 		time += EsperUtils.WINDOW_SIZE;
 		windowShots++;
 		cepRT.sendEvent(new CurrentTimeEvent(time));
-		log.debug("Sent time Event");
+		log.debug("Sent time Event current runtime ts [" + time + "]");
 	}
 
 	public void moveSnapshot() {
@@ -48,18 +48,21 @@ public abstract class RSPEsperEngine extends RSPEngine {
 		snapshots++;
 		cepRT.sendEvent(new CurrentTimeEvent(time));
 		windowShots += time % EsperUtils.WINDOW_SIZE == 0 ? 1 : 0;
-		log.debug("Sent time Event");
+		log.debug("Sent time Event current runtime ts [" + time + "]");
 	}
 
 	public void moveTimePortion(int portion) {
 		time += EsperUtils.WINDOW_SIZE / portion;
 		cepRT.sendEvent(new CurrentTimeEvent(time));
 		windowShots += time % EsperUtils.WINDOW_SIZE == 0 ? 1 : 0;
-		log.info("Sent time Even current runtime ts [" + time + "]");
+		log.debug("Sent time Event current runtime ts [" + time + "]");
 	}
 
+	/**
+	 * Initialize Esper internal clock
+	 */
 	protected void resetTime() {
-		time = 0;
+		cepRT.sendEvent(new CurrentTimeEvent(registrationTime));
 	}
 
 	protected boolean isStartable() {
@@ -81,7 +84,6 @@ public abstract class RSPEsperEngine extends RSPEngine {
 
 	@Override
 	public void progress(int i) {
-		// moveTimePortion(i);
-		sendTimeEvent(i);
+		moveSnapshot();
 	}
 }

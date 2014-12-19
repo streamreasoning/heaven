@@ -35,6 +35,11 @@ public abstract class RSPEngine implements EventProcessor<RSPTripleSet> {
 
 	public abstract int getEventNumber();
 
+	/**
+	 * TODO general definition of the API
+	 * 
+	 * @param i
+	 */
 	public abstract void progress(int i);
 
 }
