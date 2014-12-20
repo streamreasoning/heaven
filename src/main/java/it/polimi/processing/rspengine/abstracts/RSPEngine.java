@@ -7,6 +7,10 @@ import it.polimi.processing.workbench.core.EventProcessor;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * @author Riccardo
+ * 
+ */
 @Getter
 @Setter
 public abstract class RSPEngine implements EventProcessor<RSPTripleSet> {
@@ -35,11 +39,6 @@ public abstract class RSPEngine implements EventProcessor<RSPTripleSet> {
 
 	public abstract int getEventNumber();
 
-	/**
-	 * TODO general definition of the API
-	 * 
-	 * @param i
-	 */
-	public abstract void progress(int i);
+	public abstract void timeProgress();
 
 }

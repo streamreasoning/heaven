@@ -2,7 +2,7 @@ package it.polimi.processing.rspengine.abstracts;
 
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.rspengine.shared.events.EsperUtils;
+import it.polimi.processing.rspengine.windowed.jena.WindowUtils;
 import it.polimi.processing.workbench.core.EventProcessor;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
@@ -18,11 +18,11 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
 @Log4j
 public abstract class RSPEsperEngine extends RSPEngine {
 
-	protected static Configuration cepConfig;
-	protected static EPServiceProvider cep;
-	protected static EPRuntime cepRT;
-	protected static EPAdministrator cepAdm;
-	protected static ConfigurationMethodRef ref;
+	protected Configuration cepConfig;
+	protected EPServiceProvider cep;
+	protected EPRuntime cepRT;
+	protected EPAdministrator cepAdm;
+	protected ConfigurationMethodRef ref;
 
 	protected int windowShots = 0, snapshots = 0, time = 1, registrationTime = 0, rspEventsNumber = 0, esperEventsNumber = 0;
 
@@ -30,31 +30,49 @@ public abstract class RSPEsperEngine extends RSPEngine {
 		super(name, collector);
 	}
 
-	public void sendTimeEvent(long delta) {
+	/**
+	 * 
+	 * Moves time forward of an given amount of time
+	 * 
+	 * @param delta
+	 *            , Must be greater than zero
+	 */
+	public void moveTime(long delta) {
 		this.time += delta;
 		cepRT.sendEvent(new CurrentTimeEvent(time));
-		log.info("Sent time Event current runtime ts [" + time + "]");
-	}
-
-	public void moveWindow() {
-		time += EsperUtils.WINDOW_SIZE;
-		windowShots++;
-		cepRT.sendEvent(new CurrentTimeEvent(time));
 		log.debug("Sent time Event current runtime ts [" + time + "]");
 	}
 
-	public void moveSnapshot() {
-		time += EsperUtils.OUTPUT_RATE;
+	/**
+	 * Moves time forward of exactly one time slot, represented by the time value of the Output
+	 * clause of Esper
+	 */
+	public void moveTime() {
+		this.time += WindowUtils.beta;
 		snapshots++;
 		cepRT.sendEvent(new CurrentTimeEvent(time));
-		windowShots += time % EsperUtils.WINDOW_SIZE == 0 ? 1 : 0;
+		windowShots += time % WindowUtils.omega == 0 ? 1 : 0;
 		log.debug("Sent time Event current runtime ts [" + time + "]");
 	}
 
-	public void moveTimePortion(int portion) {
-		time += EsperUtils.WINDOW_SIZE / portion;
+	/**
+	 * Moves time forward of exactly n time slots, represented by the time value of the Output
+	 * clause of Esper
+	 */
+	public void moveTiveOfSlot(int n) {
+		time += n * WindowUtils.beta;
 		cepRT.sendEvent(new CurrentTimeEvent(time));
-		windowShots += time % EsperUtils.WINDOW_SIZE == 0 ? 1 : 0;
+		windowShots += time % WindowUtils.omega == 0 ? 1 : 0;
+		log.debug("Sent time Event current runtime ts [" + time + "]");
+	}
+
+	/**
+	 * Moves time forward of exactly one window
+	 */
+	public void moveTimeWindow() {
+		time += WindowUtils.omega;
+		windowShots++;
+		cepRT.sendEvent(new CurrentTimeEvent(time));
 		log.debug("Sent time Event current runtime ts [" + time + "]");
 	}
 
@@ -83,7 +101,5 @@ public abstract class RSPEsperEngine extends RSPEngine {
 	}
 
 	@Override
-	public void progress(int i) {
-		moveSnapshot();
-	}
+	public abstract void timeProgress();
 }
