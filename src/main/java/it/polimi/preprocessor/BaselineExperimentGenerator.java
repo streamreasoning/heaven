@@ -12,115 +12,121 @@ import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.Properties;
 
-import lombok.extern.log4j.Log4j;
-
-@Log4j
 public class BaselineExperimentGenerator {
 
 	private static Properties sourceProp;
-	private static boolean autoCalcInitSize = true;
-	private static int aggregation = 5;
-	private static final int eventInWindow = 10;
-	private static final boolean result_log_enabled = false, save_abox_log = false;
 	private static final EventBuilderMode mode = EventBuilderMode.CONSTANT;
 	private static final DateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+	private static int experimentNumber = 0;
+	private static Properties prop;
+	private static final Date experimentDate = new Date();
 
 	public static void main(String[] args) throws IOException {
 		String pathToClone = "properties/";
 		String inputName = "default_teststand.properties";
 		String outputName = "";
-		Date experimentDate = new Date();
+
 		sourceProp = new Properties();
 		InputStream inputStream = BaselineExperimentGenerator.class.getClassLoader().getResourceAsStream(pathToClone + inputName);
 		if (inputStream != null)
 			sourceProp.load(inputStream);
-		int experimentNumber = 0;
 		for (Reasoner reasoner : Reasoner.values()) {
 			if (reasoner.equals(Reasoner.FULL)) {
 				continue;
 			}
 			for (JenaEventType engine : JenaEventType.values()) {
-				for (int tripleInWindow = 100; tripleInWindow < 10000000; tripleInWindow *= 10) {
-					for (String kind : new String[] { "memory", "latency" }) {
-						for (int i = 0; i < 5; i++) {
-							outputName = kind.toUpperCase() + "_" + tripleInWindow + "_" + engine + "_" + reasoner + "_EXEN";
-							String rootPath = "./" + pathToClone + "baseline/constant/";
-							String pathname = rootPath + reasoner.toString().toLowerCase() + "/" + engine.toString().toLowerCase() + "/"
-									+ tripleInWindow + "/" + kind + "/";
+				for (int rsp_events_in_window = 1; rsp_events_in_window < 10000; rsp_events_in_window *= 10) {
+					for (int init_size = 10; init_size <= 10000; init_size *= 10) {
+						for (String kind : new String[] { "memory", "latency" }) {
+							for (int i = 0; i < 5; i++) {
+								outputName = kind.toUpperCase() + "_INIT" + init_size + "_EW_" + rsp_events_in_window + "_" + engine + "_" + reasoner
+										+ "_EXEN";
+								String rootPath = "./" + pathToClone + "baseline/constant/";
+								String pathname = rootPath + reasoner.toString().toLowerCase() + "/" + engine.toString().toLowerCase() + "/I"
+										+ init_size + "/EW" + rsp_events_in_window + "/" + kind + "/";
 
-							File folder = new File(rootPath + "experiments/" + kind + "/");
-							folder.mkdirs();
-							folder = new File(pathname);
-							folder.mkdirs();
+								File folder = new File(rootPath + "experiments/" + kind + "/");
+								folder.mkdirs();
+								folder = new File(pathname);
+								folder.mkdirs();
 
-							String outputFileName = outputName + i + ".properties";
-							File f = new File(pathname + outputFileName);
-							if (!f.exists())
-								f.createNewFile();
+								String outputFileName = outputName + i + ".properties";
+								File f = new File(pathname + outputFileName);
+								if (!f.exists())
+									f.createNewFile();
 
-							Properties dest_prop = (Properties) sourceProp.clone();
-							for (Enumeration propertyNames = sourceProp.propertyNames(); propertyNames.hasMoreElements();) {
-								Object key = propertyNames.nextElement();
-								dest_prop.put(key, sourceProp.get(key));
+								prop = (Properties) sourceProp.clone();
+
+								experimentProperties(i, kind.toUpperCase());
+
+								timeProperties();
+
+								engineProperties(engine.toString());
+
+								eventsProperties(mode, init_size, rsp_events_in_window);
+
+								// for (Enumeration propertyNames = sourceProp.propertyNames();
+								// propertyNames.hasMoreElements();) {
+								// Object key = propertyNames.nextElement();
+								// dest_prop.put(key, sourceProp.get(key));
+								// }
+
+								OutputStream out = new FileOutputStream(f);
+								prop.store(out, outputName + i);
+
+								// Big folder for scripting
+								prop.store(new FileOutputStream(new File(rootPath + "experiments/" + kind + "/" + outputFileName)), outputName + i);
 							}
-
-							if (autoCalcInitSize)
-								calculateInitSize(i, dest_prop, tripleInWindow);
-
-							if ("memory".equals(kind)) {
-								dest_prop.setProperty("latency_log_enabled", "false");
-								dest_prop.setProperty("memory_log_enabled", "true");
-								dest_prop.setProperty("experiment_type", "MEMORY");
-
-							} else if ("latency".equals(kind)) {
-								dest_prop.setProperty("memory_log_enabled", "false");
-								dest_prop.setProperty("latency_log_enabled", "true");
-								dest_prop.setProperty("experiment_type", "LATENCY");
-
-							}
-
-							dest_prop.setProperty("experiment_type", kind.toUpperCase());
-
-							dest_prop.setProperty("cep_event_type", engine.toString());
-							dest_prop.setProperty("input_file", "BIG_FILE.nt");
-
-							switch (mode) {
-								case CONSTANT:
-									dest_prop.setProperty("streaming_mode", "CONSTANT");
-									dest_prop.setProperty("x_size", "0");
-									dest_prop.setProperty("y_size", "0");
-									break;
-								default:
-									break;
-							}
-
-							dest_prop.setProperty("execution_number", i + "");
-							dest_prop.setProperty("experiment_number", experimentNumber + "");
-							dest_prop.setProperty("experiment_date", dt.format(experimentDate));
-
-							OutputStream out = new FileOutputStream(f);
-							dest_prop.store(out, outputName + i);
-
-							// Big folder for scripting
-							dest_prop.store(new FileOutputStream(new File(rootPath + "experiments/" + kind + "/" + outputFileName)), outputName + i);
 						}
+						experimentNumber++;
 					}
-					experimentNumber++;
 				}
 			}
 		}
 
 	}
 
-	protected static void calculateInitSize(int i, Properties dest_prop, int tripleInWindow) {
-		dest_prop.setProperty("external_time_control_on", "true");
-		dest_prop.getProperty("time_strategy", "AGGREGATION");
-		dest_prop.setProperty("init_size", (tripleInWindow / (eventInWindow * aggregation) + ""));
-		final int rspEvents = ((tripleInWindow * aggregation) + 100) < 1000 ? 1000 * aggregation : (tripleInWindow * aggregation) + 100;
-		dest_prop.setProperty("rspevent_number", rspEvents + "");
+	private static void eventsProperties(EventBuilderMode mode, int init_size, int rsp_events_in_winodow) {
+
+		prop.setProperty("max_event_stream", "5000");
+		prop.setProperty("rsp_events_in_winodow", rsp_events_in_winodow + "");
+		prop.setProperty("init_size", init_size + "");
+		switch (mode) {
+			case CONSTANT:
+				prop.setProperty("streaming_mode", "CONSTANT");
+				prop.setProperty("x_size", "0");
+				prop.setProperty("y_size", "0");
+				break;
+			default:
+				break;
+		}
 	}
 
+	private static void experimentProperties(int exe, String type) {
+		prop.setProperty("experiment_name", "RHODF EXPERIMENTS");
+		prop.setProperty("experiment_number", (experimentNumber) + "");
+		prop.setProperty("execution_number", exe + "");
+		prop.setProperty("experiment_date", dt.format(experimentDate));
+
+		prop.setProperty("experiment_type", type);
+
+		prop.setProperty("result_log_enabled", "false");
+		prop.setProperty("latency_log_enabled", "true");
+		prop.setProperty("memory_log_enabled", "true");
+		prop.setProperty("save_abox_log", "false");
+
+		prop.setProperty("input_file", "BIG_FILE.nt");
+	}
+
+	private static void timeProperties() {
+		prop.setProperty("external_time_control_on", "true");
+		prop.setProperty("time_strategy", "NAIVE");
+	}
+
+	private static void engineProperties(String eventType) {
+		prop.setProperty("cep_event_type", eventType);
+
+	}
 }
