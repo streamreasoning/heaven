@@ -4,8 +4,7 @@ import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.abstracts.RSPEsperEngine;
-import it.polimi.processing.rspengine.shared.events.EsperUtils;
-import it.polimi.processing.rspengine.windowed.esper.plain.events.TEvent;
+import it.polimi.processing.rspengine.windowed.jena.WindowUtils;
 import it.polimi.processing.workbench.core.EventProcessor;
 import lombok.extern.log4j.Log4j;
 
@@ -28,39 +27,40 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
  * by refering statements
  * 
  * **/
+/**
+ * @author Riccardo
+ * 
+ */
+/**
+ * @author Riccardo
+ * 
+ */
 @Log4j
 public abstract class JenaEngine extends RSPEsperEngine {
 
 	private final UpdateListener listener;
-	private final Class<?> eventClass;
 
-	public JenaEngine(String name, EventProcessor<Event> collector, UpdateListener listener, Class<?> eventClass) {
-		super(name, collector);
-		this.listener = listener;
-		this.eventClass = eventClass;
-	}
+	private final String query;
 
-	public JenaEngine(String name, EventProcessor<Event> collector, UpdateListener listener) {
+	private EPStatement out = null;
+
+	public JenaEngine(String name, EventProcessor<Event> collector, UpdateListener listener, String query) {
 		super(name, collector);
+		super.cepConfig = new Configuration();
 		this.listener = listener;
-		this.eventClass = TEvent.class;
+		this.query = query;
+
 	}
 
 	protected void initQueries() {
-
-		EPStatement out = cepAdm.createEPL(EsperUtils.JENA_INPUT_QUERY);
+		log.info("Registering query [" + query + "]");
+		out = cepAdm.createEPL(query);
 		out.addListener(listener);
 	}
 
 	@Override
 	public ExecutionState init() {
 		ref = new ConfigurationMethodRef();
-		cepConfig = new Configuration();
-
-		log.info("Added [" + eventClass.getSimpleName() + "] as TEvent");
-		cepConfig.addEventType("TEvent", eventClass.getName());
-
-		cepConfig.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
 
 		cep = EPServiceProviderManager.getProvider(JenaEngine.class.getName(), cepConfig);
 		// We register an EPL statement
@@ -94,6 +94,16 @@ public abstract class JenaEngine extends RSPEsperEngine {
 		return processDone();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see it.polimi.processing.rspengine.abstracts.RSPEsperEngine#moveTime();
+	 */
+	@Override
+	public void timeProgress() {
+		moveTime();
+	}
+
 	@Override
 	public boolean processDone() {
 		status = ExecutionState.READY;
@@ -118,7 +128,7 @@ public abstract class JenaEngine extends RSPEsperEngine {
 	public ExecutionState close() {
 		status = ExecutionState.CLOSED;
 		log.info("Status [" + status + "] Turing Off Processed RSPEvents [" + rspEventsNumber + "]  EsperEvents [" + esperEventsNumber
-				+ "] Windows [" + windowShots + "] Snapshots [" + (time / EsperUtils.OUTPUT_RATE) + "]");
+				+ "] Windows [" + windowShots + "] Snapshots [" + (time / WindowUtils.beta) + "]");
 		return status;
 	}
 

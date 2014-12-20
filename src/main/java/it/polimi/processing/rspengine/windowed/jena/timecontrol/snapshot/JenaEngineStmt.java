@@ -1,13 +1,16 @@
-package it.polimi.processing.rspengine.windowed.jena;
+package it.polimi.processing.rspengine.windowed.jena.timecontrol.snapshot;
 
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
+import it.polimi.processing.rspengine.windowed.jena.WindowUtils;
 import it.polimi.processing.rspengine.windowed.jena.abstracts.JenaEngine;
 import it.polimi.processing.rspengine.windowed.jena.events.StatementEvent;
 import it.polimi.processing.workbench.core.EventProcessor;
 import it.polimi.utils.RDFSUtils;
+import lombok.extern.log4j.Log4j;
 
+import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.UpdateListener;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -16,10 +19,17 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.vocabulary.RDF;
 
+@Log4j
 public class JenaEngineStmt extends JenaEngine {
 
 	public JenaEngineStmt(String name, EventProcessor<Event> collector, UpdateListener listener) {
-		super(name, collector, listener, StatementEvent.class);
+		super(name, collector, listener, WindowUtils.JENA_INPUT_QUERY_SNAPTSHOT);
+
+		cepConfig = new Configuration();
+		cepConfig.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
+		log.info("Added [" + StatementEvent.class + "] as TEvent");
+		cepConfig.addEventType("TEvent", StatementEvent.class.getName());
+
 	}
 
 	@Override

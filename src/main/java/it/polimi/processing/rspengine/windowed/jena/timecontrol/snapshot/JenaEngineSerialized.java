@@ -1,12 +1,15 @@
-package it.polimi.processing.rspengine.windowed.jena;
+package it.polimi.processing.rspengine.windowed.jena.timecontrol.snapshot;
 
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
+import it.polimi.processing.rspengine.windowed.jena.WindowUtils;
 import it.polimi.processing.rspengine.windowed.jena.abstracts.JenaEngine;
 import it.polimi.processing.rspengine.windowed.jena.events.SerializedEvent;
 import it.polimi.processing.workbench.core.EventProcessor;
+import lombok.extern.log4j.Log4j;
 
+import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.UpdateListener;
 
 /**
@@ -21,10 +24,17 @@ import com.espertech.esper.client.UpdateListener;
  * by refering statements
  * 
  * **/
-public class JenaEngineTEvent extends JenaEngine {
+@Log4j
+public class JenaEngineSerialized extends JenaEngine {
 
-	public JenaEngineTEvent(String name, EventProcessor<Event> collector, UpdateListener listener) {
-		super(name, collector, listener, SerializedEvent.class);
+	public JenaEngineSerialized(String name, EventProcessor<Event> collector, UpdateListener listener) {
+		super(name, collector, listener, WindowUtils.JENA_INPUT_QUERY_SNAPTSHOT);
+
+		cepConfig = new Configuration();
+		cepConfig.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
+		log.info("Added [" + SerializedEvent.class + "] as TEvent");
+		cepConfig.addEventType("TEvent", SerializedEvent.class.getName());
+
 	}
 
 	@Override

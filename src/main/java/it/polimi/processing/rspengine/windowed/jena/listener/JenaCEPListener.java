@@ -47,7 +47,7 @@ public abstract class JenaCEPListener implements UpdateListener {
 		double ouputMemoryUsage = Memory.getMemoryUsage();
 
 		if (oldData != null) {
-			log.info("[" + oldData.length + "] Old Events are still here");
+			log.debug("[" + oldData.length + "] Old Events are still here");
 		}
 
 		if (newData != null) {
@@ -58,18 +58,23 @@ public abstract class JenaCEPListener implements UpdateListener {
 			ABoxTriples = new HashSet<TripleContainer>();
 
 			for (EventBean e : newData) {
-				log.info(e.getUnderlying().toString());
+				log.debug(e.getUnderlying().toString());
 				JenaEsperEvent underlying = (JenaEsperEvent) e.getUnderlying();
 				abox = underlying.update(abox);
 				ABoxTriples.addAll(underlying.serialize());
 			}
 
+			double memoryUsage = Memory.getMemoryUsage();
+
 			reasoner = getReasoner();
 			InfGraph graph = reasoner.bindSchema(TBoxStar.getGraph()).bind(abox);
 			ABoxStar = new InfModelImpl(graph);
 
+			double memoryUsage2 = Memory.getMemoryUsage();
+
 			Set<TripleContainer> statements = new HashSet<TripleContainer>();
-			StmtIterator iterator = ABoxStar.difference(TBoxStar).listStatements();
+			Model difference = ABoxStar.difference(TBoxStar);
+			StmtIterator iterator = difference.listStatements();
 
 			Triple t;
 			TripleContainer statementStrings;

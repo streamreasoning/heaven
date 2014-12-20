@@ -1,13 +1,16 @@
-package it.polimi.processing.rspengine.windowed.jena;
+package it.polimi.processing.rspengine.windowed.jena.timecontrol.snapshot;
 
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
+import it.polimi.processing.rspengine.windowed.jena.WindowUtils;
 import it.polimi.processing.rspengine.windowed.jena.abstracts.JenaEngine;
 import it.polimi.processing.rspengine.windowed.jena.events.GraphEvent;
 import it.polimi.processing.workbench.core.EventProcessor;
 import it.polimi.utils.RDFSUtils;
+import lombok.extern.log4j.Log4j;
 
+import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.UpdateListener;
 import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.Triple;
@@ -30,12 +33,19 @@ import com.hp.hpl.jena.vocabulary.RDF;
  * by refering statements
  * 
  * **/
+@Log4j
 public class JenaEngineGraph extends JenaEngine {
 
 	Graph abox;
 
 	public JenaEngineGraph(String name, EventProcessor<Event> collector, UpdateListener listener) {
-		super(name, collector, listener, GraphEvent.class);
+		super(name, collector, listener, WindowUtils.JENA_INPUT_QUERY_SNAPTSHOT);
+
+		cepConfig = new Configuration();
+		cepConfig.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
+		log.info("Added [" + GraphEvent.class + "] as TEvent");
+		cepConfig.addEventType("TEvent", GraphEvent.class.getName());
+
 	}
 
 	@Override

@@ -1,8 +1,17 @@
-package it.polimi.processing.rspengine.shared.events;
+package it.polimi.processing.rspengine.windowed.jena;
 
-public class EsperUtils {
-	public static final int WINDOW_SIZE = 1001;
-	public static final int OUTPUT_RATE = 100;
-	public static final String JENA_INPUT_QUERY = " select irstream * from TEvent.win:time(" + WINDOW_SIZE + "msec) output snapshot every "
-			+ OUTPUT_RATE + " msec";
+import it.polimi.processing.system.GetPropertyValues;
+
+public class WindowUtils {
+
+	public static final int beta = 100;
+
+	private static int expectedRSPEvents = GetPropertyValues.getIntegerProperty("rsp_events_in_winodow");
+	public static final int omega = ((beta * expectedRSPEvents) + 1);
+
+	public static final String JENA_INPUT_QUERY_SNAPTSHOT = " select irstream * from TEvent.win:time(" + omega + " msec) output snapshot every "
+			+ beta + " msec";
+
+	public static final String JENA_INPUT_QUERY_INCREMENTAL = " select irstream * from TEvent.win:time(" + omega + "msec) output snapshot every "
+			+ beta + " msec";
 }
