@@ -160,4 +160,10 @@ public class Plain2369 extends RSPEsperEngine {
 		return true;
 	}
 
+	@Override
+	public void timeProgress() {
+		// TODO Auto-generated method stub
+
+	}
+
 }
