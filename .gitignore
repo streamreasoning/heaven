@@ -1,0 +1,40 @@
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+#InputFiles
+*.nt
+*.csv
+*.triG
+#Output
+
+<<<<<<< HEAD
+# Eclipse
+.classpath
+.project
+.settings/
+src/main/resources/data/preprocessing/
+.launch
+.zip
+.properties
+
+#Maven
+target
+
+#data
+*.csv
+*.DS_Store
+*.trig
+*.db
+
+
+#INTELLIJ
+.idea
+.idea/*
+
