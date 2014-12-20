@@ -77,10 +77,18 @@ public class NTStreamer extends RSPTripleSetStreamer {
 						lastEvent = builder.getEvent();
 						processor.process(lastEvent);
 						streamedEvents++;
+
 						log.debug("Send Event [" + streamedEvents + "] triples [" + triples + "] of size [" + lastEvent.size() + "]");
+
+						if (streamedEvents % 500 == 0) {
+							double percentage = (double) streamedEvents * 100 / eventLimit;
+							log.info("Process Complete [" + percentage + "%]");
+						}
+
 					} else {
 						log.debug("Still Processing " + line);
 					}
+
 					status = ExecutionState.READY;
 				}
 				log.info("End Streaming: Triples: [" + triples + "] " + "RSPEvents: [" + streamedEvents + "]");
