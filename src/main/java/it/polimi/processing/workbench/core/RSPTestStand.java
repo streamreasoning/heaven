@@ -32,7 +32,6 @@ public class RSPTestStand extends TestStandImpl {
 	private String where;
 
 	private final TimeStrategy timeStrategy;
-	int aggregation;
 	private Integer experiment;
 
 	public RSPTestStand(TimeStrategy strategy) {
