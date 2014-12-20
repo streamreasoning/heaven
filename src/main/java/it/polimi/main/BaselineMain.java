@@ -12,14 +12,14 @@ import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.processing.rspengine.windowed.esper.listeners.ResultCollectorListener;
 import it.polimi.processing.rspengine.windowed.esper.plain.Plain2369;
-import it.polimi.processing.rspengine.windowed.jena.JenaEngineGraph;
-import it.polimi.processing.rspengine.windowed.jena.JenaEngineStmt;
-import it.polimi.processing.rspengine.windowed.jena.JenaEngineTEvent;
 import it.polimi.processing.rspengine.windowed.jena.enums.JenaEventType;
 import it.polimi.processing.rspengine.windowed.jena.enums.Reasoner;
 import it.polimi.processing.rspengine.windowed.jena.listener.JenaFullListener;
 import it.polimi.processing.rspengine.windowed.jena.listener.JenaRhoDFListener;
 import it.polimi.processing.rspengine.windowed.jena.listener.JenaSMPLListener;
+import it.polimi.processing.rspengine.windowed.jena.timecontrol.snapshot.JenaEngineGraph;
+import it.polimi.processing.rspengine.windowed.jena.timecontrol.snapshot.JenaEngineSerialized;
+import it.polimi.processing.rspengine.windowed.jena.timecontrol.snapshot.JenaEngineStmt;
 import it.polimi.processing.services.FileService;
 import it.polimi.processing.streamer.RSPTripleSetStreamer;
 import it.polimi.processing.system.ExecutionEnvirorment;
@@ -28,9 +28,8 @@ import it.polimi.processing.workbench.collector.CollectorEventResult;
 import it.polimi.processing.workbench.collector.CollectorExperimentResult;
 import it.polimi.processing.workbench.core.RSPTestStand;
 import it.polimi.processing.workbench.streamer.NTStreamer;
-import it.polimi.processing.workbench.timecontrol.AggregationStrategy;
 import it.polimi.processing.workbench.timecontrol.InternalTiming;
-import it.polimi.processing.workbench.timecontrol.NoAggregationStrategy;
+import it.polimi.processing.workbench.timecontrol.NaiveStrategy;
 import it.polimi.processing.workbench.timecontrol.TimeStrategy;
 import it.polimi.utils.FileUtils;
 import it.polimi.utils.RDFSUtils;
@@ -155,7 +154,7 @@ public class BaselineMain {
 	}
 
 	private static TimeStrategy timeStrategySelection() {
-		return (GetPropertyValues.getProperty("time_strategy").equals("AGGREGATION")) ? new AggregationStrategy() : new NoAggregationStrategy();
+		return new NaiveStrategy();
 	}
 
 	protected static String streamerSelection() {
@@ -190,7 +189,7 @@ public class BaselineMain {
 		String message = "Engine Selection: [" + CEP_EVENT_TYPE + "] [" + engineName.toUpperCase() + "] ";
 		switch (CEP_EVENT_TYPE) {
 			case TEVENT:
-				engine = new JenaEngineTEvent(engineName, testStand, listener);
+				engine = new JenaEngineSerialized(engineName, testStand, listener);
 				return;
 			case STMT:
 				engine = new JenaEngineStmt(engineName, testStand, listener);
