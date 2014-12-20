@@ -12,7 +12,7 @@
 *.nt
 *.csv
 *.triG
-data/preprocessing/*
+data/*
 properties/*
 
 #Output
