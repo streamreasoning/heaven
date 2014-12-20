@@ -3,17 +3,16 @@ package it.polimi.processing.workbench.timecontrol;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TSResult;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
-import it.polimi.processing.rspengine.shared.events.EsperUtils;
 import it.polimi.processing.system.GetPropertyValues;
 import it.polimi.processing.system.Memory;
 
-public class NoAggregationStrategy implements TimeStrategy {
+public class NaiveStrategy implements TimeStrategy {
 
 	private RSPEngine rspEngine;
 	private TSResult currentResult;
 	private final int experiment;
 
-	public NoAggregationStrategy() {
+	public NaiveStrategy() {
 		this.experiment = GetPropertyValues.getIntegerProperty("experiment_number");
 	}
 
@@ -31,7 +30,7 @@ public class NoAggregationStrategy implements TimeStrategy {
 		currentResult.setMemoryA(Memory.getMemoryUsage());
 
 		boolean process = rspEngine.process(e);
-		rspEngine.progress(EsperUtils.WINDOW_SIZE / EsperUtils.OUTPUT_RATE);
+		rspEngine.timeProgress();
 		return process;
 	}
 
