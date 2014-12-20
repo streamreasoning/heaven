@@ -12,6 +12,9 @@
 *.nt
 *.csv
 *.triG
+data/preprocessing/*
+properties/*
+
 #Output
 
 <<<<<<< HEAD
