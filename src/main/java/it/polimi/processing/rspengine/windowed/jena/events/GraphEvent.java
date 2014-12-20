@@ -24,6 +24,7 @@ public class GraphEvent implements JenaEsperEvent {
 
 	@Override
 	public Graph update(Graph abox) {
+		// GraphUtil.addInto(dstGraph, srcGraph);
 		return new Union(abox, graph);
 	}
 
