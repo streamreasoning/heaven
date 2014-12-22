@@ -10,12 +10,17 @@ public class StepEventBuilder extends RSPEventBuilder {
 		eventNumber = initSize;
 	}
 
+	int distance = 0;
+
 	@Override
 	public void updateSize() {
-		if (roundSize == initSize && x != initSize) {
-			roundSize = x;
+		if (roundSize == initSize && y != initSize) {
+			roundSize = y;
+		} else if (distance == x) {
+			roundSize += y;
+			distance = 0;
 		} else {
-			roundSize += x;
+			distance++;
 		}
 	}
 }

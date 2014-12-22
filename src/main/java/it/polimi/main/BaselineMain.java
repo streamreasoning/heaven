@@ -84,9 +84,8 @@ public class BaselineMain {
 	private static int INIT_SIZE;
 	private static int EVENTS;
 	private static String RSPENGINE;
-	private static Integer X_SIZE;
-	private static Integer Y_SIZE;
 	public static String INPUT_PROPERTIES;
+	private static String wINDOWSIZE;
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
 
@@ -113,11 +112,11 @@ public class BaselineMain {
 			genearlEngineSelection();
 		}
 
-		EVENTS = GetPropertyValues.getIntegerProperty("rspevent_number");
+		EVENTS = GetPropertyValues.getIntegerProperty("max_event_stream");
 		STREAMING_MODE = GetPropertyValues.getEnumProperty(EventBuilderMode.class, "streaming_mode");
 		INIT_SIZE = GetPropertyValues.getIntegerProperty("init_size");
-		X_SIZE = GetPropertyValues.getIntegerProperty("x_size");
-		Y_SIZE = GetPropertyValues.getIntegerProperty("y_size");
+		X = GetPropertyValues.getIntegerProperty("x_size");
+		Y = GetPropertyValues.getIntegerProperty("y_size");
 
 		log.info("Experiment [" + EXPERIMENT_NUMBER + "] on [" + file + "] of [" + EXPERIMENT_DATE + "] Number of Events [" + EVENTS + "]");
 
@@ -130,8 +129,11 @@ public class BaselineMain {
 
 		FileService.createOutputFolder(FileUtils.daypath + "/exp" + EXPERIMENT_NUMBER + "/" + engineName);
 
+		wINDOWSIZE = GetPropertyValues.getProperty("rsp_events_in_window");
+
 		String generalName = "EN" + EXPERIMENT_NUMBER + "_" + "EXE" + EXECUTION_NUMBER + "_" + COMMENT + "_" + DT.format(EXPERIMENT_DATE) + "_"
-				+ file.split("\\.")[0] + "_R" + CURRENT_REASONER + "E" + CEP_EVENT_TYPE + eventBuilderCodeName;
+				+ file.split("\\.")[0] + "_" + CURRENT_REASONER + "_" + CEP_EVENT_TYPE + "_INIT" + INIT_SIZE + eventBuilderCodeName + "_EW_"
+				+ wINDOWSIZE;
 
 		EXPERIMENT_TYPE = GetPropertyValues.getEnumProperty(ExperimentType.class, "experiment_type");
 		outputFileName = EXPERIMENT_TYPE.ordinal() + "Result_" + generalName;
