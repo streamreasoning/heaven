@@ -43,16 +43,15 @@ public abstract class JenaCEPListener implements UpdateListener {
 
 	@Override
 	public void update(EventBean[] newData, EventBean[] oldData) {
-		long outputTimestamp = System.currentTimeMillis();
-		double ouputMemoryUsage = Memory.getMemoryUsage();
 
 		if (oldData != null) {
 			log.debug("[" + oldData.length + "] Old Events are still here");
+
 		}
 
 		if (newData != null) {
 
-			log.debug("[" + newData.length + "] New Events");
+			log.debug("[" + newData.length + "] New Events of type [" + newData[0].getUnderlying().getClass().getSimpleName() + "]");
 
 			abox = ModelFactory.createMemModelMaker().createDefaultModel().getGraph();
 			ABoxTriples = new HashSet<TripleContainer>();
@@ -64,13 +63,9 @@ public abstract class JenaCEPListener implements UpdateListener {
 				ABoxTriples.addAll(underlying.serialize());
 			}
 
-			double memoryUsage = Memory.getMemoryUsage();
-
 			reasoner = getReasoner();
 			InfGraph graph = reasoner.bindSchema(TBoxStar.getGraph()).bind(abox);
 			ABoxStar = new InfModelImpl(graph);
-
-			double memoryUsage2 = Memory.getMemoryUsage();
 
 			Set<TripleContainer> statements = new HashSet<TripleContainer>();
 			Model difference = ABoxStar.difference(TBoxStar);
@@ -83,6 +78,9 @@ public abstract class JenaCEPListener implements UpdateListener {
 				statementStrings = new TripleContainer(t.getSubject().toString(), t.getPredicate().toString(), t.getObject().toString());
 				statements.add(statementStrings);
 			}
+
+			long outputTimestamp = System.currentTimeMillis();
+			double ouputMemoryUsage = Memory.getMemoryUsage();
 
 			if (next != null) {
 				log.debug("Send Event to the StoreCollector");
