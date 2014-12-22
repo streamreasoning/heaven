@@ -69,6 +69,7 @@ public class NTInputFileCleaner {
 		log.info("Datatype removed");
 		input = removeSpecicifProperties(outputPath + "excluded/" + outputFile, inputOriginal, input);
 		log.info("Excluded Properties removed");
+
 		if (uniqueFile) {
 			writeCleanedFile(outputPath + "BIG_FILE", typeOfBefore, input);
 		} else {

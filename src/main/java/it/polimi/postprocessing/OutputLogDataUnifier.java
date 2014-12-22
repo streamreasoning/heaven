@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,18 +21,28 @@ public class OutputLogDataUnifier {
 	private static Map<String, String> map;
 	private static final byte[] EOF = System.getProperty("line.separator").getBytes();
 	private static final DateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
-	private static String basePath = "src/main/resources/data/output/";
+	private static String basePath = "./data/output/";
 	private static String head;
 
 	public static void main(String[] args) throws IOException, ParseException {
 
-		basePath += dt.format(dt.parse("2014-12-10")) + "/exp";
-		for (String string : new String[] { "jenarhodf", "jenasmpl" }) {
-			head = string;
-			process(string, 6);
-			process(string, 7);
-			process(string, 8);
-		}
+		basePath += dt.format(dt.parse("2014-12-22")) + "/exp";
+
+		head = "rhodf";
+
+		// process("rhodf", 10);
+		// // process("rhodf", 11);
+		// process("rhodf", 14);
+		// process("rhodf", 15);
+		// process("rhodf", 18);
+		// process("rhodf", 19);
+
+		process("rhodf", 100);
+		// process("rhodf", 104);
+		// process("rhodf", 105);
+		// process("rhodf", 106);
+		// process("rhodf", 108);
+		// process("rhodf", 109);
 
 	}
 
@@ -45,7 +56,6 @@ public class OutputLogDataUnifier {
 		String latOutName = "";
 
 		String pathname = basePath + EXPERIMENT + "/" + folder;
-		System.out.println(pathname);
 		File f = new File(pathname); // current directory
 
 		File[] files = f.listFiles();
@@ -68,8 +78,6 @@ public class OutputLogDataUnifier {
 				}
 			}
 		}
-		System.out.println(memOutName);
-		System.out.println(latOutName);
 		unify(EXPERIMENT, memFilesList.toArray(new String[memFilesList.size()]), memOutName);
 		unify(EXPERIMENT, latFilesList.toArray(new String[latFilesList.size()]), latOutName);
 
@@ -82,9 +90,8 @@ public class OutputLogDataUnifier {
 		file.deleteOnExit();
 	}
 
-	private static void unify(int exp, String[] files, String outputName) throws IOException {
+	private static void unify(final int exp, String[] files, String outputName) throws IOException {
 		String pathname = basePath + exp + "/" + head + "/" + outputName;
-		System.out.println(pathname);
 		File output = new File(pathname);
 
 		if (!output.exists()) {
@@ -129,7 +136,15 @@ public class OutputLogDataUnifier {
 		Set<String> keySet = map.keySet();
 
 		List<String> keyList = new ArrayList<String>(keySet);
-		Collections.sort(keyList);
+		Collections.sort(keyList, new Comparator<String>() {
+
+			@Override
+			public int compare(String o1, String o2) {
+				Integer i1 = new Integer(o1.replace("<http://example.org/" + exp + "/", "").replace(">", ""));
+				Integer i2 = new Integer(o2.replace("<http://example.org/" + exp + "/", "").replace(">", ""));
+				return i1.compareTo(i2);
+			}
+		});
 		for (int i = 0; i < keyList.size(); i++) {
 			write(map.get(keyList.get(i)));
 		}
