@@ -19,15 +19,13 @@ public class NaiveStrategy implements TimeStrategy {
 	@Override
 	public boolean apply(RSPTripleSet e) {
 		int eventNumber = rspEngine.getEventNumber();
-		String id = "<http://example.org/" + experiment + "/" + eventNumber + "/";
+		String id = "<http://example.org/" + experiment + "/" + eventNumber + ">";
 
 		currentResult = new TSResult();
 		currentResult.setMemoryB(Memory.getMemoryUsage());
 		currentResult.setInputTimestamp(System.currentTimeMillis());
 		currentResult.setId(id);
 		currentResult.setEventNumber(eventNumber);
-		currentResult.setOutputTimestamp(System.currentTimeMillis());
-		currentResult.setMemoryA(Memory.getMemoryUsage());
 
 		boolean process = rspEngine.process(e);
 		rspEngine.timeProgress();
