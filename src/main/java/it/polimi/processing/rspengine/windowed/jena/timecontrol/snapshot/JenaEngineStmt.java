@@ -4,7 +4,7 @@ import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.windowed.jena.WindowUtils;
-import it.polimi.processing.rspengine.windowed.jena.abstracts.JenaEngine;
+import it.polimi.processing.rspengine.windowed.jena.engine.abstracts.JenaEngine;
 import it.polimi.processing.rspengine.windowed.jena.events.StatementEvent;
 import it.polimi.processing.workbench.core.EventProcessor;
 import it.polimi.utils.RDFSUtils;
