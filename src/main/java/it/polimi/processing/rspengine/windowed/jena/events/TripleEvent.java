@@ -26,7 +26,7 @@ public class TripleEvent implements JenaEsperEvent {
 	private long timestamp;
 
 	@Override
-	public Graph update(Graph abox) {
+	public Graph addTo(Graph abox) {
 		abox.add(new Triple(s.asNode(), p.asNode(), o.asNode()));
 		return abox;
 
@@ -37,6 +37,12 @@ public class TripleEvent implements JenaEsperEvent {
 		HashSet<TripleContainer> hashSet = new HashSet<TripleContainer>();
 		hashSet.add(new TripleContainer(getS().toString(), getP().toString(), getO().toString()));
 		return hashSet;
+	}
+
+	@Override
+	public Graph removeFrom(Graph abox) {
+		abox.remove(s.asNode(), p.asNode(), p.asNode());
+		return abox;
 	}
 
 }

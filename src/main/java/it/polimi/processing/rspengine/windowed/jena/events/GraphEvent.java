@@ -23,9 +23,10 @@ public class GraphEvent implements JenaEsperEvent {
 	private long timestamp;
 
 	@Override
-	public Graph update(Graph abox) {
+	public Graph addTo(Graph abox) {
 		// GraphUtil.addInto(dstGraph, srcGraph);
-		return new Union(abox, graph);
+		Union union = new Union(abox, graph);
+		return union;
 	}
 
 	@Override
@@ -38,5 +39,11 @@ public class GraphEvent implements JenaEsperEvent {
 		}
 
 		return hashSet;
+	}
+
+	@Override
+	public Graph removeFrom(Graph abox) {
+		GraphUtil.deleteFrom(abox, graph);
+		return abox;
 	}
 }

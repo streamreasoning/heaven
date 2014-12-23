@@ -8,7 +8,9 @@ import com.hp.hpl.jena.graph.Graph;
 
 public interface JenaEsperEvent {
 
-	public Graph update(Graph abox);
+	public Graph addTo(Graph abox);
+
+	public Graph removeFrom(Graph abox);
 
 	public Set<TripleContainer> serialize();
 

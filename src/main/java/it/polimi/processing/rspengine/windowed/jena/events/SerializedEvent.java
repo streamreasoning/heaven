@@ -31,7 +31,7 @@ public class SerializedEvent extends SerializedTripleEvent implements JenaEsperE
 	}
 
 	@Override
-	public Graph update(Graph abox) {
+	public Graph addTo(Graph abox) {
 		Resource subject = ResourceFactory.createResource(getS());
 		Property predicate = (getP() != RDFSUtils.TYPE_PROPERTY) ? ResourceFactory.createProperty(getP()) : RDF.type;
 		RDFNode object = ResourceFactory.createResource(getO());
@@ -44,5 +44,14 @@ public class SerializedEvent extends SerializedTripleEvent implements JenaEsperE
 		HashSet<TripleContainer> hashSet = new HashSet<TripleContainer>();
 		hashSet.add(new TripleContainer(getS().toString(), getP().toString(), getO().toString()));
 		return hashSet;
+	}
+
+	@Override
+	public Graph removeFrom(Graph abox) {
+		Resource subject = ResourceFactory.createResource(getS());
+		Property predicate = (getP() != RDFSUtils.TYPE_PROPERTY) ? ResourceFactory.createProperty(getP()) : RDF.type;
+		RDFNode object = ResourceFactory.createResource(getO());
+		abox.remove(subject.asNode(), predicate.asNode(), object.asNode());
+		return abox;
 	}
 }

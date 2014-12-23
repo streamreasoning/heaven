@@ -35,7 +35,7 @@ public class StatementEvent implements JenaEsperEvent {
 	}
 
 	@Override
-	public Graph update(Graph abox) {
+	public Graph addTo(Graph abox) {
 		abox.add(statement.asTriple());
 		return abox;
 	}
@@ -45,5 +45,11 @@ public class StatementEvent implements JenaEsperEvent {
 		HashSet<TripleContainer> hashSet = new HashSet<TripleContainer>();
 		hashSet.add(new TripleContainer(getS().toString(), getP().toString(), getO().toString()));
 		return hashSet;
+	}
+
+	@Override
+	public Graph removeFrom(Graph abox) {
+		abox.remove(statement.getSubject().asNode(), statement.getPredicate().asNode(), statement.getObject().asNode());
+		return abox;
 	}
 }
