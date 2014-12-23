@@ -3,7 +3,7 @@ package processing.events.rspengine.jena.listener;
 import it.polimi.processing.rspengine.windowed.jena.events.GraphEvent;
 import it.polimi.processing.rspengine.windowed.jena.events.StatementEvent;
 import it.polimi.processing.rspengine.windowed.jena.events.TripleEvent;
-import it.polimi.processing.rspengine.windowed.jena.listener.JenaFullListener;
+import it.polimi.processing.rspengine.windowed.jena.timecontrol.snapshot.listener.JenaFullListener;
 import it.polimi.utils.FileUtils;
 import it.polimi.utils.RDFSUtils;
 
