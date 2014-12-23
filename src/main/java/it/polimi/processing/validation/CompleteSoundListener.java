@@ -29,9 +29,9 @@ public class CompleteSoundListener extends CSListener {
 		boolean abox = true;
 
 		collector.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), ouputcurrentTimeMillis, outputmemoryUsage, cs, ss,
-				cr, sr, !abox));
+				cr, sr, !abox, ""));
 		collector.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), ouputcurrentTimeMillis, outputmemoryUsage, cs, ss,
-				cr, sr, abox));
+				cr, sr, abox, ""));
 	}
 
 	@Override

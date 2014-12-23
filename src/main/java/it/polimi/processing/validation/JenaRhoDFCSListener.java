@@ -28,9 +28,9 @@ public class JenaRhoDFCSListener extends CSListener {
 	protected void sendResult() throws IOException {
 		boolean abox = true;
 		collector.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), ouputcurrentTimeMillis, outputmemoryUsage, null,
-				null, completeness, soundness, !abox));
+				null, completeness, soundness, !abox, ""));
 		collector.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), ouputcurrentTimeMillis, outputmemoryUsage, null,
-				null, completeness, soundness, abox));
+				null, completeness, soundness, abox, ""));
 
 	}
 
