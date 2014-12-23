@@ -12,6 +12,6 @@ public class WindowUtils {
 	public static final String JENA_INPUT_QUERY_SNAPTSHOT = " select irstream * from TEvent.win:time(" + omega + " msec) output snapshot every "
 			+ beta + " msec";
 
-	public static final String JENA_INPUT_QUERY_INCREMENTAL = " select irstream * from TEvent.win:time(" + omega + "msec) output snapshot every "
-			+ beta + " msec";
+	public static final String JENA_INPUT_QUERY_INCREMENTAL = " select irstream * from TEvent.win:time(" + omega + "msec) output all every " + beta
+			+ " msec";
 }
