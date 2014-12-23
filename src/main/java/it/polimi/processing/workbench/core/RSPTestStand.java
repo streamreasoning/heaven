@@ -32,7 +32,6 @@ public class RSPTestStand extends TestStandImpl {
 	private String where;
 
 	private final TimeStrategy timeStrategy;
-	private Integer experiment;
 
 	public RSPTestStand(TimeStrategy strategy) {
 		this.timeStrategy = strategy;
@@ -117,6 +116,10 @@ public class RSPTestStand extends TestStandImpl {
 
 		if (engineResult.isAbox()) {
 			this.where += windowFileName;
+			log.info(this.where);
+			engineResult.setId("<http://example.org/" + experimentNumber + "/" + (rspEngine.getEventNumber() - 1) + ">");
+			resultCollector.process(engineResult, this.where);
+			return true;
 		} else {
 			resultEvent++;
 			this.where += outputFileName;
@@ -128,14 +131,14 @@ public class RSPTestStand extends TestStandImpl {
 			this.currentResult.setSr(engineResult.getSoundRHODF());
 			this.currentResult.setCs(engineResult.getCompleteSMPL());
 			this.currentResult.setSs(engineResult.getSoundSMPL());
+			return processDone();
 		}
 
-		return processDone();
 	}
 
 	@Override
 	public boolean processDone() {
-		boolean ret = resultCollector.process(currentResult, where);
+		boolean ret = resultCollector.process(currentResult, this.where);
 		this.tsResultEvents += ret ? 1 : 0;
 		return ret;
 	}

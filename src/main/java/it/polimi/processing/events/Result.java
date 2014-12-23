@@ -21,9 +21,17 @@ public class Result implements EventResult {
 	private Boolean completeSMPL, soundSMPL, completeRHODF, soundRHODF;
 	private boolean abox;
 
+	private String id;
+
 	@Override
 	public CollectableData getTrig() {
-		return new TriG("<http://example.org/" + from + "/" + to + ">", statements);
+		String key;
+		if (id == null) {
+			key = "<http://example.org/" + from + "/" + to + ">";
+		} else {
+			key = this.id;
+		}
+		return new TriG(key, statements);
 	}
 
 	@Override
