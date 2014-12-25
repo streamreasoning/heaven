@@ -1,6 +1,6 @@
 package it.polimi.processing.collector.data;
 
-import it.polimi.processing.services.FileService;
+import it.polimi.services.FileService;
 import lombok.extern.log4j.Log4j;
 
 @Log4j

@@ -1,6 +1,6 @@
 package it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.listener;
 
-import it.polimi.processing.ets.core.EventProcessor;
+import it.polimi.processing.EventProcessor;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.listener.abstracts.JenaNaiveListener;
 

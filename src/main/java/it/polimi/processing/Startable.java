@@ -1,4 +1,4 @@
-package it.polimi.processing.ets.core;
+package it.polimi.processing;
 
 public interface Startable<E> {
 

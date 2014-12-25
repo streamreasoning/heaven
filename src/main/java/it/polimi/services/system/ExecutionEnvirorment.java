@@ -1,4 +1,4 @@
-package it.polimi.processing.services.system;
+package it.polimi.services.system;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

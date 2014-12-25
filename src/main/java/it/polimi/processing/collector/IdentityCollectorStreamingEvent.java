@@ -1,7 +1,7 @@
 package it.polimi.processing.collector;
 
+import it.polimi.processing.Startable;
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.ets.core.Startable;
 import it.polimi.processing.events.results.EventResult;
 
 import java.sql.SQLException;

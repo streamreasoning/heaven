@@ -1,7 +1,7 @@
 package it.polimi.processing.ets.streamer;
 
+import it.polimi.processing.EventProcessor;
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.ets.core.EventProcessor;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.factory.abstracts.EventBuilder;

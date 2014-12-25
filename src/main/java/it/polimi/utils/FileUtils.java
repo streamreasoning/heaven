@@ -1,6 +1,6 @@
 package it.polimi.utils;
 
-import it.polimi.processing.services.system.GetPropertyValues;
+import it.polimi.services.system.GetPropertyValues;
 
 import java.io.File;
 import java.text.DateFormat;

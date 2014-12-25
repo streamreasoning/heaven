@@ -1,11 +1,11 @@
 package it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener.abstracts;
 
-import it.polimi.processing.ets.core.EventProcessor;
+import it.polimi.processing.EventProcessor;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.results.Result;
-import it.polimi.processing.rspengine.jena.rspevents.JenaEsperEvent;
-import it.polimi.processing.services.system.ExecutionEnvirorment;
+import it.polimi.processing.rspengine.rspevents.jena.JenaEsperEvent;
+import it.polimi.services.system.ExecutionEnvirorment;
 
 import java.util.HashSet;
 import java.util.Set;

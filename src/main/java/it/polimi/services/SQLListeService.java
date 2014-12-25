@@ -1,4 +1,4 @@
-package it.polimi.processing.services;
+package it.polimi.services;
 
 import it.polimi.processing.collector.data.SQLStmt;
 import it.polimi.utils.FileUtils;

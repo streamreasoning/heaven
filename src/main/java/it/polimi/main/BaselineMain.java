@@ -17,15 +17,15 @@ import it.polimi.processing.events.factory.StepEventBuilder;
 import it.polimi.processing.events.factory.abstracts.EventBuilder;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.events.results.EventResult;
-import it.polimi.processing.rspengine.JeanRSPEngineFactory;
-import it.polimi.processing.rspengine.JenaReasoningListenerFactory;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
+import it.polimi.processing.rspengine.jena.JenaRSPEngineFactory;
+import it.polimi.processing.rspengine.jena.JenaReasoningListenerFactory;
 import it.polimi.processing.rspengine.jena.enums.JenaEventType;
 import it.polimi.processing.rspengine.jena.enums.Reasoner;
-import it.polimi.processing.services.FileService;
-import it.polimi.processing.services.system.ExecutionEnvirorment;
-import it.polimi.processing.services.system.GetPropertyValues;
 import it.polimi.processing.streamer.RSPTripleSetStreamer;
+import it.polimi.services.FileService;
+import it.polimi.services.system.ExecutionEnvirorment;
+import it.polimi.services.system.GetPropertyValues;
 import it.polimi.utils.FileUtils;
 
 import java.sql.SQLException;
@@ -189,15 +189,15 @@ public class BaselineMain {
 		boolean incremental = Reasoning.INCREMENTAL.equals(REASONING);
 		switch (CEP_EVENT_TYPE) {
 			case TEVENT:
-				engine = incremental ? JeanRSPEngineFactory.getIncrementalSerializedEngine(testStand, listener) : JeanRSPEngineFactory
+				engine = incremental ? JenaRSPEngineFactory.getIncrementalSerializedEngine(testStand, listener) : JenaRSPEngineFactory
 						.getSerializedEngine(testStand, listener);
 				return;
 			case STMT:
-				engine = incremental ? JeanRSPEngineFactory.getIncrementalStmtEngine(testStand, listener) : JeanRSPEngineFactory.getStmtEngine(
+				engine = incremental ? JenaRSPEngineFactory.getIncrementalStmtEngine(testStand, listener) : JenaRSPEngineFactory.getStmtEngine(
 						testStand, listener);
 				return;
 			case GRAPH:
-				engine = incremental ? JeanRSPEngineFactory.getJenaEngineGraph(testStand, listener) : JeanRSPEngineFactory.getJenaEngineGraph(
+				engine = incremental ? JenaRSPEngineFactory.getJenaEngineGraph(testStand, listener) : JenaRSPEngineFactory.getJenaEngineGraph(
 						testStand, listener);
 				return;
 			default:

@@ -1,6 +1,6 @@
-package it.polimi.processing.rspengine;
+package it.polimi.processing.rspengine.jena;
 
-import it.polimi.processing.ets.core.EventProcessor;
+import it.polimi.processing.EventProcessor;
 import it.polimi.processing.ets.core.RSPTestStand;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
@@ -11,11 +11,11 @@ import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.JenaE
 import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.JenaEngineGraph;
 import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.JenaEngineSerialized;
 import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.JenaEngineStmt;
-import it.polimi.processing.services.system.GetPropertyValues;
+import it.polimi.services.system.GetPropertyValues;
 
 import com.espertech.esper.client.UpdateListener;
 
-public final class JeanRSPEngineFactory {
+public final class JenaRSPEngineFactory {
 
 	public static RSPEngine getSerializedEngine(EventProcessor<Event> next, UpdateListener listener) {
 		return new JenaEngineSerialized(GetPropertyValues.getEnumProperty(Reasoner.class, "jena_current_reasoner").name().toLowerCase(), next,

@@ -11,10 +11,10 @@ import it.polimi.processing.events.results.EventResult;
 import it.polimi.processing.events.results.Result;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
-import it.polimi.processing.services.FileService;
-import it.polimi.processing.services.system.GetPropertyValues;
-import it.polimi.processing.services.system.Memory;
 import it.polimi.processing.streamer.RSPTripleSetStreamer;
+import it.polimi.services.FileService;
+import it.polimi.services.system.GetPropertyValues;
+import it.polimi.services.system.Memory;
 import it.polimi.utils.FileUtils;
 
 import java.io.BufferedReader;

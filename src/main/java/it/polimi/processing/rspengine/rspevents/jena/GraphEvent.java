@@ -1,4 +1,4 @@
-package it.polimi.processing.rspengine.jena.rspevents;
+package it.polimi.processing.rspengine.rspevents.jena;
 
 import it.polimi.processing.events.TripleContainer;
 

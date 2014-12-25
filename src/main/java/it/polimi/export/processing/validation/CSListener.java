@@ -1,10 +1,10 @@
 package it.polimi.export.processing.validation;
 
 import it.polimi.export.processing.rspengine.windowed.esper.plain.events.Out;
-import it.polimi.processing.ets.core.EventProcessor;
+import it.polimi.processing.EventProcessor;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.services.system.Memory;
+import it.polimi.services.system.Memory;
 import it.polimi.utils.RDFSUtils;
 
 import java.io.IOException;

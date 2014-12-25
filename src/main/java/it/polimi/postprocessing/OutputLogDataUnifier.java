@@ -1,5 +1,7 @@
 package it.polimi.postprocessing;
 
+import it.polimi.services.FileService;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,7 +28,7 @@ public class OutputLogDataUnifier {
 
 	public static void main(String[] args) throws IOException, ParseException {
 
-		basePath += dt.format(dt.parse("2014-12-22")) + "/exp";
+		basePath += dt.format(dt.parse("2014-12-24")) + "/exp";
 
 		head = "rhodf";
 
@@ -37,7 +39,10 @@ public class OutputLogDataUnifier {
 		// process("rhodf", 18);
 		// process("rhodf", 19);
 
-		process("rhodf", 100);
+		process("rhodf", 152);
+		process("rhodf", 150);
+		process("rhodf", 151);
+
 		// process("rhodf", 104);
 		// process("rhodf", 105);
 		// process("rhodf", 106);
@@ -111,7 +116,7 @@ public class OutputLogDataUnifier {
 			String f = files[i];
 			System.out.println(f);
 			header += ",MEMB" + i + ",MEMA" + i + ",LAT" + i;
-			BufferedReader br = PostUtils.getBuffer(basePath + exp + "/" + head + "/" + f);
+			BufferedReader br = FileService.getBuffer(basePath + exp + "/" + head + "/" + f);
 			String line;
 			int eventNum = 0;
 			while ((line = br.readLine()) != null) {

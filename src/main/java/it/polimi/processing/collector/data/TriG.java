@@ -1,8 +1,8 @@
 package it.polimi.processing.collector.data;
 
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.services.system.ExecutionEnvirorment;
 import it.polimi.processing.streamer.Parser;
+import it.polimi.services.system.ExecutionEnvirorment;
 
 import java.util.Set;
 

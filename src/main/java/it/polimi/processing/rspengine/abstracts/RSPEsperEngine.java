@@ -1,7 +1,7 @@
 package it.polimi.processing.rspengine.abstracts;
 
+import it.polimi.processing.EventProcessor;
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.ets.core.EventProcessor;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.jena.WindowUtils;
 import lombok.Getter;

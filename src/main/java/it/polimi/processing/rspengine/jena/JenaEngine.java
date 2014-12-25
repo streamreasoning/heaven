@@ -1,11 +1,10 @@
-package it.polimi.processing.rspengine.jena.engine.abstracts;
+package it.polimi.processing.rspengine.jena;
 
+import it.polimi.processing.EventProcessor;
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.ets.core.EventProcessor;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.abstracts.RSPEsperEngine;
-import it.polimi.processing.rspengine.jena.WindowUtils;
 import lombok.extern.log4j.Log4j;
 
 import com.espertech.esper.client.Configuration;

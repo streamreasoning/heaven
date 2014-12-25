@@ -1,8 +1,8 @@
 package it.polimi.processing.ets.collector;
 
+import it.polimi.processing.Startable;
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.ets.core.Startable;
 import it.polimi.processing.events.results.EventResult;
 import it.polimi.utils.FileUtils;
 import lombok.Getter;

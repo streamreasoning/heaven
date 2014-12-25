@@ -1,6 +1,6 @@
 package it.polimi.processing.collector.data;
 
-import it.polimi.processing.services.SQLListeService;
+import it.polimi.services.SQLListeService;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

@@ -1,7 +1,7 @@
 package it.polimi.export.processing.rspengine.windowed.esper.listeners;
 
 import it.polimi.export.processing.rspengine.windowed.esper.plain.events.TripleEvent;
-import it.polimi.processing.ets.core.EventProcessor;
+import it.polimi.processing.EventProcessor;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
 

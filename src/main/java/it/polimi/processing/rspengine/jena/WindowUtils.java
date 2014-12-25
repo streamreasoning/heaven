@@ -1,6 +1,6 @@
 package it.polimi.processing.rspengine.jena;
 
-import it.polimi.processing.services.system.GetPropertyValues;
+import it.polimi.services.system.GetPropertyValues;
 
 public class WindowUtils {
 

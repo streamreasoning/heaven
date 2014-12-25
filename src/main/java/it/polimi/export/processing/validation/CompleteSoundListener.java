@@ -1,6 +1,6 @@
 package it.polimi.export.processing.validation;
 
-import it.polimi.processing.ets.core.EventProcessor;
+import it.polimi.processing.EventProcessor;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.results.CSResult;
 
