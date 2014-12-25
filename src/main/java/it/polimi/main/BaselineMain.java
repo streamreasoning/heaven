@@ -141,7 +141,6 @@ public class BaselineMain {
 		log.info("Window file name will be: [" + whereWindow + "]");
 
 		reasonerSelection();
-
 		collectorSelection();
 		jenaEngineSelection();
 
