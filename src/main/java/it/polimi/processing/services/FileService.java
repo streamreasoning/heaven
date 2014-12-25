@@ -1,6 +1,6 @@
 package it.polimi.processing.services;
 
-import it.polimi.processing.collector.saver.data.CollectableData;
+import it.polimi.processing.collector.data.CollectableData;
 
 import java.io.BufferedReader;
 import java.io.File;

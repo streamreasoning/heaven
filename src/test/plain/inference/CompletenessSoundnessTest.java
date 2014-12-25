@@ -1,6 +1,6 @@
 package plain.inference;
 
-import it.polimi.processing.validation.DatasetAnalyser;
+import it.polimi.export.processing.validation.DatasetAnalyser;
 
 import java.io.File;
 import java.io.FileOutputStream;

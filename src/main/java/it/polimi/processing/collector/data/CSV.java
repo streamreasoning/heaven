@@ -1,6 +1,6 @@
-package it.polimi.processing.collector.saver.data;
+package it.polimi.processing.collector.data;
 
-import it.polimi.processing.system.ExecutionEnvirorment;
+import it.polimi.processing.services.system.ExecutionEnvirorment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
-public class CSV extends WritableData {
+public final class CSV extends WritableData {
 	private String s;
 
 	@Override

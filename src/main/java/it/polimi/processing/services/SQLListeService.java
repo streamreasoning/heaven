@@ -1,6 +1,6 @@
 package it.polimi.processing.services;
 
-import it.polimi.processing.collector.saver.data.SQL;
+import it.polimi.processing.collector.data.SQLStmt;
 import it.polimi.utils.FileUtils;
 
 import java.sql.Connection;
@@ -49,7 +49,7 @@ public class SQLListeService {
 		}
 	}
 
-	public static boolean write(SQL d) {
+	public static boolean write(SQLStmt d) {
 		try {
 			stmt = c.createStatement();
 			String sql = d.getData();

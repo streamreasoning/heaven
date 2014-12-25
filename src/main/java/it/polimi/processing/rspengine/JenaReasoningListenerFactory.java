@@ -3,12 +3,12 @@ package it.polimi.processing.rspengine;
 import it.polimi.processing.ets.core.EventProcessor;
 import it.polimi.processing.ets.core.RSPTestStand;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.rspengine.windowed.jena.timekeeping.external.incremenal.listener.JenaIncFullListener;
-import it.polimi.processing.rspengine.windowed.jena.timekeeping.external.incremenal.listener.JenaIncRhoDFListener;
-import it.polimi.processing.rspengine.windowed.jena.timekeeping.external.incremenal.listener.JenaIncSMPLListener;
-import it.polimi.processing.rspengine.windowed.jena.timekeeping.external.snapshot.listener.JenaFullListener;
-import it.polimi.processing.rspengine.windowed.jena.timekeeping.external.snapshot.listener.JenaRhoDFListener;
-import it.polimi.processing.rspengine.windowed.jena.timekeeping.external.snapshot.listener.JenaSMPLListener;
+import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener.JenaIncFullListener;
+import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener.JenaIncRhoDFListener;
+import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener.JenaIncSMPLListener;
+import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.listener.JenaFullListener;
+import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.listener.JenaRhoDFListener;
+import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.listener.JenaSMPLListener;
 import it.polimi.utils.FileUtils;
 import it.polimi.utils.RDFSUtils;
 

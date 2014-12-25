@@ -1,10 +1,10 @@
-package it.polimi.processing.collector.saver.data;
+package it.polimi.processing.collector.data;
 
 import it.polimi.processing.services.SQLListeService;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class SQL extends WritableData {
+public final class SQLStmt extends WritableData {
 
 	private final String s;
 
@@ -15,7 +15,7 @@ public class SQL extends WritableData {
 
 	@Override
 	public CollectableData append(String c) {
-		return new SQL(s + c);
+		return new SQLStmt(s + c);
 	}
 
 	@Override

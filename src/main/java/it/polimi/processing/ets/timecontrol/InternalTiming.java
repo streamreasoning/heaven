@@ -1,7 +1,7 @@
 package it.polimi.processing.ets.timecontrol;
 
 import it.polimi.processing.events.RSPTripleSet;
-import it.polimi.processing.events.TSResult;
+import it.polimi.processing.events.results.TSResult;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
 
 public class InternalTiming implements TimeStrategy {

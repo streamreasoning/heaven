@@ -1,9 +1,9 @@
 package processing.events.rspengine.jena.listener;
 
-import it.polimi.processing.rspengine.windowed.jena.events.GraphEvent;
-import it.polimi.processing.rspengine.windowed.jena.events.StatementEvent;
-import it.polimi.processing.rspengine.windowed.jena.events.TripleEvent;
-import it.polimi.processing.rspengine.windowed.jena.timekeeping.external.incremenal.listener.JenaIncSMPLListener;
+import it.polimi.processing.rspengine.jena.rspevents.GraphEvent;
+import it.polimi.processing.rspengine.jena.rspevents.StatementEvent;
+import it.polimi.processing.rspengine.jena.rspevents.TripleEvent;
+import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener.JenaIncSMPLListener;
 import it.polimi.utils.FileUtils;
 import it.polimi.utils.RDFSUtils;
 

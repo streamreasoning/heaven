@@ -1,8 +1,8 @@
-package it.polimi.processing.rspengine.windowed.jena.timekeeping.external.incremenal.listener;
+package it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener;
 
 import it.polimi.processing.ets.core.EventProcessor;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.rspengine.windowed.jena.timekeeping.external.incremenal.listener.abstracts.JenaIncrementalListener;
+import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener.abstracts.JenaIncrementalListener;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.impl.InfModelImpl;

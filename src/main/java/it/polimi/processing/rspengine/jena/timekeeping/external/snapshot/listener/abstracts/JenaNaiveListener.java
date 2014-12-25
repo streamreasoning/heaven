@@ -1,12 +1,11 @@
-package it.polimi.processing.rspengine.windowed.jena.timekeeping.external.snapshot.listener.abstracts;
+package it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.listener.abstracts;
 
 import it.polimi.processing.ets.core.EventProcessor;
-import it.polimi.processing.events.Result;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.rspengine.windowed.jena.events.JenaEsperEvent;
-import it.polimi.processing.system.ExecutionEnvirorment;
-import it.polimi.processing.system.Memory;
+import it.polimi.processing.events.results.Result;
+import it.polimi.processing.rspengine.jena.rspevents.JenaEsperEvent;
+import it.polimi.processing.services.system.ExecutionEnvirorment;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -80,16 +79,15 @@ public abstract class JenaNaiveListener implements UpdateListener {
 			}
 
 			long outputTimestamp = System.currentTimeMillis();
-			double ouputMemoryUsage = Memory.getMemoryUsage();
 
 			if (next != null) {
 				log.debug("Send Event to the StoreCollector");
-				next.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), outputTimestamp, ouputMemoryUsage, false));
+				eventNumber++;
+				next.process(new Result("", statements, eventNumber, outputTimestamp, false));
 				if (ExecutionEnvirorment.aboxLogEnabled) {
-					next.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), outputTimestamp, ouputMemoryUsage, true));
+					next.process(new Result("", ABoxTriples, eventNumber, outputTimestamp, true));
 				}
 			}
-			eventNumber += ABoxTriples.size() + 1;
 		}
 	}
 

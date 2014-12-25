@@ -21,7 +21,7 @@
  * 
  * This work was partially supported by the European project LarKC (FP7-215535)
  ******************************************************************************/
-package it.polimi.processing.system;
+package it.polimi.processing.services.system;
 
 public class Memory {
 

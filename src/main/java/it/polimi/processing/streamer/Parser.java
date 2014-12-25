@@ -1,6 +1,6 @@
 package it.polimi.processing.streamer;
 
-import it.polimi.processing.collector.saver.data.TriG;
+import it.polimi.processing.collector.data.TriG;
 import it.polimi.processing.events.TripleContainer;
 
 import java.util.HashSet;

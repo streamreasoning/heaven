@@ -1,7 +1,7 @@
 package it.polimi.processing.events;
 
-import it.polimi.processing.collector.saver.data.CollectableData;
-import it.polimi.processing.collector.saver.data.SQL;
+import it.polimi.processing.collector.data.CollectableData;
+import it.polimi.processing.collector.data.SQLStmt;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public class Experiment implements Event, ExperimentResult {
 
 	@Override
 	public CollectableData getSQL() {
-		return new SQL("VALUES (" + "'" + "EXP_" + experimentNumber + "'" + "," + "'" + timestampStart + "'" + "," + "'" + timestampEnd + "'" + ","
+		return new SQLStmt("VALUES (" + "'" + "EXP_" + experimentNumber + "'" + "," + "'" + timestampStart + "'" + "," + "'" + timestampEnd + "'" + ","
 				+ "'" + engine + "'" + "," + "'" + inputFileName + "'" + "," + "'" + outputFileName + "'" + "," + "'"
 				+ outputFileName.replace("Result", "LOG") + "'" + ");");
 	}

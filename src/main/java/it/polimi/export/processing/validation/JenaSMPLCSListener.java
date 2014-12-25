@@ -1,10 +1,8 @@
-package it.polimi.processing.validation;
+package it.polimi.export.processing.validation;
 
 import it.polimi.processing.ets.core.EventProcessor;
-import it.polimi.processing.events.Result;
 import it.polimi.processing.events.interfaces.Event;
-
-import java.io.IOException;
+import it.polimi.processing.events.results.CSResult;
 
 import com.hp.hpl.jena.reasoner.Reasoner;
 import com.hp.hpl.jena.reasoner.ReasonerRegistry;
@@ -24,12 +22,10 @@ public class JenaSMPLCSListener extends CSListener {
 	}
 
 	@Override
-	protected void sendResult() throws IOException {
+	protected void sendResult() {
 		boolean abox = true;
-		collector.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), ouputcurrentTimeMillis, outputmemoryUsage,
-				completeness, soundness, null, null, !abox, ""));
-		collector.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), ouputcurrentTimeMillis, outputmemoryUsage,
-				completeness, soundness, null, null, abox, ""));
+		collector.process(new CSResult("", statements, eventNumber, ouputcurrentTimeMillis, !abox, completeness, soundness, null, null));
+		collector.process(new CSResult("", ABoxTriples, eventNumber, ouputcurrentTimeMillis, abox, completeness, soundness, null, null));
 
 	}
 

@@ -1,8 +1,8 @@
 package it.polimi.preprocessor.generator;
 
 import it.polimi.processing.enums.EventBuilderMode;
-import it.polimi.processing.rspengine.windowed.jena.enums.JenaEventType;
-import it.polimi.processing.rspengine.windowed.jena.enums.Reasoner;
+import it.polimi.processing.rspengine.jena.enums.JenaEventType;
+import it.polimi.processing.rspengine.jena.enums.Reasoner;
 
 import java.io.File;
 import java.io.FileOutputStream;

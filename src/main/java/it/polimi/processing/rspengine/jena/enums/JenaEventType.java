@@ -1,4 +1,4 @@
-package it.polimi.processing.rspengine.windowed.jena.enums;
+package it.polimi.processing.rspengine.jena.enums;
 
 public enum JenaEventType {
 	TEVENT, STMT, GRAPH

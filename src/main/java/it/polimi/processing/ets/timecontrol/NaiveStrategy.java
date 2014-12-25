@@ -1,10 +1,10 @@
 package it.polimi.processing.ets.timecontrol;
 
 import it.polimi.processing.events.RSPTripleSet;
-import it.polimi.processing.events.TSResult;
+import it.polimi.processing.events.results.TSResult;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
-import it.polimi.processing.system.GetPropertyValues;
-import it.polimi.processing.system.Memory;
+import it.polimi.processing.services.system.GetPropertyValues;
+import it.polimi.processing.services.system.Memory;
 
 public class NaiveStrategy implements TimeStrategy {
 

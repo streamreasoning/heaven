@@ -1,8 +1,8 @@
-package it.polimi.processing.collector.saver.data;
+package it.polimi.processing.collector.data;
 
 import it.polimi.processing.events.TripleContainer;
+import it.polimi.processing.services.system.ExecutionEnvirorment;
 import it.polimi.processing.streamer.Parser;
-import it.polimi.processing.system.ExecutionEnvirorment;
 
 import java.util.Set;
 
@@ -15,7 +15,7 @@ import lombok.extern.log4j.Log4j;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @Log4j
-public class TriG extends WritableData {
+public final class TriG extends WritableData {
 
 	private String key;
 	private Set<TripleContainer> triples;

@@ -1,8 +1,8 @@
-package it.polimi.processing.rspengine.windowed.jena.timekeeping.external.snapshot.listener;
+package it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.listener;
 
 import it.polimi.processing.ets.core.EventProcessor;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.rspengine.windowed.jena.timekeeping.external.snapshot.listener.abstracts.JenaNaiveListener;
+import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.listener.abstracts.JenaNaiveListener;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.reasoner.Reasoner;

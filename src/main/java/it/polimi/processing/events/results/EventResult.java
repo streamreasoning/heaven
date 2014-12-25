@@ -1,6 +1,7 @@
-package it.polimi.processing.events.interfaces;
+package it.polimi.processing.events.results;
 
-import it.polimi.processing.collector.saver.data.CollectableData;
+import it.polimi.processing.collector.data.CollectableData;
+import it.polimi.processing.events.interfaces.Event;
 
 public interface EventResult extends Event {
 

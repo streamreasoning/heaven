@@ -5,7 +5,7 @@ import it.polimi.main.BaselineMain;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.util.FileManager;
 
-public class RDFSUtils {
+public final class RDFSUtils {
 
 	public static final String UNIV_BENCH_RDFS = "src/main/resources/data/inference/univ-bench-rdfs-without-datatype-materialized.rdfs";
 	public static final String RDFRESOURCE = "http://www.w3.org/2000/01/rdf-schema#Resource";

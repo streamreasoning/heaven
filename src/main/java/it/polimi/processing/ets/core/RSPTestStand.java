@@ -5,15 +5,16 @@ import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.ets.timecontrol.TimeStrategy;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPTripleSet;
-import it.polimi.processing.events.Result;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
+import it.polimi.processing.events.results.EventResult;
+import it.polimi.processing.events.results.Result;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.processing.services.FileService;
+import it.polimi.processing.services.system.GetPropertyValues;
+import it.polimi.processing.services.system.Memory;
 import it.polimi.processing.streamer.RSPTripleSetStreamer;
-import it.polimi.processing.system.GetPropertyValues;
 import it.polimi.utils.FileUtils;
 
 import java.io.BufferedReader;
@@ -112,28 +113,32 @@ public class RSPTestStand extends TestStandImpl {
 	}
 
 	public boolean process(Result engineResult) {
+		double memoryA = Memory.getMemoryUsage();
 		this.where = "exp" + experimentNumber + "/" + rspEngine.getName() + "/";
 
 		if (engineResult.isAbox()) {
 			this.where += windowFileName;
-			log.info(this.where);
-			engineResult.setId("<http://example.org/" + experimentNumber + "/" + (rspEngine.getEventNumber() - 1) + ">");
-			resultCollector.process(engineResult, this.where);
-			return true;
+			return processAbox(engineResult);
+
 		} else {
 			resultEvent++;
 			this.where += outputFileName;
 			this.currentResult = timeStrategy.getResult();
-			this.currentResult.setStatements(engineResult.getStatements());
-			this.currentResult.setMemoryA(engineResult.getMemory());
-			this.currentResult.setOutputTimestamp(engineResult.getTimestamp());
-			this.currentResult.setCr(engineResult.getCompleteRHODF());
-			this.currentResult.setSr(engineResult.getSoundRHODF());
-			this.currentResult.setCs(engineResult.getCompleteSMPL());
-			this.currentResult.setSs(engineResult.getSoundSMPL());
+			this.currentResult.setResult(engineResult);
+			this.currentResult.setMemoryA(memoryA);
+			// this.currentResult.setCr(engineResult.getCompleteRHODF());
+			// this.currentResult.setSr(engineResult.getSoundRHODF());
+			// this.currentResult.setCs(engineResult.getCompleteSMPL());
+			// this.currentResult.setSs(engineResult.getSoundSMPL());
 			return processDone();
 		}
 
+	}
+
+	private boolean processAbox(Result engineResult) {
+		engineResult.setId("<http://example.org/" + experimentNumber + "/" + (rspEngine.getEventNumber() - 1) + ">");
+		resultCollector.process(engineResult, this.where);
+		return true;
 	}
 
 	@Override

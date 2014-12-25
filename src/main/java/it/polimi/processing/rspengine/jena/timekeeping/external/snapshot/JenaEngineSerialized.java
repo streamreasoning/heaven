@@ -1,12 +1,12 @@
-package it.polimi.processing.rspengine.windowed.jena.timekeeping.external.snapshot;
+package it.polimi.processing.rspengine.jena.timekeeping.external.snapshot;
 
 import it.polimi.processing.ets.core.EventProcessor;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.rspengine.windowed.jena.WindowUtils;
-import it.polimi.processing.rspengine.windowed.jena.engine.abstracts.JenaEngine;
-import it.polimi.processing.rspengine.windowed.jena.events.SerializedEvent;
+import it.polimi.processing.rspengine.jena.WindowUtils;
+import it.polimi.processing.rspengine.jena.engine.abstracts.JenaEngine;
+import it.polimi.processing.rspengine.jena.rspevents.SerializedEvent;
 import lombok.extern.log4j.Log4j;
 
 import com.espertech.esper.client.Configuration;

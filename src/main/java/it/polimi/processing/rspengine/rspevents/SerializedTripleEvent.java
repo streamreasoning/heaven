@@ -1,4 +1,4 @@
-package it.polimi.processing.rspengine.shared.events;
+package it.polimi.processing.rspengine.rspevents;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package it.polimi.processing.collector.saver.data;
+package it.polimi.processing.collector.data;
 
 public interface CollectableData {
 

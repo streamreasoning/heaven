@@ -15,17 +15,17 @@ import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.factory.ConstantEventBuilder;
 import it.polimi.processing.events.factory.StepEventBuilder;
 import it.polimi.processing.events.factory.abstracts.EventBuilder;
-import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
+import it.polimi.processing.events.results.EventResult;
 import it.polimi.processing.rspengine.JeanRSPEngineFactory;
 import it.polimi.processing.rspengine.JenaReasoningListenerFactory;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
-import it.polimi.processing.rspengine.windowed.jena.enums.JenaEventType;
-import it.polimi.processing.rspengine.windowed.jena.enums.Reasoner;
+import it.polimi.processing.rspengine.jena.enums.JenaEventType;
+import it.polimi.processing.rspengine.jena.enums.Reasoner;
 import it.polimi.processing.services.FileService;
+import it.polimi.processing.services.system.ExecutionEnvirorment;
+import it.polimi.processing.services.system.GetPropertyValues;
 import it.polimi.processing.streamer.RSPTripleSetStreamer;
-import it.polimi.processing.system.ExecutionEnvirorment;
-import it.polimi.processing.system.GetPropertyValues;
 import it.polimi.utils.FileUtils;
 
 import java.sql.SQLException;
@@ -137,8 +137,12 @@ public class BaselineMain {
 		whereOutput = "exp" + EXPERIMENT_NUMBER + "/" + engineName + "/" + outputFileName;
 		whereWindow = "exp" + EXPERIMENT_NUMBER + "/" + engineName + "/" + windowFileName;
 
-		log.info("Output file name will be: [" + whereOutput + "]");
-		log.info("Window file name will be: [" + whereWindow + "]");
+		log.info("Output file name will be: ["
+				+ whereOutput.replace("0Result", "RESLOG").replace("0Window", "WINLOG").replace("1Result", "LATLOG").replace("1Window", "WINLATLOG")
+						.replace("2Result", "MEMLOG").replace("2Window", "WINMEMLOG") + "]");
+		log.info("Window file name will be: ["
+				+ whereWindow.replace("0Result", "RESLOG").replace("0Window", "WINLOG").replace("1Result", "LATLOG").replace("1Window", "WINLATLOG")
+						.replace("2Result", "MEMLOG").replace("2Window", "WINMEMLOG") + "]");
 
 		reasonerSelection();
 		collectorSelection();

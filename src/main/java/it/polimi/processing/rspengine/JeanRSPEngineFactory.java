@@ -4,14 +4,14 @@ import it.polimi.processing.ets.core.EventProcessor;
 import it.polimi.processing.ets.core.RSPTestStand;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
-import it.polimi.processing.rspengine.windowed.jena.enums.Reasoner;
-import it.polimi.processing.rspengine.windowed.jena.timekeeping.external.incremenal.JenaEngineGraphInc;
-import it.polimi.processing.rspengine.windowed.jena.timekeeping.external.incremenal.JenaEngineSerializedInc;
-import it.polimi.processing.rspengine.windowed.jena.timekeeping.external.incremenal.JenaEngineStmtInc;
-import it.polimi.processing.rspengine.windowed.jena.timekeeping.external.snapshot.JenaEngineGraph;
-import it.polimi.processing.rspengine.windowed.jena.timekeeping.external.snapshot.JenaEngineSerialized;
-import it.polimi.processing.rspengine.windowed.jena.timekeeping.external.snapshot.JenaEngineStmt;
-import it.polimi.processing.system.GetPropertyValues;
+import it.polimi.processing.rspengine.jena.enums.Reasoner;
+import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.JenaEngineGraphInc;
+import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.JenaEngineSerializedInc;
+import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.JenaEngineStmtInc;
+import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.JenaEngineGraph;
+import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.JenaEngineSerialized;
+import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.JenaEngineStmt;
+import it.polimi.processing.services.system.GetPropertyValues;
 
 import com.espertech.esper.client.UpdateListener;
 

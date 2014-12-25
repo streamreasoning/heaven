@@ -1,35 +1,40 @@
-package it.polimi.processing.ets.identity;
+package it.polimi.processing.collector;
 
-import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.ets.core.RSPTestStand;
 import it.polimi.processing.ets.core.Startable;
-import it.polimi.processing.events.interfaces.EventResult;
+import it.polimi.processing.events.results.EventResult;
 
 import java.sql.SQLException;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 
-@Getter
-@Setter
-public class EmptyCollectorExperimentEvent implements StartableCollector<EventResult>, Startable<ExecutionState> {
-
-	private long timestamp;
+/**
+ * Identity Class, Useful for testing
+ */
+@Log4j
+public final class IdentityCollectorExperimentEvent implements StartableCollector<EventResult>, Startable<ExecutionState> {
 
 	private ExecutionState status;
 
-	private RSPTestStand stand;
-
-	public EmptyCollectorExperimentEvent(RSPTestStand stand) throws SQLException, ClassNotFoundException {
-		this.stand = stand;
-		this.timestamp = System.currentTimeMillis();
+	public IdentityCollectorExperimentEvent(RSPTestStand stand) throws SQLException, ClassNotFoundException {
 		this.status = ExecutionState.READY;
 	}
 
 	@Override
 	public boolean process(EventResult r) {
-		return true;
+		return processDone();
+	}
+
+	@Override
+	public boolean process(EventResult r, String where) {
+		return processDone();
+	}
+
+	@Override
+	public boolean processDone() {
+		log.info("Nothing To Do, this is the Identity Implementation");
+		return false;
 	}
 
 	@Override
@@ -42,16 +47,6 @@ public class EmptyCollectorExperimentEvent implements StartableCollector<EventRe
 	public ExecutionState close() {
 		status = ExecutionState.CLOSED;
 		return status;
-	}
-
-	@Override
-	public boolean process(EventResult r, String where) {
-		return true;
-	}
-
-	@Override
-	public boolean processDone() {
-		return false;
 	}
 
 }

@@ -1,8 +1,8 @@
-package it.polimi.processing.validation;
+package it.polimi.export.processing.validation;
 
 import it.polimi.processing.ets.core.EventProcessor;
-import it.polimi.processing.events.Result;
 import it.polimi.processing.events.interfaces.Event;
+import it.polimi.processing.events.results.CSResult;
 
 import java.io.IOException;
 
@@ -28,10 +28,8 @@ public class CompleteSoundListener extends CSListener {
 	protected void sendResult() throws IOException {
 		boolean abox = true;
 
-		collector.process(new Result(statements, eventNumber, (eventNumber + ABoxTriples.size()), ouputcurrentTimeMillis, outputmemoryUsage, cs, ss,
-				cr, sr, !abox, ""));
-		collector.process(new Result(ABoxTriples, eventNumber, (eventNumber + ABoxTriples.size()), ouputcurrentTimeMillis, outputmemoryUsage, cs, ss,
-				cr, sr, abox, ""));
+		collector.process(new CSResult("", statements, eventNumber, ouputcurrentTimeMillis, !abox, cs, ss, cr, sr));
+		collector.process(new CSResult("", ABoxTriples, eventNumber, ouputcurrentTimeMillis, abox, cs, ss, cr, sr));
 	}
 
 	@Override

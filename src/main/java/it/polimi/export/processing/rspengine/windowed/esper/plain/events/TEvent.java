@@ -1,6 +1,6 @@
 package it.polimi.export.processing.rspengine.windowed.esper.plain.events;
 
-import it.polimi.processing.rspengine.shared.events.SerializedTripleEvent;
+import it.polimi.processing.rspengine.rspevents.SerializedTripleEvent;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = false)
