@@ -1,11 +1,11 @@
 package it.polimi.processing.streamer;
 
 import it.polimi.processing.enums.ExecutionState;
+import it.polimi.processing.ets.core.EventProcessor;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.factory.abstracts.EventBuilder;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.workbench.core.EventProcessor;
 
 import java.util.Set;
 

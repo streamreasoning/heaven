@@ -1,9 +1,9 @@
 package it.polimi.processing.rspengine.abstracts;
 
 import it.polimi.processing.enums.ExecutionState;
+import it.polimi.processing.ets.core.EventProcessor;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.workbench.core.EventProcessor;
 import lombok.Getter;
 import lombok.Setter;
 

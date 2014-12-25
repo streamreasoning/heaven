@@ -9,5 +9,5 @@ public enum ExecutionState {
 	 * restarted ERROR: something went wrong
 	 * 
 	 */
-	NOT_READY, READY, RUNNING, CLOSED, ERROR, OFF;
+	NOT_READY, READY, RUNNING, CLOSED, ERROR;
 }

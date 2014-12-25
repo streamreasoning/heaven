@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// TODO
 public class Parser {
 
 	private static final String TRIG_REGEX_V2 = "(<http:\\/\\/[A-Za-z\\.]*\\.[A-Za-z]*\\/[0-9]*>) \\{\\n(((<.+>) \\.\\n)*)\\}";

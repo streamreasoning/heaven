@@ -70,15 +70,4 @@ public class FileUtils {
 	public static final String UNIV_BENCH_RHODF_MODIFIED = "./data/inference/univ-bench-rdfs-materialized-rhodf-modified.rdf";
 	public static final String DATABASEPATH = daypath + "database/";
 
-	public static void createFolders(String vsfolder) {
-		new File(vsfolder).mkdirs();
-	}
-
-	public static void createFolder(String vsfolder) {
-		new File(vsfolder).mkdir();
-	}
-
-	public static void createOutputFolder(String folder) {
-		new File(daypath + "/" + folder + "/").mkdirs();
-	}
 }

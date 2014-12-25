@@ -3,7 +3,7 @@ package processing.events.rspengine.jena.listener;
 import it.polimi.processing.rspengine.windowed.jena.events.GraphEvent;
 import it.polimi.processing.rspengine.windowed.jena.events.StatementEvent;
 import it.polimi.processing.rspengine.windowed.jena.events.TripleEvent;
-import it.polimi.processing.rspengine.windowed.jena.timecontrol.snapshot.listener.JenaFullListener;
+import it.polimi.processing.rspengine.windowed.jena.timekeeping.external.incremenal.listener.JenaIncFullListener;
 import it.polimi.utils.FileUtils;
 import it.polimi.utils.RDFSUtils;
 
@@ -24,12 +24,12 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 public class JenaFullListenerTest {
 
-	private JenaFullListener listener;
+	private JenaIncFullListener listener;
 
 	@Test
 	public void stmtEventTest() {
 
-		listener = new JenaFullListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RDFS_MODIFIED), null);
+		listener = new JenaIncFullListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RDFS_MODIFIED), null);
 
 		String[] eventTriple = new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" };
@@ -69,7 +69,7 @@ public class JenaFullListenerTest {
 	@Test
 	public void tripleEventTest() {
 
-		listener = new JenaFullListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RDFS_MODIFIED), null);
+		listener = new JenaIncFullListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RDFS_MODIFIED), null);
 
 		String[] eventTriple = new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" };
@@ -108,7 +108,7 @@ public class JenaFullListenerTest {
 	@Test
 	public void graphEventTest() {
 
-		listener = new JenaFullListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RDFS_MODIFIED), null);
+		listener = new JenaIncFullListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RDFS_MODIFIED), null);
 
 		String[] eventTriple = new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor" };

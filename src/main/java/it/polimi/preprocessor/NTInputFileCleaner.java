@@ -1,5 +1,6 @@
 package it.polimi.preprocessor;
 
+import it.polimi.processing.services.FileService;
 import it.polimi.utils.FileUtils;
 import it.polimi.utils.RDFSUtils;
 
@@ -53,10 +54,10 @@ public class NTInputFileCleaner {
 
 	private static void cleanFile(String inputFileWithPath, String outputFile, String outputPath) throws IOException, FileNotFoundException {
 
-		FileUtils.createFolders(outputPath);
-		FileUtils.createFolders(outputPath + "datatype/");
-		FileUtils.createFolders(outputPath + "excluded/");
-		FileUtils.createFolders(outputPath + "logs/");
+		FileService.createFolders(outputPath);
+		FileService.createFolders(outputPath + "datatype/");
+		FileService.createFolders(outputPath + "excluded/");
+		FileService.createFolders(outputPath + "logs/");
 
 		Model inputOriginal = FileManager.get().loadModel(inputFileWithPath, null, "RDF/XML");
 		inputSize = inputOriginal.size();

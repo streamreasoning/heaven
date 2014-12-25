@@ -1,8 +1,8 @@
 package it.polimi.processing.validation;
 
+import it.polimi.processing.ets.core.EventProcessor;
 import it.polimi.processing.events.Result;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.workbench.core.EventProcessor;
 
 import java.io.IOException;
 
