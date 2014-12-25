@@ -11,7 +11,6 @@ import lombok.Data;
 import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.GraphUtil;
 import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.graph.compose.Union;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 @Data
@@ -24,9 +23,9 @@ public class GraphEvent implements JenaEsperEvent {
 
 	@Override
 	public Graph addTo(Graph abox) {
-		// GraphUtil.addInto(dstGraph, srcGraph);
-		Union union = new Union(abox, graph);
-		return union;
+		GraphUtil.addInto(abox, graph);
+		// Union union = new Union(abox, graph);
+		return abox;
 	}
 
 	@Override

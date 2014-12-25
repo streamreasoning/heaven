@@ -6,20 +6,20 @@ import it.polimi.processing.rspengine.windowed.jena.timekeeping.external.snapsho
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.reasoner.Reasoner;
-import com.hp.hpl.jena.reasoner.rulesys.GenericRuleReasoner;
-import com.hp.hpl.jena.reasoner.rulesys.Rule;
+import com.hp.hpl.jena.reasoner.ReasonerRegistry;
+import com.hp.hpl.jena.vocabulary.ReasonerVocabulary;
 
-public final class JenaRhoDFListener extends JenaNaiveListener {
+public final class JenaFullListener extends JenaNaiveListener {
 
-	private final String aBoxRuleset;
-
-	public JenaRhoDFListener(Model tbox, String aBoxRuleset, EventProcessor<Event> collector) {
-		super(tbox, collector);
-		this.aBoxRuleset = aBoxRuleset;
+	public JenaFullListener(Model tbox, EventProcessor<Event> next) {
+		super(tbox, next);
 	}
 
 	@Override
 	protected Reasoner getReasoner() {
-		return new GenericRuleReasoner(Rule.rulesFromURL(aBoxRuleset));
+		Reasoner reasoner = ReasonerRegistry.getRDFSReasoner();
+		reasoner.setParameter(ReasonerVocabulary.PROPsetRDFSLevel, ReasonerVocabulary.RDFS_FULL);
+		return reasoner;
 	}
+
 }

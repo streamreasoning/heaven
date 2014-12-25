@@ -1,4 +1,4 @@
-package it.polimi.processing.rspengine.windowed.jena.timekeeping.external.snapshot;
+package it.polimi.processing.rspengine.windowed.jena.timekeeping.external.incremenal;
 
 import it.polimi.processing.ets.core.EventProcessor;
 import it.polimi.processing.events.RSPTripleSet;
@@ -34,11 +34,11 @@ import com.hp.hpl.jena.vocabulary.RDF;
  * 
  * **/
 @Log4j
-public class JenaEngineGraph extends JenaEngine {
+public class JenaEngineGraphInc extends JenaEngine {
 
 	Graph abox;
 
-	public JenaEngineGraph(String name, EventProcessor<Event> collector, UpdateListener listener) {
+	public JenaEngineGraphInc(String name, EventProcessor<Event> collector, UpdateListener listener) {
 		super(name, collector, listener, WindowUtils.JENA_INPUT_QUERY_SNAPTSHOT);
 
 		cepConfig = new Configuration();

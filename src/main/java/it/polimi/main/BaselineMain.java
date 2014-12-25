@@ -3,36 +3,30 @@ package it.polimi.main;
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.enums.EventBuilderMode;
 import it.polimi.processing.enums.ExperimentType;
+import it.polimi.processing.enums.Reasoning;
+import it.polimi.processing.ets.collector.CollectorEventResult;
+import it.polimi.processing.ets.collector.CollectorExperimentResult;
+import it.polimi.processing.ets.core.RSPTestStand;
+import it.polimi.processing.ets.streamer.NTStreamer;
+import it.polimi.processing.ets.timecontrol.InternalTiming;
+import it.polimi.processing.ets.timecontrol.NaiveStrategy;
+import it.polimi.processing.ets.timecontrol.TimeStrategy;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.factory.ConstantEventBuilder;
 import it.polimi.processing.events.factory.StepEventBuilder;
 import it.polimi.processing.events.factory.abstracts.EventBuilder;
 import it.polimi.processing.events.interfaces.EventResult;
 import it.polimi.processing.events.interfaces.ExperimentResult;
+import it.polimi.processing.rspengine.JeanRSPEngineFactory;
+import it.polimi.processing.rspengine.JenaReasoningListenerFactory;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
-import it.polimi.processing.rspengine.windowed.esper.listeners.ResultCollectorListener;
-import it.polimi.processing.rspengine.windowed.esper.plain.Plain2369;
 import it.polimi.processing.rspengine.windowed.jena.enums.JenaEventType;
 import it.polimi.processing.rspengine.windowed.jena.enums.Reasoner;
-import it.polimi.processing.rspengine.windowed.jena.listener.JenaFullListener;
-import it.polimi.processing.rspengine.windowed.jena.listener.JenaRhoDFListener;
-import it.polimi.processing.rspengine.windowed.jena.listener.JenaSMPLListener;
-import it.polimi.processing.rspengine.windowed.jena.timecontrol.snapshot.JenaEngineGraph;
-import it.polimi.processing.rspengine.windowed.jena.timecontrol.snapshot.JenaEngineSerialized;
-import it.polimi.processing.rspengine.windowed.jena.timecontrol.snapshot.JenaEngineStmt;
 import it.polimi.processing.services.FileService;
 import it.polimi.processing.streamer.RSPTripleSetStreamer;
 import it.polimi.processing.system.ExecutionEnvirorment;
 import it.polimi.processing.system.GetPropertyValues;
-import it.polimi.processing.workbench.collector.CollectorEventResult;
-import it.polimi.processing.workbench.collector.CollectorExperimentResult;
-import it.polimi.processing.workbench.core.RSPTestStand;
-import it.polimi.processing.workbench.streamer.NTStreamer;
-import it.polimi.processing.workbench.timecontrol.InternalTiming;
-import it.polimi.processing.workbench.timecontrol.NaiveStrategy;
-import it.polimi.processing.workbench.timecontrol.TimeStrategy;
 import it.polimi.utils.FileUtils;
-import it.polimi.utils.RDFSUtils;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -46,7 +40,6 @@ import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 import com.espertech.esper.client.UpdateListener;
-import com.hp.hpl.jena.rdf.model.Model;
 
 @Log4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -76,7 +69,9 @@ public class BaselineMain {
 	private static String whereOutput, whereWindow, outputFileName, windowFileName, experimentDescription;
 	private static RSPTripleSetStreamer streamer;
 	private static Reasoner CURRENT_REASONER;
+	private static Reasoning REASONING;
 	private static EventBuilderMode STREAMING_MODE;
+
 	private static String engineName;
 	private static String eventBuilderCodeName;
 	private static int X;
@@ -103,13 +98,13 @@ public class BaselineMain {
 		COMMENT = GetPropertyValues.contains("comment") ? GetPropertyValues.getProperty("comment") : "";
 
 		RSPENGINE = GetPropertyValues.getProperty("current_engine");
+
 		if (RSPENGINE.equals("JENA")) {
 			CURRENT_REASONER = GetPropertyValues.getEnumProperty(Reasoner.class, "jena_current_reasoner");
 			engineName = CURRENT_REASONER.name().toLowerCase();
 			CEP_EVENT_TYPE = GetPropertyValues.getEnumProperty(JenaEventType.class, "cep_event_type");
-		} else {
-			engineName = Plain2369.class.getSimpleName().toLowerCase();
-			genearlEngineSelection();
+			REASONING = Reasoning.NAIVE;
+			// GetPropertyValues.getEnumProperty(Reasoning.class, "reasoning_mode");
 		}
 
 		EVENTS = GetPropertyValues.getIntegerProperty("max_event_stream");
@@ -148,7 +143,6 @@ public class BaselineMain {
 		reasonerSelection();
 
 		collectorSelection();
-
 		jenaEngineSelection();
 
 		run(file, COMMENT, EXPERIMENT_NUMBER, EXPERIMENT_DATE, experimentDescription);
@@ -189,15 +183,19 @@ public class BaselineMain {
 
 	protected static void jenaEngineSelection() {
 		String message = "Engine Selection: [" + CEP_EVENT_TYPE + "] [" + engineName.toUpperCase() + "] ";
+		boolean incremental = Reasoning.INCREMENTAL.equals(REASONING);
 		switch (CEP_EVENT_TYPE) {
 			case TEVENT:
-				engine = new JenaEngineSerialized(engineName, testStand, listener);
+				engine = incremental ? JeanRSPEngineFactory.getIncrementalSerializedEngine(testStand, listener) : JeanRSPEngineFactory
+						.getSerializedEngine(testStand, listener);
 				return;
 			case STMT:
-				engine = new JenaEngineStmt(engineName, testStand, listener);
+				engine = incremental ? JeanRSPEngineFactory.getIncrementalStmtEngine(testStand, listener) : JeanRSPEngineFactory.getStmtEngine(
+						testStand, listener);
 				return;
 			case GRAPH:
-				engine = new JenaEngineGraph(engineName, testStand, listener);
+				engine = incremental ? JeanRSPEngineFactory.getJenaEngineGraph(testStand, listener) : JeanRSPEngineFactory.getJenaEngineGraph(
+						testStand, listener);
 				return;
 			default:
 				message = "Not valid case [" + CEP_EVENT_TYPE + "]";
@@ -206,43 +204,26 @@ public class BaselineMain {
 		throw new IllegalArgumentException("Not valid case [" + CEP_EVENT_TYPE + "]");
 	}
 
-	protected static void genearlEngineSelection() {
-		listener = new ResultCollectorListener(testStand, engineName, 0);
-		engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED, GetPropertyValues.getProperty("ontology_class"), listener);
-		// case PLAIN2369CnS:
-		// listener = new CompleteSoundListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED,
-		// FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
-		// engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED,
-		// ontologyClass, listener);
-		// break;
-		// case PLAIN2369RHODF:
-		// listener = new JenaRhoDFCSListener(FileUtils.UNIV_BENCH_RHODF_MODIFIED,
-		// FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
-		// engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED,
-		// ontologyClass, listener);
-		// break;
-		// case PLAIN2369SMPL:
-		// listener = new JenaSMPLCSListener(FileUtils.UNIV_BENCH_RDFS_MODIFIED, testStand);
-		// engine = new Plain2369(engineName, testStand, FileUtils.UNIV_BENCH_RHODF_MODIFIED,
-		// ontologyClass, listener);
-		// break;
-	}
-
 	protected static void reasonerSelection() {
-		Model tbox;
 		log.info("Reasoner Selection: [" + CURRENT_REASONER + "]");
 		switch (CURRENT_REASONER) {
 			case SMPL:
-				tbox = RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RDFS_MODIFIED);
-				listener = new JenaSMPLListener(tbox, testStand);
+				listener = JenaReasoningListenerFactory.getSMPLListener(testStand);
 				break;
 			case RHODF:
-				tbox = RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED);
-				listener = new JenaRhoDFListener(tbox, FileUtils.RHODF_RULE_SET_RUNTIME, testStand);
+				listener = JenaReasoningListenerFactory.getRhoDfListener(testStand);
 				break;
 			case FULL:
-				tbox = RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED);
-				listener = new JenaFullListener(tbox, testStand);
+				listener = JenaReasoningListenerFactory.getFULLListener(testStand);
+				break;
+			case SMPL_INC:
+				listener = JenaReasoningListenerFactory.getIncrementalSMPLListener(testStand);
+				break;
+			case RHODF_INC:
+				listener = JenaReasoningListenerFactory.getIncrementalRhoDfListener(testStand);
+				break;
+			case FULL_INC:
+				listener = JenaReasoningListenerFactory.getIncrementalFULLListener(testStand);
 				break;
 			default:
 				log.error("Not valid case [" + CURRENT_REASONER + "]");

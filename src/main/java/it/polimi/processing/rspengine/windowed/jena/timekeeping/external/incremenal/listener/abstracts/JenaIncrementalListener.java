@@ -1,12 +1,12 @@
-package it.polimi.processing.rspengine.windowed.jena.timecontrol.incremenal;
+package it.polimi.processing.rspengine.windowed.jena.timekeeping.external.incremenal.listener.abstracts;
 
+import it.polimi.processing.ets.core.EventProcessor;
 import it.polimi.processing.events.Result;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.windowed.jena.events.JenaEsperEvent;
 import it.polimi.processing.system.ExecutionEnvirorment;
 import it.polimi.processing.system.Memory;
-import it.polimi.processing.workbench.core.EventProcessor;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -27,14 +27,16 @@ import com.hp.hpl.jena.reasoner.Reasoner;
 @Log4j
 public abstract class JenaIncrementalListener implements UpdateListener {
 
-	protected final Model TBoxStar;
 	protected Model abox;
+	protected final Model TBoxStar;
 	protected InfModel ABoxStar;
 
 	protected Reasoner reasoner;
 	protected final EventProcessor<Event> next;
-	protected int eventNumber = 0;
-	protected Set<TripleContainer> ABoxTriples;
+
+	private int eventNumber = 0;
+	private final Set<TripleContainer> ABoxTriples;
+	private Set<TripleContainer> statements;
 
 	public JenaIncrementalListener(Model tbox, EventProcessor<Event> next) {
 		this.TBoxStar = tbox;
@@ -46,30 +48,30 @@ public abstract class JenaIncrementalListener implements UpdateListener {
 	@Override
 	public void update(EventBean[] newData, EventBean[] oldData) {
 
-		log.info("-- Event in Window [" + abox.size() + "] [" + ABoxStar.size() + "] [" + ABoxTriples.size() + "] --");
+		log.debug("-- Event in Window [" + abox.size() + "] [" + ABoxStar.size() + "] [" + ABoxTriples.size() + "] --");
 		if (oldData != null) {
-			log.info("[" + newData.length + "] Old Events of type [" + newData[0].getUnderlying().getClass().getSimpleName() + "]");
+			log.debug("[" + newData.length + "] Old Events of type [" + newData[0].getUnderlying().getClass().getSimpleName() + "]");
 			for (EventBean e : oldData) {
-				log.info(e.getUnderlying().toString());
+				log.debug(e.getUnderlying().toString());
 				JenaEsperEvent underlying = (JenaEsperEvent) e.getUnderlying();
 				ABoxStar = ModelFactory.createInfModel((InfGraph) underlying.removeFrom(ABoxStar.getGraph()));
 				ABoxTriples.removeAll(underlying.serialize());
 			}
 		}
 
-		log.info("----");
+		log.debug("----");
 		if (newData != null) {
-			log.info("[" + newData.length + "] New Events of type [" + newData[0].getUnderlying().getClass().getSimpleName() + "]");
+			log.debug("[" + newData.length + "] New Events of type [" + newData[0].getUnderlying().getClass().getSimpleName() + "]");
 			for (EventBean e : newData) {
-				log.info(e.getUnderlying().toString());
+				log.debug(e.getUnderlying().toString());
 				JenaEsperEvent underlying = (JenaEsperEvent) e.getUnderlying();
 				ABoxStar = ModelFactory.createInfModel((InfGraph) underlying.addTo(ABoxStar.getGraph()));
 				ABoxTriples.addAll(underlying.serialize());
 			}
 		}
 
-		Set<TripleContainer> statements = new HashSet<TripleContainer>();
-		ABoxStar.rebind();
+		statements = new HashSet<TripleContainer>();
+		ABoxStar.rebind(); // TODO verificare l'effort del rebind
 		Model difference = ABoxStar.difference(TBoxStar);
 		StmtIterator iterator = difference.listStatements();
 
@@ -95,9 +97,6 @@ public abstract class JenaIncrementalListener implements UpdateListener {
 			}
 		}
 		eventNumber += ABoxTriples.size() + 1;
-
 	}
-
-	protected abstract Reasoner getReasoner();
 
 }
