@@ -1,7 +1,7 @@
 package it.polimi.processing.enums;
 
 public enum EventBuilderMode {
-	CONSTANT(0), LINEAR(1), STEP(2), EXP(3);
+	CONSTANT(0), LINEAR(1), STEP(2), EXP(3), RANDOM(4);
 
 	private int id;
 

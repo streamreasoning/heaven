@@ -22,6 +22,7 @@ public abstract class RSPEventBuilder implements EventBuilder<RSPTripleSet> {
 	protected int x, y;
 	protected boolean sizeReached;
 	protected int experimentNumber;
+	private String id;
 
 	public RSPEventBuilder(EventBuilderMode mode, int x, int y, int initSize, int experimentNumber) {
 		this.x = x;
@@ -29,7 +30,9 @@ public abstract class RSPEventBuilder implements EventBuilder<RSPTripleSet> {
 		this.initSize = roundSize = initSize;
 		this.eventNumber = 1;
 		this.mode = mode;
-		this.sizeReached = true;
+		this.sizeReached = false;
+		id = "<http://example.org/" + experimentNumber + "/";
+		e = new RSPTripleSet(id, new HashSet<TripleContainer>(), eventNumber, experimentNumber);
 	}
 
 	@Override
@@ -39,54 +42,27 @@ public abstract class RSPEventBuilder implements EventBuilder<RSPTripleSet> {
 
 	@Override
 	public boolean canSend() {
-		return (e != null) && sizeReached;
-	}
-
-	@Override
-	public boolean append(Set<TripleContainer> triples) {
-		if (triples.size() > roundSize) {
-			throw new IllegalArgumentException("Event Size [" + triples.size() + "] out of range [" + roundSize + "]");
-		} else if (sizeReached || e == null) {
-			String id = "<http://example.org/" + experimentNumber + "/";
-			e = (e != null) ? e.rebuild(id, triples, eventNumber, experimentNumber) : new RSPTripleSet(id, triples, eventNumber, experimentNumber);
-			sizeReached = (e.size() == roundSize);
-			eventNumber++;
-			updateSize();
-		} else {
-			Set<TripleContainer> eventTriples = e.getEventTriples();
-			for (TripleContainer tripleContainer : triples) {
-				if (eventTriples.size() > roundSize) {
-					throw new IllegalArgumentException("Event Size [" + triples.size() + "][" + e.size() + "] out of range [" + roundSize + "]");
-				}
-				eventTriples.add(tripleContainer);
-			}
-			sizeReached = (e.size() == roundSize);
-
-		}
 		return sizeReached;
 	}
 
 	@Override
 	public boolean append(TripleContainer triple) {
-		Set<TripleContainer> set = new HashSet<TripleContainer>();
-		String id = "<http://example.org/" + experimentNumber + "/";
-		if (e == null) {
-			set = new HashSet<TripleContainer>();
-			set.add(triple);
-			e = new RSPTripleSet(id, set, eventNumber, experimentNumber);
-			log.debug("isNull Event Size [" + e.size() + "] roundSize [" + roundSize + "]");
-		} else if (sizeReached) {
-			eventNumber++;
+		if (sizeReached) {
 			updateSize();
-			set.add(triple);
+			Set<TripleContainer> set = new HashSet<TripleContainer>();
+			if (roundSize > 0) {
+				eventNumber++;
+				set.add(triple);
+			}
 			e = e.rebuild(id, set, eventNumber, experimentNumber);
-			log.debug("isFull Event Size [" + e.size() + "] roundSize [" + roundSize + "]");
-		} else if (!(e.size() >= roundSize)) {
+			log.debug("is Full Event Size [" + e.size() + "] roundSize [" + roundSize + "]");
+		} else {
 			e.getEventTriples().add(triple);
 			log.debug("NotFull Event Size [" + e.size() + "] roundSize [" + roundSize + "]");
 		}
 
 		sizeReached = (e.size() == roundSize);
+
 		return sizeReached;
 	}
 

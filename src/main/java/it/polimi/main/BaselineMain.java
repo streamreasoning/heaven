@@ -13,6 +13,7 @@ import it.polimi.processing.ets.timecontrol.NaiveStrategy;
 import it.polimi.processing.ets.timecontrol.TimeStrategy;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.factory.ConstantEventBuilder;
+import it.polimi.processing.events.factory.RandomEventBuilder;
 import it.polimi.processing.events.factory.StepEventBuilder;
 import it.polimi.processing.events.factory.abstracts.EventBuilder;
 import it.polimi.processing.events.interfaces.ExperimentResult;
@@ -170,6 +171,11 @@ public class BaselineMain {
 			case STEP:
 				message += " Heigh [" + X + "] Width [" + Y + "] ";
 				eb = new StepEventBuilder(X, Y, INIT_SIZE, EXPERIMENT_NUMBER);
+				code += "S" + INIT_SIZE + "H" + X + "W" + Y;
+				break;
+			case RANDOM:
+				message += " RND";
+				eb = new RandomEventBuilder(Y, INIT_SIZE, EXPERIMENT_NUMBER);
 				code += "S" + INIT_SIZE + "H" + X + "W" + Y;
 				break;
 			default:

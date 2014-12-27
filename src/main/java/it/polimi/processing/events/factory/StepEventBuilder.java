@@ -5,8 +5,8 @@ import it.polimi.processing.events.factory.abstracts.RSPEventBuilder;
 
 public class StepEventBuilder extends RSPEventBuilder {
 
-	public StepEventBuilder(int height, int width, int initSize, int experiment) {
-		super(EventBuilderMode.STEP, height, width, initSize, experiment);
+	public StepEventBuilder(int width, int height, int initSize, int experiment) {
+		super(EventBuilderMode.STEP, width, height, initSize, experiment);
 		eventNumber = initSize;
 	}
 
@@ -14,13 +14,8 @@ public class StepEventBuilder extends RSPEventBuilder {
 
 	@Override
 	public void updateSize() {
-		if (roundSize == initSize && y != initSize) {
-			roundSize = y;
-		} else if (distance == x) {
+		if (eventNumber % x == 0) {
 			roundSize += y;
-			distance = 0;
-		} else {
-			distance++;
 		}
 	}
 }

@@ -46,10 +46,10 @@ public final class NTStreamer extends RSPTripleSetStreamer {
 				while ((line = br.readLine()) != null && streamedEvents <= eventLimit - 1) {
 
 					status = ExecutionState.RUNNING;
-					boolean append = builder.append(new TripleContainer(parse(line)));
+					builder.append(new TripleContainer(parse(line)));
 					triples++;
 
-					if (append && builder.canSend()) {
+					if (builder.canSend()) {
 
 						streamedEvents += processor.process(lastEvent = builder.getEvent()) ? 1 : 0;
 
