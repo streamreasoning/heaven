@@ -1,4 +1,4 @@
-package plain.inference;
+package it.polimi.export.processing.inference;
 
 import static org.junit.Assert.assertEquals;
 

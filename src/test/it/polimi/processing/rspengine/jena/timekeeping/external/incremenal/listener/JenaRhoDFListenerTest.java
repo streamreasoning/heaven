@@ -1,4 +1,4 @@
-package processing.events.rspengine.jena.listener;
+package it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener;
 
 import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.listener.JenaRhoDFListener;
 import it.polimi.processing.rspengine.rspevents.jena.GraphEvent;

@@ -1,4 +1,4 @@
-package plain.inference;
+package it.polimi.export.processing.inference;
 
 import it.polimi.export.processing.validation.DatasetAnalyser;
 

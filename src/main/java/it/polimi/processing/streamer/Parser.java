@@ -1,11 +1,5 @@
 package it.polimi.processing.streamer;
 
-import it.polimi.processing.collector.data.TriG;
-import it.polimi.processing.events.TripleContainer;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 // TODO
@@ -80,39 +74,4 @@ public class Parser {
 		return PATTER_TRIG_REGEX_V2.matcher(line).matches();
 	}
 
-	public static TriG parseTrigGraph(String line) {
-
-		Matcher matcher = PATTER_TRIG_REGEX_V2.matcher(line);
-
-		if (matcher.find()) {
-
-			String key = matcher.group(1);
-			String body = matcher.group(2);
-			String[] tripleBody = Parser.parseTrigBody(body);
-
-			Set<TripleContainer> triples = new HashSet<TripleContainer>();
-			if (tripleBody != null) {
-				for (String triple : tripleBody) {
-					String[] parseTriple = Parser.parseTriple(triple, "", false);
-					triples.add(new TripleContainer(parseTriple));
-				}
-			}
-
-			return new TriG(key, triples);
-		}
-
-		return null;
-		// TODO exception?
-	}
-
-	/**
-	 * @param triGBody
-	 *            the body of the trig graph
-	 * @return the array containing each triple in the graph
-	 */
-	private static String[] parseTrigBody(String triGBody) {
-
-		return triGBody.split(EOF);
-
-	}
 }

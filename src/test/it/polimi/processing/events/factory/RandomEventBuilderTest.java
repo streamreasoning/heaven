@@ -1,4 +1,4 @@
-package processing.events;
+package it.polimi.processing.events.factory;
 
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
@@ -16,6 +16,7 @@ public class RandomEventBuilderTest {
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
+	@Test
 	public void randomSizeTest() {
 
 		int yMax = 30;
@@ -54,7 +55,6 @@ public class RandomEventBuilderTest {
 
 	}
 
-	@Test
 	public void costantRandomSizeTest() {
 
 		int yMax = 30;

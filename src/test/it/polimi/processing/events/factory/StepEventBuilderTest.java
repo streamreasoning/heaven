@@ -1,4 +1,4 @@
-package processing.events;
+package it.polimi.processing.events.factory;
 
 import static org.junit.Assert.assertEquals;
 import it.polimi.processing.events.RSPTripleSet;
