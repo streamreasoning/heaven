@@ -1,7 +1,5 @@
 package it.polimi.services;
 
-import it.polimi.processing.collector.data.CollectableData;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,7 +12,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class FileService {
 
-	public static boolean write(String where, CollectableData d) {
+	public static boolean write(String where, String data) {
 		try {
 			FileWriter writer;
 			File file = new File(where);
@@ -22,7 +20,7 @@ public class FileService {
 				file.createNewFile();
 			}
 			writer = new FileWriter(file, true);
-			writer.write(d.getData());
+			writer.write(data);
 			writer.flush();
 			writer.close();
 			return true;

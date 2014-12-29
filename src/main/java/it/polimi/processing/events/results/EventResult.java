@@ -1,12 +1,11 @@
 package it.polimi.processing.events.results;
 
-import it.polimi.processing.collector.data.CollectableData;
 import it.polimi.processing.events.interfaces.Event;
 
 public interface EventResult extends Event {
 
-	public CollectableData getTrig();
+	public boolean saveTrig(String where);
 
-	public CollectableData getCSV();
+	public boolean saveCSV(String where);
 
 }

@@ -1,9 +1,8 @@
 package it.polimi.processing.events;
 
-import it.polimi.processing.collector.data.CollectableData;
-import it.polimi.processing.collector.data.SQLStmt;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.ExperimentResult;
+import it.polimi.services.SQLListeService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,10 +18,11 @@ public class Experiment implements Event, ExperimentResult {
 	private long timestampEnd;
 
 	@Override
-	public CollectableData getSQL() {
-		return new SQLStmt("VALUES (" + "'" + "EXP_" + experimentNumber + "'" + "," + "'" + timestampStart + "'" + "," + "'" + timestampEnd + "'" + ","
+	public boolean saveSQL(String where) {
+		String sql = "VALUES (" + "'" + "EXP_" + experimentNumber + "'" + "," + "'" + timestampStart + "'" + "," + "'" + timestampEnd + "'" + ","
 				+ "'" + engine + "'" + "," + "'" + inputFileName + "'" + "," + "'" + outputFileName + "'" + "," + "'"
-				+ outputFileName.replace("Result", "LOG") + "'" + ");");
+				+ outputFileName.replace("Result", "LOG") + "'" + ");";
+		return SQLListeService.write(sql);
 	}
 
 }

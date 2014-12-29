@@ -30,8 +30,7 @@ public class CollectorEventResult implements StartableCollector<EventResult>, St
 
 	@Override
 	public boolean processDone() {
-		return !ExecutionState.READY.equals(status) ? false : currentResult.getTrig().save(getTrigPath(where))
-				&& currentResult.getCSV().save(getCSVpath(where));
+		return !ExecutionState.READY.equals(status) ? false : currentResult.saveTrig(getTrigPath(where)) && currentResult.saveCSV(getCSVpath(where));
 	}
 
 	@Override

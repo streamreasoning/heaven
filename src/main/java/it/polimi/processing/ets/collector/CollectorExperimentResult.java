@@ -28,12 +28,12 @@ public class CollectorExperimentResult implements StartableCollector<ExperimentR
 
 	@Override
 	public boolean processDone() {
-		return currentExperiment.getSQL().save(where);
+		return currentExperiment.saveSQL(where);
 	}
 
 	@Override
 	public boolean process(ExperimentResult r, String where) {
-		return !ExecutionState.READY.equals(status) ? false : r.getSQL().save(where);
+		return !ExecutionState.READY.equals(status) ? false : r.saveSQL(where);
 	}
 
 	@Override

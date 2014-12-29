@@ -1,6 +1,5 @@
 package it.polimi.services;
 
-import it.polimi.processing.collector.data.SQLStmt;
 import it.polimi.utils.FileUtils;
 
 import java.sql.Connection;
@@ -49,10 +48,9 @@ public class SQLListeService {
 		}
 	}
 
-	public static boolean write(SQLStmt d) {
+	public static boolean write(String sql) {
 		try {
 			stmt = c.createStatement();
-			String sql = d.getData();
 			log.debug(sql);
 			if (sql != null && stmt != null && c != null && !c.isClosed()) {
 				stmt.executeUpdate(EXPERIMENT_INSERT + sql);
