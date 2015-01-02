@@ -2,7 +2,7 @@ package it.polimi.processing.ets.core;
 
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.Startable;
-import it.polimi.processing.collector.StartableCollector;
+import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.interfaces.Event;
@@ -16,7 +16,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public abstract class TestStandImpl extends Stand implements EventProcessor<Event>, Startable<ExecutionState> {
 
-	protected StartableCollector<EventResult> resultCollector;
+	protected ResultCollector<EventResult> resultCollector;
 
 	protected RSPEngine rspEngine;
 	protected RSPTripleSetStreamer rspEventStreamer;
@@ -31,7 +31,7 @@ public abstract class TestStandImpl extends Stand implements EventProcessor<Even
 	protected int rspEvent;
 	protected int totalEvent;
 
-	public void build(StartableCollector<EventResult> resultCollector, RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
+	public void build(ResultCollector<EventResult> resultCollector, RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
 		this.resultCollector = resultCollector;
 		this.rspEngine = rspEngine;
 		this.rspEventStreamer = rspEventStreamer;

@@ -1,6 +1,6 @@
 package it.polimi.processing.ets.core;
 
-import it.polimi.processing.collector.StartableCollector;
+import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.ets.timecontrol.TimeStrategy;
 import it.polimi.processing.events.Experiment;
@@ -80,7 +80,7 @@ public class RSPTestStand extends TestStandImpl {
 	}
 
 	@Override
-	public void build(StartableCollector<EventResult> resultCollector, RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
+	public void build(ResultCollector<EventResult> resultCollector, RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
 		this.timeStrategy.setRSPEngine(rspEngine);
 		super.build(resultCollector, rspEngine, rspEventStreamer);
 	}

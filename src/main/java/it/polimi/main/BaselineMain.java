@@ -1,6 +1,6 @@
 package it.polimi.main;
 
-import it.polimi.processing.collector.StartableCollector;
+import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.EventBuilderMode;
 import it.polimi.processing.enums.ExperimentType;
 import it.polimi.processing.enums.Reasoning;
@@ -56,7 +56,7 @@ public class BaselineMain {
 	private static String file, COMMENT;
 
 	private static RSPTestStand testStand;
-	private static StartableCollector<EventResult> streamingEventResultCollector;
+	private static ResultCollector<EventResult> streamingEventResultCollector;
 	private static UpdateListener listener;
 
 	private static final DateFormat DT = new SimpleDateFormat("yyyy_MM_dd");
