@@ -55,4 +55,14 @@ public final class FileUtils {
 	public static final String UNIV_BENCH_RHODF_MODIFIED = "./data/inference/univ-bench-rdfs-materialized-rhodf-modified.rdf";
 	public static final String DATABASEPATH = daypath + "database/";
 
+	public static String getTrigPath(String w) {
+		return FileUtils.TRIG_OUTPUT_FILE_PATH + w + FileUtils.TRIG_FILE_EXTENSION;
+	}
+
+	public static String getCSVpath(String w) {
+		String csvLog = w.replace("0Result", "RESLOG").replace("0Window", "WINLOG").replace("1Result", "LATLOG").replace("1Window", "WINLATLOG")
+				.replace("2Result", "MEMLOG").replace("2Window", "WINMEMLOG");
+		return FileUtils.CSV_OUTPUT_FILE_PATH + csvLog + FileUtils.CSV;
+	}
+
 }

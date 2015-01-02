@@ -1,12 +1,12 @@
 package it.polimi.processing.events;
 
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.events.interfaces.ExperimentResult;
+import it.polimi.processing.events.results.EventResult;
 import it.polimi.services.SQLListeService;
 import lombok.Data;
 
 @Data
-public class Experiment implements Event, ExperimentResult {
+public class Experiment implements Event, EventResult {
 
 	private int experimentNumber;
 	private String descr, engine, inputFileName, outputFileName, windowFileName;
@@ -24,7 +24,7 @@ public class Experiment implements Event, ExperimentResult {
 	}
 
 	@Override
-	public boolean saveSQL(String where) {
+	public boolean save(String where) {
 		String sql = "VALUES (" + "'" + "EXP_" + experimentNumber + "'" + "," + "'" + timestampStart + "'" + "," + "'" + timestampEnd + "'" + ","
 				+ "'" + engine + "'" + "," + "'" + inputFileName + "'" + "," + "'" + outputFileName + "'" + "," + "'"
 				+ outputFileName.replace("Result", "LOG") + "'" + ");";

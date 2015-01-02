@@ -4,7 +4,6 @@ import it.polimi.processing.Startable;
 import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.results.EventResult;
-import it.polimi.utils.FileUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,7 +29,7 @@ public class CollectorEventResult implements StartableCollector<EventResult>, St
 
 	@Override
 	public boolean processDone() {
-		return !ExecutionState.READY.equals(status) ? false : currentResult.saveTrig(getTrigPath(where)) && currentResult.saveCSV(getCSVpath(where));
+		return !ExecutionState.READY.equals(status) ? false : currentResult.save(where);
 	}
 
 	@Override
@@ -52,13 +51,4 @@ public class CollectorEventResult implements StartableCollector<EventResult>, St
 		return status;
 	}
 
-	private String getTrigPath(String w) {
-		return FileUtils.TRIG_OUTPUT_FILE_PATH + w + FileUtils.TRIG_FILE_EXTENSION;
-	}
-
-	private String getCSVpath(String w) {
-		String csvLog = w.replace("0Result", "RESLOG").replace("0Window", "WINLOG").replace("1Result", "LATLOG").replace("1Window", "WINLATLOG")
-				.replace("2Result", "MEMLOG").replace("2Window", "WINMEMLOG");
-		return FileUtils.CSV_OUTPUT_FILE_PATH + csvLog + FileUtils.CSV;
-	}
 }

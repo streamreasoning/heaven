@@ -4,8 +4,6 @@ import it.polimi.processing.events.interfaces.Event;
 
 public interface EventResult extends Event {
 
-	public boolean saveTrig(String where);
-
-	public boolean saveCSV(String where);
+	public boolean save(String where);
 
 }

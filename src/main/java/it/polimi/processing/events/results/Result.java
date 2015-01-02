@@ -4,6 +4,7 @@ import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.services.FileService;
 import it.polimi.services.system.ExecutionEnvirorment;
+import it.polimi.utils.FileUtils;
 
 import java.util.Set;
 
@@ -30,15 +31,21 @@ public class Result extends RSPTripleSet implements EventResult {
 	}
 
 	@Override
-	public boolean saveTrig(String where) {
+	public boolean save(String where) {
 		log.debug("Save Data [" + ExecutionEnvirorment.finalresultTrigLogEnabled + "]");
-		return ExecutionEnvirorment.finalresultTrigLogEnabled ? FileService.write(where, getData()) : !ExecutionEnvirorment.finalresultTrigLogEnabled;
+		return saveTrig(where) && saveCSV(where);
 	}
 
-	@Override
+	public boolean saveTrig(String where) {
+		log.debug("Save Data [" + ExecutionEnvirorment.finalresultTrigLogEnabled + "]");
+		return ExecutionEnvirorment.finalresultTrigLogEnabled ? FileService.write(FileUtils.getTrigPath(where), getData())
+				: !ExecutionEnvirorment.finalresultTrigLogEnabled;
+	}
+
 	public boolean saveCSV(String where) {
 		String s = "<http://example.org/" + getEventNumber() + ">" + System.getProperty("line.separator");
-		return ExecutionEnvirorment.latencyLogEnabled || ExecutionEnvirorment.memoryLogEnabled ? FileService.write(where, s) : false;
+		return ExecutionEnvirorment.latencyLogEnabled || ExecutionEnvirorment.memoryLogEnabled ? FileService.write(FileUtils.getCSVpath(where), s)
+				: false;
 	}
 
 	private String getData() {

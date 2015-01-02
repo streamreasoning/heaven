@@ -6,7 +6,6 @@ import it.polimi.processing.collector.StartableCollector;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.events.results.EventResult;
 import it.polimi.processing.events.results.TSResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
@@ -18,7 +17,6 @@ import lombok.extern.log4j.Log4j;
 public abstract class TestStandImpl extends Stand implements EventProcessor<Event>, Startable<ExecutionState> {
 
 	protected StartableCollector<EventResult> resultCollector;
-	protected StartableCollector<ExperimentResult> experimentResultCollector;
 
 	protected RSPEngine rspEngine;
 	protected RSPTripleSetStreamer rspEventStreamer;
@@ -33,9 +31,7 @@ public abstract class TestStandImpl extends Stand implements EventProcessor<Even
 	protected int rspEvent;
 	protected int totalEvent;
 
-	public void build(StartableCollector<EventResult> resultCollector, StartableCollector<ExperimentResult> experimentResultCollector,
-			RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
-		this.experimentResultCollector = experimentResultCollector;
+	public void build(StartableCollector<EventResult> resultCollector, RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
 		this.resultCollector = resultCollector;
 		this.rspEngine = rspEngine;
 		this.rspEventStreamer = rspEventStreamer;
@@ -49,14 +45,13 @@ public abstract class TestStandImpl extends Stand implements EventProcessor<Even
 			ExecutionState streamerStatus = rspEventStreamer.init();
 			ExecutionState engineStatus = rspEngine.init();
 			ExecutionState collectorStatus = resultCollector.init();
-			ExecutionState experimenTcollectorStatus = experimentResultCollector.init();
 			if (ExecutionState.READY.equals(streamerStatus) && ExecutionState.READY.equals(collectorStatus)
-					&& ExecutionState.READY.equals(engineStatus) && ExecutionState.READY.equals(experimenTcollectorStatus)) {
+					&& ExecutionState.READY.equals(engineStatus)) {
 				status = ExecutionState.READY;
 				log.debug("Status [" + status + "] Initializing the TestStand");
 			} else {
-				log.error("RSPEventStreamerStatus [" + streamerStatus + "] collectorStatus [" + collectorStatus + "] experimentCollectorStatus ["
-						+ experimenTcollectorStatus + "] engineStatus [" + engineStatus + "]");
+				log.error("RSPEventStreamerStatus [" + streamerStatus + "] collectorStatus [" + collectorStatus + "] engineStatus [" + engineStatus
+						+ "]");
 				status = ExecutionState.ERROR;
 			}
 			return status;
@@ -72,16 +67,14 @@ public abstract class TestStandImpl extends Stand implements EventProcessor<Even
 			ExecutionState rspEventStreamerStatus = rspEventStreamer.close();
 			ExecutionState engineStatus = rspEngine.close();
 			ExecutionState collectorStatus = resultCollector.close();
-			ExecutionState experimenTcollectorStatus = experimentResultCollector.close();
 
-			if (ExecutionState.CLOSED.equals(rspEventStreamerStatus) && ExecutionState.CLOSED.equals(experimenTcollectorStatus)
-					&& ExecutionState.CLOSED.equals(collectorStatus) && ExecutionState.CLOSED.equals(engineStatus)) {
+			if (ExecutionState.CLOSED.equals(rspEventStreamerStatus) && ExecutionState.CLOSED.equals(collectorStatus)
+					&& ExecutionState.CLOSED.equals(engineStatus)) {
 				status = ExecutionState.CLOSED;
 				log.debug("Status [" + status + "] Closing the TestStand");
 			} else {
 				log.error("RSPEventStreamerStatus: " + rspEventStreamerStatus);
 				log.error("collectorStatus: " + collectorStatus);
-				log.error("experimentCollectorStatus: " + experimenTcollectorStatus);
 				log.error("engineStatus: " + engineStatus);
 				status = ExecutionState.ERROR;
 			}

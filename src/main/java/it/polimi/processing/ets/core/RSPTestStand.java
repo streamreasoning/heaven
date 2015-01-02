@@ -6,7 +6,6 @@ import it.polimi.processing.ets.timecontrol.TimeStrategy;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.events.results.EventResult;
 import it.polimi.processing.events.results.Result;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
@@ -81,10 +80,9 @@ public class RSPTestStand extends TestStandImpl {
 	}
 
 	@Override
-	public void build(StartableCollector<EventResult> resultCollector, StartableCollector<ExperimentResult> experimentResultCollector,
-			RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
+	public void build(StartableCollector<EventResult> resultCollector, RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
 		this.timeStrategy.setRSPEngine(rspEngine);
-		super.build(resultCollector, experimentResultCollector, rspEngine, rspEventStreamer);
+		super.build(resultCollector, rspEngine, rspEventStreamer);
 	}
 
 	@Override
@@ -142,7 +140,7 @@ public class RSPTestStand extends TestStandImpl {
 
 			currentExperiment.setTimestampEnd(startTime);
 
-			experimentResultCollector.process(currentExperiment);
+			resultCollector.process(currentExperiment);
 
 			if (ExecutionState.CLOSED.equals(engineStatus)) {
 				status = ExecutionState.READY;

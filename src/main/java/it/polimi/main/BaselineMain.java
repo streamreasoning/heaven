@@ -5,7 +5,6 @@ import it.polimi.processing.enums.EventBuilderMode;
 import it.polimi.processing.enums.ExperimentType;
 import it.polimi.processing.enums.Reasoning;
 import it.polimi.processing.ets.collector.CollectorEventResult;
-import it.polimi.processing.ets.collector.CollectorExperimentResult;
 import it.polimi.processing.ets.core.RSPTestStand;
 import it.polimi.processing.ets.streamer.NTStreamer;
 import it.polimi.processing.ets.timecontrol.InternalTiming;
@@ -17,7 +16,6 @@ import it.polimi.processing.events.factory.ConstantEventBuilder;
 import it.polimi.processing.events.factory.RandomEventBuilder;
 import it.polimi.processing.events.factory.StepEventBuilder;
 import it.polimi.processing.events.factory.abstracts.EventBuilder;
-import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.processing.events.results.EventResult;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.processing.rspengine.jena.JenaRSPEngineFactory;
@@ -59,7 +57,6 @@ public class BaselineMain {
 
 	private static RSPTestStand testStand;
 	private static StartableCollector<EventResult> streamingEventResultCollector;
-	private static StartableCollector<ExperimentResult> experimentResultCollector;
 	private static UpdateListener listener;
 
 	private static final DateFormat DT = new SimpleDateFormat("yyyy_MM_dd");
@@ -243,7 +240,6 @@ public class BaselineMain {
 
 	protected static void collectorSelection() {
 
-		experimentResultCollector = new CollectorExperimentResult();
 		streamingEventResultCollector = new CollectorEventResult(engineName + "/");
 		String exp = "";
 		if (ExecutionEnvirorment.finalresultTrigLogEnabled)
@@ -258,7 +254,7 @@ public class BaselineMain {
 
 	private static void run(String f, String comment, int experimentNumber, Date d, String experimentDescription) {
 
-		testStand.build(streamingEventResultCollector, experimentResultCollector, engine, streamer);
+		testStand.build(streamingEventResultCollector, engine, streamer);
 		testStand.init();
 		try {
 			Experiment experiment = new Experiment(experimentNumber, experimentDescription, RSPENGINE, FileUtils.INPUT_FILE_PATH + f, outputFileName,
