@@ -11,19 +11,15 @@ import it.polimi.processing.events.results.Result;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.processing.streamer.RSPTripleSetStreamer;
-import it.polimi.services.FileService;
 import it.polimi.services.system.GetPropertyValues;
 import it.polimi.services.system.Memory;
-
-import java.io.BufferedReader;
-
 import lombok.extern.log4j.Log4j;
 
 @Log4j
 public class RSPTestStand extends TestStandImpl {
 
 	private int experimentNumber;
-	private String outputFileName, windowFileName, inputFileNameWithPath;
+	private String outputFileName, windowFileName;
 	private String where;
 
 	private final TimeStrategy timeStrategy;
@@ -97,7 +93,6 @@ public class RSPTestStand extends TestStandImpl {
 			throw new WrongStatusTransitionException("Can't run in Status [" + status + "]");
 		} else if (e != null) {
 			this.experimentNumber = e.getExperimentNumber();
-			this.inputFileNameWithPath = e.getInputFileName();
 			this.outputFileName = e.getOutputFileName();
 			this.windowFileName = e.getWindowFileName();
 
@@ -118,16 +113,8 @@ public class RSPTestStand extends TestStandImpl {
 
 			log.debug("Status [" + status + "] Processing is started");
 
-			BufferedReader buffer = FileService.getBuffer(inputFileNameWithPath);
-
 			if (ExecutionState.READY.equals(engineStatus)) {
-				if (buffer != null) {
-					rspEventStreamer.process(buffer, experimentNumber);
-				} else {
-					log.error("Status [" + status + "] Can't start streaming processing");
-					status = ExecutionState.ERROR;
-					return 0;
-				}
+				rspEventStreamer.process(e);
 			} else {
 				String msg = "Can't start streaming on status [" + status + "]";
 				status = ExecutionState.ERROR;
