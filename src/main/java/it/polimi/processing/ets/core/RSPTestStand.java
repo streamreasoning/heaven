@@ -125,7 +125,7 @@ public class RSPTestStand extends TestStandImpl {
 
 			log.debug("Status [" + status + "] Processing is ended");
 
-			currentExperiment.setTimestampEnd(startTime);
+			currentExperiment.setTimestampEnd(System.currentTimeMillis());
 
 			resultCollector.process(currentExperiment);
 
