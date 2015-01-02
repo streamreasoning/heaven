@@ -122,7 +122,7 @@ public class RSPTestStand extends TestStandImpl {
 
 			if (ExecutionState.READY.equals(engineStatus)) {
 				if (buffer != null) {
-					rspEventStreamer.startStreamimng(buffer, experimentNumber);
+					rspEventStreamer.process(buffer, experimentNumber);
 				} else {
 					log.error("Status [" + status + "] Can't start streaming processing");
 					status = ExecutionState.ERROR;

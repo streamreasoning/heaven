@@ -3,8 +3,8 @@ package it.polimi.processing.events.factory;
 import static org.junit.Assert.assertEquals;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.factory.StepEventBuilder;
-import it.polimi.processing.events.factory.abstracts.EventBuilder;
+import it.polimi.processing.events.factory.StepFlowRateProfiler;
+import it.polimi.processing.events.factory.abstracts.FlowRateProfiler;
 import lombok.extern.log4j.Log4j;
 
 import org.junit.Rule;
@@ -23,7 +23,7 @@ public class StepEventBuilderTest {
 		int width = 1;
 		int initSize = 5;
 
-		EventBuilder<RSPTripleSet> eb = new StepEventBuilder(width, height, initSize, 0); // 1 5 10
+		FlowRateProfiler<RSPTripleSet> eb = new StepFlowRateProfiler(width, height, initSize, 0); // 1 5 10
 
 		assertEquals(false, eb.canSend()); // The first RSPEvent
 

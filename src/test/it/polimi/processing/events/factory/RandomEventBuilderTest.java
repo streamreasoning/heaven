@@ -2,9 +2,9 @@ package it.polimi.processing.events.factory;
 
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.factory.ConstantRandomEventBuilder;
-import it.polimi.processing.events.factory.RandomEventBuilder;
-import it.polimi.processing.events.factory.abstracts.EventBuilder;
+import it.polimi.processing.events.factory.ConstantRandomFlowRateProfiler;
+import it.polimi.processing.events.factory.RandomFlowRateProfiler;
+import it.polimi.processing.events.factory.abstracts.FlowRateProfiler;
 import lombok.extern.log4j.Log4j;
 
 import org.junit.Rule;
@@ -25,7 +25,7 @@ public class RandomEventBuilderTest {
 		RSPTripleSet event;
 
 		int experimentNumber = 0;
-		EventBuilder<RSPTripleSet> eb = new RandomEventBuilder(yMax, initSize, experimentNumber);
+		FlowRateProfiler<RSPTripleSet> eb = new RandomFlowRateProfiler(yMax, initSize, experimentNumber);
 
 		int i = 0;
 		while (!eb.canSend()) {
@@ -65,7 +65,7 @@ public class RandomEventBuilderTest {
 		RSPTripleSet event;
 
 		int experimentNumber = 0;
-		EventBuilder<RSPTripleSet> eb = new ConstantRandomEventBuilder(xMax, yMax, initSize, experimentNumber);
+		FlowRateProfiler<RSPTripleSet> eb = new ConstantRandomFlowRateProfiler(xMax, yMax, initSize, experimentNumber);
 
 		int i = 0;
 		while (!eb.canSend()) {

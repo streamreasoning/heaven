@@ -14,7 +14,7 @@ import lombok.extern.log4j.Log4j;
 @Setter
 @Getter
 @Log4j
-public abstract class RSPEventBuilder implements EventBuilder<RSPTripleSet> {
+public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<RSPTripleSet> {
 
 	protected RSPTripleSet e;
 	protected EventBuilderMode mode;
@@ -24,7 +24,7 @@ public abstract class RSPEventBuilder implements EventBuilder<RSPTripleSet> {
 	protected int experimentNumber;
 	private String id;
 
-	public RSPEventBuilder(EventBuilderMode mode, int x, int y, int initSize, int experimentNumber) {
+	public TripleSetFlowRateProfiler(EventBuilderMode mode, int x, int y, int initSize, int experimentNumber) {
 		this.x = x;
 		this.y = y;
 		this.initSize = roundSize = initSize;

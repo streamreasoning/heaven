@@ -1,11 +1,11 @@
 package it.polimi.processing.events.factory;
 
 import it.polimi.processing.enums.EventBuilderMode;
-import it.polimi.processing.events.factory.abstracts.RSPEventBuilder;
+import it.polimi.processing.events.factory.abstracts.TripleSetFlowRateProfiler;
 
-public class LinearEventBuilder extends RSPEventBuilder {
+public class LinearFlowRateProfiler extends TripleSetFlowRateProfiler {
 
-	public LinearEventBuilder(int height, int initSize, int experiment) {
+	public LinearFlowRateProfiler(int height, int initSize, int experiment) {
 		super(EventBuilderMode.LINEAR, height, 1, initSize, experiment);
 		eventNumber = initSize;
 	}

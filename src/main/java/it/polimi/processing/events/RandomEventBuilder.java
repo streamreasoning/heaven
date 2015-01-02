@@ -1,14 +1,14 @@
 package it.polimi.processing.events;
 
 import it.polimi.processing.enums.EventBuilderMode;
-import it.polimi.processing.events.factory.abstracts.RSPEventBuilder;
+import it.polimi.processing.events.factory.abstracts.TripleSetFlowRateProfiler;
 
 import java.util.Random;
 
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-public class RandomEventBuilder extends RSPEventBuilder {
+public class RandomEventBuilder extends TripleSetFlowRateProfiler {
 
 	private final Random yRandom = new Random();
 

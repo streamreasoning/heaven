@@ -1,21 +1,21 @@
 package it.polimi.processing.events.factory;
 
 import it.polimi.processing.enums.EventBuilderMode;
-import it.polimi.processing.events.factory.abstracts.RSPEventBuilder;
+import it.polimi.processing.events.factory.abstracts.TripleSetFlowRateProfiler;
 
 import java.util.Random;
 
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-public class ConstantRandomEventBuilder extends RSPEventBuilder {
+public class ConstantRandomFlowRateProfiler extends TripleSetFlowRateProfiler {
 
 	private final Random yRandom;
 	private final Random xRandom;
 	private int roundX;
 	private int counter;
 
-	public ConstantRandomEventBuilder(long xSeed, long ySeed, int xMax, int yMax, int initSize, int experiment) {
+	public ConstantRandomFlowRateProfiler(long xSeed, long ySeed, int xMax, int yMax, int initSize, int experiment) {
 		super(EventBuilderMode.RANDOM, xMax, yMax, initSize, experiment);
 		this.roundSize = initSize;
 		this.roundX = xMax;
@@ -24,7 +24,7 @@ public class ConstantRandomEventBuilder extends RSPEventBuilder {
 		this.yRandom = new Random(ySeed);
 	}
 
-	public ConstantRandomEventBuilder(int xMax, int yMax, int initSize, int experiment) {
+	public ConstantRandomFlowRateProfiler(int xMax, int yMax, int initSize, int experiment) {
 		super(EventBuilderMode.RANDOM, xMax, yMax, initSize, experiment);
 		this.roundSize = initSize;
 		this.roundX = xMax;

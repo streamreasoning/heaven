@@ -12,10 +12,10 @@ import it.polimi.processing.ets.timecontrol.NaiveStrategy;
 import it.polimi.processing.ets.timecontrol.TimeStrategy;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPTripleSet;
-import it.polimi.processing.events.factory.ConstantEventBuilder;
-import it.polimi.processing.events.factory.RandomEventBuilder;
-import it.polimi.processing.events.factory.StepEventBuilder;
-import it.polimi.processing.events.factory.abstracts.EventBuilder;
+import it.polimi.processing.events.factory.ConstantFlowRateProfiler;
+import it.polimi.processing.events.factory.RandomFlowRateProfiler;
+import it.polimi.processing.events.factory.StepFlowRateProfiler;
+import it.polimi.processing.events.factory.abstracts.FlowRateProfiler;
 import it.polimi.processing.events.results.EventResult;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.processing.rspengine.jena.JenaRSPEngineFactory;
@@ -156,7 +156,7 @@ public class BaselineMain {
 	}
 
 	protected static String streamerSelection() {
-		EventBuilder<RSPTripleSet> eb = null;
+		FlowRateProfiler<RSPTripleSet> eb = null;
 
 		String code = "_EB";
 		String message = "Event Builder Selection: [" + STREAMING_MODE + "] [" + INIT_SIZE + "] ";
@@ -164,16 +164,16 @@ public class BaselineMain {
 		switch (STREAMING_MODE) {
 			case CONSTANT:
 				code += "K" + INIT_SIZE;
-				eb = new ConstantEventBuilder(INIT_SIZE, EXPERIMENT_NUMBER);
+				eb = new ConstantFlowRateProfiler(INIT_SIZE, EXPERIMENT_NUMBER);
 				break;
 			case STEP:
 				message += " Heigh [" + X + "] Width [" + Y + "] ";
-				eb = new StepEventBuilder(X, Y, INIT_SIZE, EXPERIMENT_NUMBER);
+				eb = new StepFlowRateProfiler(X, Y, INIT_SIZE, EXPERIMENT_NUMBER);
 				code += "S" + INIT_SIZE + "H" + X + "W" + Y;
 				break;
 			case RANDOM:
 				message += " RND";
-				eb = new RandomEventBuilder(Y, INIT_SIZE, EXPERIMENT_NUMBER);
+				eb = new RandomFlowRateProfiler(Y, INIT_SIZE, EXPERIMENT_NUMBER);
 				code += "S" + INIT_SIZE + "H" + X + "W" + Y;
 				break;
 			default:

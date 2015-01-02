@@ -4,7 +4,7 @@ import it.polimi.processing.EventProcessor;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.factory.abstracts.EventBuilder;
+import it.polimi.processing.events.factory.abstracts.FlowRateProfiler;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.streamer.Parser;
@@ -25,16 +25,16 @@ public final class NTStreamer extends RSPTripleSetStreamer {
 	private int streamedEvents;
 	private int triples;
 
-	public NTStreamer(EventProcessor<Event> processor, EventBuilder<RSPTripleSet> builder, int eventLimit) {
-		super(processor, builder, ExecutionState.CLOSED, eventLimit);
+	public NTStreamer(EventProcessor<Event> processor, FlowRateProfiler<RSPTripleSet> profiler, int eventLimit) {
+		super(processor, profiler, ExecutionState.CLOSED, eventLimit);
 	}
 
-	public NTStreamer(EventProcessor<Event> processor, EventBuilder<RSPTripleSet> builder) {
-		super(processor, builder, ExecutionState.CLOSED, 1000);
+	public NTStreamer(EventProcessor<Event> processor, FlowRateProfiler<RSPTripleSet> profiler) {
+		super(processor, profiler, ExecutionState.CLOSED, 1000);
 	}
 
 	@Override
-	public void startStreamimng(BufferedReader br, int experimentNumber) {
+	public void process(BufferedReader br, int experimentNumber) {
 		try {
 			if (!ExecutionState.READY.equals(status)) {
 				throw new WrongStatusTransitionException("Can't Start in Status [" + status + "] must be [" + ExecutionState.READY + "]");
@@ -45,12 +45,12 @@ public final class NTStreamer extends RSPTripleSetStreamer {
 				while ((line = br.readLine()) != null && streamedEvents <= eventLimit - 1) {
 
 					status = ExecutionState.RUNNING;
-					builder.append(new TripleContainer(Parser.parseTriple(line)));
+					profiler.append(new TripleContainer(Parser.parseTriple(line)));
 					triples++;
 
-					if (builder.canSend()) {
+					if (profiler.canSend()) {
 
-						streamedEvents += processor.process(lastEvent = builder.getEvent()) ? 1 : 0;
+						streamedEvents += next.process(lastEvent = profiler.getEvent()) ? 1 : 0;
 
 						log.debug("Send Event [" + streamedEvents + "] triples [" + triples + "] of size [" + lastEvent.size() + "]");
 
