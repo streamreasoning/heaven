@@ -12,7 +12,6 @@ import it.polimi.processing.streamer.RSPTripleSetStreamer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
 
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
@@ -46,7 +45,7 @@ public final class NTStreamer extends RSPTripleSetStreamer {
 				while ((line = br.readLine()) != null && streamedEvents <= eventLimit - 1) {
 
 					status = ExecutionState.RUNNING;
-					builder.append(new TripleContainer(parse(line)));
+					builder.append(new TripleContainer(Parser.parseTriple(line)));
 					triples++;
 
 					if (builder.canSend()) {
@@ -73,23 +72,6 @@ public final class NTStreamer extends RSPTripleSetStreamer {
 			status = ExecutionState.ERROR;
 			log.error(e.getMessage());
 		}
-	}
-
-	private String[] parse(String line) {
-		String[] s = Parser.parseTriple(line, "src/main/resources/data/", false);
-		if (s.length > 3) {
-			throw new IllegalArgumentException("Too much arguments");
-		}
-		log.debug("S: " + Arrays.deepToString(s));
-		s[0] = s[0].replace("<", "");
-		s[0] = s[0].replace(">", "");
-
-		s[1] = s[1].replace("<", "");
-		s[1] = s[1].replace(">", "");
-
-		s[2] = s[2].replace("<", "");
-		s[2] = s[2].replace(">", "");
-		return s;
 	}
 
 	@Override
