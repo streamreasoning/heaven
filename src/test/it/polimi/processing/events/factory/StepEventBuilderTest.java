@@ -3,8 +3,8 @@ package it.polimi.processing.events.factory;
 import static org.junit.Assert.assertEquals;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.factory.StepFlowRateProfiler;
-import it.polimi.processing.events.factory.abstracts.FlowRateProfiler;
+import it.polimi.processing.events.profiler.StepFlowRateProfiler;
+import it.polimi.processing.events.profiler.abstracts.FlowRateProfiler;
 import lombok.extern.log4j.Log4j;
 
 import org.junit.Rule;

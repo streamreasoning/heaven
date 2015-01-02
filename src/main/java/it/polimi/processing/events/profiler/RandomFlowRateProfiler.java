@@ -1,7 +1,7 @@
-package it.polimi.processing.events.factory;
+package it.polimi.processing.events.profiler;
 
 import it.polimi.processing.enums.EventBuilderMode;
-import it.polimi.processing.events.factory.abstracts.TripleSetFlowRateProfiler;
+import it.polimi.processing.events.profiler.abstracts.TripleSetFlowRateProfiler;
 
 import java.util.Random;
 

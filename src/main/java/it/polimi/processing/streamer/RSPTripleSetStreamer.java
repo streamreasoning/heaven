@@ -4,8 +4,8 @@ import it.polimi.processing.EventProcessor;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPTripleSet;
-import it.polimi.processing.events.factory.abstracts.FlowRateProfiler;
 import it.polimi.processing.events.interfaces.Event;
+import it.polimi.processing.events.profiler.abstracts.FlowRateProfiler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

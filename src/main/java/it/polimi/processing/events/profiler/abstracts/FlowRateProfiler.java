@@ -1,4 +1,4 @@
-package it.polimi.processing.events.factory.abstracts;
+package it.polimi.processing.events.profiler.abstracts;
 
 import it.polimi.processing.events.TripleContainer;
 

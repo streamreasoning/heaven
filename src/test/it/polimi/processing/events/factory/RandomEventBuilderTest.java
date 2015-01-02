@@ -2,9 +2,9 @@ package it.polimi.processing.events.factory;
 
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.factory.ConstantRandomFlowRateProfiler;
-import it.polimi.processing.events.factory.RandomFlowRateProfiler;
-import it.polimi.processing.events.factory.abstracts.FlowRateProfiler;
+import it.polimi.processing.events.profiler.ConstantRandomFlowRateProfiler;
+import it.polimi.processing.events.profiler.RandomFlowRateProfiler;
+import it.polimi.processing.events.profiler.abstracts.FlowRateProfiler;
 import lombok.extern.log4j.Log4j;
 
 import org.junit.Rule;
