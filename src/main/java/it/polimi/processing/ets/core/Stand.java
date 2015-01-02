@@ -1,9 +1,7 @@
 package it.polimi.processing.ets.core;
 
 import it.polimi.processing.enums.ExecutionState;
-import lombok.Getter;
 
-@Getter
 public abstract class Stand {
 
 	protected ExecutionState status = ExecutionState.NOT_READY;

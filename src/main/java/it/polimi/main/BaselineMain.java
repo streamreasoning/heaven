@@ -11,6 +11,7 @@ import it.polimi.processing.ets.streamer.NTStreamer;
 import it.polimi.processing.ets.timecontrol.InternalTiming;
 import it.polimi.processing.ets.timecontrol.NaiveStrategy;
 import it.polimi.processing.ets.timecontrol.TimeStrategy;
+import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.factory.ConstantEventBuilder;
 import it.polimi.processing.events.factory.RandomEventBuilder;
@@ -258,10 +259,11 @@ public class BaselineMain {
 	private static void run(String f, String comment, int experimentNumber, Date d, String experimentDescription) {
 
 		testStand.build(streamingEventResultCollector, experimentResultCollector, engine, streamer);
-
 		testStand.init();
 		try {
-			experimentNumber += testStand.run(f, experimentNumber, comment, outputFileName, windowFileName, experimentDescription);
+			Experiment experiment = new Experiment(experimentNumber, experimentDescription, RSPENGINE, FileUtils.INPUT_FILE_PATH + f, outputFileName,
+					windowFileName);
+			experimentNumber += testStand.run(experiment, comment);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			testStand.stop();

@@ -86,9 +86,9 @@ public abstract class JenaIncrementalListener implements UpdateListener {
 		if (next != null) {
 			log.debug("Send Event to the StoreCollector");
 			eventNumber++;
-			next.process(new Result("", statements, eventNumber, outputTimestamp, false));
+			next.process(new Result("", statements, eventNumber, 0, outputTimestamp, false));
 			if (ExecutionEnvirorment.aboxLogEnabled) {
-				next.process(new Result("", ABoxTriples, eventNumber, outputTimestamp, true));
+				next.process(new Result("", ABoxTriples, eventNumber, 0, outputTimestamp, true));
 			}
 		}
 

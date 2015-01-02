@@ -15,21 +15,16 @@ import it.polimi.processing.streamer.RSPTripleSetStreamer;
 import it.polimi.services.FileService;
 import it.polimi.services.system.GetPropertyValues;
 import it.polimi.services.system.Memory;
-import it.polimi.utils.FileUtils;
 
 import java.io.BufferedReader;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
-@Getter
-@Setter
 @Log4j
 public class RSPTestStand extends TestStandImpl {
 
 	private int experimentNumber;
-	private String outputFileName, windowFileName, inputFileNameWithPath, experimentDescription;
+	private String outputFileName, windowFileName, inputFileNameWithPath;
 	private String where;
 
 	private final TimeStrategy timeStrategy;
@@ -39,72 +34,9 @@ public class RSPTestStand extends TestStandImpl {
 	}
 
 	@Override
-	public int run(String f, int experimentNumber, String comment, String outputFileName, String windowFileName, String experimentDescription) {
-		this.experimentNumber = experimentNumber;
-		this.experimentDescription = experimentDescription;
-		this.inputFileNameWithPath = FileUtils.INPUT_FILE_PATH + f;
-		this.outputFileName = outputFileName;
-		this.windowFileName = windowFileName;
-
-		long startTime = System.currentTimeMillis();
-
-		if (!isOn()) {
-			throw new WrongStatusTransitionException("Can't run in Status [" + status + "]");
-		} else {
-			log.info("Status [" + status + "]" + " Start Running The Experiment [" + experimentNumber + "] of date ["
-					+ GetPropertyValues.getDateProperty("experiment_date") + "] " + "Results will be named as [" + outputFileName + "]");
-
-			status = ExecutionState.RUNNING;
-			currentExperiment = new Experiment(experimentNumber, experimentDescription, rspEngine.getName(), inputFileNameWithPath, outputFileName,
-					startTime, comment, 0L);
-
-			log.debug("Status [" + status + "] Experiment Created");
-
-			ExecutionState engineStatus = rspEngine.startProcessing();
-
-			log.debug("Status [" + status + "] Processing is started");
-
-			BufferedReader buffer = FileService.getBuffer(inputFileNameWithPath);
-
-			if (ExecutionState.READY.equals(engineStatus)) {
-				if (buffer != null) {
-					rspEventStreamer.startStreamimng(buffer, experimentNumber);
-				} else {
-					log.error("Status [" + status + "] Can't start streaming processing");
-					status = ExecutionState.ERROR;
-					return 0;
-				}
-			} else {
-				String msg = "Can't start streaming on status [" + status + "]";
-				status = ExecutionState.ERROR;
-				throw new WrongStatusTransitionException(msg);
-			}
-
-			engineStatus = rspEngine.stopProcessing();
-
-			log.debug("Status [" + status + "] Processing is ended");
-
-			currentExperiment.setTimestampEnd(startTime);
-
-			experimentResultCollector.process(currentExperiment);
-
-			if (ExecutionState.CLOSED.equals(engineStatus)) {
-				status = ExecutionState.READY;
-			} else if (ExecutionState.ERROR.equals(engineStatus)) {
-				status = ExecutionState.ERROR;
-			}
-
-			log.info("Status [" + status + "] Stop the experiment, duration " + (System.currentTimeMillis() - startTime) + "ms");
-
-		}
-
-		return 1;
-	}
-
-	@Override
 	public boolean process(Event e) {
 		totalEvent++;
-		return (e instanceof RSPTripleSet) ? process((RSPTripleSet) e) : process((Result) e);
+		return (e instanceof Result) ? process((Result) e) : process((RSPTripleSet) e);
 	}
 
 	public boolean process(RSPTripleSet e) {
@@ -153,5 +85,76 @@ public class RSPTestStand extends TestStandImpl {
 			RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
 		this.timeStrategy.setRSPEngine(rspEngine);
 		super.build(resultCollector, experimentResultCollector, rspEngine, rspEventStreamer);
+	}
+
+	@Override
+	public int run(Experiment e) {
+		return run(e, "");
+	}
+
+	@Override
+	public int run(Experiment e, String comment) {
+
+		if (!isOn()) {
+			throw new WrongStatusTransitionException("Can't run in Status [" + status + "]");
+		} else if (e != null) {
+			this.experimentNumber = e.getExperimentNumber();
+			this.inputFileNameWithPath = e.getInputFileName();
+			this.outputFileName = e.getOutputFileName();
+			this.windowFileName = e.getWindowFileName();
+
+			long startTime = System.currentTimeMillis();
+
+			log.info("Status [" + status + "]" + " Start Running The Experiment [" + experimentNumber + "] of date ["
+					+ GetPropertyValues.getDateProperty("experiment_date") + "] " + "Results will be named as [" + outputFileName + "]");
+
+			status = ExecutionState.RUNNING;
+
+			currentExperiment = e;
+			e.setComment(comment);
+			e.setTimestampStart(startTime);
+
+			log.debug("Status [" + status + "] Experiment Created");
+
+			ExecutionState engineStatus = rspEngine.startProcessing();
+
+			log.debug("Status [" + status + "] Processing is started");
+
+			BufferedReader buffer = FileService.getBuffer(inputFileNameWithPath);
+
+			if (ExecutionState.READY.equals(engineStatus)) {
+				if (buffer != null) {
+					rspEventStreamer.startStreamimng(buffer, experimentNumber);
+				} else {
+					log.error("Status [" + status + "] Can't start streaming processing");
+					status = ExecutionState.ERROR;
+					return 0;
+				}
+			} else {
+				String msg = "Can't start streaming on status [" + status + "]";
+				status = ExecutionState.ERROR;
+				throw new WrongStatusTransitionException(msg);
+			}
+
+			engineStatus = rspEngine.stopProcessing();
+
+			log.debug("Status [" + status + "] Processing is ended");
+
+			currentExperiment.setTimestampEnd(startTime);
+
+			experimentResultCollector.process(currentExperiment);
+
+			if (ExecutionState.CLOSED.equals(engineStatus)) {
+				status = ExecutionState.READY;
+			} else if (ExecutionState.ERROR.equals(engineStatus)) {
+				status = ExecutionState.ERROR;
+			}
+
+			log.info("Status [" + status + "] Stop the experiment, duration " + (System.currentTimeMillis() - startTime) + "ms");
+			return 1;
+
+		}
+
+		return 0;
 	}
 }

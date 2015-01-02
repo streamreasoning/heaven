@@ -1,9 +1,7 @@
 package it.polimi.processing.events;
 
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.services.system.Memory;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
@@ -18,10 +16,9 @@ import lombok.NoArgsConstructor;
 public class RSPTripleSet implements Event {
 
 	private String id;
-	private Set<TripleContainer> eventTriples = new HashSet<TripleContainer>();
+	private Set<TripleContainer> eventTriples;
 	private int eventNumber, experimentNumber;
 	private long inputTimestamp;
-	private double memoryBR;
 
 	public int size() {
 		return eventTriples.size();
@@ -33,7 +30,6 @@ public class RSPTripleSet implements Event {
 		this.eventNumber = eventNumber;
 		this.experimentNumber = experimentNumber;
 		this.inputTimestamp = System.currentTimeMillis();
-		this.memoryBR = Memory.getMemoryUsage();
 	}
 
 	public RSPTripleSet rebuild(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber) {
@@ -42,7 +38,6 @@ public class RSPTripleSet implements Event {
 		this.eventNumber = eventNumber;
 		this.experimentNumber = experimentNumber;
 		this.inputTimestamp = System.currentTimeMillis();
-		this.memoryBR = Memory.getMemoryUsage();
 		return this;
 	}
 

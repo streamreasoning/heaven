@@ -37,8 +37,8 @@ public class TSResult implements EventResult {
 		String compleAndSoundSIMPL = (cs != null && ss != null) ? "," + cs + "," + ss : "";
 		String compleAndSoundRHODF = (cr != null && sr != null) ? "," + cr + "," + sr : "";
 
-		String s = id + "," + eventNumber + "," + memoryB + "," + memoryA + "," + (result.getTimestamp() - inputTimestamp) + compleAndSoundSIMPL
-				+ compleAndSoundRHODF + System.getProperty("line.separator");
+		String s = id + "," + eventNumber + "," + memoryB + "," + memoryA + "," + (result.getOutputTimestamp() - inputTimestamp)
+				+ compleAndSoundSIMPL + compleAndSoundRHODF + System.getProperty("line.separator");
 		return ExecutionEnvirorment.latencyLogEnabled || ExecutionEnvirorment.memoryLogEnabled ? FileService.write(where, s) : false;
 	}
 
@@ -53,7 +53,7 @@ public class TSResult implements EventResult {
 
 		String eol = System.getProperty("line.separator");
 		String trig = key + " {";
-		for (TripleContainer tr : result.getStatements()) {
+		for (TripleContainer tr : result.getEventTriples()) {
 			String[] resource = tr.getTriple();
 			trig += eol + "<" + resource[0] + ">" + " " + "<" + resource[1] + ">" + " " + "<" + resource[2] + "> .";
 		}

@@ -1,5 +1,6 @@
 package it.polimi.processing.events.results;
 
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.services.FileService;
 import it.polimi.services.system.ExecutionEnvirorment;
@@ -8,23 +9,24 @@ import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Log4j
-public class Result implements EventResult {
+public class Result extends RSPTripleSet implements EventResult {
 
-	private String id;
-	private Set<TripleContainer> statements;
-	private long eventNumber;
-	private long timestamp;
+	private long outputTimestamp;
 	private boolean abox;
 
-	public int size() {
-		return statements.size();
+	public Result(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber, long outputTimestamp, boolean abox) {
+		super(id, hashSet, eventNumber, experimentNumber);
+		this.outputTimestamp = outputTimestamp;
+		this.abox = abox;
 	}
 
 	@Override
@@ -35,22 +37,22 @@ public class Result implements EventResult {
 
 	@Override
 	public boolean saveCSV(String where) {
-		String s = "<http://example.org/" + eventNumber + ">" + System.getProperty("line.separator");
+		String s = "<http://example.org/" + getEventNumber() + ">" + System.getProperty("line.separator");
 		return ExecutionEnvirorment.latencyLogEnabled || ExecutionEnvirorment.memoryLogEnabled ? FileService.write(where, s) : false;
 	}
 
 	private String getData() {
 
 		String key;
-		if (id == null) {
-			key = "<http://example.org/" + eventNumber + ">";
+		if (getId() == null) {
+			key = "<http://example.org/" + getEventNumber() + ">";
 		} else {
-			key = this.id;
+			key = getId();
 		}
 
 		String eol = System.getProperty("line.separator");
 		String trig = key + " {";
-		for (TripleContainer tr : statements) {
+		for (TripleContainer tr : getEventTriples()) {
 			String[] resource = tr.getTriple();
 			trig += eol + "<" + resource[0] + ">" + " " + "<" + resource[1] + ">" + " " + "<" + resource[2] + "> .";
 		}

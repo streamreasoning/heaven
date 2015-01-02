@@ -3,19 +3,25 @@ package it.polimi.processing.events;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.interfaces.ExperimentResult;
 import it.polimi.services.SQLListeService;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
-@AllArgsConstructor
 public class Experiment implements Event, ExperimentResult {
+
 	private int experimentNumber;
-	private String descr, engine, inputFileName, outputFileName;
+	private String descr, engine, inputFileName, outputFileName, windowFileName;
 	private Long timestampStart;
 	private String comment;
 	private long timestampEnd;
+
+	public Experiment(int experimentNumber, String descr, String engine, String inputFileName, String outputFileName, String windowFileName) {
+		this.experimentNumber = experimentNumber;
+		this.descr = descr;
+		this.engine = engine;
+		this.inputFileName = inputFileName;
+		this.outputFileName = outputFileName;
+		this.windowFileName = windowFileName;
+	}
 
 	@Override
 	public boolean saveSQL(String where) {

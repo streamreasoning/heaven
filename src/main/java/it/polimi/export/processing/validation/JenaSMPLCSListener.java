@@ -1,8 +1,8 @@
 package it.polimi.export.processing.validation;
 
+import it.polimi.export.processing.events.CSResult;
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.events.results.CSResult;
 
 import com.hp.hpl.jena.reasoner.Reasoner;
 import com.hp.hpl.jena.reasoner.ReasonerRegistry;

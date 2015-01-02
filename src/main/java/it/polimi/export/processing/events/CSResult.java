@@ -1,6 +1,7 @@
-package it.polimi.processing.events.results;
+package it.polimi.export.processing.events;
 
 import it.polimi.processing.events.TripleContainer;
+import it.polimi.processing.events.results.Result;
 
 import java.util.Set;
 
@@ -17,7 +18,7 @@ public class CSResult extends Result {
 
 	public CSResult(String id, Set<TripleContainer> statements, int eventNumber, long timestamp, Boolean abox, Boolean completeSMPL,
 			Boolean soundSMPL, Boolean completeRHODF, Boolean soundRHODF) {
-		super(id, statements, eventNumber, timestamp, abox);
+		super(id, statements, eventNumber, 0, timestamp, abox);
 		this.completeRHODF = completeRHODF;
 		this.soundRHODF = soundRHODF;
 		this.completeSMPL = completeSMPL;

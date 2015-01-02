@@ -12,11 +12,9 @@ import it.polimi.processing.events.results.TSResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.processing.streamer.RSPTripleSetStreamer;
-import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-@Getter
 public abstract class TestStandImpl extends Stand implements EventProcessor<Event>, Startable<ExecutionState> {
 
 	protected StartableCollector<EventResult> resultCollector;
@@ -94,5 +92,7 @@ public abstract class TestStandImpl extends Stand implements EventProcessor<Even
 		}
 	}
 
-	public abstract int run(String f, int experimentNumber, String comment, String outputFileName, String windowFileName, String experimentDescription);
+	public abstract int run(Experiment e);
+
+	public abstract int run(Experiment e, String comment);
 }
