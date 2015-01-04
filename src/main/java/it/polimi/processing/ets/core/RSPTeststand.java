@@ -2,6 +2,7 @@ package it.polimi.processing.ets.core;
 
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.ets.collector.TSResultCollector;
+import it.polimi.processing.ets.streamer.TSStreamer;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.interfaces.Event;
@@ -9,7 +10,6 @@ import it.polimi.processing.events.results.RSPTripleSetResult;
 import it.polimi.processing.events.results.TSResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
-import it.polimi.processing.streamer.RSPTripleSetStreamer;
 import it.polimi.services.system.GetPropertyValues;
 import it.polimi.services.system.Memory;
 import lombok.NoArgsConstructor;
@@ -85,7 +85,7 @@ public class RSPTeststand extends TestStand {
 	}
 
 	@Override
-	public void build(TSResultCollector resultCollector, RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
+	public void build(TSResultCollector resultCollector, RSPEngine rspEngine, TSStreamer rspEventStreamer) {
 		super.build(resultCollector, rspEngine, rspEventStreamer);
 	}
 

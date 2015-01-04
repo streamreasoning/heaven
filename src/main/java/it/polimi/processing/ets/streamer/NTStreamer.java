@@ -9,7 +9,6 @@ import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.profiler.abstracts.FlowRateProfiler;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.streamer.Parser;
-import it.polimi.processing.streamer.RSPTripleSetStreamer;
 import it.polimi.services.FileService;
 
 import java.io.BufferedReader;
@@ -20,7 +19,7 @@ import lombok.extern.log4j.Log4j;
 
 @Getter
 @Log4j
-public final class NTStreamer extends RSPTripleSetStreamer {
+public final class NTStreamer extends TSStreamer {
 
 	private RSPTripleSet lastEvent;
 	private String line;

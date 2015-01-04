@@ -9,6 +9,7 @@ import it.polimi.processing.ets.core.TestStand;
 import it.polimi.processing.ets.core.strategic.timecontrol.NaiveStrategy;
 import it.polimi.processing.ets.core.strategic.timecontrol.TimeStrategy;
 import it.polimi.processing.ets.streamer.NTStreamer;
+import it.polimi.processing.ets.streamer.TSStreamer;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.profiler.ConstantFlowRateProfiler;
@@ -20,7 +21,6 @@ import it.polimi.processing.rspengine.jena.JenaRSPEngineFactory;
 import it.polimi.processing.rspengine.jena.JenaReasoningListenerFactory;
 import it.polimi.processing.rspengine.jena.enums.JenaEventType;
 import it.polimi.processing.rspengine.jena.enums.Reasoner;
-import it.polimi.processing.streamer.RSPTripleSetStreamer;
 import it.polimi.services.FileService;
 import it.polimi.services.system.ExecutionEnvirorment;
 import it.polimi.services.system.GetPropertyValues;
@@ -64,7 +64,7 @@ public class BaselineMain {
 	private static int EXECUTION_NUMBER;
 
 	private static String whereOutput, whereWindow, outputFileName, windowFileName, experimentDescription;
-	private static RSPTripleSetStreamer streamer;
+	private static TSStreamer streamer;
 	private static Reasoner CURRENT_REASONER;
 	private static Reasoning REASONING;
 	private static FlowRateProfile STREAMING_MODE;
