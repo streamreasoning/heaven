@@ -1,8 +1,9 @@
-package it.polimi.processing.ets.core;
+package it.polimi.processing.ets.core.strategic;
 
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.ets.timecontrol.TimeStrategy;
+import it.polimi.processing.ets.core.TestStand;
+import it.polimi.processing.ets.core.strategic.timecontrol.TimeStrategy;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.interfaces.Event;
@@ -16,7 +17,7 @@ import it.polimi.services.system.Memory;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-public class RSPTestStand extends TestStandImpl {
+public class StrategicRSPTeststand extends TestStand {
 
 	private int experimentNumber;
 	private String outputFileName, windowFileName;
@@ -24,7 +25,7 @@ public class RSPTestStand extends TestStandImpl {
 
 	private final TimeStrategy timeStrategy;
 
-	public RSPTestStand(TimeStrategy strategy) {
+	public StrategicRSPTeststand(TimeStrategy strategy) {
 		this.timeStrategy = strategy;
 	}
 

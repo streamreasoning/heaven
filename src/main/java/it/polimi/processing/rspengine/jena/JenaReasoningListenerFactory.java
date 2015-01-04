@@ -1,7 +1,7 @@
 package it.polimi.processing.rspengine.jena;
 
 import it.polimi.processing.EventProcessor;
-import it.polimi.processing.ets.core.RSPTestStand;
+import it.polimi.processing.ets.core.TestStand;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener.JenaIncFullListener;
 import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener.JenaIncRhoDFListener;
@@ -26,7 +26,7 @@ public final class JenaReasoningListenerFactory {
 		return listener = new JenaRhoDFListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED), FileUtils.RHODF_RULE_SET_RUNTIME, next);
 	}
 
-	public static UpdateListener getFULLListener(RSPTestStand next) {
+	public static UpdateListener getFULLListener(TestStand next) {
 		return listener = new JenaFullListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED), next);
 	}
 
@@ -38,7 +38,7 @@ public final class JenaReasoningListenerFactory {
 		return listener = new JenaIncRhoDFListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED), FileUtils.RHODF_RULE_SET_RUNTIME, next);
 	}
 
-	public static UpdateListener getIncrementalFULLListener(RSPTestStand next) {
+	public static UpdateListener getIncrementalFULLListener(TestStand next) {
 		return listener = new JenaIncFullListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED), next);
 	}
 

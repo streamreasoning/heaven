@@ -1,4 +1,4 @@
-package it.polimi.processing.ets.timecontrol;
+package it.polimi.processing.ets.core.strategic.timecontrol;
 
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.results.TSResult;

@@ -14,7 +14,7 @@ import it.polimi.processing.streamer.RSPTripleSetStreamer;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-public abstract class TestStandImpl extends Stand implements EventProcessor<Event>, Startable<ExecutionState> {
+public abstract class TestStand extends Stand implements EventProcessor<Event>, Startable<ExecutionState> {
 
 	protected ResultCollector<EventResult> resultCollector;
 

@@ -5,11 +5,11 @@ import it.polimi.processing.enums.EventBuilderMode;
 import it.polimi.processing.enums.ExperimentType;
 import it.polimi.processing.enums.Reasoning;
 import it.polimi.processing.ets.collector.CollectorEventResult;
-import it.polimi.processing.ets.core.RSPTestStand;
+import it.polimi.processing.ets.core.RSPTeststand;
+import it.polimi.processing.ets.core.TestStand;
+import it.polimi.processing.ets.core.strategic.timecontrol.NaiveStrategy;
+import it.polimi.processing.ets.core.strategic.timecontrol.TimeStrategy;
 import it.polimi.processing.ets.streamer.NTStreamer;
-import it.polimi.processing.ets.timecontrol.InternalTiming;
-import it.polimi.processing.ets.timecontrol.NaiveStrategy;
-import it.polimi.processing.ets.timecontrol.TimeStrategy;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.profiler.ConstantFlowRateProfiler;
@@ -55,7 +55,7 @@ public class BaselineMain {
 	private static Date EXPERIMENT_DATE;
 	private static String file, COMMENT;
 
-	private static RSPTestStand testStand;
+	private static TestStand testStand;
 	private static ResultCollector<EventResult> streamingEventResultCollector;
 	private static UpdateListener listener;
 
@@ -114,8 +114,13 @@ public class BaselineMain {
 
 		log.info("Experiment [" + EXPERIMENT_NUMBER + "] on [" + file + "] of [" + EXPERIMENT_DATE + "] Number of Events [" + EVENTS + "]");
 
-		TimeStrategy strategy = (GetPropertyValues.getBooleanProperty("external_time_control_on")) ? timeStrategySelection() : new InternalTiming();
-		testStand = new RSPTestStand(strategy);
+		// // TODO Internal Timing
+		// TimeStrategy strategy =
+		// (GetPropertyValues.getBooleanProperty("external_time_control_on")) ?
+		// timeStrategySelection() : null;
+		// testStand = new StrategicRSPTeststand(strategy);
+
+		testStand = new RSPTeststand();
 
 		eventBuilderCodeName = streamerSelection();
 

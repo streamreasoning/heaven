@@ -1,7 +1,7 @@
 package it.polimi.processing.rspengine.jena;
 
 import it.polimi.processing.EventProcessor;
-import it.polimi.processing.ets.core.RSPTestStand;
+import it.polimi.processing.ets.core.TestStand;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.processing.rspengine.jena.enums.Reasoner;
@@ -22,12 +22,12 @@ public final class JenaRSPEngineFactory {
 				listener != null ? listener : JenaReasoningListenerFactory.getCurrent());
 	}
 
-	public static RSPEngine getStmtEngine(RSPTestStand next, UpdateListener listener) {
+	public static RSPEngine getStmtEngine(TestStand next, UpdateListener listener) {
 		return new JenaEngineStmt(GetPropertyValues.getEnumProperty(Reasoner.class, "jena_current_reasoner").name().toLowerCase(), next,
 				listener != null ? listener : JenaReasoningListenerFactory.getCurrent());
 	}
 
-	public static RSPEngine getJenaEngineGraph(RSPTestStand next, UpdateListener listener) {
+	public static RSPEngine getJenaEngineGraph(TestStand next, UpdateListener listener) {
 		return new JenaEngineGraph(GetPropertyValues.getEnumProperty(Reasoner.class, "jena_current_reasoner").name().toLowerCase(), next,
 				listener != null ? listener : JenaReasoningListenerFactory.getCurrent());
 	}
@@ -37,12 +37,12 @@ public final class JenaRSPEngineFactory {
 				listener != null ? listener : JenaReasoningListenerFactory.getCurrent());
 	}
 
-	public static RSPEngine getIncrementalStmtEngine(RSPTestStand next, UpdateListener listener) {
+	public static RSPEngine getIncrementalStmtEngine(TestStand next, UpdateListener listener) {
 		return new JenaEngineStmtInc(GetPropertyValues.getEnumProperty(Reasoner.class, "jena_current_reasoner").name().toLowerCase(), next,
 				listener != null ? listener : JenaReasoningListenerFactory.getCurrent());
 	}
 
-	public static RSPEngine getIncrementalJenaEngineGraph(RSPTestStand next, UpdateListener listener) {
+	public static RSPEngine getIncrementalJenaEngineGraph(TestStand next, UpdateListener listener) {
 		return new JenaEngineGraphInc(GetPropertyValues.getEnumProperty(Reasoner.class, "jena_current_reasoner").name().toLowerCase(), next,
 				listener != null ? listener : JenaReasoningListenerFactory.getCurrent());
 	}
