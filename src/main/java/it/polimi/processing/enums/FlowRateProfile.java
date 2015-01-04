@@ -1,16 +1,16 @@
 package it.polimi.processing.enums;
 
-public enum EventBuilderMode {
+public enum FlowRateProfile {
 	CONSTANT(0), LINEAR(1), STEP(2), EXP(3), RANDOM(4);
 
 	private int id;
 
-	private EventBuilderMode(final int i) {
+	private FlowRateProfile(final int i) {
 		id = i;
 	}
 
-	public static EventBuilderMode getById(int id) {
-		for (EventBuilderMode e : EventBuilderMode.values()) {
+	public static FlowRateProfile getById(int id) {
+		for (FlowRateProfile e : FlowRateProfile.values()) {
 			if (e.id == id) {
 				return e;
 			}

@@ -1,6 +1,6 @@
 package it.polimi.preprocessor.generator;
 
-import it.polimi.processing.enums.EventBuilderMode;
+import it.polimi.processing.enums.FlowRateProfile;
 import it.polimi.processing.rspengine.jena.enums.JenaEventType;
 import it.polimi.processing.rspengine.jena.enums.Reasoner;
 
@@ -17,7 +17,7 @@ import java.util.Properties;
 public class EngineBasedExperimentGenerator {
 
 	private static Properties sourceProp;
-	private static final EventBuilderMode mode = EventBuilderMode.CONSTANT;
+	private static final FlowRateProfile mode = FlowRateProfile.CONSTANT;
 	private static final DateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
 	private static int experimentNumber = 0;
 	private static Properties prop;
@@ -92,7 +92,7 @@ public class EngineBasedExperimentGenerator {
 		}
 	}
 
-	private static void eventsProperties(EventBuilderMode mode, int init_size, int rsp_events_in_winodow) {
+	private static void eventsProperties(FlowRateProfile mode, int init_size, int rsp_events_in_winodow) {
 
 		prop.setProperty("max_event_stream", "25000");
 		prop.setProperty("rsp_events_in_window", rsp_events_in_winodow + "");

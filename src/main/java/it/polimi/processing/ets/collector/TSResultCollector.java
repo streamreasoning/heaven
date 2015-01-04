@@ -8,14 +8,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class EventResultCollector implements ResultCollector {
+public class TSResultCollector implements ResultCollector {
 
 	private ExecutionState status;
 	private String where;
 
 	private EventResult currentResult;
 
-	public EventResultCollector(String where) {
+	public TSResultCollector(String where) {
 		this.status = ExecutionState.READY;
 		this.where = where;
 	}

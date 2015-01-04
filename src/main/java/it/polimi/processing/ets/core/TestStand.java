@@ -3,7 +3,7 @@ package it.polimi.processing.ets.core;
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.Startable;
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.ets.collector.EventResultCollector;
+import it.polimi.processing.ets.collector.TSResultCollector;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.results.TSResult;
@@ -15,14 +15,12 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public abstract class TestStand implements EventProcessor<Event>, Startable<ExecutionState> {
 
-	protected EventResultCollector resultCollector;
-
-	protected RSPEngine rspEngine;
-	protected RSPTripleSetStreamer rspEventStreamer;
+	protected TSResultCollector collector;
+	protected RSPEngine engine;
+	protected RSPTripleSetStreamer streamer;
 
 	protected Experiment currentExperiment;
-	protected Event se;
-	protected TSResult currentResult;
+	protected TSResult currentResult, aboxResult;
 
 	protected int eventNumber, tsResultEvents = 0;
 
@@ -50,10 +48,10 @@ public abstract class TestStand implements EventProcessor<Event>, Startable<Exec
 
 	}
 
-	public void build(EventResultCollector resultCollector, RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
-		this.resultCollector = resultCollector;
-		this.rspEngine = rspEngine;
-		this.rspEventStreamer = rspEventStreamer;
+	public void build(TSResultCollector resultCollector, RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
+		this.collector = resultCollector;
+		this.engine = rspEngine;
+		this.streamer = rspEventStreamer;
 	}
 
 	@Override
@@ -61,9 +59,9 @@ public abstract class TestStand implements EventProcessor<Event>, Startable<Exec
 		if (!isStartable()) {
 			throw new WrongStatusTransitionException("Can't Switch from Status [" + status + "] to [" + ExecutionState.READY + "]");
 		} else {
-			ExecutionState streamerStatus = rspEventStreamer.init();
-			ExecutionState engineStatus = rspEngine.init();
-			ExecutionState collectorStatus = resultCollector.init();
+			ExecutionState streamerStatus = streamer.init();
+			ExecutionState engineStatus = engine.init();
+			ExecutionState collectorStatus = collector.init();
 			if (ExecutionState.READY.equals(streamerStatus) && ExecutionState.READY.equals(collectorStatus)
 					&& ExecutionState.READY.equals(engineStatus)) {
 				status = ExecutionState.READY;
@@ -83,9 +81,9 @@ public abstract class TestStand implements EventProcessor<Event>, Startable<Exec
 		if (!isOn()) {
 			throw new WrongStatusTransitionException("Can't Switch from Status [" + status + "] to [" + ExecutionState.CLOSED + "]");
 		} else {
-			ExecutionState rspEventStreamerStatus = rspEventStreamer.close();
-			ExecutionState engineStatus = rspEngine.close();
-			ExecutionState collectorStatus = resultCollector.close();
+			ExecutionState rspEventStreamerStatus = streamer.close();
+			ExecutionState engineStatus = engine.close();
+			ExecutionState collectorStatus = collector.close();
 
 			if (ExecutionState.CLOSED.equals(rspEventStreamerStatus) && ExecutionState.CLOSED.equals(collectorStatus)
 					&& ExecutionState.CLOSED.equals(engineStatus)) {

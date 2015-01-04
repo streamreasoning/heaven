@@ -1,6 +1,6 @@
 package it.polimi.processing.events.profiler.abstracts;
 
-import it.polimi.processing.enums.EventBuilderMode;
+import it.polimi.processing.enums.FlowRateProfile;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
 
@@ -17,14 +17,14 @@ import lombok.extern.log4j.Log4j;
 public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<RSPTripleSet> {
 
 	protected RSPTripleSet e;
-	protected EventBuilderMode mode;
+	protected FlowRateProfile mode;
 	protected int initSize, roundSize, eventNumber;
 	protected int x, y;
 	protected boolean sizeReached;
 	protected int experimentNumber;
 	private String id;
 
-	public TripleSetFlowRateProfiler(EventBuilderMode mode, int x, int y, int initSize, int experimentNumber) {
+	public TripleSetFlowRateProfiler(FlowRateProfile mode, int x, int y, int initSize, int experimentNumber) {
 		this.x = x;
 		this.y = y;
 		this.initSize = roundSize = initSize;

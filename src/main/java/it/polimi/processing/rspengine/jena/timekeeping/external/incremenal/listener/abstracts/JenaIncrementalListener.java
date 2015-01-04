@@ -3,7 +3,7 @@ package it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.list
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.events.results.Result;
+import it.polimi.processing.events.results.RSPTripleSetResult;
 import it.polimi.processing.rspengine.rspevents.jena.JenaEsperEvent;
 import it.polimi.services.system.ExecutionEnvirorment;
 
@@ -86,9 +86,9 @@ public abstract class JenaIncrementalListener implements UpdateListener {
 		if (next != null) {
 			log.debug("Send Event to the StoreCollector");
 			eventNumber++;
-			next.process(new Result("", statements, eventNumber, 0, outputTimestamp, false));
+			next.process(new RSPTripleSetResult("", statements, eventNumber, 0, outputTimestamp, false));
 			if (ExecutionEnvirorment.aboxLogEnabled) {
-				next.process(new Result("", ABoxTriples, eventNumber, 0, outputTimestamp, true));
+				next.process(new RSPTripleSetResult("", ABoxTriples, eventNumber, 0, outputTimestamp, true));
 			}
 		}
 

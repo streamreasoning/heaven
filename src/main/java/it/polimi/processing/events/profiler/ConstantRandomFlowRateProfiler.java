@@ -1,6 +1,6 @@
 package it.polimi.processing.events.profiler;
 
-import it.polimi.processing.enums.EventBuilderMode;
+import it.polimi.processing.enums.FlowRateProfile;
 import it.polimi.processing.events.profiler.abstracts.TripleSetFlowRateProfiler;
 
 import java.util.Random;
@@ -16,7 +16,7 @@ public class ConstantRandomFlowRateProfiler extends TripleSetFlowRateProfiler {
 	private int counter;
 
 	public ConstantRandomFlowRateProfiler(long xSeed, long ySeed, int xMax, int yMax, int initSize, int experiment) {
-		super(EventBuilderMode.RANDOM, xMax, yMax, initSize, experiment);
+		super(FlowRateProfile.RANDOM, xMax, yMax, initSize, experiment);
 		this.roundSize = initSize;
 		this.roundX = xMax;
 		this.counter = xMax - 1;
@@ -25,7 +25,7 @@ public class ConstantRandomFlowRateProfiler extends TripleSetFlowRateProfiler {
 	}
 
 	public ConstantRandomFlowRateProfiler(int xMax, int yMax, int initSize, int experiment) {
-		super(EventBuilderMode.RANDOM, xMax, yMax, initSize, experiment);
+		super(FlowRateProfile.RANDOM, xMax, yMax, initSize, experiment);
 		this.roundSize = initSize;
 		this.roundX = xMax;
 		this.counter = xMax - 1;

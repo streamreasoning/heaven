@@ -1,6 +1,6 @@
 package it.polimi.processing.events.profiler;
 
-import it.polimi.processing.enums.EventBuilderMode;
+import it.polimi.processing.enums.FlowRateProfile;
 import it.polimi.processing.events.profiler.abstracts.TripleSetFlowRateProfiler;
 
 public class ExpEventFlowRateProfiler extends TripleSetFlowRateProfiler {
@@ -8,7 +8,7 @@ public class ExpEventFlowRateProfiler extends TripleSetFlowRateProfiler {
 	private int power = 0;
 
 	public ExpEventFlowRateProfiler(int base, int initSize, int experiment) {
-		super(EventBuilderMode.EXP, base, 1, initSize, experiment);
+		super(FlowRateProfile.EXP, base, 1, initSize, experiment);
 		eventNumber = initSize;
 	}
 

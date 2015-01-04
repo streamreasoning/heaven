@@ -1,6 +1,6 @@
 package it.polimi.preprocessor.generator;
 
-import it.polimi.processing.enums.EventBuilderMode;
+import it.polimi.processing.enums.FlowRateProfile;
 import it.polimi.processing.rspengine.jena.enums.JenaEventType;
 import it.polimi.processing.rspengine.jena.enums.Reasoner;
 
@@ -17,7 +17,7 @@ import java.util.Properties;
 public class ReasonerBasedExperimentGenerator {
 
 	private static Properties sourceProp;
-	private static final EventBuilderMode mode = EventBuilderMode.STEP;
+	private static final FlowRateProfile mode = FlowRateProfile.STEP;
 	private static final String x_size = "500";
 	private static final String y_size = "10";
 
@@ -88,7 +88,7 @@ public class ReasonerBasedExperimentGenerator {
 		}
 	}
 
-	private static void eventsProperties(EventBuilderMode mode, int init_size, int rsp_events_in_winodow) {
+	private static void eventsProperties(FlowRateProfile mode, int init_size, int rsp_events_in_winodow) {
 
 		prop.setProperty("max_event_stream", "5000");
 		prop.setProperty("rsp_events_in_window", rsp_events_in_winodow + "");

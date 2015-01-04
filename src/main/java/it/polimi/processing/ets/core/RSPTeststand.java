@@ -1,11 +1,11 @@
 package it.polimi.processing.ets.core;
 
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.ets.collector.EventResultCollector;
+import it.polimi.processing.ets.collector.TSResultCollector;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.events.results.Result;
+import it.polimi.processing.events.results.RSPTripleSetResult;
 import it.polimi.processing.events.results.TSResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
@@ -26,27 +26,27 @@ public class RSPTeststand extends TestStand {
 	@Override
 	public boolean process(Event e) {
 		totalEvent++;
-		return (e instanceof Result) ? process((Result) e) : process((RSPTripleSet) e);
+		return (e instanceof RSPTripleSetResult) ? process((RSPTripleSetResult) e) : process((RSPTripleSet) e);
 	}
 
 	public boolean process(RSPTripleSet e) {
-		rspEvent++;
-		String id = "<http://example.org/" + experimentNumber + "/" + eventNumber + ">";
+		this.rspEvent++;
+		this.eventNumber = engine.getEventNumber();
 
 		this.currentResult = new TSResult();
+		this.currentResult.setId("<http://example.org/" + experimentNumber + "/" + eventNumber + ">");
+		this.currentResult.setEventNumber(eventNumber);
 		this.currentResult.setMemoryB(Memory.getMemoryUsage());
 		this.currentResult.setInputTimestamp(System.currentTimeMillis());
-		this.currentResult.setId(id);
-		this.currentResult.setEventNumber(eventNumber);
 
-		boolean process = rspEngine.process(e);
-		rspEngine.timeProgress();
+		boolean process = engine.process(e);
+		engine.timeProgress();
 		return process;
 	}
 
-	public boolean process(Result engineResult) {
+	public boolean process(RSPTripleSetResult engineResult) {
 		double memoryA = Memory.getMemoryUsage();
-		this.where = "exp" + experimentNumber + "/" + rspEngine.getName() + "/";
+		this.where = "exp" + experimentNumber + "/" + engine.getName() + "/";
 
 		if (engineResult.isAbox()) {
 			this.where += windowFileName;
@@ -66,21 +66,26 @@ public class RSPTeststand extends TestStand {
 
 	}
 
-	private boolean processAbox(Result engineResult) {
-		engineResult.setId("<http://example.org/" + experimentNumber + "/" + (rspEngine.getEventNumber() - 1) + ">");
-		resultCollector.process(engineResult, this.where);
-		return true;
+	private boolean processAbox(RSPTripleSetResult engineResult) {
+
+		this.aboxResult = new TSResult();
+		this.aboxResult.setId("<http://example.org/" + experimentNumber + "/" + (engine.getEventNumber() - 1) + ">");
+		this.aboxResult.setEventNumber(engineResult.getEventNumber());
+		this.aboxResult.setInputTimestamp(engineResult.getInputTimestamp());
+		this.aboxResult.setResult(engineResult);
+
+		return collector.process(aboxResult, this.where);
 	}
 
 	@Override
 	public boolean processDone() {
-		boolean ret = resultCollector.process(currentResult, this.where);
+		boolean ret = collector.process(currentResult, this.where);
 		this.tsResultEvents += ret ? 1 : 0;
 		return ret;
 	}
 
 	@Override
-	public void build(EventResultCollector resultCollector, RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
+	public void build(TSResultCollector resultCollector, RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
 		super.build(resultCollector, rspEngine, rspEventStreamer);
 	}
 
@@ -112,25 +117,25 @@ public class RSPTeststand extends TestStand {
 
 			log.debug("Status [" + status + "] Experiment Created");
 
-			ExecutionState engineStatus = rspEngine.startProcessing();
+			ExecutionState engineStatus = engine.startProcessing();
 
 			log.debug("Status [" + status + "] Processing is started");
 
 			if (ExecutionState.READY.equals(engineStatus)) {
-				rspEventStreamer.process(e);
+				streamer.process(e);
 			} else {
 				String msg = "Can't start streaming on status [" + status + "]";
 				status = ExecutionState.ERROR;
 				throw new WrongStatusTransitionException(msg);
 			}
 
-			engineStatus = rspEngine.stopProcessing();
+			engineStatus = engine.stopProcessing();
 
 			log.debug("Status [" + status + "] Processing is ended");
 
 			currentExperiment.setTimestampEnd(System.currentTimeMillis());
 
-			resultCollector.process(currentExperiment);
+			collector.process(currentExperiment);
 
 			if (ExecutionState.CLOSED.equals(engineStatus)) {
 				status = ExecutionState.READY;

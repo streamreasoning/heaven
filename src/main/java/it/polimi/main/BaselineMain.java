@@ -1,9 +1,9 @@
 package it.polimi.main;
 
-import it.polimi.processing.enums.EventBuilderMode;
+import it.polimi.processing.enums.FlowRateProfile;
 import it.polimi.processing.enums.ExperimentType;
 import it.polimi.processing.enums.Reasoning;
-import it.polimi.processing.ets.collector.EventResultCollector;
+import it.polimi.processing.ets.collector.TSResultCollector;
 import it.polimi.processing.ets.core.RSPTeststand;
 import it.polimi.processing.ets.core.TestStand;
 import it.polimi.processing.ets.core.strategic.timecontrol.NaiveStrategy;
@@ -54,7 +54,7 @@ public class BaselineMain {
 	private static String file, COMMENT;
 
 	private static TestStand testStand;
-	private static EventResultCollector streamingEventResultCollector;
+	private static TSResultCollector streamingEventResultCollector;
 	private static UpdateListener listener;
 
 	private static final DateFormat DT = new SimpleDateFormat("yyyy_MM_dd");
@@ -67,7 +67,7 @@ public class BaselineMain {
 	private static RSPTripleSetStreamer streamer;
 	private static Reasoner CURRENT_REASONER;
 	private static Reasoning REASONING;
-	private static EventBuilderMode STREAMING_MODE;
+	private static FlowRateProfile STREAMING_MODE;
 
 	private static String engineName;
 	private static String eventBuilderCodeName;
@@ -105,7 +105,7 @@ public class BaselineMain {
 		}
 
 		EVENTS = GetPropertyValues.getIntegerProperty("max_event_stream");
-		STREAMING_MODE = GetPropertyValues.getEnumProperty(EventBuilderMode.class, "streaming_mode");
+		STREAMING_MODE = GetPropertyValues.getEnumProperty(FlowRateProfile.class, "streaming_mode");
 		INIT_SIZE = GetPropertyValues.getIntegerProperty("init_size");
 		X = GetPropertyValues.getIntegerProperty("x_size");
 		Y = GetPropertyValues.getIntegerProperty("y_size");
@@ -243,7 +243,7 @@ public class BaselineMain {
 
 	protected static void collectorSelection() {
 
-		streamingEventResultCollector = new EventResultCollector(engineName + "/");
+		streamingEventResultCollector = new TSResultCollector(engineName + "/");
 		String exp = "";
 		if (ExecutionEnvirorment.finalresultTrigLogEnabled)
 			exp += "Result C&S ";

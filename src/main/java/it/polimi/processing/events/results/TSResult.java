@@ -16,7 +16,7 @@ import lombok.extern.log4j.Log4j;
 public class TSResult implements EventResult {
 
 	private String id;
-	private Result result;
+	private RSPTripleSetResult result;
 	private int eventNumber;
 	private long inputTimestamp;
 	private double memoryB;
