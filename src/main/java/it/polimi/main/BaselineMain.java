@@ -1,10 +1,9 @@
 package it.polimi.main;
 
-import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.EventBuilderMode;
 import it.polimi.processing.enums.ExperimentType;
 import it.polimi.processing.enums.Reasoning;
-import it.polimi.processing.ets.collector.CollectorEventResult;
+import it.polimi.processing.ets.collector.EventResultCollector;
 import it.polimi.processing.ets.core.RSPTeststand;
 import it.polimi.processing.ets.core.TestStand;
 import it.polimi.processing.ets.core.strategic.timecontrol.NaiveStrategy;
@@ -16,7 +15,6 @@ import it.polimi.processing.events.profiler.ConstantFlowRateProfiler;
 import it.polimi.processing.events.profiler.RandomFlowRateProfiler;
 import it.polimi.processing.events.profiler.StepFlowRateProfiler;
 import it.polimi.processing.events.profiler.abstracts.FlowRateProfiler;
-import it.polimi.processing.events.results.EventResult;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.processing.rspengine.jena.JenaRSPEngineFactory;
 import it.polimi.processing.rspengine.jena.JenaReasoningListenerFactory;
@@ -56,7 +54,7 @@ public class BaselineMain {
 	private static String file, COMMENT;
 
 	private static TestStand testStand;
-	private static ResultCollector<EventResult> streamingEventResultCollector;
+	private static EventResultCollector streamingEventResultCollector;
 	private static UpdateListener listener;
 
 	private static final DateFormat DT = new SimpleDateFormat("yyyy_MM_dd");
@@ -245,7 +243,7 @@ public class BaselineMain {
 
 	protected static void collectorSelection() {
 
-		streamingEventResultCollector = new CollectorEventResult(engineName + "/");
+		streamingEventResultCollector = new EventResultCollector(engineName + "/");
 		String exp = "";
 		if (ExecutionEnvirorment.finalresultTrigLogEnabled)
 			exp += "Result C&S ";

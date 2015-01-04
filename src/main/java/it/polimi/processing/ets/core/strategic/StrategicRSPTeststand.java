@@ -1,13 +1,12 @@
 package it.polimi.processing.ets.core.strategic;
 
-import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionState;
+import it.polimi.processing.ets.collector.EventResultCollector;
 import it.polimi.processing.ets.core.TestStand;
 import it.polimi.processing.ets.core.strategic.timecontrol.TimeStrategy;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.events.results.EventResult;
 import it.polimi.processing.events.results.Result;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
@@ -77,7 +76,7 @@ public class StrategicRSPTeststand extends TestStand {
 	}
 
 	@Override
-	public void build(ResultCollector<EventResult> resultCollector, RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
+	public void build(EventResultCollector resultCollector, RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
 		this.timeStrategy.setRSPEngine(rspEngine);
 		super.build(resultCollector, rspEngine, rspEventStreamer);
 	}

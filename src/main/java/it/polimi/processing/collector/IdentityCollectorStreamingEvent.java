@@ -12,7 +12,7 @@ import lombok.extern.log4j.Log4j;
 /**
  * Identity Class, Useful for testing
  */
-public final class IdentityCollectorStreamingEvent implements ResultCollector<EventResult>, Startable<ExecutionState> {
+public final class IdentityCollectorStreamingEvent implements ResultCollector, Startable<ExecutionState> {
 
 	private ExecutionState status;
 

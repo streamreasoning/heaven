@@ -3,9 +3,10 @@ package it.polimi.processing.collector;
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.Startable;
 import it.polimi.processing.enums.ExecutionState;
+import it.polimi.processing.events.results.EventResult;
 
-public interface ResultCollector<Event> extends EventProcessor<Event>, Startable<ExecutionState> {
+public interface ResultCollector extends EventProcessor<EventResult>, Startable<ExecutionState> {
 
-	public boolean process(Event r, String where);
+	public boolean process(EventResult r, String where);
 
 }

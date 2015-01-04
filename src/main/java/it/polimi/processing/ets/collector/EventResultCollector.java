@@ -1,6 +1,5 @@
 package it.polimi.processing.ets.collector;
 
-import it.polimi.processing.Startable;
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.results.EventResult;
@@ -9,14 +8,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CollectorEventResult implements ResultCollector<EventResult>, Startable<ExecutionState> {
+public class EventResultCollector implements ResultCollector {
 
 	private ExecutionState status;
 	private String where;
 
 	private EventResult currentResult;
 
-	public CollectorEventResult(String where) {
+	public EventResultCollector(String where) {
 		this.status = ExecutionState.READY;
 		this.where = where;
 	}

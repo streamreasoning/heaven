@@ -2,11 +2,10 @@ package it.polimi.processing.ets.core;
 
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.Startable;
-import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionState;
+import it.polimi.processing.ets.collector.EventResultCollector;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.interfaces.Event;
-import it.polimi.processing.events.results.EventResult;
 import it.polimi.processing.events.results.TSResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
@@ -14,9 +13,9 @@ import it.polimi.processing.streamer.RSPTripleSetStreamer;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-public abstract class TestStand extends Stand implements EventProcessor<Event>, Startable<ExecutionState> {
+public abstract class TestStand implements EventProcessor<Event>, Startable<ExecutionState> {
 
-	protected ResultCollector<EventResult> resultCollector;
+	protected EventResultCollector resultCollector;
 
 	protected RSPEngine rspEngine;
 	protected RSPTripleSetStreamer rspEventStreamer;
@@ -31,7 +30,27 @@ public abstract class TestStand extends Stand implements EventProcessor<Event>, 
 	protected int rspEvent;
 	protected int totalEvent;
 
-	public void build(ResultCollector<EventResult> resultCollector, RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
+	protected ExecutionState status = ExecutionState.NOT_READY;
+
+	protected boolean isStartable() {
+		return ExecutionState.NOT_READY.equals(status) || ExecutionState.CLOSED.equals(status);
+	}
+
+	protected boolean isOn() {
+		return ExecutionState.READY.equals(status);
+	}
+
+	protected boolean isReady() {
+		return ExecutionState.READY.equals(status);
+	}
+
+	public ExecutionState stop() {
+		status = ExecutionState.CLOSED;
+		return status;
+
+	}
+
+	public void build(EventResultCollector resultCollector, RSPEngine rspEngine, RSPTripleSetStreamer rspEventStreamer) {
 		this.resultCollector = resultCollector;
 		this.rspEngine = rspEngine;
 		this.rspEventStreamer = rspEventStreamer;
