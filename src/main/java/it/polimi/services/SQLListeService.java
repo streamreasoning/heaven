@@ -23,6 +23,14 @@ public class SQLListeService {
 			+ "	TS_INIT      TEXT                 NOT NULL, " + "	TS_END       TEXT                 NOT NULL, "
 			+ " ENGINE       TEXT   			  NOT NULL, " + " INPUT_FILE   TEXT   			  NOT NULL, " + " RESULT_FILE  TEXT                 NOT NULL, "
 			+ " LOG_FILE     TEXT                 NOT NULL, " + " PRIMARY      KEY( EXP_ID,TS_INIT )        ) ";
+	public static final String BASELINE_EXPERIMENT_TABLE = "CREATE TABLE IF NOT EXISTS BASELINE_EXPERIMENTS " + "("
+			+ " EXP_ID         TEXT                 NOT NULL, " + " EXP_NUM        TEXT                 NOT NULL, "
+			+ " EXP_DATE       TEXT                 NOT NULL, " + "	TS_INIT        TEXT                 NOT NULL, "
+			+ "	TS_END         TEXT                 NOT NULL, " + " ENGINE         TEXT   			  NOT NULL, "
+			+ " EXP_TYPE       TEXT                 NOT NULL, " + " TIMECONTROL    TEXT                 NOT NULL, "
+			+ " INPUT_FILE     TEXT   			  NOT NULL, " + " OUTPUT_FILE  TEXT                 NOT NULL, "
+			+ " PRIMARY      KEY( EXP_ID,EXP_NUM,TS_INIT )        ) ";
+	public static final String BASELINE_INSERT = "INSERT INTO BASELINE_EXPERIMENTS ( EXP_ID, EXP_NUM, EXP_DATE, TS_INIT, TS_END, ENGINE, EXP_TYPE, TIMECONTROL,INPUT_FILE,OUTPUT_FILE) ";
 	public static final String EXPERIMENT_INSERT = "INSERT INTO EXPERIMENT ( EXP_ID, TS_INIT, TS_END, ENGINE, INPUT_FILE,RESULT_FILE,LOG_FILE ) ";
 	public static final String COMPARATION_TABLE = "CREATE TABLE IF NOT EXISTS COMPARATION " + "(" + " EXP_ID       TEXT                 NOT NULL, "
 			+ "	EVENT_ID     TEXT                 NOT NULL, " + "	SOUND        INTEGER              NOT NULL, "
@@ -39,8 +47,10 @@ public class SQLListeService {
 			stmt.executeUpdate(EXPERIMENT_TABLE);
 			log.info("Experiment Table successfully created ");
 			stmt.executeUpdate(COMPARATION_TABLE);
-			stmt.close();
 			log.info("Comparison Table successfully created ");
+			stmt.executeUpdate(BASELINE_EXPERIMENT_TABLE);
+			log.info("Baseline Table successfully created ");
+			stmt.close();
 		} catch (ClassNotFoundException e) {
 			log.error(e.getMessage());
 		} catch (SQLException e) {
@@ -53,7 +63,7 @@ public class SQLListeService {
 			stmt = c.createStatement();
 			log.debug(sql);
 			if (sql != null && stmt != null && c != null && !c.isClosed()) {
-				stmt.executeUpdate(EXPERIMENT_INSERT + sql);
+				stmt.executeUpdate(sql);
 				stmt.close();
 				return true;
 			}

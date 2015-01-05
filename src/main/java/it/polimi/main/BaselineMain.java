@@ -1,13 +1,11 @@
 package it.polimi.main;
 
-import it.polimi.processing.enums.FlowRateProfile;
 import it.polimi.processing.enums.ExperimentType;
+import it.polimi.processing.enums.FlowRateProfile;
 import it.polimi.processing.enums.Reasoning;
 import it.polimi.processing.ets.collector.TSResultCollector;
 import it.polimi.processing.ets.core.RSPTeststand;
 import it.polimi.processing.ets.core.TestStand;
-import it.polimi.processing.ets.core.strategic.timecontrol.NaiveStrategy;
-import it.polimi.processing.ets.core.strategic.timecontrol.TimeStrategy;
 import it.polimi.processing.ets.streamer.NTStreamer;
 import it.polimi.processing.ets.streamer.TSStreamer;
 import it.polimi.processing.events.Experiment;
@@ -20,7 +18,7 @@ import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.processing.rspengine.jena.JenaRSPEngineFactory;
 import it.polimi.processing.rspengine.jena.JenaReasoningListenerFactory;
 import it.polimi.processing.rspengine.jena.enums.JenaEventType;
-import it.polimi.processing.rspengine.jena.enums.Reasoner;
+import it.polimi.processing.rspengine.jena.enums.OntoLanguage;
 import it.polimi.services.FileService;
 import it.polimi.services.system.ExecutionEnvirorment;
 import it.polimi.services.system.GetPropertyValues;
@@ -65,17 +63,16 @@ public class BaselineMain {
 
 	private static String whereOutput, whereWindow, outputFileName, windowFileName, experimentDescription;
 	private static TSStreamer streamer;
-	private static Reasoner CURRENT_REASONER;
-	private static Reasoning REASONING;
-	private static FlowRateProfile STREAMING_MODE;
+	private static OntoLanguage ONTO_LANGUAGE;
+	private static Reasoning REASONING_MODE;
+	private static FlowRateProfile FLOW_RATE_PROFILE;
 
-	private static String engineName;
 	private static String eventBuilderCodeName;
 	private static int X;
 	private static int Y;
 	private static int INIT_SIZE;
-	private static int EVENTS;
-	private static String RSPENGINE;
+	private static int MAX_EVENT_STREAM;
+	private static String CURRENT_RSPENGINE;
 	public static String INPUT_PROPERTIES;
 	private static String wINDOWSIZE;
 
@@ -94,56 +91,50 @@ public class BaselineMain {
 		EXECUTION_NUMBER = GetPropertyValues.getIntegerProperty("execution_number");
 		COMMENT = GetPropertyValues.contains("comment") ? GetPropertyValues.getProperty("comment") : "";
 
-		RSPENGINE = GetPropertyValues.getProperty("current_engine");
+		CURRENT_RSPENGINE = GetPropertyValues.getProperty("current_engine");
 
-		if (RSPENGINE.equals("JENA")) {
-			CURRENT_REASONER = GetPropertyValues.getEnumProperty(Reasoner.class, "jena_current_reasoner");
-			engineName = CURRENT_REASONER.name().toLowerCase();
+		if (CURRENT_RSPENGINE.equals("JENA")) {
+			ONTO_LANGUAGE = GetPropertyValues.getEnumProperty(OntoLanguage.class, "onto_lang");
 			CEP_EVENT_TYPE = GetPropertyValues.getEnumProperty(JenaEventType.class, "cep_event_type");
-			REASONING = Reasoning.NAIVE;
-			// GetPropertyValues.getEnumProperty(Reasoning.class, "reasoning_mode");
+			REASONING_MODE = GetPropertyValues.getEnumProperty(Reasoning.class, "reasoning_mode");
 		}
 
-		EVENTS = GetPropertyValues.getIntegerProperty("max_event_stream");
-		STREAMING_MODE = GetPropertyValues.getEnumProperty(FlowRateProfile.class, "streaming_mode");
+		MAX_EVENT_STREAM = GetPropertyValues.getIntegerProperty("max_event_stream");
+		FLOW_RATE_PROFILE = GetPropertyValues.getEnumProperty(FlowRateProfile.class, "flow_rate_profile");
 		INIT_SIZE = GetPropertyValues.getIntegerProperty("init_size");
 		X = GetPropertyValues.getIntegerProperty("x_size");
 		Y = GetPropertyValues.getIntegerProperty("y_size");
 
-		log.info("Experiment [" + EXPERIMENT_NUMBER + "] on [" + file + "] of [" + EXPERIMENT_DATE + "] Number of Events [" + EVENTS + "]");
-
-		// // TODO Internal Timing
-		// TimeStrategy strategy =
-		// (GetPropertyValues.getBooleanProperty("external_time_control_on")) ?
-		// timeStrategySelection() : null;
-		// testStand = new StrategicRSPTeststand(strategy);
+		log.info("Experiment [" + EXPERIMENT_NUMBER + "] on [" + file + "] of [" + EXPERIMENT_DATE + "] Number of Events [" + MAX_EVENT_STREAM + "]");
 
 		testStand = new RSPTeststand();
 
 		eventBuilderCodeName = streamerSelection();
 
-		experimentDescription = "EXPERIMENT_ON_" + file + "_WITH_ENGINE_" + engineName + "EVENT_" + CEP_EVENT_TYPE;
-
-		FileService.createOutputFolder(FileUtils.daypath + "/exp" + EXPERIMENT_NUMBER + "/" + engineName);
+		FileService.createOutputFolder(FileUtils.daypath + "/exp" + EXPERIMENT_NUMBER + "/" + ONTO_LANGUAGE.name());
 
 		wINDOWSIZE = GetPropertyValues.getProperty("rsp_events_in_window");
 
 		String generalName = "EN" + EXPERIMENT_NUMBER + "_" + "EXE" + EXECUTION_NUMBER + "_" + COMMENT + "_" + DT.format(EXPERIMENT_DATE) + "_"
-				+ file.split("\\.")[0] + "_" + CURRENT_REASONER + "_" + CEP_EVENT_TYPE + "_INIT" + INIT_SIZE + eventBuilderCodeName + "_EW_"
+				+ file.split("\\.")[0] + "_" + ONTO_LANGUAGE + "_" + REASONING_MODE + "_" + CEP_EVENT_TYPE + eventBuilderCodeName + "_EW_"
 				+ wINDOWSIZE;
 
 		EXPERIMENT_TYPE = GetPropertyValues.getEnumProperty(ExperimentType.class, "experiment_type");
 		outputFileName = EXPERIMENT_TYPE.ordinal() + "Result_" + generalName;
 		windowFileName = EXPERIMENT_TYPE.ordinal() + "Window_" + generalName;
 
-		whereOutput = "exp" + EXPERIMENT_NUMBER + "/" + engineName + "/" + outputFileName;
-		whereWindow = "exp" + EXPERIMENT_NUMBER + "/" + engineName + "/" + windowFileName;
+		whereOutput = "exp" + EXPERIMENT_NUMBER + "/" + ONTO_LANGUAGE.name() + "/" + outputFileName;
+
+		if (GetPropertyValues.getBooleanProperty("save_abox_log")) {
+			whereWindow = "exp" + EXPERIMENT_NUMBER + "/" + ONTO_LANGUAGE.name() + "/" + windowFileName;
+			log.info("Window file name will be: ["
+					+ whereWindow.replace("0Result", "RESLOG").replace("0Window", "WINLOG").replace("1Result", "LATLOG")
+							.replace("1Window", "WINLATLOG").replace("2Result", "MEMLOG").replace("2Window", "WINMEMLOG") + "]");
+
+		}
 
 		log.info("Output file name will be: ["
 				+ whereOutput.replace("0Result", "RESLOG").replace("0Window", "WINLOG").replace("1Result", "LATLOG").replace("1Window", "WINLATLOG")
-						.replace("2Result", "MEMLOG").replace("2Window", "WINMEMLOG") + "]");
-		log.info("Window file name will be: ["
-				+ whereWindow.replace("0Result", "RESLOG").replace("0Window", "WINLOG").replace("1Result", "LATLOG").replace("1Window", "WINLATLOG")
 						.replace("2Result", "MEMLOG").replace("2Window", "WINMEMLOG") + "]");
 
 		reasonerSelection();
@@ -154,17 +145,13 @@ public class BaselineMain {
 
 	}
 
-	private static TimeStrategy timeStrategySelection() {
-		return new NaiveStrategy();
-	}
-
 	protected static String streamerSelection() {
 		FlowRateProfiler<RSPTripleSet> eb = null;
 
-		String code = "_EB";
-		String message = "Event Builder Selection: [" + STREAMING_MODE + "] [" + INIT_SIZE + "] ";
+		String code = "_FRP_";
+		String message = "Event Builder Selection: [" + FLOW_RATE_PROFILE + "] [" + INIT_SIZE + "] ";
 
-		switch (STREAMING_MODE) {
+		switch (FLOW_RATE_PROFILE) {
 			case CONSTANT:
 				code += "K" + INIT_SIZE;
 				eb = new ConstantFlowRateProfiler(INIT_SIZE, EXPERIMENT_NUMBER);
@@ -180,20 +167,20 @@ public class BaselineMain {
 				code += "S" + INIT_SIZE + "H" + X + "W" + Y;
 				break;
 			default:
-				message = "Not valid case [" + STREAMING_MODE + "]";
+				message = "Not valid case [" + FLOW_RATE_PROFILE + "]";
 		}
 
 		log.info(message);
 		if (eb != null) {
-			streamer = new NTStreamer(testStand, eb, EVENTS);
+			streamer = new NTStreamer(testStand, eb, MAX_EVENT_STREAM);
 			return code;
 		}
-		throw new IllegalArgumentException("Not valid case [" + STREAMING_MODE + "]");
+		throw new IllegalArgumentException("Not valid case [" + FLOW_RATE_PROFILE + "]");
 	}
 
 	protected static void jenaEngineSelection() {
-		String message = "Engine Selection: [" + CEP_EVENT_TYPE + "] [" + engineName.toUpperCase() + "] ";
-		boolean incremental = Reasoning.INCREMENTAL.equals(REASONING);
+		String message = "Engine Selection: [" + CEP_EVENT_TYPE + "] [" + ONTO_LANGUAGE.name().toUpperCase() + "] ";
+		boolean incremental = Reasoning.INCREMENTAL.equals(REASONING_MODE);
 		switch (CEP_EVENT_TYPE) {
 			case TEVENT:
 				engine = incremental ? JenaRSPEngineFactory.getIncrementalSerializedEngine(testStand, listener) : JenaRSPEngineFactory
@@ -204,8 +191,8 @@ public class BaselineMain {
 						testStand, listener);
 				return;
 			case GRAPH:
-				engine = incremental ? JenaRSPEngineFactory.getJenaEngineGraph(testStand, listener) : JenaRSPEngineFactory.getJenaEngineGraph(
-						testStand, listener);
+				engine = incremental ? JenaRSPEngineFactory.getIncrementalJenaEngineGraph(testStand, listener) : JenaRSPEngineFactory
+						.getJenaEngineGraph(testStand, listener);
 				return;
 			default:
 				message = "Not valid case [" + CEP_EVENT_TYPE + "]";
@@ -215,8 +202,8 @@ public class BaselineMain {
 	}
 
 	protected static void reasonerSelection() {
-		log.info("Reasoner Selection: [" + CURRENT_REASONER + "]");
-		switch (CURRENT_REASONER) {
+		log.info("Reasoner Selection: [" + ONTO_LANGUAGE + "]");
+		switch (ONTO_LANGUAGE) {
 			case SMPL:
 				listener = JenaReasoningListenerFactory.getSMPLListener(testStand);
 				break;
@@ -236,14 +223,14 @@ public class BaselineMain {
 				listener = JenaReasoningListenerFactory.getIncrementalFULLListener(testStand);
 				break;
 			default:
-				log.error("Not valid case [" + CURRENT_REASONER + "]");
-				throw new IllegalArgumentException("Not valid case [" + CURRENT_REASONER + "]");
+				log.error("Not valid case [" + ONTO_LANGUAGE + "]");
+				throw new IllegalArgumentException("Not valid case [" + ONTO_LANGUAGE + "]");
 		}
 	}
 
 	protected static void collectorSelection() {
 
-		streamingEventResultCollector = new TSResultCollector(engineName + "/");
+		streamingEventResultCollector = new TSResultCollector(ONTO_LANGUAGE.name() + "/");
 		String exp = "";
 		if (ExecutionEnvirorment.finalresultTrigLogEnabled)
 			exp += "Result C&S ";
@@ -260,8 +247,11 @@ public class BaselineMain {
 		testStand.build(streamingEventResultCollector, engine, streamer);
 		testStand.init();
 		try {
-			Experiment experiment = new Experiment(experimentNumber, experimentDescription, RSPENGINE, FileUtils.INPUT_FILE_PATH + f, outputFileName,
-					windowFileName);
+
+			Experiment experiment = new Experiment(experimentNumber, FLOW_RATE_PROFILE.name() + eventBuilderCodeName, CURRENT_RSPENGINE + "_"
+					+ REASONING_MODE.name() + "_" + ONTO_LANGUAGE.name(), FileUtils.INPUT_FILE_PATH + f, outputFileName, windowFileName,
+					d.toString(), EXPERIMENT_TYPE.name(), "EXTERNAL", "");
+
 			experimentNumber += testStand.run(experiment, comment);
 		} catch (Exception e) {
 			log.error(e.getMessage());
