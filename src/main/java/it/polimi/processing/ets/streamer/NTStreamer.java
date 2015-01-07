@@ -74,7 +74,8 @@ public final class NTStreamer extends TSStreamer {
 
 					streamedEvents += next.process(lastEvent = profiler.getEvent()) ? 1 : 0;
 
-					log.debug("Send Event [" + streamedEvents + "] triples [" + triples + "] of size [" + lastEvent.size() + "]");
+					log.info("Send Event [" + streamedEvents + "] of size [" + lastEvent.size() + "]");
+					log.debug("Streamed [" + triples + "] triples");
 
 					if (streamedEvents % 500 == 0) {
 						log.info("Process Complete [" + (double) streamedEvents * 100 / eventLimit + "%]");
