@@ -39,7 +39,7 @@ public class JenaEngineGraphInc extends JenaEngine {
 	Graph abox;
 
 	public JenaEngineGraphInc(String name, EventProcessor<Event> collector, UpdateListener listener) {
-		super(name, collector, listener, WindowUtils.JENA_INPUT_QUERY_SNAPTSHOT);
+		super(name, collector, listener, WindowUtils.JENA_INPUT_QUERY_INCREMENTAL);
 
 		cepConfig = new Configuration();
 		cepConfig.getEngineDefaults().getThreading().setInternalTimerEnabled(false);

@@ -23,7 +23,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 public class JenaEngineStmtInc extends JenaEngine {
 
 	public JenaEngineStmtInc(String name, EventProcessor<Event> collector, UpdateListener listener) {
-		super(name, collector, listener, WindowUtils.JENA_INPUT_QUERY_SNAPTSHOT);
+		super(name, collector, listener, WindowUtils.JENA_INPUT_QUERY_INCREMENTAL);
 
 		cepConfig = new Configuration();
 		cepConfig.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
