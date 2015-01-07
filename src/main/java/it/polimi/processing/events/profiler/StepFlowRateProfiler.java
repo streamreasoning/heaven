@@ -7,7 +7,6 @@ public class StepFlowRateProfiler extends TripleSetFlowRateProfiler {
 
 	public StepFlowRateProfiler(int width, int height, int initSize, int experiment) {
 		super(FlowRateProfile.STEP, width, height, initSize, experiment);
-		eventNumber = initSize;
 	}
 
 	int distance = 0;
