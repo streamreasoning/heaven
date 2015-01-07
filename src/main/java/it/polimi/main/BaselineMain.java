@@ -75,6 +75,7 @@ public class BaselineMain {
 	private static String CURRENT_RSPENGINE;
 	public static String INPUT_PROPERTIES;
 	private static String wINDOWSIZE;
+	private static boolean INCREMENTAL;
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
 
@@ -97,6 +98,7 @@ public class BaselineMain {
 			ONTO_LANGUAGE = GetPropertyValues.getEnumProperty(OntoLanguage.class, "onto_lang");
 			CEP_EVENT_TYPE = GetPropertyValues.getEnumProperty(JenaEventType.class, "cep_event_type");
 			REASONING_MODE = GetPropertyValues.getEnumProperty(Reasoning.class, "reasoning_mode");
+			INCREMENTAL = Reasoning.INCREMENTAL.equals(REASONING_MODE);
 		}
 
 		MAX_EVENT_STREAM = GetPropertyValues.getIntegerProperty("max_event_stream");
@@ -109,7 +111,7 @@ public class BaselineMain {
 
 		testStand = new RSPTeststand();
 
-		eventBuilderCodeName = streamerSelection();
+		eventBuilderCodeName = flowRateProfileSelection();
 
 		FileService.createOutputFolder(FileUtils.daypath + "/exp" + EXPERIMENT_NUMBER + "/" + ONTO_LANGUAGE.name());
 
@@ -145,11 +147,11 @@ public class BaselineMain {
 
 	}
 
-	protected static String streamerSelection() {
+	protected static String flowRateProfileSelection() {
 		FlowRateProfiler<RSPTripleSet> eb = null;
 
 		String code = "_FRP_";
-		String message = "Event Builder Selection: [" + FLOW_RATE_PROFILE + "] [" + INIT_SIZE + "] ";
+		String message = "Flow Rate Profile [" + FLOW_RATE_PROFILE + "] [" + INIT_SIZE + "] ";
 
 		switch (FLOW_RATE_PROFILE) {
 			case CONSTANT:
@@ -157,7 +159,7 @@ public class BaselineMain {
 				eb = new ConstantFlowRateProfiler(INIT_SIZE, EXPERIMENT_NUMBER);
 				break;
 			case STEP:
-				message += " Heigh [" + X + "] Width [" + Y + "] ";
+				message += " Heigh [" + Y + "] Width [" + X + "] ";
 				eb = new StepFlowRateProfiler(X, Y, INIT_SIZE, EXPERIMENT_NUMBER);
 				code += "S" + INIT_SIZE + "H" + X + "W" + Y;
 				break;
@@ -179,19 +181,20 @@ public class BaselineMain {
 	}
 
 	protected static void jenaEngineSelection() {
-		String message = "Engine Selection: [" + CEP_EVENT_TYPE + "] [" + ONTO_LANGUAGE.name().toUpperCase() + "] ";
-		boolean incremental = Reasoning.INCREMENTAL.equals(REASONING_MODE);
+		String message = "Engine Selection: [" + CEP_EVENT_TYPE + "] [" + ONTO_LANGUAGE.name().toUpperCase() + "] ["
+				+ (INCREMENTAL ? "INCREMENTAL" : "NAIVE") + "]";
+		log.info(message);
 		switch (CEP_EVENT_TYPE) {
 			case TEVENT:
-				engine = incremental ? JenaRSPEngineFactory.getIncrementalSerializedEngine(testStand, listener) : JenaRSPEngineFactory
+				engine = INCREMENTAL ? JenaRSPEngineFactory.getIncrementalSerializedEngine(testStand, listener) : JenaRSPEngineFactory
 						.getSerializedEngine(testStand, listener);
 				return;
 			case STMT:
-				engine = incremental ? JenaRSPEngineFactory.getIncrementalStmtEngine(testStand, listener) : JenaRSPEngineFactory.getStmtEngine(
+				engine = INCREMENTAL ? JenaRSPEngineFactory.getIncrementalStmtEngine(testStand, listener) : JenaRSPEngineFactory.getStmtEngine(
 						testStand, listener);
 				return;
 			case GRAPH:
-				engine = incremental ? JenaRSPEngineFactory.getIncrementalJenaEngineGraph(testStand, listener) : JenaRSPEngineFactory
+				engine = INCREMENTAL ? JenaRSPEngineFactory.getIncrementalJenaEngineGraph(testStand, listener) : JenaRSPEngineFactory
 						.getJenaEngineGraph(testStand, listener);
 				return;
 			default:
@@ -205,22 +208,16 @@ public class BaselineMain {
 		log.info("Reasoner Selection: [" + ONTO_LANGUAGE + "]");
 		switch (ONTO_LANGUAGE) {
 			case SMPL:
-				listener = JenaReasoningListenerFactory.getSMPLListener(testStand);
+				listener = INCREMENTAL ? JenaReasoningListenerFactory.getIncrementalSMPLListener(testStand) : JenaReasoningListenerFactory
+						.getSMPLListener(testStand);
 				break;
 			case RHODF:
-				listener = JenaReasoningListenerFactory.getRhoDfListener(testStand);
+				listener = INCREMENTAL ? JenaReasoningListenerFactory.getIncrementalRhoDfListener(testStand) : JenaReasoningListenerFactory
+						.getRhoDfListener(testStand);
 				break;
 			case FULL:
-				listener = JenaReasoningListenerFactory.getFULLListener(testStand);
-				break;
-			case SMPL_INC:
-				listener = JenaReasoningListenerFactory.getIncrementalSMPLListener(testStand);
-				break;
-			case RHODF_INC:
-				listener = JenaReasoningListenerFactory.getIncrementalRhoDfListener(testStand);
-				break;
-			case FULL_INC:
-				listener = JenaReasoningListenerFactory.getIncrementalFULLListener(testStand);
+				listener = INCREMENTAL ? JenaReasoningListenerFactory.getIncrementalFULLListener(testStand) : JenaReasoningListenerFactory
+						.getFULLListener(testStand);
 				break;
 			default:
 				log.error("Not valid case [" + ONTO_LANGUAGE + "]");
