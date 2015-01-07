@@ -23,7 +23,9 @@ public class StepEventBuilderTest {
 		int width = 1;
 		int initSize = 5;
 
-		FlowRateProfiler<RSPTripleSet> eb = new StepFlowRateProfiler(width, height, initSize, 0); // 1 5 10
+		FlowRateProfiler<RSPTripleSet> eb = new StepFlowRateProfiler(width, height, initSize, 0); // 1
+																									// 5
+																									// 10
 
 		assertEquals(false, eb.canSend()); // The first RSPEvent
 
@@ -60,6 +62,88 @@ public class StepEventBuilderTest {
 			event = eb.getEvent();
 			log.info("Event Size [" + event.size() + "]");
 			assertEquals(height * eventNumber, event.size());
+		}
+
+	}
+
+	@Test
+	public void stepEventBuilderTestLong() {
+
+		int height = 5;
+		int width = 5;
+		int size = 5;
+		RSPTripleSet event;
+		FlowRateProfiler<RSPTripleSet> eb = new StepFlowRateProfiler(width, height, size, 0); /*
+																							 * 5
+																							 * 5
+																							 * 5
+																							 * 5
+																							 * 5
+																							 * /
+																							 * /
+																							 * 10
+																							 * 10
+																							 * 10
+																							 * 10
+																							 * 10
+																							 * /
+																							 * /
+																							 * 15
+																							 * 15
+																							 * 15
+																							 * 15
+																							 * 15
+																							 */
+
+		assertEquals(false, eb.canSend()); // The first RSPEvent
+
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < size; j++) {
+				eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication14" + j + i,
+						"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
+						"http://www.Department1.University1.edu/AssociateProfessor24" }));
+
+			}
+
+			assertEquals(true, eb.canSend()); // The first RSPEvent
+
+			event = eb.getEvent();
+			System.out.println(event.size());
+			assertEquals(size, event.size());
+		}
+
+		size += height;
+
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < size; j++) {
+				eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication14" + j + i,
+						"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
+						"http://www.Department1.University1.edu/AssociateProfessor24" }));
+
+			}
+
+			assertEquals(true, eb.canSend()); // The first RSPEvent
+
+			event = eb.getEvent();
+			System.out.println(event.size());
+			assertEquals(size, event.size());
+		}
+
+		size += height;
+
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < size; j++) {
+				eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication14" + j + i,
+						"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
+						"http://www.Department1.University1.edu/AssociateProfessor24" }));
+
+			}
+
+			assertEquals(true, eb.canSend()); // The first RSPEvent
+
+			event = eb.getEvent();
+			System.out.println(event.size());
+			assertEquals(size, event.size());
 		}
 
 	}
