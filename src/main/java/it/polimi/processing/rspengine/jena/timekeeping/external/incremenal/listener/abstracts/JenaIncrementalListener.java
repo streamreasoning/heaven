@@ -49,7 +49,7 @@ public abstract class JenaIncrementalListener implements UpdateListener {
 		log.debug("-- Event in Window [" + abox.size() + "] [" + ABoxStar.size() + "] [" + ABoxTriples.size() + "] --");
 
 		if (oldData != null) {
-			log.info("[" + newData.length + "] Old Events of type [" + newData[0].getUnderlying().getClass().getSimpleName() + "]");
+			log.debug("[" + newData.length + "] Old Events of type [" + newData[0].getUnderlying().getClass().getSimpleName() + "]");
 			for (EventBean e : oldData) {
 				log.debug(e.getUnderlying().toString());
 				JenaEsperEvent underlying = (JenaEsperEvent) e.getUnderlying();
@@ -59,7 +59,7 @@ public abstract class JenaIncrementalListener implements UpdateListener {
 		}
 
 		if (newData != null) {
-			log.info("[" + newData.length + "] New Events of type [" + newData[0].getUnderlying().getClass().getSimpleName() + "]");
+			log.debug("[" + newData.length + "] New Events of type [" + newData[0].getUnderlying().getClass().getSimpleName() + "]");
 			for (EventBean e : newData) {
 				log.debug(e.getUnderlying().toString());
 				JenaEsperEvent underlying = (JenaEsperEvent) e.getUnderlying();

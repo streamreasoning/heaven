@@ -4,10 +4,8 @@ import it.polimi.services.FileService;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -20,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class OutputLogDataUnifier {
+public class SorterOutPut {
 	private static FileOutputStream fop;
 	private static Map<String, String> map;
 	private static final byte[] EOF = System.getProperty("line.separator").getBytes();
@@ -30,90 +28,78 @@ public class OutputLogDataUnifier {
 
 	public static void main(String[] args) throws IOException, ParseException {
 
-		basePath += dt.format(dt.parse("2015-01-19")) + "/";
+		basePath += dt.format(dt.parse("2015-01-19")) + "/exp";
 
-		File folder = new File(basePath);
-		File[] listFiles = folder.listFiles(new FileFilter() {
-			@Override
-			public boolean accept(File pathname) {
-				return pathname.isDirectory();
-			}
-		});
+		head = "rhodf";
 
-		for (File f : listFiles) {
-			File[] sfs = f.listFiles(new FileFilter() {
-				@Override
-				public boolean accept(File pathname) {
-					return pathname.isDirectory();
-				}
-			});
-			for (File sf : sfs) {
-				process(head = sf.getName(), f.getName());
-			}
+		// process("rhodf", 10);
+		// // process("rhodf", 11);
+		// process("rhodf", 14);
+		// process("rhodf", 15);
+		// process("rhodf", 18);
+		// process("rhodf", 19);
 
-		}
+		process("rhodf", 152);
+		process("rhodf", 150);
+		process("rhodf", 151);
+
+		// process("rhodf", 104);
+		// process("rhodf", 105);
+		// process("rhodf", 106);
+		// process("rhodf", 108);
+		// process("rhodf", 109);
 
 	}
 
-	public static void process(String folder, String EXPERIMENT) throws IOException {
+	public static void process(String folder, int EXPERIMENT) throws IOException {
+
 		String memlog = "MEMLOG_EN";
-		String latPrefix = "UFD_LATLOG_EN";
 		String latlog = "LATLOG_EN";
-		String memPrefix = "UFD_MEMLOG_EN";
-		List<String> filesList = new ArrayList<String>();
-		String execution = "";
+		List<String> memFilesList = new ArrayList<String>();
+		List<String> latFilesList = new ArrayList<String>();
+		String memOutName = "";
+		String latOutName = "";
+
 		String pathname = basePath + EXPERIMENT + "/" + folder;
 		File f = new File(pathname); // current directory
-		int expNum = Integer.parseInt(EXPERIMENT.replace("exp", ""));
+
 		File[] files = f.listFiles();
 		for (File file : files) {
 			if (!file.isDirectory()) {
 				String canonicalPath = file.getName();
 				System.out.println(canonicalPath);
-				if (file.isDirectory() || canonicalPath.contains(".trig") || canonicalPath.contains("UFD") || !canonicalPath.contains("_EXE0")) {
+				if (file.isDirectory() || canonicalPath.contains(".trig")) {
 					continue;
 				} else if (canonicalPath.contains("WIN")) {
 					move(file, "win");
-				} else {
-
-					if (canonicalPath.contains(memlog + expNum)) {
-						filesList = new ArrayList<String>();
-						for (int i = 0; i < 5; i++) {
-							filesList.add(execution = canonicalPath.replaceAll("_EXE" + ".?" + "_", "_EXE" + i + "_"));
-							move(new File(pathname + "/" + execution), "mem");
-						}
-
-						unify(EXPERIMENT, filesList.toArray(new String[filesList.size()]), canonicalPath.replace(memlog, memPrefix).replaceAll(
-								"_EXE" + ".?" + "_", ""));
-
-					} else if (canonicalPath.contains(latlog + expNum)) {
-						filesList = new ArrayList<String>();
-						for (int i = 0; i < 5; i++) {
-							filesList.add(execution = canonicalPath.replaceAll("_EXE" + ".?" + "_", "_EXE" + i + "_"));
-							move(new File(pathname + "/" + execution), "lat");
-						}
-						unify(EXPERIMENT, filesList.toArray(new String[filesList.size()]), canonicalPath.replace(latlog, latPrefix).replaceAll(
-								"_EXE" + ".?" + "_", ""));
-					}
+				} else if (canonicalPath.contains(memlog + EXPERIMENT)) {
+					memFilesList.add(canonicalPath);
+					memFilesList.add(canonicalPath.replaceAll("_EXE" + ".?" + "_", "_EXE1"));
+					memFilesList.add(canonicalPath.replaceAll("_EXE" + ".?" + "_", "_EXE2"));
+					memFilesList.add(canonicalPath.replaceAll("_EXE" + ".?" + "_", "_EXE3"));
+					memFilesList.add(canonicalPath.replaceAll("_EXE" + ".?" + "_", "_EXE0"));
+					memOutName = canonicalPath.replace(memlog, "UFD_MEMLOG_EN").replaceAll("_EXE" + ".?" + "_", "");
+					move(file, "mem");
+				} else if (canonicalPath.contains(latlog + EXPERIMENT)) {
+					latFilesList.add(canonicalPath);
+					latOutName = canonicalPath.replace(latlog, "UFD_LATLOG_EN").replaceAll("_EXE" + ".?" + "_", "");
+					move(file, "lat");
 				}
-
 			}
 		}
+		unify(EXPERIMENT, memFilesList.toArray(new String[memFilesList.size()]), memOutName);
+		unify(EXPERIMENT, latFilesList.toArray(new String[latFilesList.size()]), latOutName);
 
 	}
 
 	protected static void move(File file, String folder) throws IOException {
 		String newPath = file.getPath().replace(file.getName(), folder + "/");
 		new File(newPath).mkdirs();
-		try {
-			Files.copy(file.toPath(), new File(newPath + file.getName()).toPath());
-			file.deleteOnExit();
-		} catch (FileAlreadyExistsException e) {
-			System.out.println("Already moved");
-		}
+		Files.copy(file.toPath(), new File(newPath + file.getName()).toPath());
+		file.deleteOnExit();
 	}
 
-	private static void unify(final String exp, String[] files, String outputName) throws IOException {
+	private static void unify(final int exp, String[] files, String outputName) throws IOException {
 		String pathname = basePath + exp + "/" + head + "/" + outputName;
 		File output = new File(pathname);
 
@@ -140,7 +126,7 @@ public class OutputLogDataUnifier {
 			while ((line = br.readLine()) != null) {
 				String[] parts = line.split(",");
 				String id = parts[0];
-
+				eventNum++;
 				String memoryB = parts[2];
 				String memoryA = parts[3];
 				String latency = parts[4];
@@ -150,12 +136,11 @@ public class OutputLogDataUnifier {
 				} else {
 					map.put(id, eventNum + "," + id + "," + newCSV);
 				}
-				eventNum++;
+
 			}
 
 		}
 
-		final String number = exp.replace("exp", "");
 		write(header);
 		Set<String> keySet = map.keySet();
 
@@ -164,8 +149,8 @@ public class OutputLogDataUnifier {
 
 			@Override
 			public int compare(String o1, String o2) {
-				Integer i1 = new Integer(o1.replace("<http://example.org/" + number + "/", "").replace(">", ""));
-				Integer i2 = new Integer(o2.replace("<http://example.org/" + number + "/", "").replace(">", ""));
+				Integer i1 = new Integer(o1.replace("<http://example.org/" + exp + "/", "").replace(">", ""));
+				Integer i2 = new Integer(o2.replace("<http://example.org/" + exp + "/", "").replace(">", ""));
 				return i1.compareTo(i2);
 			}
 		});

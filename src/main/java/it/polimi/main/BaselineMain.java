@@ -241,7 +241,7 @@ public class BaselineMain {
 
 	private static void run(String f, String comment, int experimentNumber, Date d, String experimentDescription) {
 
-		testStand.build(streamingEventResultCollector, engine, streamer);
+		testStand.build(streamer, engine, streamingEventResultCollector);
 		testStand.init();
 		try {
 

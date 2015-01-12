@@ -22,16 +22,12 @@ public final class IdentityCollectorStreamingEvent implements ResultCollector, S
 
 	@Override
 	public boolean process(EventResult r) {
-		return processDone();
+		log.info("Nothing To Do, this is the Identity Implementation");
+		return true;
 	}
 
 	@Override
 	public boolean process(EventResult r, String where) {
-		return processDone();
-	}
-
-	@Override
-	public boolean processDone() {
 		log.info("Nothing To Do, this is the Identity Implementation");
 		return true;
 	}

@@ -27,7 +27,7 @@ public class StepEventBuilderTest {
 																									// 5
 																									// 10
 
-		assertEquals(false, eb.canSend()); // The first RSPEvent
+		assertEquals(false, eb.isReady()); // The first RSPEvent
 
 		eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication0",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" }));
@@ -40,7 +40,7 @@ public class StepEventBuilderTest {
 		eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication14",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor24" }));
 
-		assertEquals(true, eb.canSend()); // The first RSPEvent
+		assertEquals(true, eb.isReady()); // The first RSPEvent
 
 		RSPTripleSet event = eb.getEvent();
 
@@ -53,12 +53,12 @@ public class StepEventBuilderTest {
 						"http://www.Department1.University1.edu/AssociateProfessor2" + i }));
 
 				if (i + 1 == eventNumber * height) {
-					assertEquals(true, eb.canSend()); // The first RSPEvent
+					assertEquals(true, eb.isReady()); // The first RSPEvent
 				} else {
-					assertEquals(false, eb.canSend()); // The first RSPEvent
+					assertEquals(false, eb.isReady()); // The first RSPEvent
 				}
 			}
-			assertEquals(true, eb.canSend()); // The first RSPEvent
+			assertEquals(true, eb.isReady()); // The first RSPEvent
 			event = eb.getEvent();
 			log.info("Event Size [" + event.size() + "]");
 			assertEquals(height * eventNumber, event.size());
@@ -95,7 +95,7 @@ public class StepEventBuilderTest {
 																							 * 15
 																							 */
 
-		assertEquals(false, eb.canSend()); // The first RSPEvent
+		assertEquals(false, eb.isReady()); // The first RSPEvent
 
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < size; j++) {
@@ -105,7 +105,7 @@ public class StepEventBuilderTest {
 
 			}
 
-			assertEquals(true, eb.canSend()); // The first RSPEvent
+			assertEquals(true, eb.isReady()); // The first RSPEvent
 
 			event = eb.getEvent();
 			System.out.println(event.size());
@@ -122,7 +122,7 @@ public class StepEventBuilderTest {
 
 			}
 
-			assertEquals(true, eb.canSend()); // The first RSPEvent
+			assertEquals(true, eb.isReady()); // The first RSPEvent
 
 			event = eb.getEvent();
 			System.out.println(event.size());
@@ -139,7 +139,7 @@ public class StepEventBuilderTest {
 
 			}
 
-			assertEquals(true, eb.canSend()); // The first RSPEvent
+			assertEquals(true, eb.isReady()); // The first RSPEvent
 
 			event = eb.getEvent();
 			System.out.println(event.size());

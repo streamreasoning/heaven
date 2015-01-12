@@ -61,7 +61,9 @@ public class RSPTeststand extends TestStand {
 			// this.currentResult.setSr(engineResult.getSoundRHODF());
 			// this.currentResult.setCs(engineResult.getCompleteSMPL());
 			// this.currentResult.setSs(engineResult.getSoundSMPL());
-			return processDone();
+			boolean ret = collector.process(currentResult, this.where);
+			this.tsResultEvents += ret ? 1 : 0;
+			return ret;
 		}
 
 	}
@@ -78,15 +80,8 @@ public class RSPTeststand extends TestStand {
 	}
 
 	@Override
-	public boolean processDone() {
-		boolean ret = collector.process(currentResult, this.where);
-		this.tsResultEvents += ret ? 1 : 0;
-		return ret;
-	}
-
-	@Override
-	public void build(TSResultCollector resultCollector, RSPEngine rspEngine, TSStreamer rspEventStreamer) {
-		super.build(resultCollector, rspEngine, rspEventStreamer);
+	public void build(TSStreamer rspEventStreamer, RSPEngine rspEngine, TSResultCollector resultCollector) {
+		super.build(rspEventStreamer, rspEngine, resultCollector);
 	}
 
 	@Override

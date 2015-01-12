@@ -134,7 +134,7 @@ public class Plain2369 extends RSPEsperEngine {
 		}
 		log.debug("Status [" + status + "] Parsing done, return...");
 		status = ExecutionState.READY;
-		return true;
+		return status.equals(ExecutionState.READY);
 	}
 
 	@Override
@@ -152,12 +152,6 @@ public class Plain2369 extends RSPEsperEngine {
 		status = ExecutionState.CLOSED;
 		log.info("Status[" + status + "] Nothing to do...Turing Off");
 		return status;
-	}
-
-	@Override
-	public boolean processDone() {
-		status = ExecutionState.READY;
-		return true;
 	}
 
 	@Override

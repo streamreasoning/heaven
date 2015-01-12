@@ -40,8 +40,41 @@ public final class NTStreamer extends TSStreamer {
 		if (!ExecutionState.READY.equals(status)) {
 			throw new WrongStatusTransitionException("Can't Start in Status [" + status + "] must be [" + ExecutionState.READY + "]");
 		} else {
-			currentExperiment = e;
-			return processDone();
+			this.currentExperiment = e;
+			try {
+				log.info("Start Streaming");
+				BufferedReader br = FileService.getBuffer(currentExperiment.getInputFileName());
+				while ((line = br.readLine()) != null && streamedEvents <= eventLimit - 1) {
+
+					status = ExecutionState.RUNNING;
+					profiler.append(new TripleContainer(Parser.parseTriple(line)));
+					triples++;
+
+					if (profiler.isReady()) {
+
+						streamedEvents += next.process(lastEvent = profiler.getEvent()) ? 1 : 0;
+
+						log.debug("Send Event [" + streamedEvents + "] of size [" + lastEvent.size() + "]");
+						log.debug("Streamed [" + triples + "] triples");
+
+						if (streamedEvents % 1000 == 0) {
+							log.info("Process Complete [" + (double) streamedEvents * 100 / eventLimit + "%]");
+						}
+
+					} else {
+						log.debug("Still Processing [" + line + "]");
+					}
+
+					status = ExecutionState.READY;
+				}
+
+				log.info("End Streaming: Triples: [" + triples + "] " + "RSPEvents: [" + streamedEvents + "]");
+				br.close();
+			} catch (IOException ex) {
+				status = ExecutionState.ERROR;
+				log.error(ex.getMessage());
+			}
+			return ExecutionState.READY.equals(status);
 		}
 	}
 
@@ -59,42 +92,4 @@ public final class NTStreamer extends TSStreamer {
 		return status;
 	}
 
-	@Override
-	public boolean processDone() {
-		try {
-			log.info("Start Streaming");
-			BufferedReader br = FileService.getBuffer(currentExperiment.getInputFileName());
-			while ((line = br.readLine()) != null && streamedEvents <= eventLimit - 1) {
-
-				status = ExecutionState.RUNNING;
-				profiler.append(new TripleContainer(Parser.parseTriple(line)));
-				triples++;
-
-				if (profiler.canSend()) {
-
-					streamedEvents += next.process(lastEvent = profiler.getEvent()) ? 1 : 0;
-
-					log.info("Send Event [" + streamedEvents + "] of size [" + lastEvent.size() + "]");
-					log.debug("Streamed [" + triples + "] triples");
-
-					if (streamedEvents % 500 == 0) {
-						log.info("Process Complete [" + (double) streamedEvents * 100 / eventLimit + "%]");
-					}
-
-				} else {
-					log.debug("Still Processing [" + line + "]");
-				}
-
-				status = ExecutionState.READY;
-			}
-
-			log.info("End Streaming: Triples: [" + triples + "] " + "RSPEvents: [" + streamedEvents + "]");
-			br.close();
-			return true;
-		} catch (IOException e) {
-			status = ExecutionState.ERROR;
-			log.error(e.getMessage());
-			return false;
-		}
-	}
 }

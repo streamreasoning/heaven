@@ -89,8 +89,9 @@ public abstract class JenaEngine extends RSPEsperEngine {
 		status = ExecutionState.RUNNING;
 		rspEventsNumber++;
 		handleEvent(e);
-		log.debug("Status[" + (status = ExecutionState.READY) + "] Parsing done, prepare time scheduling...");
-		return processDone();
+		status = ExecutionState.READY;
+		log.debug("Status[" + status + "] Parsing done, prepare time scheduling...");
+		return ExecutionState.READY.equals(status);
 	}
 
 	/*
@@ -101,12 +102,6 @@ public abstract class JenaEngine extends RSPEsperEngine {
 	@Override
 	public void timeProgress() {
 		moveTime();
-	}
-
-	@Override
-	public boolean processDone() {
-		status = ExecutionState.READY;
-		return true;
 	}
 
 	protected void handleEvent(RSPTripleSet e) {

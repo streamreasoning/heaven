@@ -28,7 +28,7 @@ public class RandomEventBuilderTest {
 		FlowRateProfiler<RSPTripleSet> eb = new RandomFlowRateProfiler(yMax, initSize, experimentNumber);
 
 		int i = 0;
-		while (!eb.canSend()) {
+		while (!eb.isReady()) {
 			eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication" + i + "" + i,
 					"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
 					"http://www.Department1.University1.edu/AssociateProfessor2" + i }));
@@ -41,7 +41,7 @@ public class RandomEventBuilderTest {
 			eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication" + i + "" + i,
 					"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
 					"http://www.Department1.University1.edu/AssociateProfessor2" + i }));
-			while (!eb.canSend()) {
+			while (!eb.isReady()) {
 				i++;
 				eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication" + i + "" + i,
 						"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
@@ -68,7 +68,7 @@ public class RandomEventBuilderTest {
 		FlowRateProfiler<RSPTripleSet> eb = new ConstantRandomFlowRateProfiler(xMax, yMax, initSize, experimentNumber);
 
 		int i = 0;
-		while (!eb.canSend()) {
+		while (!eb.isReady()) {
 			eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication" + i + "" + i,
 					"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
 					"http://www.Department1.University1.edu/AssociateProfessor2" + i }));
@@ -81,7 +81,7 @@ public class RandomEventBuilderTest {
 			eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication" + i + "" + i,
 					"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
 					"http://www.Department1.University1.edu/AssociateProfessor2" + i }));
-			while (!eb.canSend()) {
+			while (!eb.isReady()) {
 				i++;
 				eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication" + i + "" + i,
 						"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",

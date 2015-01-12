@@ -41,7 +41,7 @@ public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<RSPT
 	}
 
 	@Override
-	public boolean canSend() {
+	public boolean isReady() {
 		return sizeReached;
 	}
 

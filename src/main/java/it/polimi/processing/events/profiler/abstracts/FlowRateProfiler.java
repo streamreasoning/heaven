@@ -6,7 +6,7 @@ public interface FlowRateProfiler<T> {
 
 	public T getEvent();
 
-	public boolean canSend();
+	public boolean isReady();
 
 	public boolean append(TripleContainer triple);
 

@@ -24,22 +24,22 @@ public class ConstantEventBuilderTest {
 		TripleContainer tc2 = new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication8",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
 
-		assertEquals(false, eb.canSend()); // The first RSPEvent
+		assertEquals(false, eb.isReady()); // The first RSPEvent
 
 		eb.append(tc1);
 
-		assertEquals(true, eb.canSend());
+		assertEquals(true, eb.isReady());
 
 		RSPTripleSet event = eb.getEvent();
 
 		assertEquals(1, event.getEventTriples().size());
 
-		assertEquals(true, eb.canSend());
+		assertEquals(true, eb.isReady());
 
 		eb.append(tc1);
 		eb.append(tc2);
 
-		assertEquals(true, eb.canSend());
+		assertEquals(true, eb.isReady());
 
 		event = eb.getEvent();
 		assertEquals(1, event.getEventTriples().size());
@@ -50,7 +50,7 @@ public class ConstantEventBuilderTest {
 	public void constantEventBuilderRealCaseTest() {
 		FlowRateProfiler<RSPTripleSet> eb = new ConstantFlowRateProfiler(1, 0);
 
-		assertEquals(false, eb.canSend());
+		assertEquals(false, eb.isReady());
 
 		for (int i = 0; i < 10; i++) {
 
@@ -59,7 +59,7 @@ public class ConstantEventBuilderTest {
 							"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
 							"http://www.Department1.University1.edu/AssociateProfessor2" }));
 			assertEquals(1, eb.getEvent().size());
-			assertEquals(true, eb.canSend());
+			assertEquals(true, eb.isReady());
 
 		}
 
@@ -75,21 +75,21 @@ public class ConstantEventBuilderTest {
 		TripleContainer tc2 = new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication8",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
 
-		assertEquals(false, eb.canSend()); // The first RSPEvent
+		assertEquals(false, eb.isReady()); // The first RSPEvent
 
 		eb.append(tc1);
 
-		assertEquals(true, eb.canSend());
+		assertEquals(true, eb.isReady());
 
 		RSPTripleSet event = eb.getEvent();
 
 		assertEquals(1, event.getEventTriples().size());
 
-		assertEquals(true, eb.canSend());
+		assertEquals(true, eb.isReady());
 
 		eb.append(tc2);
 
-		assertEquals(true, eb.canSend());
+		assertEquals(true, eb.isReady());
 
 		event = eb.getEvent();
 		assertEquals(1, event.getEventTriples().size());
@@ -100,7 +100,7 @@ public class ConstantEventBuilderTest {
 	public void constantEventBuilderRealCaseTestSingleAdd() {
 		FlowRateProfiler<RSPTripleSet> eb = new ConstantFlowRateProfiler(1, 0);
 
-		assertEquals(false, eb.canSend());
+		assertEquals(false, eb.isReady());
 
 		for (int i = 0; i < 10; i++) {
 
@@ -109,7 +109,7 @@ public class ConstantEventBuilderTest {
 							"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
 							"http://www.Department1.University1.edu/AssociateProfessor2" }));
 			assertEquals(1, eb.getEvent().size());
-			assertEquals(true, eb.canSend());
+			assertEquals(true, eb.isReady());
 
 		}
 

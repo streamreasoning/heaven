@@ -48,7 +48,7 @@ public abstract class TestStand implements EventProcessor<Event>, Startable<Exec
 
 	}
 
-	public void build(TSResultCollector resultCollector, RSPEngine rspEngine, TSStreamer rspEventStreamer) {
+	public void build(TSStreamer rspEventStreamer, RSPEngine rspEngine, TSResultCollector resultCollector) {
 		this.collector = resultCollector;
 		this.engine = rspEngine;
 		this.streamer = rspEventStreamer;

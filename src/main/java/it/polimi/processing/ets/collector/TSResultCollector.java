@@ -23,19 +23,13 @@ public class TSResultCollector implements ResultCollector {
 	@Override
 	public boolean process(EventResult r) {
 		this.currentResult = r;
-		return !ExecutionState.READY.equals(status) ? false : processDone();
-	}
-
-	@Override
-	public boolean processDone() {
-		return !ExecutionState.READY.equals(status) ? false : currentResult.save(where);
+		return !ExecutionState.READY.equals(status) ? false : currentResult.save(this.where);
 	}
 
 	@Override
 	public boolean process(EventResult r, String w) {
 		currentResult = r;
-		this.where = w;
-		return processDone();
+		return !ExecutionState.READY.equals(status) ? false : currentResult.save(where);
 	}
 
 	@Override
