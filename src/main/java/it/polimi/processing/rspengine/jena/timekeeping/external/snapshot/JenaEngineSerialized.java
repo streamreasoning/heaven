@@ -3,7 +3,6 @@ package it.polimi.processing.rspengine.jena.timekeeping.external.snapshot;
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.jena.JenaEngine;
 import it.polimi.processing.rspengine.jena.WindowUtils;
 import it.polimi.processing.rspengine.rspevents.jena.SerializedEvent;
@@ -27,7 +26,7 @@ import com.espertech.esper.client.UpdateListener;
 @Log4j
 public class JenaEngineSerialized extends JenaEngine {
 
-	public JenaEngineSerialized(String name, EventProcessor<Event> collector, UpdateListener listener) {
+	public JenaEngineSerialized(String name, EventProcessor<RSPTripleSet> collector, UpdateListener listener) {
 		super(name, collector, listener, WindowUtils.JENA_INPUT_QUERY_SNAPTSHOT);
 
 		cepConfig = new Configuration();

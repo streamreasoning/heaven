@@ -3,7 +3,6 @@ package it.polimi.processing.rspengine.jena;
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPTripleSet;
-import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.abstracts.RSPEsperEngine;
 import lombok.extern.log4j.Log4j;
 
@@ -14,26 +13,6 @@ import com.espertech.esper.client.EPStatement;
 import com.espertech.esper.client.UpdateListener;
 import com.espertech.esper.client.time.CurrentTimeEvent;
 
-/**
- * In this example rdfs property of subclass of is exploited by external static
- * functions which can be called form EPL No data or time windows are considered
- * in event consuming, se the related example for that time is externally
- * controlled all event are sent in the samte time interval
- * 
- * the query doesn't include joins
- * 
- * events are pushed, on incoming events, in 3 differents queue which are pulled
- * by refering statements
- * 
- * **/
-/**
- * @author Riccardo
- * 
- */
-/**
- * @author Riccardo
- * 
- */
 @Log4j
 public abstract class JenaEngine extends RSPEsperEngine {
 
@@ -43,7 +22,7 @@ public abstract class JenaEngine extends RSPEsperEngine {
 
 	private EPStatement out = null;
 
-	public JenaEngine(String name, EventProcessor<Event> collector, UpdateListener listener, String query) {
+	public JenaEngine(String name, EventProcessor<RSPTripleSet> collector, UpdateListener listener, String query) {
 		super(name, collector);
 		super.cepConfig = new Configuration();
 		this.listener = listener;

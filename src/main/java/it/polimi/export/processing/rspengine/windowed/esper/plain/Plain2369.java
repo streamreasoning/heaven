@@ -8,7 +8,6 @@ import it.polimi.processing.EventProcessor;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.rspengine.abstracts.RSPEsperEngine;
 
 import java.util.Set;
@@ -42,7 +41,7 @@ public class Plain2369 extends RSPEsperEngine {
 	private TEvent esperEvent = null;
 	private final String ontologyClass;
 
-	public Plain2369(String name, EventProcessor<Event> collector, String runtimeOnto, String ontologyClass, UpdateListener listener) {
+	public Plain2369(String name, EventProcessor<RSPTripleSet> collector, String runtimeOnto, String ontologyClass, UpdateListener listener) {
 		super(name, collector);
 		this.runtimeOnto = runtimeOnto;
 		this.ontologyClass = ontologyClass;

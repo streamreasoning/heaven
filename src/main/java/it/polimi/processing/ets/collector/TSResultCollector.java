@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TSResultCollector implements ResultCollector {
+public final class TSResultCollector implements ResultCollector {
 
 	private ExecutionState status;
 	private String where;
@@ -29,7 +29,7 @@ public class TSResultCollector implements ResultCollector {
 	@Override
 	public boolean process(EventResult r, String w) {
 		currentResult = r;
-		return !ExecutionState.READY.equals(status) ? false : currentResult.save(where);
+		return !ExecutionState.READY.equals(status) ? false : currentResult.save(w);
 	}
 
 	@Override

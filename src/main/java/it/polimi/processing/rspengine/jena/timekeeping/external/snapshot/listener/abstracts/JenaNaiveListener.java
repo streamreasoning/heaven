@@ -1,8 +1,8 @@
 package it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.listener.abstracts;
 
 import it.polimi.processing.EventProcessor;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.results.RSPTripleSetResult;
 import it.polimi.processing.rspengine.rspevents.jena.JenaEsperEvent;
 import it.polimi.services.system.ExecutionEnvirorment;
@@ -31,12 +31,12 @@ public abstract class JenaNaiveListener implements UpdateListener {
 	private Graph abox;
 	private InfModel ABoxStar;
 	private Reasoner reasoner;
-	private final EventProcessor<Event> next;
+	private final EventProcessor<RSPTripleSet> next;
 	private int eventNumber = 0;
 	private Set<TripleContainer> ABoxTriples;
 	private int experimentNumber;
 
-	public JenaNaiveListener(Model tbox, EventProcessor<Event> next) {
+	public JenaNaiveListener(Model tbox, EventProcessor<RSPTripleSet> next) {
 		this.TBoxStar = tbox;
 		this.next = next;
 	}

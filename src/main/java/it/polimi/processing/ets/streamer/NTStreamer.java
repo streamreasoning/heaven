@@ -5,7 +5,6 @@ import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.profiler.abstracts.FlowRateProfiler;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.streamer.Parser;
@@ -27,11 +26,11 @@ public final class NTStreamer extends TSStreamer {
 	private int triples;
 	private Experiment currentExperiment;
 
-	public NTStreamer(EventProcessor<Event> processor, FlowRateProfiler<RSPTripleSet> profiler, int eventLimit) {
+	public NTStreamer(EventProcessor<RSPTripleSet> processor, FlowRateProfiler<RSPTripleSet> profiler, int eventLimit) {
 		super(processor, profiler, ExecutionState.CLOSED, eventLimit);
 	}
 
-	public NTStreamer(EventProcessor<Event> processor, FlowRateProfiler<RSPTripleSet> profiler) {
+	public NTStreamer(EventProcessor<RSPTripleSet> processor, FlowRateProfiler<RSPTripleSet> profiler) {
 		super(processor, profiler, ExecutionState.CLOSED, 1000);
 	}
 

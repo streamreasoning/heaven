@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class TripleContainer {
+public final class TripleContainer {
 
 	private final String[] triple = new String[3];
 

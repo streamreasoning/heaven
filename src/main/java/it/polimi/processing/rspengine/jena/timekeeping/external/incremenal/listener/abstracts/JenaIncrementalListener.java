@@ -1,8 +1,8 @@
 package it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener.abstracts;
 
 import it.polimi.processing.EventProcessor;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.results.RSPTripleSetResult;
 import it.polimi.processing.rspengine.rspevents.jena.JenaEsperEvent;
 import it.polimi.services.system.ExecutionEnvirorment;
@@ -30,13 +30,13 @@ public abstract class JenaIncrementalListener implements UpdateListener {
 	protected InfModel ABoxStar;
 
 	protected Reasoner reasoner;
-	protected final EventProcessor<Event> next;
+	protected final EventProcessor<RSPTripleSet> next;
 
 	private int eventNumber = 0;
 	private final Set<TripleContainer> ABoxTriples;
 	private Set<TripleContainer> statements;
 
-	public JenaIncrementalListener(Model tbox, EventProcessor<Event> next) {
+	public JenaIncrementalListener(Model tbox, EventProcessor<RSPTripleSet> next) {
 		this.TBoxStar = tbox;
 		this.next = next;
 		abox = ModelFactory.createMemModelMaker().createDefaultModel();

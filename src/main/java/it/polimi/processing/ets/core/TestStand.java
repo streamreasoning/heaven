@@ -6,14 +6,14 @@ import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.ets.collector.TSResultCollector;
 import it.polimi.processing.ets.streamer.TSStreamer;
 import it.polimi.processing.events.Experiment;
-import it.polimi.processing.events.interfaces.Event;
+import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.results.TSResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-public abstract class TestStand implements EventProcessor<Event>, Startable<ExecutionState> {
+public abstract class TestStand implements EventProcessor<RSPTripleSet>, Startable<ExecutionState> {
 
 	protected TSResultCollector collector;
 	protected RSPEngine engine;

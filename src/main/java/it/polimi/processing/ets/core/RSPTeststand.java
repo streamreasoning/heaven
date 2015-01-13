@@ -5,7 +5,6 @@ import it.polimi.processing.ets.collector.TSResultCollector;
 import it.polimi.processing.ets.streamer.TSStreamer;
 import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPTripleSet;
-import it.polimi.processing.events.interfaces.Event;
 import it.polimi.processing.events.results.RSPTripleSetResult;
 import it.polimi.processing.events.results.TSResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
@@ -24,12 +23,12 @@ public class RSPTeststand extends TestStand {
 	private String where;
 
 	@Override
-	public boolean process(Event e) {
+	public boolean process(RSPTripleSet e) {
 		totalEvent++;
-		return (e instanceof RSPTripleSetResult) ? process((RSPTripleSetResult) e) : process((RSPTripleSet) e);
+		return (e instanceof RSPTripleSetResult) ? process((RSPTripleSetResult) e) : processRSPTripleSet(e);
 	}
 
-	public boolean process(RSPTripleSet e) {
+	public boolean processRSPTripleSet(RSPTripleSet e) {
 		this.rspEvent++;
 		this.eventNumber = engine.getEventNumber();
 
@@ -47,7 +46,6 @@ public class RSPTeststand extends TestStand {
 	public boolean process(RSPTripleSetResult engineResult) {
 		double memoryA = Memory.getMemoryUsage();
 		this.where = "exp" + experimentNumber + "/" + engine.getName() + "/";
-
 		if (engineResult.isAbox()) {
 			this.where += windowFileName;
 			return processAbox(engineResult);
