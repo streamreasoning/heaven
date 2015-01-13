@@ -12,6 +12,7 @@ import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.RSPTripleSet;
 import it.polimi.processing.events.profiler.ConstantFlowRateProfiler;
 import it.polimi.processing.events.profiler.RandomFlowRateProfiler;
+import it.polimi.processing.events.profiler.StepFactorFlowRateProfiler;
 import it.polimi.processing.events.profiler.StepFlowRateProfiler;
 import it.polimi.processing.events.profiler.abstracts.FlowRateProfiler;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
@@ -161,6 +162,11 @@ public class BaselineMain {
 			case STEP:
 				message += " Heigh [" + Y + "] Width [" + X + "] ";
 				eb = new StepFlowRateProfiler(X, Y, INIT_SIZE, EXPERIMENT_NUMBER);
+				code += "S" + INIT_SIZE + "H" + X + "W" + Y;
+				break;
+			case STEP_FACTOR:
+				message += " Factor [" + Y + "] Width [" + X + "] ";
+				eb = new StepFactorFlowRateProfiler(X, Y, INIT_SIZE, EXPERIMENT_NUMBER);
 				code += "S" + INIT_SIZE + "H" + X + "W" + Y;
 				break;
 			case RANDOM:
