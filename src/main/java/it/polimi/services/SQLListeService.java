@@ -24,7 +24,7 @@ public class SQLListeService {
 			+ " ENGINE       TEXT   			  NOT NULL, " + " INPUT_FILE   TEXT   			  NOT NULL, " + " RESULT_FILE  TEXT                 NOT NULL, "
 			+ " LOG_FILE     TEXT                 NOT NULL, " + " PRIMARY      KEY( EXP_ID,TS_INIT )        ) ";
 	public static final String BASELINE_EXPERIMENT_TABLE = "CREATE TABLE IF NOT EXISTS BASELINE_EXPERIMENTS " + "("
-			+ " EXP_ID         TEXT                 NOT NULL, " + " EXP_NUM        TEXT                 NOT NULL, "
+			+ " EXP_ID         TEXT                 NOT NULL, " + " EXP_NUM        INTEGER                 NOT NULL, "
 			+ " EXP_DATE       TEXT                 NOT NULL, " + "	TS_INIT        TEXT                 NOT NULL, "
 			+ "	TS_END         TEXT                 NOT NULL, " + " ENGINE         TEXT   			  NOT NULL, "
 			+ " EXP_TYPE       TEXT                 NOT NULL, " + " TIMECONTROL    TEXT                 NOT NULL, "
