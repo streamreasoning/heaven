@@ -1,6 +1,6 @@
 package it.polimi.processing.events.factory;
 
-import it.polimi.processing.events.RSPTripleSet;
+import it.polimi.processing.events.InputRDFStream;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.profiler.ConstantRandomFlowRateProfiler;
 import it.polimi.processing.events.profiler.RandomFlowRateProfiler;
@@ -22,10 +22,10 @@ public class RandomEventBuilderTest {
 		int yMax = 30;
 		int initSize = 5;
 
-		RSPTripleSet event;
+		InputRDFStream event;
 
 		int experimentNumber = 0;
-		FlowRateProfiler<RSPTripleSet> eb = new RandomFlowRateProfiler(yMax, initSize, experimentNumber);
+		FlowRateProfiler<InputRDFStream> eb = new RandomFlowRateProfiler(yMax, initSize, experimentNumber);
 
 		int i = 0;
 		while (!eb.isReady()) {
@@ -62,10 +62,10 @@ public class RandomEventBuilderTest {
 
 		int initSize = 5;
 
-		RSPTripleSet event;
+		InputRDFStream event;
 
 		int experimentNumber = 0;
-		FlowRateProfiler<RSPTripleSet> eb = new ConstantRandomFlowRateProfiler(xMax, yMax, initSize, experimentNumber);
+		FlowRateProfiler<InputRDFStream> eb = new ConstantRandomFlowRateProfiler(xMax, yMax, initSize, experimentNumber);
 
 		int i = 0;
 		while (!eb.isReady()) {

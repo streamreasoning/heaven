@@ -4,8 +4,8 @@ import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.ets.collector.TSResultCollector;
 import it.polimi.processing.ets.streamer.TSStreamer;
 import it.polimi.processing.events.Experiment;
-import it.polimi.processing.events.RSPTripleSet;
-import it.polimi.processing.events.results.RSPTripleSetResult;
+import it.polimi.processing.events.InputRDFStream;
+import it.polimi.processing.events.results.OutputRDFStream;
 import it.polimi.processing.events.results.TSResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
@@ -23,12 +23,12 @@ public class RSPTeststand extends TestStand {
 	private String where;
 
 	@Override
-	public boolean process(RSPTripleSet e) {
+	public boolean process(InputRDFStream e) {
 		totalEvent++;
-		return (e instanceof RSPTripleSetResult) ? process((RSPTripleSetResult) e) : processRSPTripleSet(e);
+		return (e instanceof OutputRDFStream) ? process((OutputRDFStream) e) : processRSPTripleSet(e);
 	}
 
-	public boolean processRSPTripleSet(RSPTripleSet e) {
+	public boolean processRSPTripleSet(InputRDFStream e) {
 		this.rspEvent++;
 		this.eventNumber = engine.getEventNumber();
 
@@ -43,7 +43,7 @@ public class RSPTeststand extends TestStand {
 		return process;
 	}
 
-	public boolean process(RSPTripleSetResult engineResult) {
+	public boolean process(OutputRDFStream engineResult) {
 		double memoryA = Memory.getMemoryUsage();
 		this.where = "exp" + experimentNumber + "/" + engine.getName() + "/";
 		if (engineResult.isAbox()) {
@@ -66,7 +66,7 @@ public class RSPTeststand extends TestStand {
 
 	}
 
-	private boolean processAbox(RSPTripleSetResult engineResult) {
+	private boolean processAbox(OutputRDFStream engineResult) {
 
 		this.aboxResult = new TSResult();
 		this.aboxResult.setId("<http://example.org/" + experimentNumber + "/" + (engine.getEventNumber() - 1) + ">");

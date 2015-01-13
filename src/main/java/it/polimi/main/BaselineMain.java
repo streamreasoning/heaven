@@ -6,10 +6,10 @@ import it.polimi.processing.enums.Reasoning;
 import it.polimi.processing.ets.collector.TSResultCollector;
 import it.polimi.processing.ets.core.RSPTeststand;
 import it.polimi.processing.ets.core.TestStand;
-import it.polimi.processing.ets.streamer.NTStreamer;
+import it.polimi.processing.ets.streamer.RDFStreamGenerator;
 import it.polimi.processing.ets.streamer.TSStreamer;
 import it.polimi.processing.events.Experiment;
-import it.polimi.processing.events.RSPTripleSet;
+import it.polimi.processing.events.InputRDFStream;
 import it.polimi.processing.events.profiler.ConstantFlowRateProfiler;
 import it.polimi.processing.events.profiler.RandomFlowRateProfiler;
 import it.polimi.processing.events.profiler.StepFactorFlowRateProfiler;
@@ -149,7 +149,7 @@ public class BaselineMain {
 	}
 
 	protected static String flowRateProfileSelection() {
-		FlowRateProfiler<RSPTripleSet> eb = null;
+		FlowRateProfiler<InputRDFStream> eb = null;
 
 		String code = "_FRP_";
 		String message = "Flow Rate Profile [" + FLOW_RATE_PROFILE + "] [" + INIT_SIZE + "] ";
@@ -180,7 +180,7 @@ public class BaselineMain {
 
 		log.info(message);
 		if (eb != null) {
-			streamer = new NTStreamer(testStand, eb, MAX_EVENT_STREAM);
+			streamer = new RDFStreamGenerator(testStand, eb, MAX_EVENT_STREAM);
 			return code;
 		}
 		throw new IllegalArgumentException("Not valid case [" + FLOW_RATE_PROFILE + "]");

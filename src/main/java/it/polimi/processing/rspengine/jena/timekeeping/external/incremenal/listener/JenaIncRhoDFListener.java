@@ -1,7 +1,7 @@
 package it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener;
 
 import it.polimi.processing.EventProcessor;
-import it.polimi.processing.events.RSPTripleSet;
+import it.polimi.processing.events.InputRDFStream;
 import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener.abstracts.JenaIncrementalListener;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -14,7 +14,7 @@ public class JenaIncRhoDFListener extends JenaIncrementalListener {
 
 	private final String aBoxRuleset;
 
-	public JenaIncRhoDFListener(Model tbox, String aBoxRuleset, EventProcessor<RSPTripleSet> collector) {
+	public JenaIncRhoDFListener(Model tbox, String aBoxRuleset, EventProcessor<InputRDFStream> collector) {
 		super(tbox, collector);
 		this.aBoxRuleset = aBoxRuleset;
 		reasoner = new GenericRuleReasoner(Rule.rulesFromURL(this.aBoxRuleset));

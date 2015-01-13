@@ -2,7 +2,7 @@ package it.polimi.processing.rspengine.jena;
 
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.ets.core.TestStand;
-import it.polimi.processing.events.RSPTripleSet;
+import it.polimi.processing.events.InputRDFStream;
 import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener.JenaIncFullListener;
 import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener.JenaIncRhoDFListener;
 import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener.JenaIncSMPLListener;
@@ -20,12 +20,12 @@ public final class JenaReasoningListenerFactory {
 
 	private static UpdateListener listener;
 
-	public static UpdateListener getSMPLListener(EventProcessor<RSPTripleSet> next) {
+	public static UpdateListener getSMPLListener(EventProcessor<InputRDFStream> next) {
 		log.info("Select SMPLListener ");
 		return listener = new JenaSMPLListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RDFS_MODIFIED), next);
 	}
 
-	public static UpdateListener getRhoDfListener(EventProcessor<RSPTripleSet> next) {
+	public static UpdateListener getRhoDfListener(EventProcessor<InputRDFStream> next) {
 		log.info("Select RHODFListener ");
 		return listener = new JenaRhoDFListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED), FileUtils.RHODF_RULE_SET_RUNTIME, next);
 	}
@@ -35,12 +35,12 @@ public final class JenaReasoningListenerFactory {
 		return listener = new JenaFullListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED), next);
 	}
 
-	public static UpdateListener getIncrementalSMPLListener(EventProcessor<RSPTripleSet> next) {
+	public static UpdateListener getIncrementalSMPLListener(EventProcessor<InputRDFStream> next) {
 		log.info("Select SMPLListener INC");
 		return listener = new JenaIncSMPLListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RDFS_MODIFIED), next);
 	}
 
-	public static UpdateListener getIncrementalRhoDfListener(EventProcessor<RSPTripleSet> next) {
+	public static UpdateListener getIncrementalRhoDfListener(EventProcessor<InputRDFStream> next) {
 		log.info("Select RHODFListener INC  ");
 		return listener = new JenaIncRhoDFListener(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED), FileUtils.RHODF_RULE_SET_RUNTIME, next);
 	}

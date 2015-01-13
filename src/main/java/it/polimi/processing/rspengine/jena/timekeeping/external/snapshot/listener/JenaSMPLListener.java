@@ -1,7 +1,7 @@
 package it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.listener;
 
 import it.polimi.processing.EventProcessor;
-import it.polimi.processing.events.RSPTripleSet;
+import it.polimi.processing.events.InputRDFStream;
 import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.listener.abstracts.JenaNaiveListener;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -11,7 +11,7 @@ import com.hp.hpl.jena.vocabulary.ReasonerVocabulary;
 
 public final class JenaSMPLListener extends JenaNaiveListener {
 
-	public JenaSMPLListener(Model tbox, EventProcessor<RSPTripleSet> next) {
+	public JenaSMPLListener(Model tbox, EventProcessor<InputRDFStream> next) {
 		super(tbox, next);
 	}
 

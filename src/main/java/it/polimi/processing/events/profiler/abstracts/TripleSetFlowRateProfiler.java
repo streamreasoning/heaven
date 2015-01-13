@@ -1,7 +1,7 @@
 package it.polimi.processing.events.profiler.abstracts;
 
 import it.polimi.processing.enums.FlowRateProfile;
-import it.polimi.processing.events.RSPTripleSet;
+import it.polimi.processing.events.InputRDFStream;
 import it.polimi.processing.events.TripleContainer;
 
 import java.util.HashSet;
@@ -14,9 +14,9 @@ import lombok.extern.log4j.Log4j;
 @Setter
 @Getter
 @Log4j
-public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<RSPTripleSet> {
+public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<InputRDFStream> {
 
-	protected RSPTripleSet e;
+	protected InputRDFStream e;
 	protected FlowRateProfile mode;
 	protected int initSize, roundSize, eventNumber;
 	protected int x, y;
@@ -32,11 +32,11 @@ public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<RSPT
 		this.mode = mode;
 		this.sizeReached = false;
 		id = "<http://example.org/" + experimentNumber + "/";
-		e = new RSPTripleSet(id, new HashSet<TripleContainer>(), eventNumber, experimentNumber);
+		e = new InputRDFStream(id, new HashSet<TripleContainer>(), eventNumber, experimentNumber);
 	}
 
 	@Override
-	public RSPTripleSet getEvent() {
+	public InputRDFStream getEvent() {
 		return sizeReached ? e : null;
 	}
 

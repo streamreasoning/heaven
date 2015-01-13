@@ -1,9 +1,9 @@
 package it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.listener.abstracts;
 
 import it.polimi.processing.EventProcessor;
-import it.polimi.processing.events.RSPTripleSet;
+import it.polimi.processing.events.InputRDFStream;
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.results.RSPTripleSetResult;
+import it.polimi.processing.events.results.OutputRDFStream;
 import it.polimi.processing.rspengine.rspevents.jena.JenaEsperEvent;
 import it.polimi.services.system.ExecutionEnvirorment;
 
@@ -31,12 +31,12 @@ public abstract class JenaNaiveListener implements UpdateListener {
 	private Graph abox;
 	private InfModel ABoxStar;
 	private Reasoner reasoner;
-	private final EventProcessor<RSPTripleSet> next;
+	private final EventProcessor<InputRDFStream> next;
 	private int eventNumber = 0;
 	private Set<TripleContainer> ABoxTriples;
 	private int experimentNumber;
 
-	public JenaNaiveListener(Model tbox, EventProcessor<RSPTripleSet> next) {
+	public JenaNaiveListener(Model tbox, EventProcessor<InputRDFStream> next) {
 		this.TBoxStar = tbox;
 		this.next = next;
 	}
@@ -84,9 +84,9 @@ public abstract class JenaNaiveListener implements UpdateListener {
 			if (next != null) {
 				log.debug("Send Event to the StoreCollector");
 				eventNumber++;
-				next.process(new RSPTripleSetResult("", statements, eventNumber, 0, outputTimestamp, false));
+				next.process(new OutputRDFStream("", statements, eventNumber, 0, outputTimestamp, false));
 				if (ExecutionEnvirorment.aboxLogEnabled) {
-					next.process(new RSPTripleSetResult("", ABoxTriples, eventNumber, 0, outputTimestamp, true));
+					next.process(new OutputRDFStream("", ABoxTriples, eventNumber, 0, outputTimestamp, true));
 				}
 			}
 		}

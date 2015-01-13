@@ -1,6 +1,6 @@
 package it.polimi.processing.ets.core.strategic.timecontrol;
 
-import it.polimi.processing.events.RSPTripleSet;
+import it.polimi.processing.events.InputRDFStream;
 import it.polimi.processing.events.results.TSResult;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.services.system.GetPropertyValues;
@@ -17,7 +17,7 @@ public class NaiveStrategy implements TimeStrategy {
 	}
 
 	@Override
-	public boolean apply(RSPTripleSet e) {
+	public boolean apply(InputRDFStream e) {
 		int eventNumber = rspEngine.getEventNumber();
 		String id = "<http://example.org/" + experiment + "/" + eventNumber + ">";
 

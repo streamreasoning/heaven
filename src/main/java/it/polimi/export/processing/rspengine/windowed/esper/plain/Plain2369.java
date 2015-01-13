@@ -6,7 +6,7 @@ import it.polimi.export.processing.rspengine.windowed.esper.plain.utils.Ontology
 import it.polimi.export.processing.rspengine.windowed.esper.plain.utils.Queries;
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.events.RSPTripleSet;
+import it.polimi.processing.events.InputRDFStream;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.rspengine.abstracts.RSPEsperEngine;
 
@@ -41,7 +41,7 @@ public class Plain2369 extends RSPEsperEngine {
 	private TEvent esperEvent = null;
 	private final String ontologyClass;
 
-	public Plain2369(String name, EventProcessor<RSPTripleSet> collector, String runtimeOnto, String ontologyClass, UpdateListener listener) {
+	public Plain2369(String name, EventProcessor<InputRDFStream> collector, String runtimeOnto, String ontologyClass, UpdateListener listener) {
 		super(name, collector);
 		this.runtimeOnto = runtimeOnto;
 		this.ontologyClass = ontologyClass;
@@ -115,7 +115,7 @@ public class Plain2369 extends RSPEsperEngine {
 	}
 
 	@Override
-	public boolean process(RSPTripleSet e) {
+	public boolean process(InputRDFStream e) {
 		setCurrentEvent(e);
 		status = ExecutionState.RUNNING;
 		Set<TripleContainer> eventTriples = e.getEventTriples();

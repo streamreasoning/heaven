@@ -1,7 +1,7 @@
 package it.polimi.processing.rspengine.jena.timekeeping.external.incremenal;
 
 import it.polimi.processing.EventProcessor;
-import it.polimi.processing.events.RSPTripleSet;
+import it.polimi.processing.events.InputRDFStream;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.rspengine.jena.JenaEngine;
 import it.polimi.processing.rspengine.jena.WindowUtils;
@@ -37,7 +37,7 @@ public class JenaEngineGraphInc extends JenaEngine {
 
 	Graph abox;
 
-	public JenaEngineGraphInc(String name, EventProcessor<RSPTripleSet> collector, UpdateListener listener) {
+	public JenaEngineGraphInc(String name, EventProcessor<InputRDFStream> collector, UpdateListener listener) {
 		super(name, collector, listener, WindowUtils.JENA_INPUT_QUERY_INCREMENTAL);
 
 		cepConfig = new Configuration();
@@ -48,7 +48,7 @@ public class JenaEngineGraphInc extends JenaEngine {
 	}
 
 	@Override
-	protected void handleEvent(RSPTripleSet e) {
+	protected void handleEvent(InputRDFStream e) {
 		super.handleEvent(e);
 		abox = ModelFactory.createMemModelMaker().createDefaultModel().getGraph();
 		for (TripleContainer tc : e.getEventTriples()) {
