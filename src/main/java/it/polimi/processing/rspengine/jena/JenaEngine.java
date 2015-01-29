@@ -2,7 +2,7 @@ package it.polimi.processing.rspengine.jena;
 
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.events.InputRDFStream;
+import it.polimi.processing.events.CTEvent;
 import it.polimi.processing.rspengine.abstracts.RSPEsperEngine;
 import lombok.extern.log4j.Log4j;
 
@@ -22,7 +22,7 @@ public abstract class JenaEngine extends RSPEsperEngine {
 
 	private EPStatement out = null;
 
-	public JenaEngine(String name, EventProcessor<InputRDFStream> collector, UpdateListener listener, String query) {
+	public JenaEngine(String name, EventProcessor<CTEvent> collector, UpdateListener listener, String query) {
 		super(name, collector);
 		super.cepConfig = new Configuration();
 		this.listener = listener;
@@ -63,7 +63,7 @@ public abstract class JenaEngine extends RSPEsperEngine {
 	}
 
 	@Override
-	public boolean process(InputRDFStream e) {
+	public boolean process(CTEvent e) {
 		setCurrentEvent(e);
 		status = ExecutionState.RUNNING;
 		rspEventsNumber++;
@@ -83,7 +83,7 @@ public abstract class JenaEngine extends RSPEsperEngine {
 		moveTime();
 	}
 
-	protected void handleEvent(InputRDFStream e) {
+	protected void handleEvent(CTEvent e) {
 		this.sentTimestamp = System.currentTimeMillis();
 	}
 

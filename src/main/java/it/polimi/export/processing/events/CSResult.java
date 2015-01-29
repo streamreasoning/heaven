@@ -1,7 +1,7 @@
 package it.polimi.export.processing.events;
 
 import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.results.OutputRDFStream;
+import it.polimi.processing.events.results.OutCTEvent;
 
 import java.util.Set;
 
@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
-public class CSResult extends OutputRDFStream {
+public class CSResult extends OutCTEvent {
 
 	private Boolean completeSMPL, soundSMPL, completeRHODF, soundRHODF;
 

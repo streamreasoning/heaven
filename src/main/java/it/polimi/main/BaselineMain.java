@@ -3,13 +3,8 @@ package it.polimi.main;
 import it.polimi.processing.enums.ExperimentType;
 import it.polimi.processing.enums.FlowRateProfile;
 import it.polimi.processing.enums.Reasoning;
-import it.polimi.processing.ets.collector.TSResultCollector;
-import it.polimi.processing.ets.core.RSPTeststand;
-import it.polimi.processing.ets.core.TestStand;
-import it.polimi.processing.ets.streamer.RDFStreamGenerator;
-import it.polimi.processing.ets.streamer.TSStreamer;
 import it.polimi.processing.events.Experiment;
-import it.polimi.processing.events.InputRDFStream;
+import it.polimi.processing.events.CTEvent;
 import it.polimi.processing.events.profiler.ConstantFlowRateProfiler;
 import it.polimi.processing.events.profiler.RandomFlowRateProfiler;
 import it.polimi.processing.events.profiler.StepFactorFlowRateProfiler;
@@ -20,6 +15,11 @@ import it.polimi.processing.rspengine.jena.JenaRSPEngineFactory;
 import it.polimi.processing.rspengine.jena.JenaReasoningListenerFactory;
 import it.polimi.processing.rspengine.jena.enums.JenaEventType;
 import it.polimi.processing.rspengine.jena.enums.OntoLanguage;
+import it.polimi.processing.teststand.collector.TSResultCollector;
+import it.polimi.processing.teststand.core.RSPTeststand;
+import it.polimi.processing.teststand.core.TestStand;
+import it.polimi.processing.teststand.streamer.RDFStreamGenerator;
+import it.polimi.processing.teststand.streamer.TSStreamer;
 import it.polimi.services.FileService;
 import it.polimi.services.system.ExecutionEnvirorment;
 import it.polimi.services.system.GetPropertyValues;
@@ -149,7 +149,7 @@ public class BaselineMain {
 	}
 
 	protected static String flowRateProfileSelection() {
-		FlowRateProfiler<InputRDFStream> eb = null;
+		FlowRateProfiler<CTEvent> eb = null;
 
 		String code = "_FRP_";
 		String message = "Flow Rate Profile [" + FLOW_RATE_PROFILE + "] [" + INIT_SIZE + "] ";

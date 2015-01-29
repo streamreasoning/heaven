@@ -1,7 +1,7 @@
 package it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.listener;
 
 import it.polimi.processing.EventProcessor;
-import it.polimi.processing.events.InputRDFStream;
+import it.polimi.processing.events.CTEvent;
 import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.listener.abstracts.JenaNaiveListener;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -13,7 +13,7 @@ public final class JenaRhoDFListener extends JenaNaiveListener {
 
 	private final String aBoxRuleset;
 
-	public JenaRhoDFListener(Model tbox, String aBoxRuleset, EventProcessor<InputRDFStream> collector) {
+	public JenaRhoDFListener(Model tbox, String aBoxRuleset, EventProcessor<CTEvent> collector) {
 		super(tbox, collector);
 		this.aBoxRuleset = aBoxRuleset;
 	}

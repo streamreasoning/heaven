@@ -1,9 +1,9 @@
-package it.polimi.processing.ets.streamer;
+package it.polimi.processing.teststand.streamer;
 
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.Experiment;
-import it.polimi.processing.events.InputRDFStream;
+import it.polimi.processing.events.CTEvent;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.profiler.abstracts.FlowRateProfiler;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
@@ -20,17 +20,17 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public final class RDFStreamGenerator extends TSStreamer {
 
-	private InputRDFStream lastEvent;
+	private CTEvent lastEvent;
 	private String line;
 	private int streamedEvents;
 	private int triples;
 	private Experiment currentExperiment;
 
-	public RDFStreamGenerator(EventProcessor<InputRDFStream> processor, FlowRateProfiler<InputRDFStream> profiler, int eventLimit) {
+	public RDFStreamGenerator(EventProcessor<CTEvent> processor, FlowRateProfiler<CTEvent> profiler, int eventLimit) {
 		super(processor, profiler, ExecutionState.CLOSED, eventLimit);
 	}
 
-	public RDFStreamGenerator(EventProcessor<InputRDFStream> processor, FlowRateProfiler<InputRDFStream> profiler) {
+	public RDFStreamGenerator(EventProcessor<CTEvent> processor, FlowRateProfiler<CTEvent> profiler) {
 		super(processor, profiler, ExecutionState.CLOSED, 1000);
 	}
 

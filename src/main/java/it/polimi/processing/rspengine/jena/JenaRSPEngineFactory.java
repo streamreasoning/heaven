@@ -1,8 +1,7 @@
 package it.polimi.processing.rspengine.jena;
 
 import it.polimi.processing.EventProcessor;
-import it.polimi.processing.ets.core.TestStand;
-import it.polimi.processing.events.InputRDFStream;
+import it.polimi.processing.events.CTEvent;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
 import it.polimi.processing.rspengine.jena.enums.OntoLanguage;
 import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.JenaEngineGraphInc;
@@ -11,13 +10,14 @@ import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.JenaE
 import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.JenaEngineGraph;
 import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.JenaEngineSerialized;
 import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.JenaEngineStmt;
+import it.polimi.processing.teststand.core.TestStand;
 import it.polimi.services.system.GetPropertyValues;
 
 import com.espertech.esper.client.UpdateListener;
 
 public final class JenaRSPEngineFactory {
 
-	public static RSPEngine getSerializedEngine(EventProcessor<InputRDFStream> next, UpdateListener listener) {
+	public static RSPEngine getSerializedEngine(EventProcessor<CTEvent> next, UpdateListener listener) {
 		return new JenaEngineSerialized(GetPropertyValues.getEnumProperty(OntoLanguage.class, "onto_lang").name().toLowerCase(), next,
 				listener != null ? listener : JenaReasoningListenerFactory.getCurrent());
 	}
@@ -32,7 +32,7 @@ public final class JenaRSPEngineFactory {
 				listener != null ? listener : JenaReasoningListenerFactory.getCurrent());
 	}
 
-	public static RSPEngine getIncrementalSerializedEngine(EventProcessor<InputRDFStream> next, UpdateListener listener) {
+	public static RSPEngine getIncrementalSerializedEngine(EventProcessor<CTEvent> next, UpdateListener listener) {
 		return new JenaEngineSerializedInc(GetPropertyValues.getEnumProperty(OntoLanguage.class, "onto_lang").name().toLowerCase(), next,
 				listener != null ? listener : JenaReasoningListenerFactory.getCurrent());
 	}

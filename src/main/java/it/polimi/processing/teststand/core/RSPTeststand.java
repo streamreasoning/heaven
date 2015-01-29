@@ -1,48 +1,51 @@
-package it.polimi.processing.ets.core.strategic;
+package it.polimi.processing.teststand.core;
 
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.ets.collector.TSResultCollector;
-import it.polimi.processing.ets.core.TestStand;
-import it.polimi.processing.ets.core.strategic.timecontrol.TimeStrategy;
-import it.polimi.processing.ets.streamer.TSStreamer;
 import it.polimi.processing.events.Experiment;
-import it.polimi.processing.events.InputRDFStream;
-import it.polimi.processing.events.results.OutputRDFStream;
+import it.polimi.processing.events.CTEvent;
+import it.polimi.processing.events.results.OutCTEvent;
 import it.polimi.processing.events.results.TSResult;
 import it.polimi.processing.exceptions.WrongStatusTransitionException;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
+import it.polimi.processing.teststand.collector.TSResultCollector;
+import it.polimi.processing.teststand.streamer.TSStreamer;
 import it.polimi.services.system.GetPropertyValues;
 import it.polimi.services.system.Memory;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-public final class StrategicRSPTeststand extends TestStand {
+@NoArgsConstructor
+public class RSPTeststand extends TestStand {
 
 	private int experimentNumber;
 	private String outputFileName, windowFileName;
 	private String where;
 
-	private final TimeStrategy timeStrategy;
-
-	public StrategicRSPTeststand(TimeStrategy strategy) {
-		this.timeStrategy = strategy;
-	}
-
 	@Override
-	public boolean process(InputRDFStream e) {
+	public boolean process(CTEvent e) {
 		totalEvent++;
-		return (e instanceof OutputRDFStream) ? process((OutputRDFStream) e) : processRSPTripleSet(e);
+		return (e instanceof OutCTEvent) ? process((OutCTEvent) e) : processRSPTripleSet(e);
 	}
 
-	public boolean processRSPTripleSet(InputRDFStream e) {
-		rspEvent++;
-		return timeStrategy.apply(e);
+	public boolean processRSPTripleSet(CTEvent e) {
+		this.rspEvent++;
+		this.eventNumber = engine.getEventNumber();
+
+		this.currentResult = new TSResult();
+		this.currentResult.setId("<http://example.org/" + experimentNumber + "/" + eventNumber + ">");
+		this.currentResult.setEventNumber(eventNumber);
+		this.currentResult.setMemoryB(Memory.getMemoryUsage());
+		this.currentResult.setInputTimestamp(System.currentTimeMillis());
+
+		boolean process = engine.process(e);
+		engine.timeProgress();
+		return process;
 	}
 
-	public boolean process(OutputRDFStream engineResult) {
+	public boolean process(OutCTEvent engineResult) {
 		double memoryA = Memory.getMemoryUsage();
 		this.where = "exp" + experimentNumber + "/" + engine.getName() + "/";
-
 		if (engineResult.isAbox()) {
 			this.where += windowFileName;
 			return processAbox(engineResult);
@@ -50,7 +53,6 @@ public final class StrategicRSPTeststand extends TestStand {
 		} else {
 			resultEvent++;
 			this.where += outputFileName;
-			this.currentResult = timeStrategy.getResult();
 			this.currentResult.setResult(engineResult);
 			this.currentResult.setMemoryA(memoryA);
 			// this.currentResult.setCr(engineResult.getCompleteRHODF());
@@ -64,18 +66,19 @@ public final class StrategicRSPTeststand extends TestStand {
 
 	}
 
-	private boolean processAbox(OutputRDFStream engineResult) {
+	private boolean processAbox(OutCTEvent engineResult) {
+
 		this.aboxResult = new TSResult();
 		this.aboxResult.setId("<http://example.org/" + experimentNumber + "/" + (engine.getEventNumber() - 1) + ">");
 		this.aboxResult.setEventNumber(engineResult.getEventNumber());
 		this.aboxResult.setInputTimestamp(engineResult.getInputTimestamp());
 		this.aboxResult.setResult(engineResult);
+
 		return collector.process(aboxResult, this.where);
 	}
 
 	@Override
 	public void build(TSStreamer rspEventStreamer, RSPEngine rspEngine, TSResultCollector resultCollector) {
-		this.timeStrategy.setRSPEngine(rspEngine);
 		super.build(rspEventStreamer, rspEngine, resultCollector);
 	}
 

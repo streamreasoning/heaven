@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-public class InputRDFStream implements Event {
+public class CTEvent implements Event {
 
 	private String id;
 	private Set<TripleContainer> eventTriples;
@@ -24,7 +24,7 @@ public class InputRDFStream implements Event {
 		return eventTriples.size();
 	}
 
-	public InputRDFStream(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber) {
+	public CTEvent(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber) {
 		this.id = id;
 		this.eventTriples = hashSet;
 		this.eventNumber = eventNumber;
@@ -32,7 +32,7 @@ public class InputRDFStream implements Event {
 		this.inputTimestamp = System.currentTimeMillis();
 	}
 
-	public InputRDFStream rebuild(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber) {
+	public CTEvent rebuild(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber) {
 		this.id = id;
 		this.eventTriples = hashSet;
 		this.eventNumber = eventNumber;

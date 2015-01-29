@@ -1,7 +1,7 @@
 package it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener;
 
 import it.polimi.processing.EventProcessor;
-import it.polimi.processing.events.InputRDFStream;
+import it.polimi.processing.events.CTEvent;
 import it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener.abstracts.JenaIncrementalListener;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -12,7 +12,7 @@ import com.hp.hpl.jena.vocabulary.ReasonerVocabulary;
 
 public class JenaIncSMPLListener extends JenaIncrementalListener {
 
-	public JenaIncSMPLListener(Model tbox, EventProcessor<InputRDFStream> next) {
+	public JenaIncSMPLListener(Model tbox, EventProcessor<CTEvent> next) {
 		super(tbox, next);
 
 		reasoner = ReasonerRegistry.getRDFSReasoner();

@@ -1,7 +1,7 @@
 package it.polimi.processing.events.factory;
 
 import static org.junit.Assert.assertEquals;
-import it.polimi.processing.events.InputRDFStream;
+import it.polimi.processing.events.CTEvent;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.profiler.StepFactorFlowRateProfiler;
 import it.polimi.processing.events.profiler.abstracts.FlowRateProfiler;
@@ -22,7 +22,7 @@ public class OMStepEventBuilderTest {
 		int factor = 10;
 		int initSize = 5;
 
-		FlowRateProfiler<InputRDFStream> eb = new StepFactorFlowRateProfiler(factor, height, initSize, 0); // 1
+		FlowRateProfiler<CTEvent> eb = new StepFactorFlowRateProfiler(factor, height, initSize, 0); // 1
 																										// 5
 																										// 10
 
@@ -41,7 +41,7 @@ public class OMStepEventBuilderTest {
 
 		assertEquals(true, eb.isReady()); // The first RSPEvent
 
-		InputRDFStream event = eb.getEvent();
+		CTEvent event = eb.getEvent();
 
 		assertEquals(initSize, event.size());
 
@@ -71,8 +71,8 @@ public class OMStepEventBuilderTest {
 		int factor = 10;
 		int width = 5;
 		int size = 10;
-		InputRDFStream event;
-		FlowRateProfiler<InputRDFStream> eb = new StepFactorFlowRateProfiler(width, factor, size, 0); /*
+		CTEvent event;
+		FlowRateProfiler<CTEvent> eb = new StepFactorFlowRateProfiler(width, factor, size, 0); /*
 																								 * /
 																								 * /
 																								 * 10

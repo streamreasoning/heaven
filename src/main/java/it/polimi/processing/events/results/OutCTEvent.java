@@ -1,6 +1,6 @@
 package it.polimi.processing.events.results;
 
-import it.polimi.processing.events.InputRDFStream;
+import it.polimi.processing.events.CTEvent;
 import it.polimi.processing.events.TripleContainer;
 
 import java.util.Set;
@@ -14,12 +14,12 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-public class OutputRDFStream extends InputRDFStream {
+public class OutCTEvent extends CTEvent {
 
 	private long outputTimestamp;
 	private boolean abox;
 
-	public OutputRDFStream(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber, long outputTimestamp, boolean abox) {
+	public OutCTEvent(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber, long outputTimestamp, boolean abox) {
 		super(id, hashSet, eventNumber, experimentNumber);
 		this.outputTimestamp = outputTimestamp;
 		this.abox = abox;

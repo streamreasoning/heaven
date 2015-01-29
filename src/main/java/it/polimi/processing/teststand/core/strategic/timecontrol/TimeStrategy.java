@@ -1,12 +1,12 @@
-package it.polimi.processing.ets.core.strategic.timecontrol;
+package it.polimi.processing.teststand.core.strategic.timecontrol;
 
-import it.polimi.processing.events.InputRDFStream;
+import it.polimi.processing.events.CTEvent;
 import it.polimi.processing.events.results.TSResult;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
 
 public interface TimeStrategy {
 
-	public boolean apply(InputRDFStream e);
+	public boolean apply(CTEvent e);
 
 	public void setRSPEngine(RSPEngine rspEngine);
 

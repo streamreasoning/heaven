@@ -2,7 +2,7 @@ package it.polimi.processing.rspengine.abstracts;
 
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.enums.ExecutionState;
-import it.polimi.processing.events.InputRDFStream;
+import it.polimi.processing.events.CTEvent;
 import it.polimi.processing.rspengine.jena.WindowUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,17 +26,17 @@ public abstract class RSPEsperEngine implements RSPEngine {
 	protected ConfigurationMethodRef ref;
 
 	protected ExecutionState status;
-	protected EventProcessor<InputRDFStream> next;
+	protected EventProcessor<CTEvent> next;
 
 	protected String name;
 
 	@Setter
-	protected InputRDFStream currentEvent = null;
+	protected CTEvent currentEvent = null;
 	protected long sentTimestamp;
 
 	protected int windowShots = 0, snapshots = 0, time = 1, registrationTime = 0, rspEventsNumber = 0, esperEventsNumber = 0;
 
-	public RSPEsperEngine(String name, EventProcessor<InputRDFStream> next) {
+	public RSPEsperEngine(String name, EventProcessor<CTEvent> next) {
 		this.next = next;
 		this.name = name;
 	}

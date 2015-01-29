@@ -1,4 +1,4 @@
-package it.polimi.processing.ets.collector;
+package it.polimi.processing.teststand.collector;
 
 import it.polimi.processing.collector.ResultCollector;
 import it.polimi.processing.enums.ExecutionState;

@@ -1,7 +1,7 @@
 package it.polimi.processing.rspengine.jena.timekeeping.external.incremenal;
 
 import it.polimi.processing.EventProcessor;
-import it.polimi.processing.events.InputRDFStream;
+import it.polimi.processing.events.CTEvent;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.rspengine.jena.JenaEngine;
 import it.polimi.processing.rspengine.jena.WindowUtils;
@@ -26,7 +26,7 @@ import com.espertech.esper.client.UpdateListener;
 @Log4j
 public class JenaEngineSerializedInc extends JenaEngine {
 
-	public JenaEngineSerializedInc(String name, EventProcessor<InputRDFStream> collector, UpdateListener listener) {
+	public JenaEngineSerializedInc(String name, EventProcessor<CTEvent> collector, UpdateListener listener) {
 		super(name, collector, listener, WindowUtils.JENA_INPUT_QUERY_INCREMENTAL);
 
 		cepConfig = new Configuration();
@@ -37,7 +37,7 @@ public class JenaEngineSerializedInc extends JenaEngine {
 	}
 
 	@Override
-	protected void handleEvent(InputRDFStream e) {
+	protected void handleEvent(CTEvent e) {
 		super.handleEvent(e);
 		for (TripleContainer tc : e.getEventTriples()) {
 			String[] t = tc.getTriple();
