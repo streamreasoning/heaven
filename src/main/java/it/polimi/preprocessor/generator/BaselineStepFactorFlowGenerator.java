@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class BaselineStepFactorFlowGenerator {
 
-	private static int experimentNumber = 1;
+	private static int experimentNumber = 57;
 	private static final String eol = System.getProperty("line.separator");
 	private static final String date = "2015-01-18";
 
@@ -32,8 +32,8 @@ public class BaselineStepFactorFlowGenerator {
 		String content = "";
 		String name = "";
 
-		for (int rsp_events_in_window = 1; rsp_events_in_window <= 100; rsp_events_in_window *= 10) {
-			for (Reasoning reasoning_mode : reasoning) {
+		for (Reasoning reasoning_mode : reasoning) {
+			for (int rsp_events_in_window = 1; rsp_events_in_window <= 100; rsp_events_in_window *= 10) {
 				for (OntoLanguage lang : langs) {
 					for (JenaEventType eventType : jenaEventTypes) {
 						for (ExperimentType type : experimentTypes) {

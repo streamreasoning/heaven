@@ -13,7 +13,7 @@ public class BaselineConstantFlowGenerator {
 
 	private static int experimentNumber = 1;
 	private static final String eol = System.getProperty("line.separator");
-	private static final String date = "2015-01-19";
+	private static final String date = "2015-01-18";
 
 	private static boolean memory = false, latency = true, abox = false, result = false;
 	private static int maxEventStream = 2500;
@@ -31,9 +31,10 @@ public class BaselineConstantFlowGenerator {
 
 		String content = "";
 		String name = "";
-		for (int rsp_events_in_window = 1; rsp_events_in_window <= 1000; rsp_events_in_window *= 10) {
-			for (int init_size = 1; init_size <= 1000; init_size *= 10) {
-				for (Reasoning reasoning_mode : reasoning) {
+		for (Reasoning reasoning_mode : reasoning) {
+			for (int rsp_events_in_window = 1; rsp_events_in_window <= 1000; rsp_events_in_window *= 10) {
+				for (int init_size = 1; init_size <= 1000000; init_size *= 10) {
+
 					for (OntoLanguage lang : langs) {
 						for (JenaEventType eventType : jenaEventTypes) {
 							for (ExperimentType type : experimentTypes) {
@@ -46,10 +47,10 @@ public class BaselineConstantFlowGenerator {
 									content = engineProperties(content, "JENA", eventType, reasoning_mode, lang);
 									content = eventsProperties(content, init_size, profile, rsp_events_in_window, maxEventStream);
 									content = timeProperties(content, true);
-									if (rsp_events_in_window * init_size <= 1000) {
-										writeOnFile(outputFolder + reasoning_mode + "/", content, name, lang, eventType, rsp_events_in_window,
-												init_size, type, executionNumber);
-									}
+									// if (rsp_events_in_window * init_size <= 1000) {
+									writeOnFile(outputFolder + reasoning_mode + "/", content, name, lang, eventType, rsp_events_in_window, init_size,
+											type, executionNumber);
+									// }
 								}
 								System.out.println("Generate experiment [" + experimentNumber + "] name [" + name + "]");
 
