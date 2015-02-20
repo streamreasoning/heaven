@@ -1,6 +1,6 @@
 package it.polimi.export.processing.rspengine.windowed.esper.plain.utils;
 
-import it.polimi.processing.rspengine.jena.WindowUtils;
+import it.polimi.baselines.WindowUtils;
 import it.polimi.services.system.GetPropertyValues;
 
 public class Queries {
