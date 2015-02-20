@@ -1,24 +1,25 @@
 package it.polimi.main;
 
+import it.polimi.baselines.JenaRSPEngineFactory;
+import it.polimi.baselines.JenaReasoningListenerFactory;
+import it.polimi.baselines.enums.JenaEventType;
+import it.polimi.baselines.enums.OntoLanguage;
 import it.polimi.processing.enums.ExperimentType;
 import it.polimi.processing.enums.FlowRateProfile;
 import it.polimi.processing.enums.Reasoning;
-import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.CTEvent;
+import it.polimi.processing.events.Experiment;
 import it.polimi.processing.events.profiler.ConstantFlowRateProfiler;
+import it.polimi.processing.events.profiler.CustomStepFlowRateProfiler;
 import it.polimi.processing.events.profiler.RandomFlowRateProfiler;
 import it.polimi.processing.events.profiler.StepFactorFlowRateProfiler;
 import it.polimi.processing.events.profiler.StepFlowRateProfiler;
 import it.polimi.processing.events.profiler.abstracts.FlowRateProfiler;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
-import it.polimi.processing.rspengine.jena.JenaRSPEngineFactory;
-import it.polimi.processing.rspengine.jena.JenaReasoningListenerFactory;
-import it.polimi.processing.rspengine.jena.enums.JenaEventType;
-import it.polimi.processing.rspengine.jena.enums.OntoLanguage;
 import it.polimi.processing.teststand.collector.TSResultCollector;
 import it.polimi.processing.teststand.core.RSPTeststand;
 import it.polimi.processing.teststand.core.TestStand;
-import it.polimi.processing.teststand.streamer.RDFStreamGenerator;
+import it.polimi.processing.teststand.streamer.RDF2RDFStream;
 import it.polimi.processing.teststand.streamer.TSStreamer;
 import it.polimi.services.FileService;
 import it.polimi.services.system.ExecutionEnvirorment;
@@ -162,12 +163,17 @@ public class BaselineMain {
 			case STEP:
 				message += " Heigh [" + Y + "] Width [" + X + "] ";
 				eb = new StepFlowRateProfiler(X, Y, INIT_SIZE, EXPERIMENT_NUMBER);
-				code += "S" + INIT_SIZE + "H" + X + "W" + Y;
+				code += "S" + INIT_SIZE + "W" + X + "H" + Y;
 				break;
 			case STEP_FACTOR:
 				message += " Factor [" + Y + "] Width [" + X + "] ";
 				eb = new StepFactorFlowRateProfiler(X, Y, INIT_SIZE, EXPERIMENT_NUMBER);
-				code += "S" + INIT_SIZE + "H" + X + "W" + Y;
+				code += "S" + INIT_SIZE + "W" + X + "H" + Y;
+				break;
+			case CUSTOM_STEP:
+				message += " Custom Step Init [" + INIT_SIZE + "] FINAL [" + Y + "] WIDTH [" + X + "] ";
+				eb = new CustomStepFlowRateProfiler(X, Y, INIT_SIZE, EXPERIMENT_NUMBER);
+				code += "S" + INIT_SIZE + "F" + Y + "W" + X;
 				break;
 			case RANDOM:
 				message += " RND";
@@ -180,7 +186,7 @@ public class BaselineMain {
 
 		log.info(message);
 		if (eb != null) {
-			streamer = new RDFStreamGenerator(testStand, eb, MAX_EVENT_STREAM);
+			streamer = new RDF2RDFStream(testStand, eb, MAX_EVENT_STREAM);
 			return code;
 		}
 		throw new IllegalArgumentException("Not valid case [" + FLOW_RATE_PROFILE + "]");
