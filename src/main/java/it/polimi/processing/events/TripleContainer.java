@@ -3,6 +3,12 @@ package it.polimi.processing.events;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Thi class encapsulate the serialization of an RDF triple redefining equals concept
+ * 
+ * @author Riccardo
+ * 
+ */
 @Getter
 @NoArgsConstructor
 public final class TripleContainer {

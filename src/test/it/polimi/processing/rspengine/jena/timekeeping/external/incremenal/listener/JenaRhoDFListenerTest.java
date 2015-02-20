@@ -1,6 +1,6 @@
 package it.polimi.processing.rspengine.jena.timekeeping.external.incremenal.listener;
 
-import it.polimi.processing.rspengine.jena.timekeeping.external.snapshot.listener.JenaRhoDFListener;
+import it.polimi.baselines.timekeeping.external.snapshot.listener.JenaRhoDFListener;
 import it.polimi.processing.rspengine.rspevents.jena.GraphEvent;
 import it.polimi.processing.rspengine.rspevents.jena.StatementEvent;
 import it.polimi.processing.rspengine.rspevents.jena.TripleEvent;

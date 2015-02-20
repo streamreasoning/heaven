@@ -9,6 +9,12 @@ import java.io.IOException;
 
 import lombok.extern.log4j.Log4j;
 
+/**
+ * Service class that allow many operations on the filesystem
+ * 
+ * @author Riccardo
+ * 
+ */
 @Log4j
 public class FileService {
 

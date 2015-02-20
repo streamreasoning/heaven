@@ -1,9 +1,9 @@
 package it.polimi.processing.rspengine.abstracts;
 
+import it.polimi.baselines.WindowUtils;
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.CTEvent;
-import it.polimi.processing.rspengine.jena.WindowUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;

@@ -89,7 +89,6 @@ public class RSPTeststand extends TestStand {
 
 	@Override
 	public int run(Experiment e, String comment) {
-
 		if (!isOn()) {
 			throw new WrongStatusTransitionException("Can't run in Status [" + status + "]");
 		} else if (e != null) {

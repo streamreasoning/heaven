@@ -1,10 +1,10 @@
 package it.polimi.preprocessor.generator;
 
+import it.polimi.baselines.enums.JenaEventType;
+import it.polimi.baselines.enums.OntoLanguage;
 import it.polimi.processing.enums.ExperimentType;
 import it.polimi.processing.enums.FlowRateProfile;
 import it.polimi.processing.enums.Reasoning;
-import it.polimi.processing.rspengine.jena.enums.JenaEventType;
-import it.polimi.processing.rspengine.jena.enums.OntoLanguage;
 import it.polimi.services.FileService;
 
 import java.io.IOException;
