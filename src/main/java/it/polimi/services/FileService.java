@@ -49,14 +49,32 @@ public class FileService {
 		new File(folder).mkdirs();
 	}
 
-	public static BufferedReader getBuffer(String fileName) {
+	public static FileReader getFileReader(String fileName) {
 		log.info("Try to load [" + fileName + "]");
 		try {
 			File file = new File(fileName);
-			return new BufferedReader(new FileReader(file));
+			return new FileReader(file);
 		} catch (FileNotFoundException e) {
 			log.error(e.getMessage());
 			return null;
 		}
 	}
+
+	public static BufferedReader getBuffer(FileReader in) {
+		log.info("Try to load ");
+		return new BufferedReader(in);
+	}
+
+	public static BufferedReader getBuffer(String fileName) {
+		log.info("Try to load [" + fileName + "]");
+		try {
+			File file = new File(fileName);
+			FileReader in = new FileReader(file);
+			return new BufferedReader(in);
+		} catch (FileNotFoundException e) {
+			log.error(e.getMessage());
+			return null;
+		}
+	}
+
 }

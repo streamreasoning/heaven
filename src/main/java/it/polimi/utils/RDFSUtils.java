@@ -1,6 +1,6 @@
 package it.polimi.utils;
 
-import it.polimi.main.BaselineMain;
+import it.polimi.postprocessing.BaselineMain;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.util.FileManager;

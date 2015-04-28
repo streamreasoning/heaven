@@ -1,12 +1,10 @@
 package it.polimi.preprocessor;
 
 import it.polimi.services.FileService;
-import it.polimi.utils.FileUtils;
 import it.polimi.utils.RDFSUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,9 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 import lombok.extern.log4j.Log4j;
-
-import org.apache.jena.riot.RDFDataMgr;
-import org.apache.jena.riot.RDFFormat;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -40,16 +35,11 @@ public class NTInputFileCleaner {
 
 	public static void main(String[] args) throws IOException {
 		datatypeSize = inputSize = typeOfSizeBefore = typeOfSizeAfter = excludedSize = finalSize = 0;
-		int univNumber = 10;
-		int index = 0;
-		for (int seed = 0; seed < 10; seed++) {
 
-			String filenameOrURI = "./lubm/UNIV10IGEN/_UNIV" + univNumber + "INDEX" + index + "SEED" + seed + ".nt";
-			String outputFile = "_CLND_UNIV" + univNumber + "INDEX" + index + "SEED" + seed;
-			cleanFile(filenameOrURI, outputFile, FileUtils.PREPROCESSING_FILE_PATH + "UNIV10IGEN/");
-			index += univNumber;
-			log.info("Written " + outputFile);
+		for (String filenameOrURI : args) {
+			cleanFile(filenameOrURI, filenameOrURI.replace(".nt", "_CLND.nt"), "CLEANED/");
 		}
+
 	}
 
 	private static void cleanFile(String inputFileWithPath, String outputFile, String outputPath) throws IOException, FileNotFoundException {
@@ -80,13 +70,14 @@ public class NTInputFileCleaner {
 
 		typeOfSizeAfter = input.query(new SimpleSelector(null, RDF.type, (RDFNode) null)).size();
 
-		writeLogFile(inputFileWithPath, outputPath + "logs/" + "+Big_" + outputFile);
+		// writeLogFile(inputFileWithPath, outputPath + "logs/" + outputFile);
 
-		log.info("Log File Avaliable");
+		log.info("Log NOT File Avaliable");
 	}
 
 	private static void writeLogFile(String inputFile, String outputFileWithPath) throws IOException {
-		file = new File(outputFileWithPath.replace("_CLND_UNIV", "LOG_") + ".txt");
+		file = new File(outputFileWithPath.replace("_CLND.nt", "_LOG.txt"));
+
 		if (!file.exists()) {
 			file.createNewFile();
 		}
@@ -166,7 +157,8 @@ public class NTInputFileCleaner {
 			temp = inputOriginal.query(new SimpleSelector(null, ResourceFactory.createProperty(dp), (RDFNode) null));
 			excludedSize += temp.size();
 			input = input.difference(temp);
-			RDFDataMgr.write(new FileOutputStream(new File(outputFile + "-" + dp.split("#")[1] + ".nt"), true), temp, RDFFormat.NT);
+			// RDFDataMgr.write(new FileOutputStream(new File(outputFile + "-" + dp.split("#")[1] +
+			// ".nt"), true), temp, RDFFormat.NT);
 
 		}
 		return input;
@@ -177,7 +169,8 @@ public class NTInputFileCleaner {
 			temp = inputOriginal.query(new SimpleSelector(null, ResourceFactory.createProperty(dp), (RDFNode) null));
 			datatypeSize += temp.size();
 			input = input.difference(temp);
-			RDFDataMgr.write(new FileOutputStream(new File(outputFile + "-" + dp.split("#")[1] + ".nt"), true), temp, RDFFormat.NT);
+			// RDFDataMgr.write(new FileOutputStream(new File(outputFile + "-" + dp.split("#")[1] +
+			// ".nt"), true), temp, RDFFormat.NT);
 		}
 		return input;
 	}

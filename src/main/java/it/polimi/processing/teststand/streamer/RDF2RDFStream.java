@@ -11,6 +11,7 @@ import it.polimi.processing.streamer.Parser;
 import it.polimi.services.FileService;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 
 import lombok.Getter;
@@ -31,13 +32,16 @@ public final class RDF2RDFStream extends TSStreamer {
 	private int streamedEvents;
 	private int triples;
 	private Experiment currentExperiment;
+	protected FlowRateProfiler<CTEvent> profiler;
 
 	public RDF2RDFStream(EventProcessor<CTEvent> processor, FlowRateProfiler<CTEvent> profiler, int eventLimit) {
-		super(processor, profiler, ExecutionState.CLOSED, eventLimit);
+		super(processor, ExecutionState.CLOSED, eventLimit);
+		this.profiler = profiler;
 	}
 
 	public RDF2RDFStream(EventProcessor<CTEvent> processor, FlowRateProfiler<CTEvent> profiler) {
-		super(processor, profiler, ExecutionState.CLOSED, 1000);
+		super(processor, ExecutionState.CLOSED, 1000);
+		this.profiler = profiler;
 	}
 
 	/**
@@ -52,10 +56,12 @@ public final class RDF2RDFStream extends TSStreamer {
 		} else {
 			this.currentExperiment = e;
 			try {
-
 				log.info("Start Streaming");
-				BufferedReader br = FileService.getBuffer(currentExperiment.getInputFileName());
-				while ((line = br.readLine()) != null && streamedEvents <= eventLimit - 1) {
+				FileReader in = FileService.getFileReader(currentExperiment.getInputFileName());
+				BufferedReader br = FileService.getBuffer(in);
+				while (streamedEvents <= eventLimit - 1) {
+
+					line = br.readLine();
 
 					status = ExecutionState.RUNNING;
 					profiler.append(new TripleContainer(Parser.parseTriple(line)));

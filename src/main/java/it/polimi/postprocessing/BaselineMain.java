@@ -1,4 +1,4 @@
-package it.polimi.main;
+package it.polimi.postprocessing;
 
 import it.polimi.baselines.JenaRSPEngineFactory;
 import it.polimi.baselines.JenaReasoningListenerFactory;
@@ -16,9 +16,10 @@ import it.polimi.processing.events.profiler.StepFactorFlowRateProfiler;
 import it.polimi.processing.events.profiler.StepFlowRateProfiler;
 import it.polimi.processing.events.profiler.abstracts.FlowRateProfiler;
 import it.polimi.processing.rspengine.abstracts.RSPEngine;
+import it.polimi.processing.rspengine.abstracts.RSPListener;
 import it.polimi.processing.teststand.collector.TSResultCollector;
-import it.polimi.processing.teststand.core.RSPTeststand;
 import it.polimi.processing.teststand.core.TestStand;
+import it.polimi.processing.teststand.core.TestStandImpl;
 import it.polimi.processing.teststand.streamer.RDF2RDFStream;
 import it.polimi.processing.teststand.streamer.TSStreamer;
 import it.polimi.services.FileService;
@@ -37,8 +38,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
-import com.espertech.esper.client.UpdateListener;
-
 @Log4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BaselineMain {
@@ -51,11 +50,11 @@ public class BaselineMain {
 	private static RSPEngine engine;
 
 	private static Date EXPERIMENT_DATE;
-	private static String file, COMMENT;
 
+	private static String file, COMMENT;
 	private static TestStand testStand;
 	private static TSResultCollector streamingEventResultCollector;
-	private static UpdateListener listener;
+	private static RSPListener listener;
 
 	private static final DateFormat DT = new SimpleDateFormat("yyyy_MM_dd");
 
@@ -111,7 +110,7 @@ public class BaselineMain {
 
 		log.info("Experiment [" + EXPERIMENT_NUMBER + "] on [" + file + "] of [" + EXPERIMENT_DATE + "] Number of Events [" + MAX_EVENT_STREAM + "]");
 
-		testStand = new RSPTeststand();
+		testStand = new TestStandImpl();
 
 		eventBuilderCodeName = flowRateProfileSelection();
 
@@ -255,17 +254,12 @@ public class BaselineMain {
 
 		testStand.build(streamer, engine, streamingEventResultCollector);
 		testStand.init();
-		try {
 
-			Experiment experiment = new Experiment(experimentNumber, FLOW_RATE_PROFILE.name() + eventBuilderCodeName, CURRENT_RSPENGINE + "_"
-					+ REASONING_MODE.name() + "_" + ONTO_LANGUAGE.name(), FileUtils.INPUT_FILE_PATH + f, outputFileName, windowFileName,
-					d.toString(), EXPERIMENT_TYPE.name(), "EXTERNAL", "");
+		Experiment experiment = new Experiment(experimentNumber, FLOW_RATE_PROFILE.name() + eventBuilderCodeName, CURRENT_RSPENGINE + "_"
+				+ REASONING_MODE.name() + "_" + ONTO_LANGUAGE.name(), FileUtils.INPUT_FILE_PATH + f, outputFileName, windowFileName, d.toString(),
+				EXPERIMENT_TYPE.name(), "EXTERNAL", "");
 
-			experimentNumber += testStand.run(experiment, comment);
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			testStand.stop();
-		}
+		experimentNumber += testStand.run(experiment, comment);
 
 		testStand.close();
 	}

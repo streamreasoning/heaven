@@ -27,10 +27,11 @@ public class OutputLogDataUnifier {
 	private static final DateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
 	private static String basePath = "./data/output/";
 	private static String head;
+	private static int numerOfExecutions = 10;
 
 	public static void main(String[] args) throws IOException, ParseException {
 
-		basePath += dt.format(dt.parse("2015-01-19")) + "/";
+		basePath += dt.format(dt.parse("2015-04-30")) + "/";
 
 		File folder = new File(basePath);
 		File[] listFiles = folder.listFiles(new FileFilter() {
@@ -78,7 +79,7 @@ public class OutputLogDataUnifier {
 
 					if (canonicalPath.contains(memlog + expNum)) {
 						filesList = new ArrayList<String>();
-						for (int i = 0; i < 5; i++) {
+						for (int i = 0; i < numerOfExecutions; i++) {
 							filesList.add(execution = canonicalPath.replaceAll("_EXE" + ".?" + "_", "_EXE" + i + "_"));
 							move(new File(pathname + "/" + execution), "mem");
 						}
@@ -88,7 +89,7 @@ public class OutputLogDataUnifier {
 
 					} else if (canonicalPath.contains(latlog + expNum)) {
 						filesList = new ArrayList<String>();
-						for (int i = 0; i < 5; i++) {
+						for (int i = 0; i < numerOfExecutions; i++) {
 							filesList.add(execution = canonicalPath.replaceAll("_EXE" + ".?" + "_", "_EXE" + i + "_"));
 							move(new File(pathname + "/" + execution), "lat");
 						}

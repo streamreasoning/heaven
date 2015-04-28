@@ -1,25 +1,25 @@
 package it.polimi.preprocessor.generator;
 
+import it.polimi.baselines.enums.JenaEventType;
+import it.polimi.baselines.enums.OntoLanguage;
 import it.polimi.processing.enums.ExperimentType;
 import it.polimi.processing.enums.FlowRateProfile;
 import it.polimi.processing.enums.Reasoning;
-import it.polimi.processing.rspengine.jena.enums.JenaEventType;
-import it.polimi.processing.rspengine.jena.enums.OntoLanguage;
 import it.polimi.services.FileService;
 
 import java.io.IOException;
 
 public class BaselineConstantFlowGenerator {
 
-	private static int experimentNumber = 1;
+	private static int experimentNumber = 0;
 	private static final String eol = System.getProperty("line.separator");
-	private static final String date = "2015-01-18";
+	private static final String date = "2015-04-30";
 
-	private static boolean memory = false, latency = true, abox = false, result = false;
-	private static int maxEventStream = 2500;
+	private static boolean latency = true, abox = false, result = false;
+	private static int maxEventStream = 30000;
 	private static final String inputFile = "BIG_SHUFFLED.nt";
 
-	private static final OntoLanguage[] langs = new OntoLanguage[] { OntoLanguage.SMPL, OntoLanguage.RHODF };
+	private static final OntoLanguage[] langs = new OntoLanguage[] { OntoLanguage.RHODF };
 	private static final ExperimentType[] experimentTypes = new ExperimentType[] { ExperimentType.LATENCY, ExperimentType.MEMORY };
 	private static final FlowRateProfile profile = FlowRateProfile.CONSTANT;
 	private static final Reasoning[] reasoning = new Reasoning[] { Reasoning.NAIVE, Reasoning.INCREMENTAL };
@@ -27,41 +27,46 @@ public class BaselineConstantFlowGenerator {
 
 	public static void main(String[] args) throws IOException {
 
-		String outputFolder = "./properties/ESWC15/" + profile + "FR" + "/";
+		String outputFolder = "./properties/THESIS/" + profile + "FR" + "/";
 
 		String content = "";
 		String name = "";
-		for (Reasoning reasoning_mode : reasoning) {
-			for (int rsp_events_in_window = 1; rsp_events_in_window <= 1000; rsp_events_in_window *= 10) {
-				for (int init_size = 1; init_size <= 1000000; init_size *= 10) {
 
-					for (OntoLanguage lang : langs) {
+		for (int rsp_events_in_window = 1; rsp_events_in_window <= 10000; rsp_events_in_window *= 10) {
+			for (int init_size = 1; init_size <= 10000; init_size *= 10) {
+				if (rsp_events_in_window * init_size > 10000) {
+					continue;
+				}
+				for (OntoLanguage lang : langs) {
+					for (Reasoning reasoning_mode : reasoning) {
 						for (JenaEventType eventType : jenaEventTypes) {
 							for (ExperimentType type : experimentTypes) {
 
-								name += profile + "_" + reasoning_mode + "_" + type + "_" + lang.name() + "_" + eventType + "INIT" + init_size + "W"
+								name += profile + "_" + reasoning_mode + "_" + type + "_" + lang.name() + "_" + eventType + "_K" + init_size + "EW"
 										+ rsp_events_in_window;
 
-								for (int executionNumber = 0; executionNumber < 5; executionNumber++) {
+								for (int executionNumber = 0; executionNumber < 10; executionNumber++) {
 									content = experimentProperties(content, executionNumber, date, type.name());
 									content = engineProperties(content, "JENA", eventType, reasoning_mode, lang);
 									content = eventsProperties(content, init_size, profile, rsp_events_in_window, maxEventStream);
 									content = timeProperties(content, true);
-									// if (rsp_events_in_window * init_size <= 1000) {
-									writeOnFile(outputFolder + reasoning_mode + "/", content, name, lang, eventType, rsp_events_in_window, init_size,
-											type, executionNumber);
-									// }
-								}
-								System.out.println("Generate experiment [" + experimentNumber + "] name [" + name + "]");
 
+									writeOnFile(outputFolder + reasoning_mode + "/", content, "EN" + (experimentNumber) + "_" + name, lang,
+											eventType, rsp_events_in_window, init_size, type, executionNumber);
+									experimentNumber += type.equals(ExperimentType.LATENCY) && eventType.equals(JenaEventType.STMT)
+											&& reasoning_mode.equals(Reasoning.NAIVE) ? executionNumber / 9 : 0;
+
+									content = "";
+								}
+								System.out.println("Generate experiment [" + experimentNumber + "] name [" + "EN" + (experimentNumber) + "_" + name
+										+ "]");
 								name = "";
-								content = "";
 
 							}
 						}
 
 					}
-					experimentNumber++;
+
 				}
 			}
 		}
@@ -83,7 +88,7 @@ public class BaselineConstantFlowGenerator {
 	private static String timeProperties(String content, boolean externalTiming) {
 		content += "#Timing";
 		content += eol;
-		content += "external_time_control_on = " + maxEventStream;
+		content += "external_time_control_on = " + externalTiming;
 		content += eol;
 		content += "#Timing End";
 		content += eol;
@@ -127,11 +132,11 @@ public class BaselineConstantFlowGenerator {
 	}
 
 	private static String experimentProperties(String content, int executionNumber, String date, String type) {
-		content += "#ESWC15 Baselines Constant Flow Rate Experiments";
+		content += "#Thesis Baselines Constant Flow Rate Experiments";
 		content += eol;
 		content += "#Experiment";
 		content += eol;
-		content += "experiment_name = ESWC15 BASELINES CONSTANT FLOW RATE";
+		content += "experiment_name = THESIS BASELINES CONSTANT FLOW RATE";
 		content += eol;
 		content += "experiment_number = " + experimentNumber;
 		content += eol;

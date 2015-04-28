@@ -5,11 +5,11 @@ import it.polimi.baselines.WindowUtils;
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.events.CTEvent;
 import it.polimi.processing.events.TripleContainer;
+import it.polimi.processing.rspengine.abstracts.RSPListener;
 import it.polimi.processing.rspengine.rspevents.jena.SerializedEvent;
 import lombok.extern.log4j.Log4j;
 
 import com.espertech.esper.client.Configuration;
-import com.espertech.esper.client.UpdateListener;
 
 /**
  * In this example rdfs property of subclass of is exploited by external static
@@ -26,7 +26,7 @@ import com.espertech.esper.client.UpdateListener;
 @Log4j
 public class JenaEngineSerialized extends JenaEngine {
 
-	public JenaEngineSerialized(String name, EventProcessor<CTEvent> collector, UpdateListener listener) {
+	public JenaEngineSerialized(String name, EventProcessor<CTEvent> collector, RSPListener listener) {
 		super(name, collector, listener, WindowUtils.JENA_INPUT_QUERY_SNAPTSHOT);
 
 		cepConfig = new Configuration();

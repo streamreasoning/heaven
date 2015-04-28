@@ -16,7 +16,7 @@ import lombok.extern.log4j.Log4j;
 
 @Log4j
 @NoArgsConstructor
-public class RSPTeststand extends TestStand {
+public class TestStandImpl extends TestStand {
 
 	private int experimentNumber;
 	private String outputFileName, windowFileName;

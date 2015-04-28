@@ -4,25 +4,25 @@ import it.polimi.processing.EventProcessor;
 import it.polimi.processing.enums.ExecutionState;
 import it.polimi.processing.events.CTEvent;
 import it.polimi.processing.rspengine.abstracts.RSPEsperEngine;
+import it.polimi.processing.rspengine.abstracts.RSPListener;
 import lombok.extern.log4j.Log4j;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.ConfigurationMethodRef;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
-import com.espertech.esper.client.UpdateListener;
 import com.espertech.esper.client.time.CurrentTimeEvent;
 
 @Log4j
 public abstract class JenaEngine extends RSPEsperEngine {
 
-	private final UpdateListener listener;
+	private final RSPListener listener;
 
 	private final String query;
 
 	private EPStatement out = null;
 
-	public JenaEngine(String name, EventProcessor<CTEvent> collector, UpdateListener listener, String query) {
+	public JenaEngine(String name, EventProcessor<CTEvent> collector, RSPListener listener, String query) {
 		super(name, collector);
 		super.cepConfig = new Configuration();
 		this.listener = listener;

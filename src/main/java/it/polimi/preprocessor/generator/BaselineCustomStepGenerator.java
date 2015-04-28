@@ -14,12 +14,12 @@ import lombok.extern.java.Log;
 @Log
 public class BaselineCustomStepGenerator {
 
-	private static int experimentNumber = 110;
+	private static int experimentNumber = 20;
 	private static final String eol = System.getProperty("line.separator");
 	private static final String date = "2015-04-30";
 
 	private static boolean latency = true, abox = false, result = false;
-	private static int maxEventStream = 40000, x_size, y_size = 10000, init_size = 1000, rsp_events_in_window = 10;
+	private static int maxEventStream = 60000, x_size, y_size = 10000, init_size = 1000, rsp_events_in_window = 10;
 	private static final String inputFile = "BIG_SHUFFLED.nt";
 
 	private static final OntoLanguage[] langs = new OntoLanguage[] { OntoLanguage.RHODF };
@@ -49,8 +49,8 @@ public class BaselineCustomStepGenerator {
 			}
 		}
 
-		for (Reasoning reasoning_mode : reasoning) {
-			for (OntoLanguage lang : langs) {
+		for (OntoLanguage lang : langs) {
+			for (Reasoning reasoning_mode : reasoning) {
 				for (JenaEventType eventType : jenaEventTypes) {
 					for (ExperimentType type : experimentTypes) {
 
@@ -63,19 +63,23 @@ public class BaselineCustomStepGenerator {
 							content = eventsProperties(content, init_size, profile, rsp_events_in_window, maxEventStream);
 							content = timeProperties(content, true);
 
-							writeOnFile(outputFolder + reasoning_mode + "/", content, name, lang, eventType, rsp_events_in_window, init_size, type,
-									executionNumber);
+							writeOnFile(outputFolder + reasoning_mode + "/", content, "EN" + (experimentNumber) + "_" + name, lang, eventType,
+									rsp_events_in_window, init_size, type, executionNumber);
+
+							experimentNumber += type.equals(ExperimentType.LATENCY) && eventType.equals(JenaEventType.STMT)
+									&& reasoning_mode.equals(Reasoning.NAIVE) ? executionNumber / 9 : 0;
+
+							content = "";
 						}
+
 						System.out.println("Generate experiment [" + experimentNumber + "] name [" + name + "]");
 
 						name = "";
-						content = "";
 
 					}
 				}
 
 			}
-			experimentNumber++;
 		}
 
 		System.out.println("Generated [" + (experimentNumber - 1) + "] Experiments");

@@ -4,6 +4,7 @@ import it.polimi.processing.EventProcessor;
 import it.polimi.processing.events.CTEvent;
 import it.polimi.processing.events.TripleContainer;
 import it.polimi.processing.events.results.OutCTEvent;
+import it.polimi.processing.rspengine.abstracts.RSPListener;
 import it.polimi.processing.rspengine.rspevents.jena.JenaEsperEvent;
 import it.polimi.services.system.ExecutionEnvirorment;
 
@@ -13,7 +14,6 @@ import java.util.Set;
 import lombok.extern.log4j.Log4j;
 
 import com.espertech.esper.client.EventBean;
-import com.espertech.esper.client.UpdateListener;
 import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.InfModel;
@@ -25,7 +25,7 @@ import com.hp.hpl.jena.reasoner.InfGraph;
 import com.hp.hpl.jena.reasoner.Reasoner;
 
 @Log4j
-public abstract class JenaNaiveListener implements UpdateListener {
+public abstract class JenaNaiveListener implements RSPListener {
 
 	private final Model TBoxStar;
 	private Graph abox;
@@ -34,7 +34,6 @@ public abstract class JenaNaiveListener implements UpdateListener {
 	private final EventProcessor<CTEvent> next;
 	private int eventNumber = 0;
 	private Set<TripleContainer> ABoxTriples;
-	private int experimentNumber;
 
 	public JenaNaiveListener(Model tbox, EventProcessor<CTEvent> next) {
 		this.TBoxStar = tbox;

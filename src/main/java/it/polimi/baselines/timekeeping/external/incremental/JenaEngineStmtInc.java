@@ -5,12 +5,12 @@ import it.polimi.baselines.WindowUtils;
 import it.polimi.processing.EventProcessor;
 import it.polimi.processing.events.CTEvent;
 import it.polimi.processing.events.TripleContainer;
+import it.polimi.processing.rspengine.abstracts.RSPListener;
 import it.polimi.processing.rspengine.rspevents.jena.StatementEvent;
 import it.polimi.utils.RDFSUtils;
 import lombok.extern.log4j.Log4j;
 
 import com.espertech.esper.client.Configuration;
-import com.espertech.esper.client.UpdateListener;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -21,7 +21,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 @Log4j
 public class JenaEngineStmtInc extends JenaEngine {
 
-	public JenaEngineStmtInc(String name, EventProcessor<CTEvent> collector, UpdateListener listener) {
+	public JenaEngineStmtInc(String name, EventProcessor<CTEvent> collector, RSPListener listener) {
 		super(name, collector, listener, WindowUtils.JENA_INPUT_QUERY_INCREMENTAL);
 
 		cepConfig = new Configuration();
