@@ -1,0 +1,8 @@
+args<-commandArgs(TRUE)
+dataset <- read.csv(args[1])
+filename = gsub(".csv", "", args[1])
+fileNameEt <- paste(filename, "_AVG.csv", sep="")
+avgLat <- rowMeans(cbind(dataset$LAT0,dataset$LAT1 ,dataset$LAT2 ,dataset$LAT3 ,dataset$LAT4,dataset$LAT5,dataset$LAT6,dataset$LAT7,dataset$LAT8,dataset$LAT9))
+avgMEMA <- rowMeans(cbind(dataset$MEMA0,dataset$MEMA1 ,dataset$MEMA2 ,dataset$MEMA3 ,dataset$MEMA4,dataset$MEMA5,dataset$MEMA6,dataset$MEMA7,dataset$MEMA8,dataset$MEMA9))
+avgMEMB <- rowMeans(cbind(dataset$MEMB0,dataset$MEMB1 ,dataset$MEMB2 ,dataset$MEMB3 ,dataset$MEMB4,dataset$MEMB5,dataset$MEMB6,dataset$MEMB7,dataset$MEMB8,dataset$MEMB9))
+write.table(cbind(dataset, avgLat, avgMEMB, avgMEMA),  append=TRUE, sep=";", dec=",", row.names = FALSE, file = fileNameEt )
