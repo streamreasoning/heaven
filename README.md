@@ -6,4 +6,4 @@ It is composed by
 
 - RSP Engine Test Stand 
 - Four baselines RSP Engine developed with [Esper](http://www.espertech.com/esper/) and [Jena](http://jena.apache.org/index.html)
-- some R scripts for data anlisis
+- some R scripts for data analysis
