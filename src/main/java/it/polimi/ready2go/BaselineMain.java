@@ -1,4 +1,4 @@
-package it.polimi.postprocessing;
+package it.polimi.ready2go;
 
 import it.polimi.baselines.JenaRSPEngineFactory;
 import it.polimi.baselines.JenaReasoningListenerFactory;

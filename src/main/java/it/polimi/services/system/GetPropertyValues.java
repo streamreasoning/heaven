@@ -1,6 +1,6 @@
 package it.polimi.services.system;
 
-import it.polimi.postprocessing.BaselineMain;
+import it.polimi.ready2go.BaselineMain;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,10 +20,11 @@ import lombok.extern.log4j.Log4j;
 public class GetPropertyValues {
 	private static Properties prop = new Properties();
 	public static String inputPropertiesFileName = null;
-	private static final String defaultPropertiesFileName = "properties/default_teststand.properties";
+	private static final String defaultPropertiesFileName = "data/properties/default_teststand.properties";
 	private static final DateFormat DT = new SimpleDateFormat("yyyy-MM-dd");
 
 	public static final String DEFAULT_INPUT_FILE = "input_file";
+	public static final String READY2GO = "data/properties/ready2go.properties";
 
 	static {
 		InputStream inputStream;
