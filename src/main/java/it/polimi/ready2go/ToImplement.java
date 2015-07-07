@@ -23,7 +23,9 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -67,17 +69,25 @@ public class ToImplement {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
 
+		if (args.length >= 1) {
+			INPUT_PROPERTIES = args[0];
+			log.info(Arrays.deepToString(args));
+		}
+		
 		
 		file = GetPropertyValues.getProperty(GetPropertyValues.READY2GO);
+//		file = "properties/ready2go.properties";
 
 		MAX_EVENT_STREAM = GetPropertyValues.getIntegerProperty("max_event_stream");
-		
-		
+		EXPERIMENT_NUMBER = GetPropertyValues.getIntegerProperty("experiment_number");
+				
 		log.info("Experiment [" + EXPERIMENT_NUMBER + "] on [" + file + "] of [" + EXPERIMENT_DATE + "] Number of Events [" + MAX_EVENT_STREAM + "]");
 
 		testStand = new TestStandImpl();
 
-		FileService.createOutputFolder(FileUtils.daypath + "/exp" + EXPERIMENT_NUMBER + "/" + ONTO_LANGUAGE.name());
+		eventBuilderCodeName = flowRateProfileSelection();
+
+		FileService.createOutputFolder(FileUtils.daypath + "/exp" + EXPERIMENT_NUMBER + "/prove");
 
 		wINDOWSIZE = GetPropertyValues.getProperty("rsp_events_in_window");
 
@@ -90,10 +100,10 @@ public class ToImplement {
 		outputFileName = EXPERIMENT_TYPE.ordinal() + "Result_" + generalName;
 		windowFileName = EXPERIMENT_TYPE.ordinal() + "Window_" + generalName;
 
-		whereOutput = "exp" + EXPERIMENT_NUMBER + "/" + ONTO_LANGUAGE.name() + "/" + outputFileName;
+		whereOutput = "exp" + EXPERIMENT_NUMBER + "/prove/" + outputFileName;
 
 		if (GetPropertyValues.getBooleanProperty("save_abox_log")) {
-			whereWindow = "exp" + EXPERIMENT_NUMBER + "/" + ONTO_LANGUAGE.name() + "/" + windowFileName;
+			whereWindow = "exp" + EXPERIMENT_NUMBER + "/prove/" + windowFileName;
 			log.info("Window file name will be: ["
 					+ whereWindow.replace("0Result", "RESLOG").replace("0Window", "WINLOG").replace("1Result", "LATLOG")
 							.replace("1Window", "WINLATLOG").replace("2Result", "MEMLOG").replace("2Window", "WINMEMLOG") + "]");
@@ -111,18 +121,23 @@ public class ToImplement {
 
 	}
 
-	protected static void flowRateProfileSelection() {
+	protected static String flowRateProfileSelection() {
 		FlowRateProfiler<CTEvent> eb = new ConstantFlowRateProfiler(INIT_SIZE, EXPERIMENT_NUMBER);
 			streamer = new RDF2RDFStream(testStand, eb, MAX_EVENT_STREAM);
+			String code = "_FRP_";
+			code += "K" + INIT_SIZE;
+			return code;
 	}
 
 	protected static void engineSelection() {
-		//TODO implement here your engine
+		log.info("Reasoner Selection: [C-SPARQL Engine]");
+		CURRENT_RSPENGINE = "C-SPARQL Engine";
+		engine = new CSPARQLEngineFacade("C-SPARQL Engine",testStand);
 	}
 
 	protected static void collectorSelection() {
 
-		streamingEventResultCollector = new TSResultCollector(ONTO_LANGUAGE.name() + "/");
+		streamingEventResultCollector = new TSResultCollector("prove/");
 		String exp = "";
 		if (ExecutionEnvirorment.finalresultTrigLogEnabled)
 			exp += "Result C&S ";
@@ -139,8 +154,7 @@ public class ToImplement {
 		testStand.build(streamer, engine, streamingEventResultCollector);
 		testStand.init();
 
-		Experiment experiment = new Experiment(experimentNumber, FLOW_RATE_PROFILE.name() + eventBuilderCodeName, CURRENT_RSPENGINE + "_"
-				+ REASONING_MODE.name() + "_" + ONTO_LANGUAGE.name(), FileUtils.INPUT_FILE_PATH + f, outputFileName, windowFileName, d.toString(),
+		Experiment experiment = new Experiment(experimentNumber, FLOW_RATE_PROFILE + eventBuilderCodeName, CURRENT_RSPENGINE, FileUtils.INPUT_FILE_PATH + f, outputFileName, windowFileName, d.toString(),
 				EXPERIMENT_TYPE.name(), "EXTERNAL", "");
 
 		experimentNumber += testStand.run(experiment, comment);
