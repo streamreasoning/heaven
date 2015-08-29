@@ -1,10 +1,10 @@
 package it.polimi.processing.events.profiler;
 
 import static org.junit.Assert.assertEquals;
-import it.polimi.processing.events.CTEvent;
-import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.profiler.StepFactorFlowRateProfiler;
-import it.polimi.processing.events.profiler.abstracts.FlowRateProfiler;
+import it.polimi.heaven.core.ts.events.Stimulus;
+import it.polimi.heaven.core.ts.events.TripleContainer;
+import it.polimi.heaven.core.ts.streamer.flowrateprofiler.FlowRateProfiler;
+import it.polimi.heaven.core.tsimpl.streamer.flowrateprofiler.StepFactorFlowRateProfiler;
 import lombok.extern.log4j.Log4j;
 
 import org.junit.Rule;
@@ -22,7 +22,7 @@ public class OMStepEventBuilderTest {
 		int factor = 10;
 		int initSize = 5;
 
-		FlowRateProfiler<CTEvent> eb = new StepFactorFlowRateProfiler(factor, height, initSize, 0); // 1
+		FlowRateProfiler<Stimulus> eb = new StepFactorFlowRateProfiler(factor, height, initSize, 0); // 1
 																										// 5
 																										// 10
 
@@ -41,7 +41,7 @@ public class OMStepEventBuilderTest {
 
 		assertEquals(true, eb.isReady()); // The first RSPEvent
 
-		CTEvent event = eb.getEvent();
+		Stimulus event = eb.getEvent();
 
 		assertEquals(initSize, event.size());
 
@@ -71,8 +71,8 @@ public class OMStepEventBuilderTest {
 		int factor = 10;
 		int width = 5;
 		int size = 10;
-		CTEvent event;
-		FlowRateProfiler<CTEvent> eb = new StepFactorFlowRateProfiler(width, factor, size, 0); /*
+		Stimulus event;
+		FlowRateProfiler<Stimulus> eb = new StepFactorFlowRateProfiler(width, factor, size, 0); /*
 																								 * /
 																								 * /
 																								 * 10

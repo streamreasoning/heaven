@@ -1,9 +1,10 @@
 package it.polimi.processing.events.profiler;
 
 import static org.junit.Assert.assertEquals;
-import it.polimi.processing.events.CTEvent;
-import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.profiler.abstracts.FlowRateProfiler;
+import it.polimi.heaven.core.ts.events.Stimulus;
+import it.polimi.heaven.core.ts.events.TripleContainer;
+import it.polimi.heaven.core.ts.streamer.flowrateprofiler.FlowRateProfiler;
+import it.polimi.heaven.core.tsimpl.streamer.flowrateprofiler.CustomStepFlowRateProfiler;
 import lombok.extern.log4j.Log4j;
 
 import org.junit.Rule;
@@ -22,7 +23,7 @@ public class CustomStepEventBuilderTest {
 		int finalSize = 10;
 		int width = 2;
 
-		FlowRateProfiler<CTEvent> eb = new CustomStepFlowRateProfiler(width, finalSize, initSize, 0);
+		FlowRateProfiler<Stimulus> eb = new CustomStepFlowRateProfiler(width, finalSize, initSize, 0);
 
 		assertEquals(false, eb.isReady()); // The first RSPEvent
 
@@ -39,7 +40,7 @@ public class CustomStepEventBuilderTest {
 
 		assertEquals(true, eb.isReady()); // The first RSPEvent
 
-		CTEvent event = eb.getEvent();
+		Stimulus event = eb.getEvent();
 
 		assertEquals(initSize, event.size());
 
@@ -142,8 +143,8 @@ public class CustomStepEventBuilderTest {
 		int finalSize = 15;
 		int width = 5;
 		int size = 5;
-		CTEvent event;
-		FlowRateProfiler<CTEvent> eb = new CustomStepFlowRateProfiler(width, finalSize, size, 0); // 555551515151515
+		Stimulus event;
+		FlowRateProfiler<Stimulus> eb = new CustomStepFlowRateProfiler(width, finalSize, size, 0); // 555551515151515
 		assertEquals(false, eb.isReady()); // The first RSPEvent
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < size; j++) {
@@ -175,8 +176,8 @@ public class CustomStepEventBuilderTest {
 		int finalSize = 5;
 		int width = 5;
 		int size = 15;
-		CTEvent event;
-		FlowRateProfiler<CTEvent> eb = new CustomStepFlowRateProfiler(width, finalSize, size, 0); // 555551515151515
+		Stimulus event;
+		FlowRateProfiler<Stimulus> eb = new CustomStepFlowRateProfiler(width, finalSize, size, 0); // 555551515151515
 		assertEquals(false, eb.isReady()); // The first RSPEvent
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < size; j++) {

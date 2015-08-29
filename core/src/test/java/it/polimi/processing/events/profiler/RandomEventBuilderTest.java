@@ -1,10 +1,10 @@
 package it.polimi.processing.events.profiler;
 
-import it.polimi.processing.events.CTEvent;
-import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.profiler.ConstantRandomFlowRateProfiler;
-import it.polimi.processing.events.profiler.RandomFlowRateProfiler;
-import it.polimi.processing.events.profiler.abstracts.FlowRateProfiler;
+import it.polimi.heaven.core.ts.events.Stimulus;
+import it.polimi.heaven.core.ts.events.TripleContainer;
+import it.polimi.heaven.core.ts.streamer.flowrateprofiler.FlowRateProfiler;
+import it.polimi.heaven.core.tsimpl.streamer.flowrateprofiler.ConstantRandomFlowRateProfiler;
+import it.polimi.heaven.core.tsimpl.streamer.flowrateprofiler.RandomFlowRateProfiler;
 import lombok.extern.log4j.Log4j;
 
 import org.junit.Rule;
@@ -22,10 +22,10 @@ public class RandomEventBuilderTest {
 		int yMax = 30;
 		int initSize = 5;
 
-		CTEvent event;
+		Stimulus event;
 
 		int experimentNumber = 0;
-		FlowRateProfiler<CTEvent> eb = new RandomFlowRateProfiler(yMax, initSize, experimentNumber);
+		FlowRateProfiler<Stimulus> eb = new RandomFlowRateProfiler(yMax, initSize, experimentNumber);
 
 		int i = 0;
 		while (!eb.isReady()) {
@@ -62,10 +62,10 @@ public class RandomEventBuilderTest {
 
 		int initSize = 5;
 
-		CTEvent event;
+		Stimulus event;
 
 		int experimentNumber = 0;
-		FlowRateProfiler<CTEvent> eb = new ConstantRandomFlowRateProfiler(xMax, yMax, initSize, experimentNumber);
+		FlowRateProfiler<Stimulus> eb = new ConstantRandomFlowRateProfiler(xMax, yMax, initSize, experimentNumber);
 
 		int i = 0;
 		while (!eb.isReady()) {

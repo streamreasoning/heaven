@@ -1,10 +1,10 @@
 package it.polimi.processing.events.profiler;
 
 import static org.junit.Assert.assertEquals;
-import it.polimi.processing.events.CTEvent;
-import it.polimi.processing.events.TripleContainer;
-import it.polimi.processing.events.profiler.ConstantFlowRateProfiler;
-import it.polimi.processing.events.profiler.abstracts.FlowRateProfiler;
+import it.polimi.heaven.core.ts.events.Stimulus;
+import it.polimi.heaven.core.ts.events.TripleContainer;
+import it.polimi.heaven.core.ts.streamer.flowrateprofiler.FlowRateProfiler;
+import it.polimi.heaven.core.tsimpl.streamer.flowrateprofiler.ConstantFlowRateProfiler;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,7 +16,7 @@ public class ConstantEventBuilderTest {
 
 	@Test
 	public void constantEventBuilderTest() {
-		FlowRateProfiler<CTEvent> eb = new ConstantFlowRateProfiler(1, 0);
+		FlowRateProfiler<Stimulus> eb = new ConstantFlowRateProfiler(1, 0);
 
 		TripleContainer tc1 = new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
@@ -30,7 +30,7 @@ public class ConstantEventBuilderTest {
 
 		assertEquals(true, eb.isReady());
 
-		CTEvent event = eb.getEvent();
+		Stimulus event = eb.getEvent();
 
 		assertEquals(1, event.getEventTriples().size());
 
@@ -48,7 +48,7 @@ public class ConstantEventBuilderTest {
 
 	@Test
 	public void constantEventBuilderRealCaseTest() {
-		FlowRateProfiler<CTEvent> eb = new ConstantFlowRateProfiler(1, 0);
+		FlowRateProfiler<Stimulus> eb = new ConstantFlowRateProfiler(1, 0);
 
 		assertEquals(false, eb.isReady());
 
@@ -67,7 +67,7 @@ public class ConstantEventBuilderTest {
 
 	@Test
 	public void constantEventBuilderTestSingleAdd() {
-		FlowRateProfiler<CTEvent> eb = new ConstantFlowRateProfiler(1, 0);
+		FlowRateProfiler<Stimulus> eb = new ConstantFlowRateProfiler(1, 0);
 
 		TripleContainer tc1 = new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
@@ -81,7 +81,7 @@ public class ConstantEventBuilderTest {
 
 		assertEquals(true, eb.isReady());
 
-		CTEvent event = eb.getEvent();
+		Stimulus event = eb.getEvent();
 
 		assertEquals(1, event.getEventTriples().size());
 
@@ -98,7 +98,7 @@ public class ConstantEventBuilderTest {
 
 	@Test
 	public void constantEventBuilderRealCaseTestSingleAdd() {
-		FlowRateProfiler<CTEvent> eb = new ConstantFlowRateProfiler(1, 0);
+		FlowRateProfiler<Stimulus> eb = new ConstantFlowRateProfiler(1, 0);
 
 		assertEquals(false, eb.isReady());
 
