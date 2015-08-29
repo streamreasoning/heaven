@@ -98,89 +98,14 @@
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
 		</dependency>
-		<dependency>
-			<groupId>eu.larkc.csparql</groupId>
-			<artifactId>csparql-core</artifactId>
-			<version>0.9.5</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>slf4j-api</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>log4j</artifactId>
-					<groupId>log4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>jcl-over-slf4j</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>csparql-common</artifactId>
-					<groupId>eu.larkc.csparql</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>xercesImpl</artifactId>
-					<groupId>xerces</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>jena-arq-Percentile</artifactId>
-					<groupId>org.apache.jena</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>slf4j-log4j12</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>csparql-cep-api</artifactId>
-					<groupId>eu.larkc.csparql</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>gson</artifactId>
-					<groupId>com.google.code.gson</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>csparql-sparql-api</artifactId>
-					<groupId>eu.larkc.csparql</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>jena-core</artifactId>
-					<groupId>org.apache.jena</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>esper</artifactId>
-					<groupId>com.espertech</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>jena-iri</artifactId>
-					<groupId>org.apache.jena</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>httpclient</artifactId>
-					<groupId>org.apache.httpcomponents</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 	</dependencies>
-	<repositories>
-		<repository>
-			<id>streamreasoning_repository</id>
-			<name>Csparql server repository</name>
-			<url>http://streamreasoning.org/maven/</url>
-			<layout>default</layout>
-		</repository>
-	</repositories>
-
 	<packaging>pom</packaging>
 	<modules>
 		<module>baselines</module>
 		<module>preprocessing</module>
 		<module>core</module>
 		<module>heaven-commons</module>
+		<module>heaven-postprocessing</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
