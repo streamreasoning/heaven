@@ -1,67 +1,84 @@
-package it.polimi.preprocessor.generator;
+package it.polimi.experiments;
 
-import it.polimi.baselines.enums.JenaEventType;
-import it.polimi.baselines.enums.OntoLanguage;
-import it.polimi.processing.enums.ExperimentType;
-import it.polimi.processing.enums.FlowRateProfile;
-import it.polimi.processing.enums.Reasoning;
+import it.polimi.heaven.core.enums.ExperimentType;
+import it.polimi.heaven.core.enums.FlowRateProfile;
+import it.polimi.heaven.core.enums.Reasoning;
+import it.polimi.heaven.enums.JenaEventType;
+import it.polimi.heaven.enums.OntoLanguage;
 import it.polimi.services.FileService;
 
 import java.io.IOException;
 
-public class BaselineStepFlowGenerator {
+import lombok.extern.java.Log;
 
-	private static int experimentNumber = 39;
+@Log
+public class BaselineCustomStepGenerator {
+
+	private static int experimentNumber = 20;
 	private static final String eol = System.getProperty("line.separator");
-	private static final String date = "2015-01-19";
+	private static final String date = "2015-04-30";
 
 	private static boolean latency = true, abox = false, result = false;
-	private static int maxEventStream = 6000, x_size = 100, y_size = 0;
+	private static int maxEventStream = 60000, x_size, y_size = 10000, init_size = 1000, rsp_events_in_window = 10;
 	private static final String inputFile = "BIG_SHUFFLED.nt";
 
-	private static final OntoLanguage[] langs = new OntoLanguage[] { OntoLanguage.SMPL, OntoLanguage.RHODF };
+	private static final OntoLanguage[] langs = new OntoLanguage[] { OntoLanguage.RHODF };
 	private static final ExperimentType[] experimentTypes = new ExperimentType[] { ExperimentType.LATENCY, ExperimentType.MEMORY };
-	private static final FlowRateProfile profile = FlowRateProfile.STEP;
+	private static final FlowRateProfile profile = FlowRateProfile.CUSTOM_STEP;
 	private static final Reasoning[] reasoning = new Reasoning[] { Reasoning.NAIVE, Reasoning.INCREMENTAL };
 	private static final JenaEventType[] jenaEventTypes = new JenaEventType[] { JenaEventType.STMT, JenaEventType.GRAPH };
+	private static final int repsNumber = 10;
 
 	public static void main(String[] args) throws IOException {
 
-		String outputFolder = "./properties/ESWC15/" + profile + "FR" + "/SHORT100/";
-
+		String outputFolder = "./properties/THESIS/" + profile + "FR" + "/GROWSTEP/";
 		String content = "";
 		String name = "";
+		x_size = maxEventStream / 2;
 
-		for (int rsp_events_in_window = 1; rsp_events_in_window <= 100; rsp_events_in_window *= 10) {
-			int init_size = 100 / rsp_events_in_window;
+		if (args != null && args.length != 0) {
+			if ("help".equals(args[0])) {
+				log.info("Argument List, all mandatory: \n MaxEvent \n Event in Window \n Initial Size \n Final Size \n Width");
+				return;
+			} else {
+				maxEventStream = Integer.parseInt(args[0]);
+				rsp_events_in_window = Integer.parseInt(args[1]);
+				init_size = Integer.parseInt(args[2]);
+				y_size = Integer.parseInt(args[3]);
+				x_size = Integer.parseInt(args[4]);
+			}
+		}
+
+		for (OntoLanguage lang : langs) {
 			for (Reasoning reasoning_mode : reasoning) {
-				for (OntoLanguage lang : langs) {
-					for (JenaEventType eventType : jenaEventTypes) {
-						for (ExperimentType type : experimentTypes) {
-							y_size = init_size;
+				for (JenaEventType eventType : jenaEventTypes) {
+					for (ExperimentType type : experimentTypes) {
 
-							name += profile + "_" + reasoning_mode + "_" + type + "_" + lang.name() + "_" + eventType + "INIT" + init_size + "W"
-									+ rsp_events_in_window;
+						name += profile + "_" + reasoning_mode + "_" + type + "_" + lang.name() + "_" + eventType + "_INIT" + init_size + "FINAL"
+								+ y_size + "WIDTH" + x_size + "W" + rsp_events_in_window;
 
-							for (int executionNumber = 0; executionNumber < 5; executionNumber++) {
-								content = experimentProperties(content, executionNumber, date, type.name());
-								content = engineProperties(content, "JENA", eventType, reasoning_mode, lang);
-								content = eventsProperties(content, init_size, profile, rsp_events_in_window, maxEventStream);
-								content = timeProperties(content, true);
+						for (int executionNumber = 0; executionNumber < repsNumber; executionNumber++) {
+							content = experimentProperties(content, executionNumber, date, type.name());
+							content = engineProperties(content, "JENA", eventType, reasoning_mode, lang);
+							content = eventsProperties(content, init_size, profile, rsp_events_in_window, maxEventStream);
+							content = timeProperties(content, true);
 
-								writeOnFile(outputFolder + reasoning_mode + "/", content, name, lang, eventType, rsp_events_in_window, init_size,
-										type, executionNumber);
-							}
-							System.out.println("Generate experiment [" + experimentNumber + "] name [" + name + "]");
+							writeOnFile(outputFolder + reasoning_mode + "/", content, "EN" + (experimentNumber) + "_" + name, lang, eventType,
+									rsp_events_in_window, init_size, type, executionNumber);
 
-							name = "";
+							experimentNumber += type.equals(ExperimentType.LATENCY) && eventType.equals(JenaEventType.STMT)
+									&& reasoning_mode.equals(Reasoning.NAIVE) ? executionNumber / 9 : 0;
+
 							content = "";
-
 						}
-					}
 
+						System.out.println("Generate experiment [" + experimentNumber + "] name [" + name + "]");
+
+						name = "";
+
+					}
 				}
-				experimentNumber++;
+
 			}
 		}
 
@@ -70,8 +87,8 @@ public class BaselineStepFlowGenerator {
 
 	private static void writeOnFile(String outputFolder, String content, String name, OntoLanguage lang, JenaEventType eventType,
 			int rsp_events_in_window, int init_size, ExperimentType type, int executionNumber) {
-		String currentOutputFolder = outputFolder + "/" + type + "/" + lang + "/" + eventType + "/" + "SLOT" + rsp_events_in_window + "STEPS"
-				+ maxEventStream / x_size + "INIT" + init_size + "END" + rsp_events_in_window * init_size * (maxEventStream / x_size) + "/";
+		String currentOutputFolder = outputFolder + "/" + type + "/" + lang + "/" + eventType + "/" + "SLOT" + rsp_events_in_window + "STEPS" + 1
+				+ "INIT" + init_size + "FINAL" + y_size + "WIDTH" + x_size + "/";
 		FileService.createFolders(currentOutputFolder);
 		FileService.createFolders(outputFolder + "/Experiments/");
 		FileService.write(currentOutputFolder + "" + name + "EN" + executionNumber + ".properties", content);
@@ -81,7 +98,7 @@ public class BaselineStepFlowGenerator {
 	private static String timeProperties(String content, boolean externalTiming) {
 		content += "#Timing";
 		content += eol;
-		content += "external_time_control_on = " + maxEventStream;
+		content += "external_time_control_on = " + externalTiming;
 		content += eol;
 		content += "#Timing End";
 		content += eol;
@@ -129,7 +146,7 @@ public class BaselineStepFlowGenerator {
 		content += eol;
 		content += "#Experiment";
 		content += eol;
-		content += "experiment_name = ESWC15 BASELINES CONSTANT FLOW RATE";
+		content += "experiment_name = THESI BASELINES CUSTOM STEP FLOW RATE";
 		content += eol;
 		content += "experiment_number = " + experimentNumber;
 		content += eol;

@@ -1,4 +1,4 @@
-package it.polimi.preprocessor;
+package it.polimi.preprocessing;
 
 import java.io.FileWriter;
 import java.io.IOException;

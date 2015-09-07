@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package it.polimi.preprocessor;
+package it.polimi.preprocessing;
 
 import java.io.File;
 import java.io.FileOutputStream;

@@ -1,4 +1,4 @@
-package it.polimi.preprocessor;
+package it.polimi.preprocessing;
 
 import it.polimi.services.FileService;
 import it.polimi.utils.RDFSUtils;
