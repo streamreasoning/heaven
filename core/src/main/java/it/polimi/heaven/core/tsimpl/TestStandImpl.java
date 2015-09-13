@@ -36,12 +36,11 @@ public class TestStandImpl extends TestStand {
 		this.currentResult.setId("<http://example.org/" + currentExperiment.getExperimentNumber() + "/" + eventNumber + ">");
 		this.currentResult.setEventNumber(eventNumber);
 		this.currentResult.setMemoryB((currentExperiment.isMemoryLog()) ? Memory.getMemoryUsage() : 0D);
-		this.currentResult.setInputTimestamp(System.currentTimeMillis());
+		this.currentResult.setInputTimestamp(e.getInputTimestamp());
 		this.currentResult.setAboxLog(currentExperiment.isAboxLog());
 		this.currentResult.setLatencyLog(currentExperiment.isLatencyLog());
 		this.currentResult.setMemoryLog(currentExperiment.isMemoryLog());
 		this.currentResult.setResultLog(currentExperiment.isResultLog());
-
 		boolean process = engine.process(e);
 		engine.timeProgress();
 		return process;
@@ -49,21 +48,25 @@ public class TestStandImpl extends TestStand {
 
 	public boolean process(RSPEngineResult engineResult) {
 
-		// TODO add wait
-		double memoryA = (currentExperiment.isMemoryLog()) ? Memory.getMemoryUsage() : 0D;
-
 		if (engineResult.isAbox()) {
 			return processAbox(engineResult);
-
 		} else {
 			resultEvent++;
 			this.currentResult.setResult(engineResult);
+
+			try {
+				log.info("Response received in [" + currentResult.getLatency() + "ms] wait for [" + currentResult.getResponsivity() + "ms]");
+				Thread.sleep(currentResult.getResponsivity());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
+			double memoryA = (currentExperiment.isMemoryLog()) ? Memory.getMemoryUsage() : 0D;
 			this.currentResult.setMemoryA(memoryA);
 			// this.currentResult.setCr(engineResult.getCompleteRHODF());
 			// this.currentResult.setSr(engineResult.getSoundRHODF());
 			// this.currentResult.setCs(engineResult.getCompleteSMPL());
 			// this.currentResult.setSs(engineResult.getSoundSMPL());
-
 			String filePath = outputPath + "/exp" + currentExperiment.getExperimentNumber() + "/" + engineName + "/" + experimentnName;
 
 			boolean ret = collector.process(currentResult, filePath);
