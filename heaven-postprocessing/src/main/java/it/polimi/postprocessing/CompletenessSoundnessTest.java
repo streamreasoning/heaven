@@ -1,7 +1,5 @@
 package it.polimi.postprocessing;
 
-import it.polimi.utils.FileUtils;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -20,10 +18,10 @@ public class CompletenessSoundnessTest {
 	public ErrorCollector jenasmplCollector = new ErrorCollector();
 	@Rule
 	public ErrorCollector jenarhodfCollector = new ErrorCollector();
+	String expPath = "data/output/2015_09_13/";
 
 	@Test
 	public void jenarhodfTest() throws IOException {
-		String expPath = FileUtils.OUTPUT_FILE_PATH;
 		for (String num : new String[] { "50", "100", "250", "500" }) {
 			String fileNmae = "_EN0__2014_11_19_inputTrigINIT" + num + "D1GF0SN1R" + ".csv";
 			String pathname = expPath + "jenarhodf_vs_plain2369" + "/" + fileNmae;
@@ -53,7 +51,6 @@ public class CompletenessSoundnessTest {
 
 	@Test
 	public void jenasmplTest() throws IOException {
-		String expPath = FileUtils.OUTPUT_FILE_PATH;
 		for (String num : new String[] { "50", "100", "250", "500" }) {
 			String fileNmae = "_EN0__2014_11_19_inputTrigINIT" + num + "D1GF0SN1R" + ".csv";
 			String pathname = expPath + "jenasmpl_vs_plain2369" + "/" + fileNmae;
@@ -72,7 +69,8 @@ public class CompletenessSoundnessTest {
 					log.info("Complete and sound at event [" + linenumber + "]");
 
 				jenasmplCollector.checkThat(sound, CoreMatchers.equalTo(true));
-				// TODO check per la completeness va definito per cosa può non essere sound (query
+				// TODO check per la completeness va definito per cosa può non
+				// essere sound (query
 				// con
 				// jena)
 				linenumber++;

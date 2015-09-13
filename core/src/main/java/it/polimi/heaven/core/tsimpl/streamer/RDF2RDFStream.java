@@ -58,7 +58,7 @@ public final class RDF2RDFStream extends TSStreamer {
 				log.info("Start Streaming");
 				log.info("Start Streaming");
 
-				FileReader in = FileService.getFileReader(currentExperiment.getInputFileName());
+				FileReader in = FileService.getFileReader(currentExperiment.getInputSource());
 				BufferedReader br = FileService.getBuffer(in);
 				while (streamedEvents <= eventLimit - 1) {
 

@@ -11,7 +11,6 @@ import it.polimi.heaven.core.ts.rspengine.RSPEngine;
 import it.polimi.heaven.core.tsimpl.collector.TSResultCollector;
 import it.polimi.heaven.core.tsimpl.streamer.TSStreamer;
 import it.polimi.heaven.services.system.Memory;
-import it.polimi.utils.GetPropertyValues;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
@@ -30,7 +29,8 @@ public final class StrategicRSPTeststand extends TestStand {
 	@Override
 	public boolean process(Stimulus e) {
 		totalEvent++;
-		return (e instanceof RSPEngineResult) ? process((RSPEngineResult) e) : processRSPTripleSet(e);
+		return (e instanceof RSPEngineResult) ? process((RSPEngineResult) e)
+				: processRSPTripleSet(e);
 	}
 
 	public boolean processRSPTripleSet(Stimulus e) {
@@ -65,7 +65,8 @@ public final class StrategicRSPTeststand extends TestStand {
 
 	private boolean processAbox(RSPEngineResult engineResult) {
 		this.aboxResult = new HeavenResult();
-		this.aboxResult.setId("<http://example.org/" + experimentNumber + "/" + (engine.getEventNumber() - 1) + ">");
+		this.aboxResult.setId("<http://example.org/" + experimentNumber + "/"
+				+ (engine.getEventNumber() - 1) + ">");
 		this.aboxResult.setEventNumber(engineResult.getEventNumber());
 		this.aboxResult.setInputTimestamp(engineResult.getInputTimestamp());
 		this.aboxResult.setResult(engineResult);
@@ -73,7 +74,8 @@ public final class StrategicRSPTeststand extends TestStand {
 	}
 
 	@Override
-	public void build(TSStreamer rspEventStreamer, RSPEngine rspEngine, TSResultCollector resultCollector) {
+	public void build(TSStreamer rspEventStreamer, RSPEngine rspEngine,
+			TSResultCollector resultCollector) {
 		this.timeStrategy.setRSPEngine(rspEngine);
 		super.build(rspEventStreamer, rspEngine, resultCollector);
 	}
@@ -87,21 +89,20 @@ public final class StrategicRSPTeststand extends TestStand {
 	public int run(Experiment e, String comment) {
 
 		if (!isOn()) {
-			throw new WrongStatusTransitionException("Can't run in Status [" + status + "]");
+			throw new WrongStatusTransitionException("Can't run in Status ["
+					+ status + "]");
 		} else if (e != null) {
-			this.experimentNumber = e.getExperimentNumber();
-			this.outputFileName = e.getOutputFileName();
-			this.windowFileName = e.getWindowFileName();
 
 			long startTime = System.currentTimeMillis();
 
-			log.info("Status [" + status + "]" + " Start Running The Experiment [" + experimentNumber + "] of date ["
-					+ GetPropertyValues.getDateProperty("experiment_date") + "] " + "Results will be named as [" + outputFileName + "]");
+			log.info("Status [" + status + "]"
+					+ " Start Running The Experiment [" + experimentNumber
+					+ "] of date [" + currentExperiment.getDate() + "] "
+					+ "Results will be named as [" + outputFileName + "]");
 
 			status = ExecutionState.RUNNING;
 
 			currentExperiment = e;
-			e.setComment(comment);
 			e.setTimestampStart(startTime);
 
 			log.debug("Status [" + status + "] Experiment Created");
@@ -132,7 +133,8 @@ public final class StrategicRSPTeststand extends TestStand {
 				status = ExecutionState.ERROR;
 			}
 
-			log.info("Status [" + status + "] Stop the experiment, duration " + (System.currentTimeMillis() - startTime) + "ms");
+			log.info("Status [" + status + "] Stop the experiment, duration "
+					+ (System.currentTimeMillis() - startTime) + "ms");
 			return 1;
 
 		}

@@ -19,6 +19,7 @@ import lombok.extern.log4j.Log4j;
 public class FileService {
 
 	public static boolean write(String where, String data) {
+		log.debug("Try to write ["+data+"] to [" + where + "]");
 		try {
 			FileWriter writer;
 			File file = new File(where);
@@ -33,6 +34,7 @@ public class FileService {
 		} catch (IOException e) {
 			log.error(where);
 			log.error(e.getMessage());
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -50,7 +52,7 @@ public class FileService {
 	}
 
 	public static FileReader getFileReader(String fileName) {
-		log.info("Try to load [" + fileName + "]");
+		log.debug("Try to load FileReader [" + fileName + "]");
 		try {
 			File file = new File(fileName);
 			return new FileReader(file);
@@ -61,12 +63,12 @@ public class FileService {
 	}
 
 	public static BufferedReader getBuffer(FileReader in) {
-		log.info("Try to load ");
+		log.debug("Try to load BufferReader");
 		return new BufferedReader(in);
 	}
 
 	public static BufferedReader getBuffer(String fileName) {
-		log.info("Try to load [" + fileName + "]");
+		log.debug("Try to load [" + fileName + "]");
 		try {
 			File file = new File(fileName);
 			FileReader in = new FileReader(file);

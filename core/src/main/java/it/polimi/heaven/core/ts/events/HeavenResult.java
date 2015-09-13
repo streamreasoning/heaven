@@ -1,13 +1,10 @@
 package it.polimi.heaven.core.ts.events;
 
-import it.polimi.heaven.services.system.ExecutionEnvirorment;
 import it.polimi.services.FileService;
-import it.polimi.utils.FileUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j;
-
 
 @Data
 @AllArgsConstructor
@@ -22,6 +19,7 @@ public class HeavenResult implements EventResult {
 	private double memoryB;
 	private double memoryA;
 	private Boolean cs, ss, cr, sr;
+	private boolean memoryLog, latencyLog, resultLog, aboxLog;
 
 	public int size() {
 		return result.size();
@@ -29,20 +27,17 @@ public class HeavenResult implements EventResult {
 
 	@Override
 	public boolean save(String where) {
-		log.debug("Save Data ["
-				+ ExecutionEnvirorment.finalresultTrigLogEnabled + "]");
+		log.debug("Save Data [" + resultLog + "]");
 
-		return saveTrig(where) && saveCSV(where);
+		return  saveCSV(where) && saveTrig(where);
 
 	}
 
 	public boolean saveTrig(String where) {
-		log.debug("saveTrig: Data ["
-				+ ExecutionEnvirorment.finalresultTrigLogEnabled + "]");
+		log.debug("saveTrig: Data [" + resultLog + "]");
 
-		return ExecutionEnvirorment.finalresultTrigLogEnabled ? FileService
-				.write(FileUtils.getTrigPath(where), getData())
-				: !ExecutionEnvirorment.finalresultTrigLogEnabled;
+		return resultLog ? FileService.write(where + ".trig", getData())
+				: !resultLog;
 	}
 
 	public boolean saveCSV(String where) {
@@ -55,9 +50,7 @@ public class HeavenResult implements EventResult {
 				+ (result.getOutputTimestamp() - inputTimestamp)
 				+ compleAndSoundSIMPL + compleAndSoundRHODF
 				+ System.getProperty("line.separator");
-		return ExecutionEnvirorment.latencyLogEnabled
-				|| ExecutionEnvirorment.memoryLogEnabled ? FileService.write(
-				FileUtils.getCSVpath(where), s) : false;
+		return latencyLog || memoryLog ? FileService.write(where+".csv", s) : false;
 	}
 
 	private String getData() {

@@ -11,26 +11,24 @@ import lombok.Setter;
 public final class TSResultCollector implements ResultCollector {
 
 	private ExecutionState status;
-	private String where;
-
+	private String outputPath;
 	private EventResult currentResult;
 
-	public TSResultCollector(String where) {
+	public TSResultCollector(String outputPath) {
 		this.status = ExecutionState.READY;
-		this.where = where;
+		this.outputPath = outputPath;
 	}
 
 	@Override
 	public boolean process(EventResult r) {
 		this.currentResult = r;
-		return !ExecutionState.READY.equals(status) ? false : currentResult.save(this.where);
+		return !ExecutionState.READY.equals(status) ? false : currentResult.save(this.outputPath);
 	}
 
 	@Override
 	public boolean process(EventResult r, String w) {
 		currentResult = r;
-		return !ExecutionState.READY.equals(status) ? false : currentResult
-				.save(w);
+		return !ExecutionState.READY.equals(status) ? false : currentResult.save(w);
 	}
 
 	@Override

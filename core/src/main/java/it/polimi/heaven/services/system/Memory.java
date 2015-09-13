@@ -23,34 +23,25 @@
  ******************************************************************************/
 package it.polimi.heaven.services.system;
 
+
 public class Memory {
 
 	private static Runtime runtime = Runtime.getRuntime();
 	private static int mb = 1024 * 1024;
 
 	public static double getTotalMemory() {
-		if (ExecutionEnvirorment.memoryLogEnabled) {
 			return runtime.totalMemory() / mb;
-		} else {
-			return 0D;
-		}
 	}
 
 	public static double getFreeMemory() {
-		if (ExecutionEnvirorment.memoryLogEnabled) {
 			return runtime.freeMemory() / mb;
-
-		} else {
-			return 0D;
-		}
 	}
 
 	public static double getMemoryUsage() {
-		if (ExecutionEnvirorment.memoryLogEnabled) {
 			return (runtime.totalMemory() - runtime.freeMemory()) / mb;
-		} else {
-			return 0D;
-		}
 	}
 
+	
+	
+	
 }

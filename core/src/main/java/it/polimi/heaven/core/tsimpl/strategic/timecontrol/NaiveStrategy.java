@@ -4,7 +4,6 @@ import it.polimi.heaven.core.ts.events.HeavenResult;
 import it.polimi.heaven.core.ts.events.Stimulus;
 import it.polimi.heaven.core.ts.rspengine.RSPEngine;
 import it.polimi.heaven.services.system.Memory;
-import it.polimi.utils.GetPropertyValues;
 
 public class NaiveStrategy implements TimeStrategy {
 
@@ -13,7 +12,7 @@ public class NaiveStrategy implements TimeStrategy {
 	private final int experiment;
 
 	public NaiveStrategy() {
-		this.experiment = GetPropertyValues.getIntegerProperty("experiment_number");
+		this.experiment = 0; //TODO
 	}
 
 	@Override

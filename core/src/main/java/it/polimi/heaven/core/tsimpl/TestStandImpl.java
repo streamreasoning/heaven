@@ -11,7 +11,6 @@ import it.polimi.heaven.core.ts.rspengine.RSPEngine;
 import it.polimi.heaven.core.tsimpl.collector.TSResultCollector;
 import it.polimi.heaven.core.tsimpl.streamer.TSStreamer;
 import it.polimi.heaven.services.system.Memory;
-import it.polimi.utils.GetPropertyValues;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
@@ -19,9 +18,9 @@ import lombok.extern.log4j.Log4j;
 @NoArgsConstructor
 public class TestStandImpl extends TestStand {
 
-	private int experimentNumber;
-	private String outputFileName, windowFileName;
-	private String where;
+	private String outputPath = "";
+	private String experimentnName = "";
+	private String engineName;
 
 	@Override
 	public boolean process(Stimulus e) {
@@ -34,10 +33,14 @@ public class TestStandImpl extends TestStand {
 		this.eventNumber = engine.getEventNumber();
 
 		this.currentResult = new HeavenResult();
-		this.currentResult.setId("<http://example.org/" + experimentNumber + "/" + eventNumber + ">");
+		this.currentResult.setId("<http://example.org/" + currentExperiment.getExperimentNumber() + "/" + eventNumber + ">");
 		this.currentResult.setEventNumber(eventNumber);
-		this.currentResult.setMemoryB(Memory.getMemoryUsage());
+		this.currentResult.setMemoryB((currentExperiment.isMemoryLog()) ? Memory.getMemoryUsage() : 0D);
 		this.currentResult.setInputTimestamp(System.currentTimeMillis());
+		this.currentResult.setAboxLog(currentExperiment.isAboxLog());
+		this.currentResult.setLatencyLog(currentExperiment.isLatencyLog());
+		this.currentResult.setMemoryLog(currentExperiment.isMemoryLog());
+		this.currentResult.setResultLog(currentExperiment.isResultLog());
 
 		boolean process = engine.process(e);
 		engine.timeProgress();
@@ -45,22 +48,25 @@ public class TestStandImpl extends TestStand {
 	}
 
 	public boolean process(RSPEngineResult engineResult) {
-		double memoryA = Memory.getMemoryUsage();
-		this.where = "exp" + experimentNumber + "/" + engine.getName() + "/";
+
+		// TODO add wait
+		double memoryA = (currentExperiment.isMemoryLog()) ? Memory.getMemoryUsage() : 0D;
+
 		if (engineResult.isAbox()) {
-			this.where += windowFileName;
 			return processAbox(engineResult);
 
 		} else {
 			resultEvent++;
-			this.where += outputFileName;
 			this.currentResult.setResult(engineResult);
 			this.currentResult.setMemoryA(memoryA);
 			// this.currentResult.setCr(engineResult.getCompleteRHODF());
 			// this.currentResult.setSr(engineResult.getSoundRHODF());
 			// this.currentResult.setCs(engineResult.getCompleteSMPL());
 			// this.currentResult.setSs(engineResult.getSoundSMPL());
-			boolean ret = collector.process(currentResult, this.where);
+
+			String filePath = outputPath + "/exp" + currentExperiment.getExperimentNumber() + "/" + engineName + "/" + experimentnName;
+
+			boolean ret = collector.process(currentResult, filePath);
 			this.tsResultEvents += ret ? 1 : 0;
 			return ret;
 		}
@@ -70,12 +76,12 @@ public class TestStandImpl extends TestStand {
 	private boolean processAbox(RSPEngineResult engineResult) {
 
 		this.aboxResult = new HeavenResult();
-		this.aboxResult.setId("<http://example.org/" + experimentNumber + "/" + (engine.getEventNumber() - 1) + ">");
+		this.aboxResult.setId("<http://example.org/" + currentExperiment.getExperimentNumber() + "/" + (engine.getEventNumber() - 1) + ">");
 		this.aboxResult.setEventNumber(engineResult.getEventNumber());
 		this.aboxResult.setInputTimestamp(engineResult.getInputTimestamp());
 		this.aboxResult.setResult(engineResult);
 
-		return collector.process(aboxResult, this.where);
+		return collector.process(aboxResult, currentExperiment.getOutputPath());
 	}
 
 	@Override
@@ -93,20 +99,18 @@ public class TestStandImpl extends TestStand {
 		if (!isOn()) {
 			throw new WrongStatusTransitionException("Can't run in Status [" + status + "]");
 		} else if (e != null) {
-			this.experimentNumber = e.getExperimentNumber();
-			this.outputFileName = e.getOutputFileName();
-			this.windowFileName = e.getWindowFileName();
+			this.currentExperiment = e;
+			this.outputPath = currentExperiment.getOutputPath() + currentExperiment.getDate();
+			this.experimentnName = currentExperiment.getName();
+			this.engineName = engine.getName();
 
 			long startTime = System.currentTimeMillis();
 
-			log.info("Status [" + status + "]" + " Start Running The Experiment [" + experimentNumber + "] of date ["
-					+ GetPropertyValues.getDateProperty("experiment_date") + "] " + "Results will be named as [" + outputFileName + "]");
+			log.info("Status [" + status + "]" + " Start Running The Experiment [" + e.getExperimentNumber() + "] of date [" + e.getDate() + "]");
 
 			status = ExecutionState.RUNNING;
 
-			currentExperiment = e;
-			e.setComment(comment);
-			e.setTimestampStart(startTime);
+			currentExperiment.setTimestampStart(startTime);
 
 			log.debug("Status [" + status + "] Experiment Created");
 
@@ -126,9 +130,9 @@ public class TestStandImpl extends TestStand {
 
 			log.debug("Status [" + status + "] Processing is ended");
 
-			currentExperiment.setTimestampEnd(System.currentTimeMillis());
+			this.currentExperiment.setTimestampEnd(System.currentTimeMillis());
 
-			collector.process(currentExperiment);
+			this.collector.process(currentExperiment, outputPath + "/database/");
 
 			if (ExecutionState.CLOSED.equals(engineStatus)) {
 				status = ExecutionState.READY;
