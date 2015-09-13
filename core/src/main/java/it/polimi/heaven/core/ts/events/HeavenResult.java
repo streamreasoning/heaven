@@ -29,28 +29,24 @@ public class HeavenResult implements EventResult {
 	public boolean save(String where) {
 		log.debug("Save Data [" + resultLog + "]");
 
-		return  saveCSV(where) && saveTrig(where);
+		return saveCSV(where) && saveTrig(where);
 
 	}
 
 	public boolean saveTrig(String where) {
 		log.debug("saveTrig: Data [" + resultLog + "]");
 
-		return resultLog ? FileService.write(where + ".trig", getData())
-				: !resultLog;
+		return resultLog ? FileService.write(where + ".trig", getData()) : !resultLog;
 	}
 
 	public boolean saveCSV(String where) {
-		String compleAndSoundSIMPL = (cs != null && ss != null) ? "," + cs
-				+ "," + ss : "";
-		String compleAndSoundRHODF = (cr != null && sr != null) ? "," + cr
-				+ "," + sr : "";
+		String compleAndSoundSIMPL = (cs != null && ss != null) ? "," + cs + "," + ss : "";
+		String compleAndSoundRHODF = (cr != null && sr != null) ? "," + cr + "," + sr : "";
 
-		String s = id + "," + eventNumber + "," + memoryB + "," + memoryA + ","
-				+ (result.getOutputTimestamp() - inputTimestamp)
-				+ compleAndSoundSIMPL + compleAndSoundRHODF
-				+ System.getProperty("line.separator");
-		return latencyLog || memoryLog ? FileService.write(where+".csv", s) : false;
+		String s = id + "," + eventNumber + "," + memoryB + "," + memoryA + "," + (result.getOutputTimestamp() - inputTimestamp)
+				+ compleAndSoundSIMPL + compleAndSoundRHODF + System.getProperty("line.separator");
+		log.info(s);
+		return latencyLog || memoryLog ? FileService.write(where + ".csv", s) : false;
 	}
 
 	private String getData() {
@@ -66,11 +62,19 @@ public class HeavenResult implements EventResult {
 		String trig = key + " {";
 		for (TripleContainer tr : result.getEventTriples()) {
 			String[] resource = tr.getTriple();
-			trig += eol + "<" + resource[0] + ">" + " " + "<" + resource[1]
-					+ ">" + " " + "<" + resource[2] + "> .";
+			trig += eol + "<" + resource[0] + ">" + " " + "<" + resource[1] + ">" + " " + "<" + resource[2] + "> .";
 		}
 
 		trig += eol + "}" + eol;
 		return trig;
 	}
+
+	public long getOutputTimestamp() {
+		return result.getOutputTimestamp();
+	}
+
+	public long getLatency() {
+		return result.getOutputTimestamp() - inputTimestamp;
+	}
+
 }
