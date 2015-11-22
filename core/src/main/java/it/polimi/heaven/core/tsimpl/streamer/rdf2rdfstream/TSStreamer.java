@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.tsimpl.streamer;
+package it.polimi.heaven.core.tsimpl.streamer.rdf2rdfstream;
 
 import it.polimi.heaven.core.enums.ExecutionState;
 import it.polimi.heaven.core.ts.EventProcessor;

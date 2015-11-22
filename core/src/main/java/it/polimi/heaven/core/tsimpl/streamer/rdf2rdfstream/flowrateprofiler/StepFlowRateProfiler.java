@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.tsimpl.streamer.flowrateprofiler;
+package it.polimi.heaven.core.tsimpl.streamer.rdf2rdfstream.flowrateprofiler;
 
 import it.polimi.heaven.core.enums.FlowRateProfile;
 import it.polimi.heaven.core.ts.streamer.flowrateprofiler.TripleSetFlowRateProfiler;

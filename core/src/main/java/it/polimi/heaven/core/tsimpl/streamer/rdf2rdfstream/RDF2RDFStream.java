@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.tsimpl.streamer;
+package it.polimi.heaven.core.tsimpl.streamer.rdf2rdfstream;
 
 import it.polimi.heaven.core.enums.ExecutionState;
 import it.polimi.heaven.core.exceptions.WrongStatusTransitionException;
@@ -56,7 +56,6 @@ public final class RDF2RDFStream extends TSStreamer {
 			this.currentExperiment = e;
 			try {
 				log.info("Start Streaming");
-				log.info("Start Streaming");
 
 				FileReader in = FileService.getFileReader(currentExperiment.getInputSource());
 				BufferedReader br = FileService.getBuffer(in);
@@ -72,7 +71,7 @@ public final class RDF2RDFStream extends TSStreamer {
 						streamedEvents += next.process(lastEvent = profiler.getEvent()) ? 1 : 0;
 						log.debug("Send Event [" + streamedEvents + "] of size [" + lastEvent.size() + "]");
 						log.debug("Streamed [" + triples + "] triples");
-						if (streamedEvents % 1000 == 0) {
+						if (streamedEvents % 100 == 0) {
 							log.info("Process Complete [" + (double) streamedEvents * 100 / eventLimit + "%]");
 						}
 					} else {
