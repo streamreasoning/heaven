@@ -26,6 +26,10 @@ public class Experiment implements Event, EventResult {
 	private String inputSource;
 	private String outputPath;
 
+	// requirements
+
+	private long responsivity;
+
 	@Override
 	public boolean save(String where) {
 		String type = "";
@@ -34,18 +38,14 @@ public class Experiment implements Event, EventResult {
 
 		;
 
-		String sql = "VALUES (" + "'" + getName() + "'" + "," + "'"
-				+ experimentNumber + "'" + "," + "'" + date + "'" + "," + "'"
-				+ timestampStart + "'" + "," + "'" + timestampEnd + "'" + ","
-				+ "'" + engine + "'" + "," + "'" + type + "'" + "," + "'"
-				+ timecontrol + "'" + "," + "'" + inputSource + "'" + "," + "'"
-				+ outputPath + "/" + getName() + "')";
+		String sql = "VALUES (" + "'" + getName() + "'" + "," + "'" + experimentNumber + "'" + "," + "'" + date + "'" + "," + "'" + timestampStart
+				+ "'" + "," + "'" + timestampEnd + "'" + "," + "'" + engine + "'" + "," + "'" + type + "'" + "," + "'" + timecontrol + "'" + ","
+				+ "'" + inputSource + "'" + "," + "'" + outputPath + "/" + getName() + "')";
 		log.info("Insert Experiment [" + sql + "] in [" + where + "]");
 		return SQLListeService.write(SQLListeService.BASELINE_INSERT + sql);
 	}
 
 	public String getName() {
-		return "EN" + experimentNumber + "EXE" + executionNumber + "_" + date
-				+ "_" + metadata;
+		return "EN" + experimentNumber + "EXE" + executionNumber + "_" + date + "_" + metadata;
 	}
 }

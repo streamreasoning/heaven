@@ -9,7 +9,7 @@ import it.polimi.heaven.core.ts.events.RSPEngineResult;
 import it.polimi.heaven.core.ts.events.Stimulus;
 import it.polimi.heaven.core.ts.rspengine.RSPEngine;
 import it.polimi.heaven.core.tsimpl.collector.TSResultCollector;
-import it.polimi.heaven.core.tsimpl.streamer.TSStreamer;
+import it.polimi.heaven.core.tsimpl.streamer.rdf2rdfstream.TSStreamer;
 import it.polimi.heaven.services.system.Memory;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -25,10 +25,10 @@ public class TestStandImpl extends TestStand {
 	@Override
 	public boolean process(Stimulus e) {
 		totalEvent++;
-		return (e instanceof RSPEngineResult) ? process((RSPEngineResult) e) : processRSPTripleSet(e);
+		return (e instanceof RSPEngineResult) ? process((RSPEngineResult) e) : processStimulus(e);
 	}
 
-	public boolean processRSPTripleSet(Stimulus e) {
+	public boolean processStimulus(Stimulus e) {
 		this.rspEvent++;
 		this.eventNumber = engine.getEventNumber();
 
@@ -42,7 +42,13 @@ public class TestStandImpl extends TestStand {
 		this.currentResult.setMemoryLog(currentExperiment.isMemoryLog());
 		this.currentResult.setResultLog(currentExperiment.isResultLog());
 		boolean process = engine.process(e);
+
+		// TODO add smart wait here, with ReentrantLock, I have to delegate to
+		// the faced some functionality in terms of event pushing
+
+		log.debug("Stimulus Received at timestamp [" + e.getInputTimestamp() + "]");
 		engine.timeProgress();
+
 		return process;
 	}
 
@@ -55,11 +61,16 @@ public class TestStandImpl extends TestStand {
 			this.currentResult.setResult(engineResult);
 
 			try {
-				log.info("Response received in [" + currentResult.getLatency() + "ms] wait for [" + currentResult.getResponsivity() + "ms]");
-				Thread.sleep(currentResult.getResponsivity());
+				long responsivity = currentExperiment.getResponsivity() - currentResult.getLatency();
+
+				log.debug("Response received in [" + currentResult.getLatency() + "ms] wait for [" + responsivity + "ms]");
+				if (responsivity > 0) {
+					Thread.sleep(responsivity);
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			log.debug("Restart at [" + System.currentTimeMillis() + "]");
 
 			double memoryA = (currentExperiment.isMemoryLog()) ? Memory.getMemoryUsage() : 0D;
 			this.currentResult.setMemoryA(memoryA);
@@ -71,6 +82,7 @@ public class TestStandImpl extends TestStand {
 
 			boolean ret = collector.process(currentResult, filePath);
 			this.tsResultEvents += ret ? 1 : 0;
+			log.debug("Result Saved at [" + System.currentTimeMillis() + "]");
 			return ret;
 		}
 

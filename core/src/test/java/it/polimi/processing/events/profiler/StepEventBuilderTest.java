@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import it.polimi.heaven.core.ts.events.Stimulus;
 import it.polimi.heaven.core.ts.events.TripleContainer;
 import it.polimi.heaven.core.ts.streamer.flowrateprofiler.FlowRateProfiler;
-import it.polimi.heaven.core.tsimpl.streamer.flowrateprofiler.StepFlowRateProfiler;
+import it.polimi.heaven.core.tsimpl.streamer.rdf2rdfstream.flowrateprofiler.StepFlowRateProfiler;
 import lombok.extern.log4j.Log4j;
 
 import org.junit.Rule;

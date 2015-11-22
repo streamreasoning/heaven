@@ -9,7 +9,7 @@ import it.polimi.heaven.core.ts.events.RSPEngineResult;
 import it.polimi.heaven.core.ts.events.Stimulus;
 import it.polimi.heaven.core.ts.rspengine.RSPEngine;
 import it.polimi.heaven.core.tsimpl.collector.TSResultCollector;
-import it.polimi.heaven.core.tsimpl.streamer.TSStreamer;
+import it.polimi.heaven.core.tsimpl.streamer.rdf2rdfstream.TSStreamer;
 import it.polimi.heaven.services.system.Memory;
 import lombok.extern.log4j.Log4j;
 

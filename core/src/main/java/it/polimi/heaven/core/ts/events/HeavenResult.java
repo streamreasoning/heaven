@@ -45,7 +45,6 @@ public class HeavenResult implements EventResult {
 
 		String s = id + "," + eventNumber + "," + memoryB + "," + memoryA + "," + (result.getOutputTimestamp() - inputTimestamp)
 				+ compleAndSoundSIMPL + compleAndSoundRHODF + System.getProperty("line.separator");
-		log.info(s);
 		return latencyLog || memoryLog ? FileService.write(where + ".csv", s) : false;
 	}
 

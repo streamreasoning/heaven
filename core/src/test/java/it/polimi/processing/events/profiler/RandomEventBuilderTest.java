@@ -3,8 +3,8 @@ package it.polimi.processing.events.profiler;
 import it.polimi.heaven.core.ts.events.Stimulus;
 import it.polimi.heaven.core.ts.events.TripleContainer;
 import it.polimi.heaven.core.ts.streamer.flowrateprofiler.FlowRateProfiler;
-import it.polimi.heaven.core.tsimpl.streamer.flowrateprofiler.ConstantRandomFlowRateProfiler;
-import it.polimi.heaven.core.tsimpl.streamer.flowrateprofiler.RandomFlowRateProfiler;
+import it.polimi.heaven.core.tsimpl.streamer.rdf2rdfstream.flowrateprofiler.ConstantRandomFlowRateProfiler;
+import it.polimi.heaven.core.tsimpl.streamer.rdf2rdfstream.flowrateprofiler.RandomFlowRateProfiler;
 import lombok.extern.log4j.Log4j;
 
 import org.junit.Rule;
