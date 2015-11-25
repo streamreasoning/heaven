@@ -1,8 +1,7 @@
 package it.polimi.heaven.core.ts.streamer.flowrateprofiler;
 
-import it.polimi.heaven.core.ts.events.TripleContainer;
 
-public interface FlowRateProfiler<T> {
+public interface FlowRateProfiler<T, E> {
 
 	public T getEvent();
 
@@ -16,6 +15,6 @@ public interface FlowRateProfiler<T> {
 	 *            a container for an RDF Triple
 	 * @return true if the appending phase happens successfully
 	 */
-	public boolean append(TripleContainer triple);
+	public boolean append(E triple);
 
 }

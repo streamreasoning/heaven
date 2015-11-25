@@ -14,7 +14,7 @@ import lombok.extern.log4j.Log4j;
 @Setter
 @Getter
 @Log4j
-public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<Stimulus> {
+public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<Stimulus, TripleContainer> {
 
 	protected Stimulus e;
 	protected FlowRateProfile mode;
@@ -23,16 +23,20 @@ public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<Stim
 	protected boolean sizeReached;
 	protected int experimentNumber;
 	private String id;
+	protected long currentTimestamp;
+	protected int timing;
 
-	public TripleSetFlowRateProfiler(FlowRateProfile mode, int x, int y, int initSize, int experimentNumber) {
+	public TripleSetFlowRateProfiler(FlowRateProfile mode, int x, int y, int initSize, int experimentNumber, int timing) {
 		this.x = x;
 		this.y = y;
 		this.initSize = roundSize = initSize;
 		this.eventNumber = 1;
 		this.mode = mode;
 		this.sizeReached = false;
+		this.currentTimestamp = 0L;
+		this.timing = timing;
 		id = "<http://example.org/" + experimentNumber + "/";
-		e = new Stimulus(id, new HashSet<TripleContainer>(), eventNumber, experimentNumber);
+		e = new Stimulus(id, new HashSet<TripleContainer>(), eventNumber, experimentNumber, currentTimestamp);
 	}
 
 	@Override
@@ -54,7 +58,7 @@ public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<Stim
 				eventNumber++;
 				set.add(triple);
 			}
-			e = e.rebuild(id, set, eventNumber, experimentNumber);
+			e = e.rebuild(id, set, eventNumber, experimentNumber, currentTimestamp + timing);
 			log.debug("is Full Event Size [" + e.size() + "] roundSize [" + roundSize + "]");
 		} else {
 			e.getEventTriples().add(triple);
