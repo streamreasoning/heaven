@@ -12,7 +12,7 @@ public class NaiveStrategy implements TimeStrategy {
 	private final int experiment;
 
 	public NaiveStrategy() {
-		this.experiment = 0; //TODO
+		this.experiment = 0; // TODO
 	}
 
 	@Override
@@ -27,7 +27,6 @@ public class NaiveStrategy implements TimeStrategy {
 		currentResult.setEventNumber(eventNumber);
 
 		boolean process = rspEngine.process(e);
-		rspEngine.timeProgress();
 		return process;
 	}
 
