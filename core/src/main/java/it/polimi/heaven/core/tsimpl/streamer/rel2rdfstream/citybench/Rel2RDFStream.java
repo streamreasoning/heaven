@@ -1,13 +1,13 @@
-package it.polimi.heaven.core.tsimpl.streamer.rdf2rdfstream;
+package it.polimi.heaven.core.tsimpl.streamer.rel2rdfstream.citybench;
 
 import it.polimi.heaven.core.enums.ExecutionState;
 import it.polimi.heaven.core.exceptions.WrongStatusTransitionException;
 import it.polimi.heaven.core.ts.EventProcessor;
 import it.polimi.heaven.core.ts.events.Experiment;
 import it.polimi.heaven.core.ts.events.Stimulus;
-import it.polimi.heaven.core.ts.events.TripleContainer;
 import it.polimi.heaven.core.ts.streamer.flowrateprofiler.FlowRateProfiler;
 import it.polimi.heaven.core.tsimpl.streamer.TSStreamer;
+import it.polimi.heaven.core.tsimpl.streamer.rel2rdfstream.citybench.ssnobservations.SensorObservation;
 import it.polimi.services.FileService;
 
 import java.io.BufferedReader;
@@ -25,21 +25,21 @@ import lombok.extern.log4j.Log4j;
  * The current experiment can be available until finalization.
  */
 @Log4j
-public final class RDF2RDFStream extends TSStreamer {
+public final class Rel2RDFStream extends TSStreamer {
 
 	private Stimulus lastEvent;
 	private String line;
 	private int streamedEvents;
 	private int triples;
 	private Experiment currentExperiment;
-	protected FlowRateProfiler<Stimulus, TripleContainer> profiler;
+	protected FlowRateProfiler<Stimulus, SensorObservation> profiler;
 
-	public RDF2RDFStream(EventProcessor<Stimulus> processor, FlowRateProfiler<Stimulus, TripleContainer> profiler, int eventLimit) {
+	public Rel2RDFStream(EventProcessor<Stimulus> processor, FlowRateProfiler<Stimulus, SensorObservation> profiler, int eventLimit) {
 		super(processor, ExecutionState.CLOSED, eventLimit);
 		this.profiler = profiler;
 	}
 
-	public RDF2RDFStream(EventProcessor<Stimulus> processor, FlowRateProfiler<Stimulus, TripleContainer> profiler) {
+	public Rel2RDFStream(EventProcessor<Stimulus> processor, FlowRateProfiler<Stimulus, SensorObservation> profiler) {
 		super(processor, ExecutionState.CLOSED, 1000);
 		this.profiler = profiler;
 	}
@@ -66,7 +66,7 @@ public final class RDF2RDFStream extends TSStreamer {
 					line = br.readLine();
 
 					status = ExecutionState.RUNNING;
-					profiler.append(new TripleContainer(Parser.parseTriple(line)));
+					profiler.append(EventFactory.createObservation(line));
 					triples++;
 
 					if (profiler.isReady()) {
@@ -85,6 +85,9 @@ public final class RDF2RDFStream extends TSStreamer {
 				log.info("End Streaming: Triples: [" + triples + "] " + "RSPEvents: [" + streamedEvents + "]");
 				br.close();
 			} catch (IOException ex) {
+				status = ExecutionState.ERROR;
+				log.error(ex.getMessage());
+			} catch (NumberFormatException ex) {
 				status = ExecutionState.ERROR;
 				log.error(ex.getMessage());
 			}
