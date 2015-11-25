@@ -41,6 +41,8 @@ public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<Stim
 
 	@Override
 	public Stimulus getEvent() {
+		currentTimestamp += timing;
+		e.setTimestamp(currentTimestamp);
 		return sizeReached ? e : null;
 	}
 
@@ -58,7 +60,7 @@ public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<Stim
 				eventNumber++;
 				set.add(triple);
 			}
-			e = e.rebuild(id, set, eventNumber, experimentNumber, currentTimestamp + timing);
+			e = e.rebuild(id, set, eventNumber, experimentNumber, currentTimestamp);
 			log.debug("is Full Event Size [" + e.size() + "] roundSize [" + roundSize + "]");
 		} else {
 			e.getEventTriples().add(triple);
