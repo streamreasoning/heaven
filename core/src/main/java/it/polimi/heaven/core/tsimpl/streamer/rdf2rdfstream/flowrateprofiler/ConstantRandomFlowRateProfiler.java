@@ -15,8 +15,8 @@ public class ConstantRandomFlowRateProfiler extends TripleSetFlowRateProfiler {
 	private int roundX;
 	private int counter;
 
-	public ConstantRandomFlowRateProfiler(long xSeed, long ySeed, int xMax, int yMax, int initSize, int experiment) {
-		super(FlowRateProfile.RANDOM, xMax, yMax, initSize, experiment);
+	public ConstantRandomFlowRateProfiler(long xSeed, long ySeed, int xMax, int yMax, int initSize, int experiment, int timing) {
+		super(FlowRateProfile.RANDOM, xMax, yMax, initSize, experiment, timing);
 		this.roundSize = initSize;
 		this.roundX = xMax;
 		this.counter = xMax - 1;
@@ -24,8 +24,8 @@ public class ConstantRandomFlowRateProfiler extends TripleSetFlowRateProfiler {
 		this.yRandom = new Random(ySeed);
 	}
 
-	public ConstantRandomFlowRateProfiler(int xMax, int yMax, int initSize, int experiment) {
-		super(FlowRateProfile.RANDOM, xMax, yMax, initSize, experiment);
+	public ConstantRandomFlowRateProfiler(int xMax, int yMax, int initSize, int experiment, int timing) {
+		super(FlowRateProfile.RANDOM, xMax, yMax, initSize, experiment, timing);
 		this.roundSize = initSize;
 		this.roundX = xMax;
 		this.counter = xMax - 1;

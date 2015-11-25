@@ -5,16 +5,15 @@ import it.polimi.heaven.core.ts.streamer.flowrateprofiler.TripleSetFlowRateProfi
 
 /**
  * 
- * x is width
- * y is factor
+ * x is width y is factor
  * 
  * @author Riccardo
  * 
  */
 public class StepFactorFlowRateProfiler extends TripleSetFlowRateProfiler {
 
-	public StepFactorFlowRateProfiler(int width, int factor, int initSize, int experiment) {
-		super(FlowRateProfile.STEP, width, factor, initSize, experiment);
+	public StepFactorFlowRateProfiler(int width, int factor, int initSize, int experiment, int timing) {
+		super(FlowRateProfile.STEP, width, factor, initSize, experiment, timing);
 	}
 
 	int distance = 0;

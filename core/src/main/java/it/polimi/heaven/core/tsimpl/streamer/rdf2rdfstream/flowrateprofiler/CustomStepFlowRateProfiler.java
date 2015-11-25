@@ -5,8 +5,8 @@ import it.polimi.heaven.core.ts.streamer.flowrateprofiler.TripleSetFlowRateProfi
 
 public class CustomStepFlowRateProfiler extends TripleSetFlowRateProfiler {
 
-	public CustomStepFlowRateProfiler(int width, int finalSize, int initSize, int experiment) {
-		super(FlowRateProfile.STEP, width, finalSize, initSize, experiment);
+	public CustomStepFlowRateProfiler(int width, int finalSize, int initSize, int experiment, int timing) {
+		super(FlowRateProfile.STEP, width, finalSize, initSize, experiment, timing);
 	}
 
 	@Override

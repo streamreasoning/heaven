@@ -5,8 +5,8 @@ import it.polimi.heaven.core.ts.streamer.flowrateprofiler.TripleSetFlowRateProfi
 
 public class LinearFlowRateProfiler extends TripleSetFlowRateProfiler {
 
-	public LinearFlowRateProfiler(int height, int initSize, int experiment) {
-		super(FlowRateProfile.LINEAR, height, 1, initSize, experiment);
+	public LinearFlowRateProfiler(int height, int initSize, int experiment, int timing) {
+		super(FlowRateProfile.LINEAR, height, 1, initSize, experiment, timing);
 		eventNumber = initSize;
 	}
 

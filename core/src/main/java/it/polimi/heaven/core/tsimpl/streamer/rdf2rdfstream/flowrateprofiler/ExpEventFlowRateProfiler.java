@@ -7,8 +7,8 @@ public class ExpEventFlowRateProfiler extends TripleSetFlowRateProfiler {
 
 	private int power = 0;
 
-	public ExpEventFlowRateProfiler(int base, int initSize, int experiment) {
-		super(FlowRateProfile.EXP, base, 1, initSize, experiment);
+	public ExpEventFlowRateProfiler(int base, int initSize, int experiment, int timing) {
+		super(FlowRateProfile.EXP, base, 1, initSize, experiment, timing);
 		eventNumber = initSize;
 	}
 

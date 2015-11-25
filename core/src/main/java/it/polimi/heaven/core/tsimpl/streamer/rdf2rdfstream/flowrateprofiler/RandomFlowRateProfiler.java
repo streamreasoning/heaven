@@ -12,14 +12,14 @@ public class RandomFlowRateProfiler extends TripleSetFlowRateProfiler {
 
 	private final Random yRandom;
 
-	public RandomFlowRateProfiler(long seed, int yMax, int initSize, int experiment) {
-		super(FlowRateProfile.RANDOM, -1, yMax, initSize, experiment);
+	public RandomFlowRateProfiler(long seed, int yMax, int initSize, int experiment, int timing) {
+		super(FlowRateProfile.RANDOM, -1, yMax, initSize, experiment, timing);
 		roundSize = initSize;
 		this.yRandom = new Random(seed);
 	}
 
-	public RandomFlowRateProfiler(int yMax, int initSize, int experiment) {
-		super(FlowRateProfile.RANDOM, -1, yMax, initSize, experiment);
+	public RandomFlowRateProfiler(int yMax, int initSize, int experiment, int timing) {
+		super(FlowRateProfile.RANDOM, -1, yMax, initSize, experiment, timing);
 		roundSize = initSize;
 		this.yRandom = new Random(1L);
 	}

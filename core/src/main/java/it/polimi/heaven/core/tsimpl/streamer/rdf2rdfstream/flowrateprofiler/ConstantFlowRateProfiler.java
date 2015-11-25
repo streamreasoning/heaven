@@ -5,8 +5,8 @@ import it.polimi.heaven.core.ts.streamer.flowrateprofiler.TripleSetFlowRateProfi
 
 public class ConstantFlowRateProfiler extends TripleSetFlowRateProfiler {
 
-	public ConstantFlowRateProfiler(int initSize, int experiment) {
-		super(FlowRateProfile.CONSTANT, 0, 0, initSize, experiment);
+	public ConstantFlowRateProfiler(int initSize, int experiment, int timing) {
+		super(FlowRateProfile.CONSTANT, 0, 0, initSize, experiment, timing);
 		roundSize = initSize;
 	}
 
