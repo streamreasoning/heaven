@@ -16,7 +16,7 @@ public class ConstantEventBuilderTest {
 
 	@Test
 	public void constantEventBuilderTest() {
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new ConstantFlowRateProfiler(1, 0);
+		FlowRateProfiler<Stimulus, TripleContainer> eb = new ConstantFlowRateProfiler(1, 0, 100);
 
 		TripleContainer tc1 = new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
@@ -48,7 +48,7 @@ public class ConstantEventBuilderTest {
 
 	@Test
 	public void constantEventBuilderRealCaseTest() {
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new ConstantFlowRateProfiler(1, 0);
+		FlowRateProfiler<Stimulus, TripleContainer> eb = new ConstantFlowRateProfiler(1, 0, 100);
 
 		assertEquals(false, eb.isReady());
 
@@ -67,7 +67,7 @@ public class ConstantEventBuilderTest {
 
 	@Test
 	public void constantEventBuilderTestSingleAdd() {
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new ConstantFlowRateProfiler(1, 0);
+		FlowRateProfiler<Stimulus, TripleContainer> eb = new ConstantFlowRateProfiler(1, 0, 100);
 
 		TripleContainer tc1 = new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
@@ -98,7 +98,7 @@ public class ConstantEventBuilderTest {
 
 	@Test
 	public void constantEventBuilderRealCaseTestSingleAdd() {
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new ConstantFlowRateProfiler(1, 0);
+		FlowRateProfiler<Stimulus, TripleContainer> eb = new ConstantFlowRateProfiler(1, 0, 100);
 
 		assertEquals(false, eb.isReady());
 

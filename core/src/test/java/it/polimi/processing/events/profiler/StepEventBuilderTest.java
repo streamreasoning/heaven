@@ -23,7 +23,7 @@ public class StepEventBuilderTest {
 		int width = 1;
 		int initSize = 5;
 
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new StepFlowRateProfiler(width, height, initSize, 0); // 1
+		FlowRateProfiler<Stimulus, TripleContainer> eb = new StepFlowRateProfiler(width, height, initSize, 0, 100); // 1
 		// 5
 		// 10
 
@@ -73,27 +73,27 @@ public class StepEventBuilderTest {
 		int width = 5;
 		int size = 5;
 		Stimulus event;
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new StepFlowRateProfiler(width, height, size, 0); /*
-																											 * 5
-																											 * 5
-																											 * 5
-																											 * 5
-																											 * 5
-																											 * /
-																											 * /
-																											 * 10
-																											 * 10
-																											 * 10
-																											 * 10
-																											 * 10
-																											 * /
-																											 * /
-																											 * 15
-																											 * 15
-																											 * 15
-																											 * 15
-																											 * 15
-																											 */
+		FlowRateProfiler<Stimulus, TripleContainer> eb = new StepFlowRateProfiler(width, height, size, 0, 100); /*
+																												 * 5
+																												 * 5
+																												 * 5
+																												 * 5
+																												 * 5
+																												 * /
+																												 * /
+																												 * 10
+																												 * 10
+																												 * 10
+																												 * 10
+																												 * 10
+																												 * /
+																												 * /
+																												 * 15
+																												 * 15
+																												 * 15
+																												 * 15
+																												 * 15
+																												 */
 
 		assertEquals(false, eb.isReady()); // The first RSPEvent
 

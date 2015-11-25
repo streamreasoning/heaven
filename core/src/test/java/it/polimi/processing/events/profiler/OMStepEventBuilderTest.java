@@ -22,7 +22,7 @@ public class OMStepEventBuilderTest {
 		int factor = 10;
 		int initSize = 5;
 
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new StepFactorFlowRateProfiler(factor, height, initSize, 0); // 1
+		FlowRateProfiler<Stimulus, TripleContainer> eb = new StepFactorFlowRateProfiler(factor, height, initSize, 0, 100); // 1
 		// 5
 		// 10
 
@@ -72,27 +72,27 @@ public class OMStepEventBuilderTest {
 		int width = 5;
 		int size = 10;
 		Stimulus event;
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new StepFactorFlowRateProfiler(width, factor, size, 0); /*
-																												 * /
-																												 * /
-																												 * 10
-																												 * 10
-																												 * 10
-																												 * 10
-																												 * 10
-																												 * /
-																												 * /
-																												 * 100
-																												 * 100
-																												 * 100
-																												 * 100
-																												 * 100
-																												 * 
-																												 * 1000
-																												 * 1000
-																												 * 1000
-																												 * 1000
-																												 */
+		FlowRateProfiler<Stimulus, TripleContainer> eb = new StepFactorFlowRateProfiler(width, factor, size, 0, 100); /*
+																													 * /
+																													 * /
+																													 * 10
+																													 * 10
+																													 * 10
+																													 * 10
+																													 * 10
+																													 * /
+																													 * /
+																													 * 100
+																													 * 100
+																													 * 100
+																													 * 100
+																													 * 100
+																													 * 
+																													 * 1000
+																													 * 1000
+																													 * 1000
+																													 * 1000
+																													 */
 
 		assertEquals(false, eb.isReady()); // The first RSPEvent
 

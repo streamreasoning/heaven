@@ -23,7 +23,7 @@ public class CustomStepEventBuilderTest {
 		int finalSize = 10;
 		int width = 2;
 
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new CustomStepFlowRateProfiler(width, finalSize, initSize, 0);
+		FlowRateProfiler<Stimulus, TripleContainer> eb = new CustomStepFlowRateProfiler(width, finalSize, initSize, 0, 100);
 
 		assertEquals(false, eb.isReady()); // The first RSPEvent
 
@@ -144,7 +144,7 @@ public class CustomStepEventBuilderTest {
 		int width = 5;
 		int size = 5;
 		Stimulus event;
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new CustomStepFlowRateProfiler(width, finalSize, size, 0); // 555551515151515
+		FlowRateProfiler<Stimulus, TripleContainer> eb = new CustomStepFlowRateProfiler(width, finalSize, size, 0, 100); // 555551515151515
 		assertEquals(false, eb.isReady()); // The first RSPEvent
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < size; j++) {
@@ -177,7 +177,7 @@ public class CustomStepEventBuilderTest {
 		int width = 5;
 		int size = 15;
 		Stimulus event;
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new CustomStepFlowRateProfiler(width, finalSize, size, 0); // 555551515151515
+		FlowRateProfiler<Stimulus, TripleContainer> eb = new CustomStepFlowRateProfiler(width, finalSize, size, 0, 100); // 555551515151515
 		assertEquals(false, eb.isReady()); // The first RSPEvent
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < size; j++) {

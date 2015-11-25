@@ -25,7 +25,7 @@ public class RandomEventBuilderTest {
 		Stimulus event;
 
 		int experimentNumber = 0;
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new RandomFlowRateProfiler(yMax, initSize, experimentNumber);
+		FlowRateProfiler<Stimulus, TripleContainer> eb = new RandomFlowRateProfiler(yMax, initSize, experimentNumber, 100);
 
 		int i = 0;
 		while (!eb.isReady()) {
@@ -65,7 +65,7 @@ public class RandomEventBuilderTest {
 		Stimulus event;
 
 		int experimentNumber = 0;
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new ConstantRandomFlowRateProfiler(xMax, yMax, initSize, experimentNumber);
+		FlowRateProfiler<Stimulus, TripleContainer> eb = new ConstantRandomFlowRateProfiler(xMax, yMax, initSize, experimentNumber, 100);
 
 		int i = 0;
 		while (!eb.isReady()) {
