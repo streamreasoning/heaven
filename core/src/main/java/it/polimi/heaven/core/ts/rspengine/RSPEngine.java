@@ -19,6 +19,4 @@ public interface RSPEngine extends EventProcessor<Stimulus>, Startable<Execution
 
 	public String getName();
 
-	public boolean timeProgress();
-
 }
