@@ -14,17 +14,13 @@ import lombok.extern.log4j.Log4j;
 public abstract class TestStand implements EventProcessor<Stimulus>, Startable<ExecutionState> {
 
 	protected TSResultCollector collector;
-	protected RSPEngine engine;
 	protected TSStreamer streamer;
+	protected RSPEngine engine;
 
 	protected Experiment currentExperiment;
 	protected HeavenResult currentResult, aboxResult;
 
-	protected int eventNumber, tsResultEvents = 0;
-
-	protected int resultEvent;
-	protected int rspEvent;
-	protected int totalEvent;
+	protected int stimulusNumber = 0, rspEngineResultNumber = 0, totalEvent = 0;
 
 	protected ExecutionState status = ExecutionState.NOT_READY;
 
@@ -94,8 +90,8 @@ public abstract class TestStand implements EventProcessor<Stimulus>, Startable<E
 				status = ExecutionState.ERROR;
 			}
 
-			log.info("Status [" + status + "] Processed RSPEvents [" + rspEvent + "]  ResultEvents [" + resultEvent + "]  Total [" + totalEvent
-					+ "] Produced [" + tsResultEvents + "] TSResult Events");
+			log.info("Status [" + status + "]: Stimuli [" + stimulusNumber + "] RSP Engine Results [" + rspEngineResultNumber + "] Total Events ["
+					+ totalEvent + "]");
 			return status;
 		}
 	}

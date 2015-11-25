@@ -29,12 +29,11 @@ public class TestStandImpl extends TestStand {
 	}
 
 	public boolean processStimulus(Stimulus e) {
-		this.rspEvent++;
-		this.eventNumber = engine.getEventNumber();
+		stimulusNumber++;
 
 		this.currentResult = new HeavenResult();
-		this.currentResult.setId("<http://example.org/" + currentExperiment.getExperimentNumber() + "/" + eventNumber + ">");
-		this.currentResult.setEventNumber(eventNumber);
+		this.currentResult.setId("<http://example.org/" + currentExperiment.getExperimentNumber() + "/" + stimulusNumber + ">");
+		this.currentResult.setEventNumber(stimulusNumber);
 		this.currentResult.setMemoryB((currentExperiment.isMemoryLog()) ? Memory.getMemoryUsage() : 0D);
 		this.currentResult.setInputTimestamp(e.getInputTimestamp());
 		this.currentResult.setAboxLog(currentExperiment.isAboxLog());
@@ -56,7 +55,7 @@ public class TestStandImpl extends TestStand {
 		if (engineResult.isAbox()) {
 			return processAbox(engineResult);
 		} else {
-			resultEvent++;
+			rspEngineResultNumber++;
 			this.currentResult.setResult(engineResult);
 
 			try {
@@ -80,7 +79,7 @@ public class TestStandImpl extends TestStand {
 			String filePath = outputPath + "/exp" + currentExperiment.getExperimentNumber() + "/" + engineName + "/" + experimentnName;
 
 			boolean ret = collector.process(currentResult, filePath);
-			this.tsResultEvents += ret ? 1 : 0;
+			this.rspEngineResultNumber += ret ? 1 : 0;
 			log.debug("Result Saved at [" + System.currentTimeMillis() + "]");
 			return ret;
 		}
@@ -90,7 +89,7 @@ public class TestStandImpl extends TestStand {
 	private boolean processAbox(RSPEngineResult engineResult) {
 
 		this.aboxResult = new HeavenResult();
-		this.aboxResult.setId("<http://example.org/" + currentExperiment.getExperimentNumber() + "/" + (engine.getEventNumber() - 1) + ">");
+		this.aboxResult.setId("<http://example.org/" + currentExperiment.getExperimentNumber() + "/" + stimulusNumber + ">");
 		this.aboxResult.setEventNumber(engineResult.getEventNumber());
 		this.aboxResult.setInputTimestamp(engineResult.getInputTimestamp());
 		this.aboxResult.setResult(engineResult);
