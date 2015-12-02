@@ -1,9 +1,11 @@
 package it.polimi.heaven.core.tsimpl.streamer.rel2rdfstream.citybench.ssnobservations;
 
 import it.polimi.heaven.core.ts.events.TripleContainer;
+import it.polimi.heaven.core.tsimpl.streamer.rel2rdfstream.citybench.CityBenchUtils;
 
 import java.util.Date;
 import java.util.Set;
+import java.util.UUID;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,8 +39,13 @@ public class AarhusTrafficObservation extends SensorObservation {
 
 	@Override
 	public Set<TripleContainer> getTriples() {
-		// TODO Auto-generated method stub
-		return null;
+		Set<TripleContainer> s = super.getTriples();
+		String id = CityBenchUtils.defaultPrefix + obId + UUID.randomUUID();
+		s.add(new TripleContainer(id, CityBenchUtils.saoHasValue, "\"" + vehicleCount + "\"" + "^^xsd:integer"));
+		s.add(new TripleContainer(id, CityBenchUtils.saoHasValue, "\"" + medianMeasuredTime + "\"" + "^^xsd:double"));
+		s.add(new TripleContainer(id, CityBenchUtils.saoHasValue, "\"" + avgSpeed + "\"" + "^^xsd:double"));
+		s.add(new TripleContainer(id, CityBenchUtils.saoHasValue, "\"" + vehicleCount + "\"" + "^^xsd:integer"));
+		return s;
 	}
 
 }
