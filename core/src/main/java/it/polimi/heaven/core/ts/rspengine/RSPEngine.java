@@ -15,6 +15,6 @@ public interface RSPEngine extends EventProcessor<Stimulus>, Startable<Execution
 
 	public ExecutionState stopProcessing();
 
-	public String getName();
+	public void registerQuery(Query q);
 
 }
