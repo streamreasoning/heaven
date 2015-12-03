@@ -36,6 +36,11 @@ public abstract class SensorObservation implements Serializable {
 		s.add(observedBy);
 		s.add(observation);
 		return s;
+	}
+
+	public String getService() {
+		// TODO Auto-generated method stub
+		return null;
 	};
 
 }

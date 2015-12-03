@@ -32,7 +32,7 @@ public class SensorObservationProfiler implements FlowRateProfiler<Stimulus, Sen
 	@Override
 	public boolean append(SensorObservation so) {
 		s = new Stimulus();
-		s.rebuild(so.getObId(), so.getTriples(), eventNumber, experimentNumber, so.getObTimeStamp().getTime());
+		s.rebuild(so.getObId(), so.getService(), so.getTriples(), eventNumber, experimentNumber, so.getObTimeStamp().getTime());
 		s.setInputTimestamp(so.getSysTimestamp().getTime());
 		eventNumber++;
 		return true;

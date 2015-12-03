@@ -115,7 +115,6 @@ public class TestStandImpl extends TestStand {
 			this.currentExperiment = e;
 			this.outputPath = currentExperiment.getOutputPath() + currentExperiment.getDate();
 			this.experimentnName = currentExperiment.getName();
-			this.engineName = engine.getName();
 
 			long startTime = System.currentTimeMillis();
 
