@@ -16,11 +16,9 @@ public class RSPEngineResult extends Stimulus {
 	private long outputTimestamp;
 	private boolean abox;
 
-	public RSPEngineResult(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber, long outputTimestamp, boolean abox) {
-		// TODO 0 is the stimulus timestamp assegnated by the flow rate
-		// profiler, find a proper way to use this within the context of the
-		// RSPER
-		super(id, hashSet, eventNumber, experimentNumber, 0);
+	public RSPEngineResult(String id, String streamName, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber, long outputTimestamp,
+			boolean abox) {
+		super(id, streamName, hashSet, eventNumber, experimentNumber, 0);
 		this.outputTimestamp = outputTimestamp;
 		this.abox = abox;
 	}

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Stimulus implements Event {
 
-	private String id;
+	private String id, streamName;
 	private Set<TripleContainer> eventTriples;
 	private int eventNumber, experimentNumber;
 	private long inputTimestamp, timestamp;
@@ -22,8 +22,9 @@ public class Stimulus implements Event {
 		return eventTriples.size();
 	}
 
-	public Stimulus(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber, long timestamp) {
+	public Stimulus(String id, String streamName, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber, long timestamp) {
 		this.id = id;
+		this.streamName = streamName;
 		this.eventTriples = hashSet;
 		this.eventNumber = eventNumber;
 		this.experimentNumber = experimentNumber;
@@ -31,9 +32,9 @@ public class Stimulus implements Event {
 		this.timestamp = timestamp;
 	}
 
-	public Stimulus rebuild(String id, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber, long timestamp) {
-		// TODO edit to include all the parameters
+	public Stimulus rebuild(String id, String streamName, Set<TripleContainer> hashSet, int eventNumber, int experimentNumber, long timestamp) {
 		this.id = id;
+		this.streamName = streamName;
 		this.eventTriples = hashSet;
 		this.eventNumber = eventNumber;
 		this.experimentNumber = experimentNumber;

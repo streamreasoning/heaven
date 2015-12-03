@@ -36,7 +36,7 @@ public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<Stim
 		this.currentTimestamp = 0L;
 		this.timing = timing;
 		id = "<http://example.org/" + experimentNumber + "/";
-		e = new Stimulus(id, new HashSet<TripleContainer>(), eventNumber, experimentNumber, currentTimestamp);
+		e = new Stimulus(id, "lubmEvent", new HashSet<TripleContainer>(), eventNumber, experimentNumber, currentTimestamp);
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<Stim
 				eventNumber++;
 				set.add(triple);
 			}
-			e = e.rebuild(id, set, eventNumber, experimentNumber, currentTimestamp);
+			e = e.rebuild(id, "lubmEvent", set, eventNumber, experimentNumber, currentTimestamp);
 			log.debug("is Full Event Size [" + e.size() + "] roundSize [" + roundSize + "]");
 		} else {
 			e.getEventTriples().add(triple);
