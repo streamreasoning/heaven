@@ -76,7 +76,7 @@ public class TestStandImpl extends TestStand {
 			// this.currentResult.setSr(engineResult.getSoundRHODF());
 			// this.currentResult.setCs(engineResult.getCompleteSMPL());
 			// this.currentResult.setSs(engineResult.getSoundSMPL());
-			String filePath = outputPath + "/exp" + currentExperiment.getExperimentNumber() + "/" + engineName + "/" + experimentnName;
+			String filePath = outputPath + "/exp" + currentExperiment.getExperimentNumber() + "/" + experimentnName;
 
 			boolean ret = collector.process(currentResult, filePath);
 			this.rspEngineResultNumber += ret ? 1 : 0;
