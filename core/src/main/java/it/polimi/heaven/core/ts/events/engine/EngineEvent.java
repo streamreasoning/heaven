@@ -1,5 +1,5 @@
-package it.polimi.heaven.core.ts.events;
+package it.polimi.heaven.core.ts.events.engine;
 
-public interface Event {
+public interface EngineEvent {
 
 }
