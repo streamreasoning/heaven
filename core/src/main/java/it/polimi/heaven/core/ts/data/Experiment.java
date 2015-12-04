@@ -1,12 +1,9 @@
-package it.polimi.heaven.core.ts.events;
+package it.polimi.heaven.core.ts.data;
 
-import it.polimi.services.SQLListeService;
 import lombok.Data;
-import lombok.extern.log4j.Log4j;
 
 @Data
-@Log4j
-public class Experiment implements Event, EventResult {
+public class Experiment {
 
 	private String date;
 	private int experimentNumber;
@@ -15,8 +12,6 @@ public class Experiment implements Event, EventResult {
 
 	private String engine;
 	private String timecontrol;
-	private Long timestampStart;
-	private Long timestampEnd;
 
 	private boolean memoryLog;
 	private boolean latencyLog;
@@ -26,24 +21,7 @@ public class Experiment implements Event, EventResult {
 	private String inputSource;
 	private String outputPath;
 
-	// requirements
-
 	private long responsivity;
-
-	@Override
-	public boolean save(String where) {
-		String type = "";
-		type += memoryLog ? "MEM" : "";
-		type += latencyLog ? "LAT" : "";
-
-		;
-
-		String sql = "VALUES (" + "'" + getName() + "'" + "," + "'" + experimentNumber + "'" + "," + "'" + date + "'" + "," + "'" + timestampStart
-				+ "'" + "," + "'" + timestampEnd + "'" + "," + "'" + engine + "'" + "," + "'" + type + "'" + "," + "'" + timecontrol + "'" + ","
-				+ "'" + inputSource + "'" + "," + "'" + outputPath + "/" + getName() + "')";
-		log.info("Insert Experiment [" + sql + "] in [" + where + "]");
-		return SQLListeService.write(SQLListeService.BASELINE_INSERT + sql);
-	}
 
 	public String getName() {
 		return "EN" + experimentNumber + "EXE" + executionNumber + "_" + date + "_" + metadata;

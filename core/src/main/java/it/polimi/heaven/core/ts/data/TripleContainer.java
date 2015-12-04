@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.ts.events;
+package it.polimi.heaven.core.ts.data;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

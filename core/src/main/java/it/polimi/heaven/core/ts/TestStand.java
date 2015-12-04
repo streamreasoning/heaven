@@ -1,102 +1,77 @@
 package it.polimi.heaven.core.ts;
 
-import it.polimi.heaven.core.enums.ExecutionState;
-import it.polimi.heaven.core.exceptions.WrongStatusTransitionException;
-import it.polimi.heaven.core.ts.events.Experiment;
-import it.polimi.heaven.core.ts.events.HeavenResult;
-import it.polimi.heaven.core.ts.events.Stimulus;
+import it.polimi.heaven.core.ts.collector.ResultCollector;
+import it.polimi.heaven.core.ts.data.Experiment;
+import it.polimi.heaven.core.ts.data.ExperimentExecution;
+import it.polimi.heaven.core.ts.events.heaven.HeavenEvent;
 import it.polimi.heaven.core.ts.rspengine.RSPEngine;
-import it.polimi.heaven.core.tsimpl.collector.TSResultCollector;
-import it.polimi.heaven.core.tsimpl.streamer.TSStreamer;
+import it.polimi.heaven.core.ts.rspengine.Receiver;
+import it.polimi.heaven.core.tsimpl.streamer.Streamer;
+import it.polimi.services.FileService;
+
+import java.io.FileReader;
+
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-public abstract class TestStand implements EventProcessor<Stimulus>, Startable<ExecutionState> {
+public class TestStand implements EventProcessor<HeavenEvent> {
 
-	protected TSResultCollector collector;
-	protected TSStreamer streamer;
-	protected RSPEngine engine;
+	private Experiment current_experiment;
+	private ExperimentExecution current_execution;
 
-	protected Experiment currentExperiment;
-	protected HeavenResult currentResult, aboxResult;
+	private Streamer streamer;
+	private RSPEngine engine;
+	private Receiver receiver;
+	private ResultCollector collector;
 
-	protected int stimulusNumber = 0, rspEngineResultNumber = 0, totalEvent = 0;
-
-	protected ExecutionState status = ExecutionState.NOT_READY;
-
-	protected boolean isStartable() {
-		return ExecutionState.NOT_READY.equals(status) || ExecutionState.CLOSED.equals(status);
+	public TestStand(Streamer streamer, RSPEngine engine, ResultCollector collector, Receiver receiver) {
+		this.streamer = streamer;
+		this.engine = engine;
+		this.collector = collector;
+		this.receiver = receiver;
 	}
 
-	protected boolean isOn() {
-		return ExecutionState.READY.equals(status);
+	public void init(Experiment e) {
+		this.current_experiment = e;
+		receiver.setNext(this);
+		streamer.setCollector(this);
+		engine.setNext(receiver);
+		collector.setExperiment(e);
 	}
 
-	protected boolean isReady() {
-		return ExecutionState.READY.equals(status);
-	}
+	public ExperimentExecution run() {
+		this.current_execution = new ExperimentExecution(current_experiment, System.currentTimeMillis());
 
-	public ExecutionState stop() {
-		status = ExecutionState.CLOSED;
-		return status;
+		log.info("Start Running The Experiment [" + current_experiment.getExperimentNumber() + "] of date [" + current_experiment.getDate() + "]");
 
-	}
+		log.debug("Experiment Created");
 
-	public void build(TSStreamer rspEventStreamer, RSPEngine rspEngine, TSResultCollector resultCollector) {
-		this.collector = resultCollector;
-		this.engine = rspEngine;
-		this.streamer = rspEventStreamer;
-	}
+		engine.startProcessing();
 
-	@Override
-	public ExecutionState init() {
-		if (!isStartable()) {
-			throw new WrongStatusTransitionException("Can't Switch from Status [" + status + "] to [" + ExecutionState.READY + "]");
-		} else {
-			ExecutionState streamerStatus = streamer.init();
-			ExecutionState engineStatus = engine.init();
-			ExecutionState collectorStatus = collector.init();
-			if (ExecutionState.READY.equals(streamerStatus) && ExecutionState.READY.equals(collectorStatus)
-					&& ExecutionState.READY.equals(engineStatus)) {
-				status = ExecutionState.READY;
-				log.debug("Status [" + status + "] Initializing the TestStand");
-			} else {
-				log.error("RSPEventStreamerStatus [" + streamerStatus + "] collectorStatus [" + collectorStatus + "] engineStatus [" + engineStatus
-						+ "]");
-				status = ExecutionState.ERROR;
-			}
-			return status;
-		}
+		log.debug("Processing is started ");
+		log.info("Loding file at [" + current_experiment.getInputSource() + "]");
+		FileReader in = FileService.getFileReader(current_experiment.getInputSource());
 
+		this.streamer.start(in);
+
+		this.engine.stopProcessing();
+
+		log.debug("Processing is ended ");
+
+		this.current_execution.setTimestampEnd(System.currentTimeMillis());
+
+		log.info("Stop the experiment, duration " + (current_execution.getTimestampEnd() - current_execution.getTimestampStart()) + "ms");
+		return this.current_execution;
 	}
 
 	@Override
-	public ExecutionState close() {
-		if (!isOn()) {
-			throw new WrongStatusTransitionException("Can't Switch from Status [" + status + "] to [" + ExecutionState.CLOSED + "]");
-		} else {
-			ExecutionState rspEventStreamerStatus = streamer.close();
-			ExecutionState engineStatus = engine.close();
-			ExecutionState collectorStatus = collector.close();
-
-			if (ExecutionState.CLOSED.equals(rspEventStreamerStatus) && ExecutionState.CLOSED.equals(collectorStatus)
-					&& ExecutionState.CLOSED.equals(engineStatus)) {
-				status = ExecutionState.CLOSED;
-				log.debug("Status [" + status + "] Closing the TestStand");
-			} else {
-				log.error("RSPEventStreamerStatus: " + rspEventStreamerStatus);
-				log.error("collectorStatus: " + collectorStatus);
-				log.error("engineStatus: " + engineStatus);
-				status = ExecutionState.ERROR;
-			}
-
-			log.info("Status [" + status + "]: Stimuli [" + stimulusNumber + "] RSP Engine Results [" + rspEngineResultNumber + "] Total Events ["
-					+ totalEvent + "]");
-			return status;
-		}
+	public boolean process(HeavenEvent event) {
+		return collector.process(event);
 	}
 
-	public abstract int run(Experiment e);
+	@Override
+	public boolean setNext(EventProcessor<?> ep) {
+		return false;
+	}
 
-	public abstract int run(Experiment e, String comment);
 }

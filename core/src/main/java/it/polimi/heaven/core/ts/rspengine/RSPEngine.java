@@ -1,20 +1,21 @@
 package it.polimi.heaven.core.ts.rspengine;
 
-import it.polimi.heaven.core.enums.ExecutionState;
 import it.polimi.heaven.core.ts.EventProcessor;
-import it.polimi.heaven.core.ts.Startable;
-import it.polimi.heaven.core.ts.events.Stimulus;
+import it.polimi.heaven.core.ts.events.engine.Stimulus;
+
+import javax.sound.midi.Receiver;
 
 /**
  * @author Riccardo
  * 
  */
-public interface RSPEngine extends EventProcessor<Stimulus>, Startable<ExecutionState> {
+public interface RSPEngine extends EventProcessor<Stimulus> {
 
-	public ExecutionState startProcessing();
+	public void startProcessing();
 
-	public ExecutionState stopProcessing();
+	public void stopProcessing();
 
 	public void registerQuery(Query q);
 
+	public void registerReceiver(Receiver r);
 }
