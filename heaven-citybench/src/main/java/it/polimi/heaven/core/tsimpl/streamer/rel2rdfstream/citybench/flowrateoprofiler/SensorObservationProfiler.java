@@ -1,6 +1,6 @@
 package it.polimi.heaven.core.tsimpl.streamer.rel2rdfstream.citybench.flowrateoprofiler;
 
-import it.polimi.heaven.core.ts.events.Stimulus;
+import it.polimi.heaven.core.ts.events.engine.Stimulus;
 import it.polimi.heaven.core.ts.streamer.flowrateprofiler.FlowRateProfiler;
 import it.polimi.heaven.core.tsimpl.streamer.rel2rdfstream.citybench.ssnobservations.SensorObservation;
 
@@ -20,7 +20,7 @@ public class SensorObservationProfiler implements FlowRateProfiler<Stimulus, Sen
 	}
 
 	@Override
-	public Stimulus getEvent() {
+	public Stimulus build() {
 		return s;
 	}
 

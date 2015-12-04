@@ -3,10 +3,10 @@ package it.polimi.heaven.core.tsimpl.streamer.rel2rdfstream.citybench;
 import it.polimi.heaven.core.enums.ExecutionState;
 import it.polimi.heaven.core.exceptions.WrongStatusTransitionException;
 import it.polimi.heaven.core.ts.EventProcessor;
-import it.polimi.heaven.core.ts.events.Experiment;
-import it.polimi.heaven.core.ts.events.Stimulus;
+import it.polimi.heaven.core.ts.data.Experiment;
+import it.polimi.heaven.core.ts.events.engine.Stimulus;
 import it.polimi.heaven.core.ts.streamer.flowrateprofiler.FlowRateProfiler;
-import it.polimi.heaven.core.tsimpl.streamer.TSStreamer;
+import it.polimi.heaven.core.tsimpl.streamer.Streamer;
 import it.polimi.heaven.core.tsimpl.streamer.rel2rdfstream.citybench.ssnobservations.SensorObservation;
 import it.polimi.services.FileService;
 
@@ -25,7 +25,7 @@ import lombok.extern.log4j.Log4j;
  * The current experiment can be available until finalization.
  */
 @Log4j
-public final class Rel2RDFStream extends TSStreamer {
+public final class Rel2RDFStream extends Streamer {
 
 	private Stimulus lastEvent;
 	private String line;
@@ -70,7 +70,7 @@ public final class Rel2RDFStream extends TSStreamer {
 					triples++;
 
 					if (profiler.isReady()) {
-						streamedEvents += next.process(lastEvent = profiler.getEvent()) ? 1 : 0;
+						streamedEvents += engine.process(lastEvent = profiler.build()) ? 1 : 0;
 						log.debug("Send Event [" + streamedEvents + "] of size [" + lastEvent.size() + "]");
 						log.debug("Streamed [" + triples + "] triples");
 						if (streamedEvents % 100 == 0) {

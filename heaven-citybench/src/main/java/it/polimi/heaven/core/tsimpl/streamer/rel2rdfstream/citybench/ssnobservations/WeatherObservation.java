@@ -1,6 +1,6 @@
 package it.polimi.heaven.core.tsimpl.streamer.rel2rdfstream.citybench.ssnobservations;
 
-import it.polimi.heaven.core.ts.events.TripleContainer;
+import it.polimi.heaven.core.ts.data.TripleContainer;
 
 import java.util.Date;
 import java.util.Set;
