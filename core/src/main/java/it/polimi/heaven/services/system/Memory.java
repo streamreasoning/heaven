@@ -23,6 +23,7 @@
  ******************************************************************************/
 package it.polimi.heaven.services.system;
 
+import net.sourceforge.sizeof.SizeOf;
 
 public class Memory {
 
@@ -30,18 +31,19 @@ public class Memory {
 	private static int mb = 1024 * 1024;
 
 	public static double getTotalMemory() {
-			return runtime.totalMemory() / mb;
+		return runtime.totalMemory() / mb;
 	}
 
 	public static double getFreeMemory() {
-			return runtime.freeMemory() / mb;
+		return runtime.freeMemory() / mb;
 	}
 
 	public static double getMemoryUsage() {
-			return (runtime.totalMemory() - runtime.freeMemory()) / mb;
+		return (runtime.totalMemory() - runtime.freeMemory()) / mb;
 	}
 
-	
-	
-	
+	public static double sizeOf(Object o) {
+		return SizeOf.deepSizeOf(o);
+	}
+
 }
