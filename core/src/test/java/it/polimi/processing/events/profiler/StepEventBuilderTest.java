@@ -1,8 +1,8 @@
 package it.polimi.processing.events.profiler;
 
 import static org.junit.Assert.assertEquals;
-import it.polimi.heaven.core.ts.events.Stimulus;
-import it.polimi.heaven.core.ts.events.TripleContainer;
+import it.polimi.heaven.core.ts.data.TripleContainer;
+import it.polimi.heaven.core.ts.events.heaven.HeavenInput;
 import it.polimi.heaven.core.ts.streamer.flowrateprofiler.FlowRateProfiler;
 import it.polimi.heaven.core.tsimpl.streamer.rdf2rdfstream.flowrateprofiler.StepFlowRateProfiler;
 import lombok.extern.log4j.Log4j;
@@ -23,7 +23,7 @@ public class StepEventBuilderTest {
 		int width = 1;
 		int initSize = 5;
 
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new StepFlowRateProfiler(width, height, initSize, 0, 100); // 1
+		FlowRateProfiler<HeavenInput, TripleContainer> eb = new StepFlowRateProfiler(width, height, initSize, 0, 100); // 1
 		// 5
 		// 10
 
@@ -42,7 +42,7 @@ public class StepEventBuilderTest {
 
 		assertEquals(true, eb.isReady()); // The first RSPEvent
 
-		Stimulus event = eb.getEvent();
+		HeavenInput event = eb.build();
 
 		assertEquals(initSize, event.size());
 
@@ -59,7 +59,7 @@ public class StepEventBuilderTest {
 				}
 			}
 			assertEquals(true, eb.isReady()); // The first RSPEvent
-			event = eb.getEvent();
+			event = eb.build();
 			log.info("Event Size [" + event.size() + "]");
 			assertEquals(height * eventNumber, event.size());
 		}
@@ -72,28 +72,28 @@ public class StepEventBuilderTest {
 		int height = 5;
 		int width = 5;
 		int size = 5;
-		Stimulus event;
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new StepFlowRateProfiler(width, height, size, 0, 100); /*
-																												 * 5
-																												 * 5
-																												 * 5
-																												 * 5
-																												 * 5
-																												 * /
-																												 * /
-																												 * 10
-																												 * 10
-																												 * 10
-																												 * 10
-																												 * 10
-																												 * /
-																												 * /
-																												 * 15
-																												 * 15
-																												 * 15
-																												 * 15
-																												 * 15
-																												 */
+		HeavenInput event;
+		FlowRateProfiler<HeavenInput, TripleContainer> eb = new StepFlowRateProfiler(width, height, size, 0, 100); /*
+																													 * 5
+																													 * 5
+																													 * 5
+																													 * 5
+																													 * 5
+																													 * /
+																													 * /
+																													 * 10
+																													 * 10
+																													 * 10
+																													 * 10
+																													 * 10
+																													 * /
+																													 * /
+																													 * 15
+																													 * 15
+																													 * 15
+																													 * 15
+																													 * 15
+																													 */
 
 		assertEquals(false, eb.isReady()); // The first RSPEvent
 
@@ -107,7 +107,7 @@ public class StepEventBuilderTest {
 
 			assertEquals(true, eb.isReady()); // The first RSPEvent
 
-			event = eb.getEvent();
+			event = eb.build();
 			System.out.println(event.size());
 			assertEquals(size, event.size());
 		}
@@ -124,7 +124,7 @@ public class StepEventBuilderTest {
 
 			assertEquals(true, eb.isReady()); // The first RSPEvent
 
-			event = eb.getEvent();
+			event = eb.build();
 			System.out.println(event.size());
 			assertEquals(size, event.size());
 		}
@@ -141,7 +141,7 @@ public class StepEventBuilderTest {
 
 			assertEquals(true, eb.isReady()); // The first RSPEvent
 
-			event = eb.getEvent();
+			event = eb.build();
 			System.out.println(event.size());
 			assertEquals(size, event.size());
 		}

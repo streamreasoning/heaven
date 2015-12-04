@@ -1,7 +1,7 @@
 package it.polimi.processing.events.profiler;
 
-import it.polimi.heaven.core.ts.events.Stimulus;
-import it.polimi.heaven.core.ts.events.TripleContainer;
+import it.polimi.heaven.core.ts.data.TripleContainer;
+import it.polimi.heaven.core.ts.events.heaven.HeavenInput;
 import it.polimi.heaven.core.ts.streamer.flowrateprofiler.FlowRateProfiler;
 import it.polimi.heaven.core.tsimpl.streamer.rdf2rdfstream.flowrateprofiler.ConstantRandomFlowRateProfiler;
 import it.polimi.heaven.core.tsimpl.streamer.rdf2rdfstream.flowrateprofiler.RandomFlowRateProfiler;
@@ -22,10 +22,10 @@ public class RandomEventBuilderTest {
 		int yMax = 30;
 		int initSize = 5;
 
-		Stimulus event;
+		HeavenInput event;
 
 		int experimentNumber = 0;
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new RandomFlowRateProfiler(yMax, initSize, experimentNumber, 100);
+		FlowRateProfiler<HeavenInput, TripleContainer> eb = new RandomFlowRateProfiler(yMax, initSize, experimentNumber, 100);
 
 		int i = 0;
 		while (!eb.isReady()) {
@@ -34,7 +34,7 @@ public class RandomEventBuilderTest {
 					"http://www.Department1.University1.edu/AssociateProfessor2" + i }));
 			i++;
 		}
-		event = eb.getEvent();
+		event = eb.build();
 		log.info("Event [" + 0 + "] Size [" + event.size() + "]");
 
 		for (int eventNumber = 1; eventNumber < 100; eventNumber++) {
@@ -48,7 +48,7 @@ public class RandomEventBuilderTest {
 						"http://www.Department1.University1.edu/AssociateProfessor2" + i }));
 
 			}
-			event = eb.getEvent();
+			event = eb.build();
 			log.info("Event [" + eventNumber + "] Size [" + event.size() + "]");
 
 		}
@@ -62,10 +62,10 @@ public class RandomEventBuilderTest {
 
 		int initSize = 5;
 
-		Stimulus event;
+		HeavenInput event;
 
 		int experimentNumber = 0;
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new ConstantRandomFlowRateProfiler(xMax, yMax, initSize, experimentNumber, 100);
+		FlowRateProfiler<HeavenInput, TripleContainer> eb = new ConstantRandomFlowRateProfiler(xMax, yMax, initSize, experimentNumber, 100);
 
 		int i = 0;
 		while (!eb.isReady()) {
@@ -74,7 +74,7 @@ public class RandomEventBuilderTest {
 					"http://www.Department1.University1.edu/AssociateProfessor2" + i }));
 			i++;
 		}
-		event = eb.getEvent();
+		event = eb.build();
 		log.info("Event [" + 0 + "] Size [" + event.size() + "]");
 
 		for (int eventNumber = 1; eventNumber < 1000; eventNumber++) {
@@ -88,7 +88,7 @@ public class RandomEventBuilderTest {
 						"http://www.Department1.University1.edu/AssociateProfessor2" + i }));
 
 			}
-			event = eb.getEvent();
+			event = eb.build();
 			log.info("Event [" + eventNumber + "] Size [" + event.size() + "]");
 
 		}

@@ -1,8 +1,8 @@
 package it.polimi.processing.events.profiler;
 
 import static org.junit.Assert.assertEquals;
-import it.polimi.heaven.core.ts.events.Stimulus;
-import it.polimi.heaven.core.ts.events.TripleContainer;
+import it.polimi.heaven.core.ts.data.TripleContainer;
+import it.polimi.heaven.core.ts.events.heaven.HeavenInput;
 import it.polimi.heaven.core.ts.streamer.flowrateprofiler.FlowRateProfiler;
 import it.polimi.heaven.core.tsimpl.streamer.rdf2rdfstream.flowrateprofiler.CustomStepFlowRateProfiler;
 import lombok.extern.log4j.Log4j;
@@ -23,7 +23,7 @@ public class CustomStepEventBuilderTest {
 		int finalSize = 10;
 		int width = 2;
 
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new CustomStepFlowRateProfiler(width, finalSize, initSize, 0, 100);
+		FlowRateProfiler<HeavenInput, TripleContainer> eb = new CustomStepFlowRateProfiler(width, finalSize, initSize, 0, 100);
 
 		assertEquals(false, eb.isReady()); // The first RSPEvent
 
@@ -40,7 +40,7 @@ public class CustomStepEventBuilderTest {
 
 		assertEquals(true, eb.isReady()); // The first RSPEvent
 
-		Stimulus event = eb.getEvent();
+		HeavenInput event = eb.build();
 
 		assertEquals(initSize, event.size());
 
@@ -57,7 +57,7 @@ public class CustomStepEventBuilderTest {
 
 		assertEquals(true, eb.isReady()); // The first RSPEvent
 
-		event = eb.getEvent();
+		event = eb.build();
 
 		assertEquals(initSize, event.size());
 
@@ -94,7 +94,7 @@ public class CustomStepEventBuilderTest {
 						"http://www.Department1.University1.edu/AssociateProfessor234524" }));
 
 		assertEquals(true, eb.isReady());
-		event = eb.getEvent();
+		event = eb.build();
 
 		assertEquals(finalSize, event.size());
 
@@ -131,7 +131,7 @@ public class CustomStepEventBuilderTest {
 						"http://www.Department1.University1.edu/AssociateProfessor234524" }));
 
 		assertEquals(true, eb.isReady());
-		event = eb.getEvent();
+		event = eb.build();
 
 		assertEquals(finalSize, event.size());
 
@@ -143,8 +143,8 @@ public class CustomStepEventBuilderTest {
 		int finalSize = 15;
 		int width = 5;
 		int size = 5;
-		Stimulus event;
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new CustomStepFlowRateProfiler(width, finalSize, size, 0, 100); // 555551515151515
+		HeavenInput event;
+		FlowRateProfiler<HeavenInput, TripleContainer> eb = new CustomStepFlowRateProfiler(width, finalSize, size, 0, 100); // 555551515151515
 		assertEquals(false, eb.isReady()); // The first RSPEvent
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < size; j++) {
@@ -154,7 +154,7 @@ public class CustomStepEventBuilderTest {
 
 			}
 			assertEquals(true, eb.isReady()); // The first RSPEvent
-			event = eb.getEvent();
+			event = eb.build();
 			assertEquals(size, event.size());
 		}
 		size = finalSize;
@@ -165,7 +165,7 @@ public class CustomStepEventBuilderTest {
 						"http://www.Department1.University1.edu/AssociateProfessor24" + i + j }));
 			}
 			assertEquals(true, eb.isReady()); // The first RSPEvent
-			event = eb.getEvent();
+			event = eb.build();
 			assertEquals(size, event.size());
 		}
 	}
@@ -176,8 +176,8 @@ public class CustomStepEventBuilderTest {
 		int finalSize = 5;
 		int width = 5;
 		int size = 15;
-		Stimulus event;
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new CustomStepFlowRateProfiler(width, finalSize, size, 0, 100); // 555551515151515
+		HeavenInput event;
+		FlowRateProfiler<HeavenInput, TripleContainer> eb = new CustomStepFlowRateProfiler(width, finalSize, size, 0, 100); // 555551515151515
 		assertEquals(false, eb.isReady()); // The first RSPEvent
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < size; j++) {
@@ -187,7 +187,7 @@ public class CustomStepEventBuilderTest {
 
 			}
 			assertEquals(true, eb.isReady()); // The first RSPEvent
-			event = eb.getEvent();
+			event = eb.build();
 			assertEquals(size, event.size());
 		}
 		size = finalSize;
@@ -198,7 +198,7 @@ public class CustomStepEventBuilderTest {
 						"http://www.Department1.University1.edu/AssociateProfessor24" + i + j }));
 			}
 			assertEquals(true, eb.isReady()); // The first RSPEvent
-			event = eb.getEvent();
+			event = eb.build();
 			assertEquals(size, event.size());
 		}
 	}

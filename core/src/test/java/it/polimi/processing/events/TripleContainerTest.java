@@ -2,7 +2,7 @@ package it.polimi.processing.events;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import it.polimi.heaven.core.ts.events.TripleContainer;
+import it.polimi.heaven.core.ts.data.TripleContainer;
 
 import java.util.HashSet;
 import java.util.Set;

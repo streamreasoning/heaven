@@ -1,8 +1,8 @@
 package it.polimi.processing.events.profiler;
 
 import static org.junit.Assert.assertEquals;
-import it.polimi.heaven.core.ts.events.Stimulus;
-import it.polimi.heaven.core.ts.events.TripleContainer;
+import it.polimi.heaven.core.ts.data.TripleContainer;
+import it.polimi.heaven.core.ts.events.heaven.HeavenInput;
 import it.polimi.heaven.core.ts.streamer.flowrateprofiler.FlowRateProfiler;
 import it.polimi.heaven.core.tsimpl.streamer.rdf2rdfstream.flowrateprofiler.ConstantFlowRateProfiler;
 
@@ -16,7 +16,7 @@ public class ConstantEventBuilderTest {
 
 	@Test
 	public void constantEventBuilderTest() {
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new ConstantFlowRateProfiler(1, 0, 100);
+		FlowRateProfiler<HeavenInput, TripleContainer> eb = new ConstantFlowRateProfiler(1, 0, 100);
 
 		TripleContainer tc1 = new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
@@ -30,7 +30,7 @@ public class ConstantEventBuilderTest {
 
 		assertEquals(true, eb.isReady());
 
-		Stimulus event = eb.getEvent();
+		HeavenInput event = eb.build();
 
 		assertEquals(1, event.getEventTriples().size());
 
@@ -41,14 +41,14 @@ public class ConstantEventBuilderTest {
 
 		assertEquals(true, eb.isReady());
 
-		event = eb.getEvent();
+		event = eb.build();
 		assertEquals(1, event.getEventTriples().size());
 
 	}
 
 	@Test
 	public void constantEventBuilderRealCaseTest() {
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new ConstantFlowRateProfiler(1, 0, 100);
+		FlowRateProfiler<HeavenInput, TripleContainer> eb = new ConstantFlowRateProfiler(1, 0, 100);
 
 		assertEquals(false, eb.isReady());
 
@@ -58,7 +58,7 @@ public class ConstantEventBuilderTest {
 					new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication" + i,
 							"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
 							"http://www.Department1.University1.edu/AssociateProfessor2" }));
-			assertEquals(1, eb.getEvent().size());
+			assertEquals(1, eb.build().size());
 			assertEquals(true, eb.isReady());
 
 		}
@@ -67,7 +67,7 @@ public class ConstantEventBuilderTest {
 
 	@Test
 	public void constantEventBuilderTestSingleAdd() {
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new ConstantFlowRateProfiler(1, 0, 100);
+		FlowRateProfiler<HeavenInput, TripleContainer> eb = new ConstantFlowRateProfiler(1, 0, 100);
 
 		TripleContainer tc1 = new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
@@ -81,7 +81,7 @@ public class ConstantEventBuilderTest {
 
 		assertEquals(true, eb.isReady());
 
-		Stimulus event = eb.getEvent();
+		HeavenInput event = eb.build();
 
 		assertEquals(1, event.getEventTriples().size());
 
@@ -91,14 +91,14 @@ public class ConstantEventBuilderTest {
 
 		assertEquals(true, eb.isReady());
 
-		event = eb.getEvent();
+		event = eb.build();
 		assertEquals(1, event.getEventTriples().size());
 
 	}
 
 	@Test
 	public void constantEventBuilderRealCaseTestSingleAdd() {
-		FlowRateProfiler<Stimulus, TripleContainer> eb = new ConstantFlowRateProfiler(1, 0, 100);
+		FlowRateProfiler<HeavenInput, TripleContainer> eb = new ConstantFlowRateProfiler(1, 0, 100);
 
 		assertEquals(false, eb.isReady());
 
@@ -108,7 +108,7 @@ public class ConstantEventBuilderTest {
 					new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication" + i,
 							"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
 							"http://www.Department1.University1.edu/AssociateProfessor2" }));
-			assertEquals(1, eb.getEvent().size());
+			assertEquals(1, eb.build().size());
 			assertEquals(true, eb.isReady());
 
 		}
