@@ -3,7 +3,7 @@ package it.polimi.heaven.core.ts.streamer.flowrateprofiler;
 
 public interface FlowRateProfiler<T, E> {
 
-	public T getEvent();
+	public T build();
 
 	/**
 	 * @return true if the built event can be sent

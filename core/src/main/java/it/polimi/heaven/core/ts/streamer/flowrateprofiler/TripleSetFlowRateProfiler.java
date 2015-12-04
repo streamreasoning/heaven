@@ -1,8 +1,8 @@
 package it.polimi.heaven.core.ts.streamer.flowrateprofiler;
 
 import it.polimi.heaven.core.enums.FlowRateProfile;
-import it.polimi.heaven.core.ts.events.Stimulus;
-import it.polimi.heaven.core.ts.events.TripleContainer;
+import it.polimi.heaven.core.ts.data.TripleContainer;
+import it.polimi.heaven.core.ts.events.heaven.HeavenInput;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,9 +14,9 @@ import lombok.extern.log4j.Log4j;
 @Setter
 @Getter
 @Log4j
-public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<Stimulus, TripleContainer> {
+public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<HeavenInput, TripleContainer> {
 
-	protected Stimulus e;
+	protected HeavenInput e;
 	protected FlowRateProfile mode;
 	protected int initSize, roundSize, eventNumber;
 	protected int x, y;
@@ -36,13 +36,13 @@ public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<Stim
 		this.currentTimestamp = 0L;
 		this.timing = timing;
 		id = "<http://example.org/" + experimentNumber + "/";
-		e = new Stimulus(id, "lubmEvent", new HashSet<TripleContainer>(), eventNumber, experimentNumber, currentTimestamp);
+		e = new HeavenInput(id, "lubmEvent", experimentNumber, experimentNumber, currentTimestamp, new HashSet<TripleContainer>());
 	}
 
 	@Override
-	public Stimulus getEvent() {
+	public HeavenInput build() {
 		currentTimestamp += timing;
-		e.setTimestamp(currentTimestamp);
+		e.setStimuli_application_timestamp(currentTimestamp);
 		return sizeReached ? e : null;
 	}
 
@@ -60,7 +60,7 @@ public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<Stim
 				eventNumber++;
 				set.add(triple);
 			}
-			e = e.rebuild(id, "lubmEvent", set, eventNumber, experimentNumber, currentTimestamp);
+			e = e.rebuild(id, "lubmEvent", experimentNumber, eventNumber, currentTimestamp, set);
 			log.debug("is Full Event Size [" + e.size() + "] roundSize [" + roundSize + "]");
 		} else {
 			e.getEventTriples().add(triple);

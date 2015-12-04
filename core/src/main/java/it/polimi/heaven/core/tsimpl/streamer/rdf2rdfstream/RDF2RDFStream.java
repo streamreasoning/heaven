@@ -1,13 +1,14 @@
 package it.polimi.heaven.core.tsimpl.streamer.rdf2rdfstream;
 
 import it.polimi.heaven.core.enums.ExecutionState;
-import it.polimi.heaven.core.exceptions.WrongStatusTransitionException;
 import it.polimi.heaven.core.ts.EventProcessor;
-import it.polimi.heaven.core.ts.events.Experiment;
-import it.polimi.heaven.core.ts.events.Stimulus;
-import it.polimi.heaven.core.ts.events.TripleContainer;
+import it.polimi.heaven.core.ts.data.TripleContainer;
+import it.polimi.heaven.core.ts.events.engine.Stimulus;
+import it.polimi.heaven.core.ts.events.heaven.HeavenInput;
+import it.polimi.heaven.core.ts.streamer.Encoder;
 import it.polimi.heaven.core.ts.streamer.flowrateprofiler.FlowRateProfiler;
-import it.polimi.heaven.core.tsimpl.streamer.TSStreamer;
+import it.polimi.heaven.core.tsimpl.streamer.Streamer;
+import it.polimi.heaven.services.system.Memory;
 import it.polimi.services.FileService;
 
 import java.io.BufferedReader;
@@ -15,97 +16,71 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
-@Getter
-/**
- * Specific implementation of the TSStreamer, responsible to build an RDF Stream starting from a file containing RDF Triples in nt format
- * The Modules must be initialized trough the method init() and  finalized trough the method close()
- * The last event is maintained and can be accessed to a getter method
- * The current experiment can be available until finalization.
- */
 @Log4j
-public final class RDF2RDFStream extends TSStreamer {
+@Getter
+@NoArgsConstructor()
+public final class RDF2RDFStream extends Streamer {
 
-	private Stimulus lastEvent;
 	private String line;
-	private int streamedEvents;
 	private int triples;
-	private Experiment currentExperiment;
-	protected FlowRateProfiler<Stimulus, TripleContainer> profiler;
+	private Stimulus[] last_stimuli;
+	private HeavenInput last_input;
+	private int streamedEvents;
+	private ExecutionState status;
+	@Setter
+	private FlowRateProfiler<HeavenInput, TripleContainer> profiler;
 
-	public RDF2RDFStream(EventProcessor<Stimulus> processor, FlowRateProfiler<Stimulus, TripleContainer> profiler, int eventLimit) {
-		super(processor, ExecutionState.CLOSED, eventLimit);
+	public RDF2RDFStream(int eventLimit, Encoder encoder, EventProcessor<Stimulus> engine, FlowRateProfiler<HeavenInput, TripleContainer> profiler) {
+		super(eventLimit, encoder, engine);
 		this.profiler = profiler;
 	}
 
-	public RDF2RDFStream(EventProcessor<Stimulus> processor, FlowRateProfiler<Stimulus, TripleContainer> profiler) {
-		super(processor, ExecutionState.CLOSED, 1000);
-		this.profiler = profiler;
-	}
-
-	/**
-	 * 
-	 * This method process an Experiment
-	 * 
-	 **/
 	@Override
-	public boolean process(Experiment e) {
-		if (!ExecutionState.READY.equals(status)) {
-			throw new WrongStatusTransitionException("Can't Start in Status [" + status + "] must be [" + ExecutionState.READY + "]");
-		} else {
-			this.currentExperiment = e;
-			try {
-				log.info("Start Streaming");
+	public boolean start(FileReader in) {
+		try {
+			log.info("Start Streaming");
+			BufferedReader br = FileService.getBuffer(in);
+			while (streamedEvents <= eventLimit - 1) {
+				line = br.readLine();
+				status = ExecutionState.RUNNING;
+				profiler.append(new TripleContainer(Parser.parseTriple(line)));
+				triples++;
 
-				FileReader in = FileService.getFileReader(currentExperiment.getInputSource());
-				BufferedReader br = FileService.getBuffer(in);
-
-				while (streamedEvents <= eventLimit - 1) {
-
-					line = br.readLine();
-
-					status = ExecutionState.RUNNING;
-					profiler.append(new TripleContainer(Parser.parseTriple(line)));
-					triples++;
-
-					if (profiler.isReady()) {
-						streamedEvents += next.process(lastEvent = profiler.getEvent()) ? 1 : 0;
-						log.debug("Send Event [" + streamedEvents + "] of size [" + lastEvent.size() + "]");
-						log.debug("Streamed [" + triples + "] triples");
-						if (streamedEvents % 100 == 0) {
-							log.info("Process Complete [" + (double) streamedEvents * 100 / eventLimit + "%]");
-						}
-					} else {
-						log.debug("Still Processing [" + line + "]");
+				if (profiler.isReady()) {
+					last_input = profiler.build();
+					last_input.setEncoding_start_time(System.currentTimeMillis());
+					last_stimuli = encoder.encode(last_input);
+					last_input.setEncoding_end_time(System.currentTimeMillis());
+					last_input.setStimuli(last_stimuli);
+					for (Stimulus stimulus : last_stimuli) {
+						streamedEvents += engine.process(stimulus) ? 1 : 0;
 					}
-					status = ExecutionState.READY;
+					log.debug("Streamed [" + triples + "] triples");
+					if (streamedEvents % 100 == 0) {
+						log.info("Process Complete [" + (double) streamedEvents * 100 / eventLimit + "%]");
+					}
+					last_input.setMemory_usage_before_processing(Memory.getMemoryUsage());
+					// last_input.setEngine_size_inmemory(Memory.sizeOf(engine));
+					// last_input.setTeststand_size_inmemory(Memory.sizeOf(collector));
+					// last_input.setStreamer_size_inmemory(Memory.sizeOf(this));
+
+					collector.process(last_input);
+				} else {
+					log.debug("Still Processing [" + line + "]");
 				}
-
-				log.info("End Streaming: Triples: [" + triples + "] " + "RSPEvents: [" + streamedEvents + "]");
-				br.close();
-			} catch (IOException ex) {
-				status = ExecutionState.ERROR;
-				log.error(ex.getMessage());
+				status = ExecutionState.READY;
 			}
-			return ExecutionState.READY.equals(status);
+
+			log.info("End Streaming: Triples: [" + triples + "] " + "RSPEvents: [" + streamedEvents + "]");
+			br.close();
+		} catch (IOException ex) {
+			status = ExecutionState.ERROR;
+			log.error(ex.getMessage());
 		}
+		return ExecutionState.READY.equals(status);
 	}
-
-	@Override
-	public ExecutionState init() {
-		status = ExecutionState.READY;
-		streamedEvents = 0;
-		triples = 0;
-		return status;
-	}
-
-	@Override
-	public ExecutionState close() {
-		status = ExecutionState.CLOSED;
-		currentExperiment = null;
-		lastEvent = null;
-		return status;
-	}
-
 }
