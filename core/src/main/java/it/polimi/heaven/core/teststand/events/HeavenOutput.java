@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.teststand.events.heaven;
+package it.polimi.heaven.core.teststand.events;
 
 import it.polimi.heaven.core.teststand.collector.Collectable;
 import it.polimi.services.FileService;

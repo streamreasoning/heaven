@@ -1,7 +1,7 @@
-package it.polimi.heaven.core.teststand.events.heaven;
+package it.polimi.heaven.core.teststand.events;
 
 import it.polimi.heaven.core.teststand.collector.Collectable;
-import it.polimi.heaven.core.teststand.events.engine.Response;
+import it.polimi.heaven.core.teststand.rspengine.events.Response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

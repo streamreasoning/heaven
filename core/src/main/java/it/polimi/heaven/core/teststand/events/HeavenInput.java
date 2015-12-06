@@ -1,7 +1,7 @@
-package it.polimi.heaven.core.teststand.events.heaven;
+package it.polimi.heaven.core.teststand.events;
 
-import it.polimi.heaven.core.teststand.events.engine.Stimulus;
-import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.TripleContainer;
+import it.polimi.heaven.core.teststand.rspengine.events.Stimulus;
+import it.polimi.heaven.core.teststand.streamer.lubm.Line;
 
 import java.util.Set;
 
@@ -27,14 +27,14 @@ public class HeavenInput implements HeavenEvent {
 	private double streamer_size_inmemory;
 
 	private Stimulus[] stimuli;
-	private Set<TripleContainer> eventTriples;
+	private Set<Line> eventTriples;
 
 	public int size() {
 		return eventTriples.size();
 	}
 
 	public HeavenInput(String id, String stream_name, int eventNumber, int experimentNumber, long stimuli_application_timestamp,
-			Set<TripleContainer> eventTriples) {
+			Set<Line> eventTriples) {
 		this.id = id;
 		this.stream_name = stream_name;
 		this.eventNumber = eventNumber;
@@ -45,7 +45,7 @@ public class HeavenInput implements HeavenEvent {
 	}
 
 	public HeavenInput rebuild(String id, String stream_name, int eventNumber, int experimentNumber, long stimuli_application_timestamp,
-			Set<TripleContainer> eventTriples) {
+			Set<Line> eventTriples) {
 		this.id = id;
 		this.stream_name = stream_name;
 		this.eventNumber = eventNumber;
