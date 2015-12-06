@@ -3,8 +3,8 @@ package it.polimi.heaven.core.teststand.streamer.lubm;
 import it.polimi.heaven.core.teststand.data.Line;
 import it.polimi.heaven.core.teststand.events.HeavenInput;
 import it.polimi.heaven.core.teststand.streamer.Encoder;
+import it.polimi.heaven.core.teststand.streamer.FlowRateProfiler;
 import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
-import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.FlowRateProfiler;
 import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.profiles.FlowRateProfile;
 
 import java.util.HashSet;

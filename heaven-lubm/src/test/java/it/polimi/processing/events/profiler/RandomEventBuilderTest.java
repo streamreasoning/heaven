@@ -3,7 +3,7 @@ package it.polimi.processing.events.profiler;
 import it.polimi.heaven.core.teststand.events.HeavenInput;
 import it.polimi.heaven.core.teststand.rspengine.events.Stimulus;
 import it.polimi.heaven.core.teststand.streamer.Encoder;
-import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.FlowRateProfiler;
+import it.polimi.heaven.core.teststand.streamer.FlowRateProfiler;
 import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.profiles.ConstantRandomFlowRateProfiler;
 import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.profiles.RandomFlowRateProfiler;
 import it.polimi.heaven.core.teststand.streamer.lubm.LUBMParser;

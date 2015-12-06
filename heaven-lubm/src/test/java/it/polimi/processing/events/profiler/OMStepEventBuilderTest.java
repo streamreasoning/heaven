@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import it.polimi.heaven.core.teststand.events.HeavenInput;
 import it.polimi.heaven.core.teststand.rspengine.events.Stimulus;
 import it.polimi.heaven.core.teststand.streamer.Encoder;
-import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.FlowRateProfiler;
+import it.polimi.heaven.core.teststand.streamer.FlowRateProfiler;
 import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.profiles.StepFactorFlowRateProfiler;
 import it.polimi.heaven.core.teststand.streamer.lubm.LUBMFlowRateProfiler;
 import it.polimi.heaven.core.teststand.streamer.lubm.LUBMParser;

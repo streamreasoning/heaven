@@ -1,8 +1,6 @@
-package it.polimi.heaven.core.teststand.streamer.flowrateprofiler;
+package it.polimi.heaven.core.teststand.streamer;
 
 import it.polimi.heaven.core.teststand.events.HeavenInput;
-import it.polimi.heaven.core.teststand.streamer.Encoder;
-import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
 import lombok.Getter;
 import lombok.Setter;
 
