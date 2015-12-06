@@ -1,25 +1,25 @@
-package it.polimi.heaven.core.teststand.streamer.impl.flowrateprofiler;
+package it.polimi.heaven.core.teststand.streamer.flowrateprofiler.profiles;
 
-import it.polimi.heaven.core.enums.FlowRateProfile;
-import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.TripleSetFlowRateProfiler;
+import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
+import it.polimi.heaven.core.teststand.streamer.lubm.LUBMFlowRateProfiler;
 
 import java.util.Random;
 
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-public class RandomFlowRateProfiler extends TripleSetFlowRateProfiler {
+public class RandomFlowRateProfiler extends LUBMFlowRateProfiler {
 
 	private final Random yRandom;
 
-	public RandomFlowRateProfiler(long seed, int yMax, int initSize, int experiment, int timing) {
-		super(FlowRateProfile.RANDOM, -1, yMax, initSize, experiment, timing);
+	public RandomFlowRateProfiler(ParsingTemplate parser, long seed, int yMax, int initSize, int experiment, int timing) {
+		super(FlowRateProfile.RANDOM, parser, -1, yMax, initSize, experiment, timing);
 		roundSize = initSize;
 		this.yRandom = new Random(seed);
 	}
 
-	public RandomFlowRateProfiler(int yMax, int initSize, int experiment, int timing) {
-		super(FlowRateProfile.RANDOM, -1, yMax, initSize, experiment, timing);
+	public RandomFlowRateProfiler(ParsingTemplate parser, int yMax, int initSize, int experiment, int timing) {
+		super(FlowRateProfile.RANDOM, parser, -1, yMax, initSize, experiment, timing);
 		roundSize = initSize;
 		this.yRandom = new Random(1L);
 	}

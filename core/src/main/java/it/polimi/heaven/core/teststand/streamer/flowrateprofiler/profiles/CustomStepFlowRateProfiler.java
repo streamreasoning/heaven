@@ -1,17 +1,17 @@
-package it.polimi.heaven.core.teststand.streamer.impl.flowrateprofiler;
+package it.polimi.heaven.core.teststand.streamer.flowrateprofiler.profiles;
 
-import it.polimi.heaven.core.enums.FlowRateProfile;
-import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.TripleSetFlowRateProfiler;
+import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
+import it.polimi.heaven.core.teststand.streamer.lubm.LUBMFlowRateProfiler;
 
-public class CustomStepFlowRateProfiler extends TripleSetFlowRateProfiler {
+public class CustomStepFlowRateProfiler extends LUBMFlowRateProfiler {
 
-	public CustomStepFlowRateProfiler(int width, int finalSize, int initSize, int experiment, int timing) {
-		super(FlowRateProfile.STEP, width, finalSize, initSize, experiment, timing);
+	public CustomStepFlowRateProfiler(ParsingTemplate parser, int width, int finalSize, int initSize, int experiment, int timing) {
+		super(FlowRateProfile.STEP, parser, width, finalSize, initSize, experiment, timing);
 	}
 
 	@Override
 	public void updateSize() {
-		if (eventNumber == x) {
+		if (current_heaven_input == x) {
 			roundSize = y;
 		}
 	}

@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.teststand.streamer.flowrateprofiler;
+package it.polimi.heaven.core.teststand.streamer.lubm;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,17 +11,17 @@ import lombok.NoArgsConstructor;
  */
 @Getter
 @NoArgsConstructor
-public final class TripleContainer {
+public final class Line {
 
 	private final String[] triple = new String[3];
 
-	public TripleContainer(String s, String p, String o) {
+	public Line(String s, String p, String o) {
 		this.triple[0] = s;
 		this.triple[1] = p;
 		this.triple[2] = o;
 	}
 
-	public TripleContainer(String[] t) {
+	public Line(String[] t) {
 		this.triple[0] = t[0];
 		this.triple[1] = t[1];
 		this.triple[2] = t[2];
@@ -41,7 +41,7 @@ public final class TripleContainer {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TripleContainer other = (TripleContainer) obj;
+		Line other = (Line) obj;
 		String[] t = other.getTriple();
 		return t[0].equals(triple[0]) && t[0].equals(triple[0]) && t[0].equals(triple[0]);
 	}

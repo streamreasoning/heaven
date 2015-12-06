@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.teststand.streamer.impl;
+package it.polimi.heaven.core.teststand.streamer.lubm;
 
 import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
 

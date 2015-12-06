@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.enums;
+package it.polimi.heaven.core.teststand.streamer.flowrateprofiler.profiles;
 
 /**
  * @author Riccardo

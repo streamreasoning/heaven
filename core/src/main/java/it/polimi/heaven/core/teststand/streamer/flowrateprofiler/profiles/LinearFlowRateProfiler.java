@@ -1,13 +1,13 @@
-package it.polimi.heaven.core.teststand.streamer.impl.flowrateprofiler;
+package it.polimi.heaven.core.teststand.streamer.flowrateprofiler.profiles;
 
-import it.polimi.heaven.core.enums.FlowRateProfile;
-import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.TripleSetFlowRateProfiler;
+import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
+import it.polimi.heaven.core.teststand.streamer.lubm.LUBMFlowRateProfiler;
 
-public class LinearFlowRateProfiler extends TripleSetFlowRateProfiler {
+public class LinearFlowRateProfiler extends LUBMFlowRateProfiler {
 
-	public LinearFlowRateProfiler(int height, int initSize, int experiment, int timing) {
-		super(FlowRateProfile.LINEAR, height, 1, initSize, experiment, timing);
-		eventNumber = initSize;
+	public LinearFlowRateProfiler(ParsingTemplate parser, int height, int initSize, int experiment, int timing) {
+		super(FlowRateProfile.LINEAR, parser, height, 1, initSize, experiment, timing);
+		current_heaven_input = initSize;
 	}
 
 	@Override

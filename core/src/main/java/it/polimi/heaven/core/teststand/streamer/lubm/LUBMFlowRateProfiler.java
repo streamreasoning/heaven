@@ -1,7 +1,10 @@
-package it.polimi.heaven.core.teststand.streamer.flowrateprofiler;
+package it.polimi.heaven.core.teststand.streamer.lubm;
 
-import it.polimi.heaven.core.enums.FlowRateProfile;
-import it.polimi.heaven.core.teststand.events.heaven.HeavenInput;
+import it.polimi.heaven.core.teststand.events.HeavenInput;
+import it.polimi.heaven.core.teststand.streamer.Encoder;
+import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
+import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.FlowRateProfiler;
+import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.profiles.FlowRateProfile;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,56 +16,59 @@ import lombok.extern.log4j.Log4j;
 @Setter
 @Getter
 @Log4j
-public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<HeavenInput, TripleContainer> {
+public abstract class LUBMFlowRateProfiler extends FlowRateProfiler {
 
-	protected HeavenInput e;
 	protected FlowRateProfile mode;
-	protected int initSize, roundSize, eventNumber;
+	protected int initSize, roundSize, current_heaven_input;
 	protected int x, y;
 	protected boolean sizeReached;
-	protected int experimentNumber;
-	private String id;
-	protected long currentTimestamp;
-	protected int timing;
 
-	public TripleSetFlowRateProfiler(FlowRateProfile mode, int x, int y, int initSize, int experimentNumber, int timing) {
+	public LUBMFlowRateProfiler(FlowRateProfile mode, ParsingTemplate parser, int x, int y, int initSize, int experiment_number, int timing) {
+		this(mode, parser, null, x, y, initSize, experiment_number, timing);
+	}
+
+	public LUBMFlowRateProfiler(FlowRateProfile mode, ParsingTemplate parser, Encoder encoder, int x, int y, int initSize, int experiment_number,
+			int timing) {
+		super(experiment_number, timing, true, parser, encoder);
+		this.mode = mode;
+		this.parser = parser;
 		this.x = x;
 		this.y = y;
 		this.initSize = roundSize = initSize;
-		this.eventNumber = 1;
-		this.mode = mode;
+		this.current_heaven_input = 1;
 		this.sizeReached = false;
-		this.currentTimestamp = 0L;
+		this.current_assigned_timestamp = 0L;
 		this.timing = timing;
-		id = "<http://example.org/" + experimentNumber + "/";
-		e = new HeavenInput(id, "lubmEvent", experimentNumber, experimentNumber, currentTimestamp, new HashSet<TripleContainer>());
+		this.event_id = "<http://example.org/" + experiment_number + "/";
+		e = new HeavenInput(event_id + current_assigned_timestamp + ">", getStreamName(), current_heaven_input, experiment_number,
+				current_assigned_timestamp, new HashSet<Line>());
 	}
 
-	@Override
 	public HeavenInput build() {
-		currentTimestamp += timing;
-		e.setStimuli_application_timestamp(currentTimestamp);
+		current_assigned_timestamp += timing;
+		e.setEncoding_start_time(System.currentTimeMillis());
+		e.setStimuli(encoder.encode(e));
+		e.setEncoding_end_time(System.currentTimeMillis());
 		return sizeReached ? e : null;
 	}
 
-	@Override
 	public boolean isReady() {
 		return sizeReached;
 	}
 
-	@Override
-	public boolean append(TripleContainer triple) {
+	public boolean append(String lineString) {
+		current_line = new Line(parser.parse(lineString));
 		if (sizeReached) {
 			updateSize();
-			Set<TripleContainer> set = new HashSet<TripleContainer>();
+			Set<Line> set = new HashSet<Line>();
 			if (roundSize > 0) {
-				eventNumber++;
-				set.add(triple);
+				current_heaven_input++;
+				set.add(current_line);
 			}
-			e = e.rebuild(id, "lubmEvent", experimentNumber, eventNumber, currentTimestamp, set);
+			e = e.rebuild(event_id + current_heaven_input + ">", getStreamName(), current_heaven_input, experiment_number, getTimestamp(), set);
 			log.debug("is Full Event Size [" + e.size() + "] roundSize [" + roundSize + "]");
 		} else {
-			e.getEventTriples().add(triple);
+			e.getEventTriples().add(current_line);
 			log.debug("NotFull Event Size [" + e.size() + "] roundSize [" + roundSize + "]");
 		}
 
@@ -72,4 +78,12 @@ public abstract class TripleSetFlowRateProfiler implements FlowRateProfiler<Heav
 	}
 
 	public abstract void updateSize();
+
+	public long getTimestamp() {
+		return current_assigned_timestamp;
+	};
+
+	public String getStreamName() {
+		return "lubmEvent";
+	};
 }

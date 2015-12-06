@@ -1,12 +1,12 @@
-package it.polimi.heaven.core.teststand.streamer.impl.flowrateprofiler;
+package it.polimi.heaven.core.teststand.streamer.flowrateprofiler.profiles;
 
-import it.polimi.heaven.core.enums.FlowRateProfile;
-import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.TripleSetFlowRateProfiler;
+import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
+import it.polimi.heaven.core.teststand.streamer.lubm.LUBMFlowRateProfiler;
 
-public class ConstantFlowRateProfiler extends TripleSetFlowRateProfiler {
+public class ConstantFlowRateProfiler extends LUBMFlowRateProfiler {
 
-	public ConstantFlowRateProfiler(int initSize, int experiment, int timing) {
-		super(FlowRateProfile.CONSTANT, 0, 0, initSize, experiment, timing);
+	public ConstantFlowRateProfiler(ParsingTemplate parser, int initSize, int experiment, int timing) {
+		super(FlowRateProfile.CONSTANT, parser, 0, 0, initSize, experiment, timing);
 		roundSize = initSize;
 	}
 

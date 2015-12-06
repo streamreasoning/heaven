@@ -1,8 +1,8 @@
 package it.polimi.heaven.core.teststand.streamer;
 
 import it.polimi.heaven.core.teststand.EventProcessor;
-import it.polimi.heaven.core.teststand.events.engine.Stimulus;
-import it.polimi.heaven.core.teststand.events.heaven.HeavenEvent;
+import it.polimi.heaven.core.teststand.events.HeavenEvent;
+import it.polimi.heaven.core.teststand.rspengine.events.Stimulus;
 
 import java.io.FileReader;
 
@@ -35,31 +35,19 @@ import lombok.extern.log4j.Log4j;
 public abstract class Streamer {
 	@Setter
 	protected int eventLimit;
-	@Setter
-	protected Encoder encoder;
+
 	protected EventProcessor<Stimulus> engine;
 	@Setter
 	protected EventProcessor<HeavenEvent> collector;
 
-	@Setter
-	protected ParsingTemplate parser;
-
-	public Streamer(ParsingTemplate parser) {
-		this.parser = parser;
-	}
-
-	public Streamer(int eventLimit, Encoder encoder, EventProcessor<Stimulus> engine, ParsingTemplate parser) {
+	public Streamer(int eventLimit, EventProcessor<Stimulus> engine, ParsingTemplate parser) {
 		this.eventLimit = eventLimit;
-		this.encoder = encoder;
 		this.engine = engine;
-		this.parser = parser;
 	}
 
 	public Streamer(Encoder encoder, EventProcessor<Stimulus> engine, ParsingTemplate parser) {
 		this.eventLimit = 1000;
-		this.encoder = encoder;
 		this.engine = engine;
-		this.parser = parser;
 	}
 
 	public abstract boolean start(FileReader in);
