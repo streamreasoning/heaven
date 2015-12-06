@@ -1,10 +1,10 @@
 package it.polimi.heaven.core.teststand.collector;
 
 import it.polimi.heaven.core.teststand.data.Experiment;
-import it.polimi.heaven.core.teststand.events.heaven.HeavenEvent;
-import it.polimi.heaven.core.teststand.events.heaven.HeavenInput;
-import it.polimi.heaven.core.teststand.events.heaven.HeavenOutput;
-import it.polimi.heaven.core.teststand.events.heaven.HeavenResult;
+import it.polimi.heaven.core.teststand.events.HeavenEvent;
+import it.polimi.heaven.core.teststand.events.HeavenInput;
+import it.polimi.heaven.core.teststand.events.HeavenOutput;
+import it.polimi.heaven.core.teststand.events.HeavenResult;
 import it.polimi.services.FileService;
 import lombok.Getter;
 
