@@ -1,13 +1,14 @@
-package it.polimi.heaven.core.tsimpl.streamer.rdf2rdfstream;
+package it.polimi.heaven.core.ts.streamer.impl;
 
 import it.polimi.heaven.core.enums.ExecutionState;
 import it.polimi.heaven.core.ts.EventProcessor;
-import it.polimi.heaven.core.ts.data.TripleContainer;
 import it.polimi.heaven.core.ts.events.engine.Stimulus;
 import it.polimi.heaven.core.ts.events.heaven.HeavenInput;
 import it.polimi.heaven.core.ts.streamer.Encoder;
+import it.polimi.heaven.core.ts.streamer.ParsingTemplate;
+import it.polimi.heaven.core.ts.streamer.Streamer;
 import it.polimi.heaven.core.ts.streamer.flowrateprofiler.FlowRateProfiler;
-import it.polimi.heaven.core.tsimpl.streamer.Streamer;
+import it.polimi.heaven.core.ts.streamer.flowrateprofiler.TripleContainer;
 import it.polimi.heaven.services.system.Memory;
 import it.polimi.services.FileService;
 
@@ -34,8 +35,13 @@ public final class RDF2RDFStream extends Streamer {
 	@Setter
 	private FlowRateProfiler<HeavenInput, TripleContainer> profiler;
 
-	public RDF2RDFStream(int eventLimit, Encoder encoder, EventProcessor<Stimulus> engine, FlowRateProfiler<HeavenInput, TripleContainer> profiler) {
-		super(eventLimit, encoder, engine);
+	public RDF2RDFStream(ParsingTemplate parser) {
+		super(parser);
+	}
+
+	public RDF2RDFStream(int eventLimit, Encoder encoder, EventProcessor<Stimulus> engine, FlowRateProfiler<HeavenInput, TripleContainer> profiler,
+			ParsingTemplate parser) {
+		super(eventLimit, encoder, engine, parser);
 		this.profiler = profiler;
 	}
 
@@ -47,7 +53,7 @@ public final class RDF2RDFStream extends Streamer {
 			while (streamedEvents <= eventLimit - 1) {
 				line = br.readLine();
 				status = ExecutionState.RUNNING;
-				profiler.append(new TripleContainer(Parser.parseTriple(line)));
+				profiler.append(new TripleContainer(parser.parse(line)));
 				triples++;
 
 				if (profiler.isReady()) {
@@ -64,7 +70,7 @@ public final class RDF2RDFStream extends Streamer {
 						log.info("Process Complete [" + (double) streamedEvents * 100 / eventLimit + "%]");
 					}
 					last_input.setMemory_usage_before_processing(Memory.getMemoryUsage());
-					// last_input.setEngine_size_inmemory(Memory.sizeOf(engine));
+					last_input.setEngine_size_inmemory(Memory.sizeOf(engine));
 					// last_input.setTeststand_size_inmemory(Memory.sizeOf(collector));
 					// last_input.setStreamer_size_inmemory(Memory.sizeOf(this));
 

@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.ts.data;
+package it.polimi.heaven.core.ts.streamer.flowrateprofiler;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -6,7 +6,7 @@ import it.polimi.heaven.core.ts.data.ExperimentExecution;
 import it.polimi.heaven.core.ts.events.heaven.HeavenEvent;
 import it.polimi.heaven.core.ts.rspengine.RSPEngine;
 import it.polimi.heaven.core.ts.rspengine.Receiver;
-import it.polimi.heaven.core.tsimpl.streamer.Streamer;
+import it.polimi.heaven.core.ts.streamer.Streamer;
 import it.polimi.services.FileService;
 
 import java.io.FileReader;

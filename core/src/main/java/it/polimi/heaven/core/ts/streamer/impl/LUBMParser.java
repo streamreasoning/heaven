@@ -1,8 +1,10 @@
-package it.polimi.heaven.core.tsimpl.streamer.rdf2rdfstream;
+package it.polimi.heaven.core.ts.streamer.impl;
 
-public class Parser {
+import it.polimi.heaven.core.ts.streamer.ParsingTemplate;
 
-	public static String[] parseTriple(String tripleInput) {
+public class LUBMParser implements ParsingTemplate {
+
+	public String[] parse(String tripleInput) {
 
 		String[] values = new String[3];
 

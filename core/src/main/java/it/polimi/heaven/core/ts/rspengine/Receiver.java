@@ -11,7 +11,6 @@ import lombok.extern.log4j.Log4j;
 public class Receiver implements EventProcessor<Response> {
 
 	private EventProcessor<HeavenEvent> collector;
-	private Decoder decoder;
 
 	public Receiver() {
 	}

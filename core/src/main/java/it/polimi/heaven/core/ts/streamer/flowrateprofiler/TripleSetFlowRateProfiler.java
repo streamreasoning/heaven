@@ -1,7 +1,6 @@
 package it.polimi.heaven.core.ts.streamer.flowrateprofiler;
 
 import it.polimi.heaven.core.enums.FlowRateProfile;
-import it.polimi.heaven.core.ts.data.TripleContainer;
 import it.polimi.heaven.core.ts.events.heaven.HeavenInput;
 
 import java.util.HashSet;
