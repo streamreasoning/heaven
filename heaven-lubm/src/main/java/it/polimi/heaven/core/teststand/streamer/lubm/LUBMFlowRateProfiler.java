@@ -1,5 +1,6 @@
 package it.polimi.heaven.core.teststand.streamer.lubm;
 
+import it.polimi.heaven.core.teststand.data.Line;
 import it.polimi.heaven.core.teststand.events.HeavenInput;
 import it.polimi.heaven.core.teststand.streamer.Encoder;
 import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
@@ -22,6 +23,7 @@ public abstract class LUBMFlowRateProfiler extends FlowRateProfiler {
 	protected int initSize, roundSize, current_heaven_input;
 	protected int x, y;
 	protected boolean sizeReached;
+	protected Line current_line;
 
 	public LUBMFlowRateProfiler(FlowRateProfile mode, ParsingTemplate parser, int x, int y, int initSize, int experiment_number, int timing) {
 		this(mode, parser, null, x, y, initSize, experiment_number, timing);

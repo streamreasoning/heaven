@@ -3,7 +3,6 @@ package it.polimi.heaven.core.teststand.streamer.flowrateprofiler;
 import it.polimi.heaven.core.teststand.events.HeavenInput;
 import it.polimi.heaven.core.teststand.streamer.Encoder;
 import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
-import it.polimi.heaven.core.teststand.streamer.lubm.Line;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,7 +22,6 @@ public abstract class FlowRateProfiler {
 
 	protected ParsingTemplate parser;
 	protected Encoder encoder;
-	protected Line current_line;
 
 	public FlowRateProfiler(int experiment_number, int timing, boolean assigned_timestamp_enabled, ParsingTemplate parser, Encoder encoder) {
 		this.experiment_number = experiment_number;

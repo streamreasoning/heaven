@@ -10,7 +10,6 @@ import it.polimi.heaven.baselines.jena.StatementBaseline;
 import it.polimi.heaven.baselines.jena.encoders.GraphEncoder;
 import it.polimi.heaven.baselines.jena.encoders.StatementEncoder;
 import it.polimi.heaven.baselines.utils.BaselinesUtils;
-import it.polimi.heaven.baselines.utils.FileUtils;
 import it.polimi.heaven.baselines.utils.GetPropertyValues;
 import it.polimi.heaven.core.enums.Reasoning;
 import it.polimi.heaven.core.teststand.TestStand;

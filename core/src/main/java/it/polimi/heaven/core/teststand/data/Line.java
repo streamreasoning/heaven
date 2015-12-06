@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.teststand.streamer.lubm;
+package it.polimi.heaven.core.teststand.data;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

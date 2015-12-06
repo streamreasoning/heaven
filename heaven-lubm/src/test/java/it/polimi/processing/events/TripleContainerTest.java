@@ -2,7 +2,7 @@ package it.polimi.processing.events;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import it.polimi.heaven.core.teststand.streamer.lubm.Line;
+import it.polimi.heaven.core.teststand.data.Line;
 
 import java.util.HashSet;
 import java.util.Set;
