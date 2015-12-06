@@ -1,10 +1,10 @@
 package it.polimi.processing.events.profiler;
 
 import static org.junit.Assert.assertEquals;
-import it.polimi.heaven.core.ts.events.heaven.HeavenInput;
-import it.polimi.heaven.core.ts.streamer.flowrateprofiler.FlowRateProfiler;
-import it.polimi.heaven.core.ts.streamer.flowrateprofiler.TripleContainer;
-import it.polimi.heaven.core.ts.streamer.impl.flowrateprofiler.ConstantFlowRateProfiler;
+import it.polimi.heaven.core.teststand.events.heaven.HeavenInput;
+import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.FlowRateProfiler;
+import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.TripleContainer;
+import it.polimi.heaven.core.teststand.streamer.impl.flowrateprofiler.ConstantFlowRateProfiler;
 
 import org.junit.Rule;
 import org.junit.Test;
