@@ -1,10 +1,12 @@
 package it.polimi.processing.events.profiler;
 
 import static org.junit.Assert.assertEquals;
-import it.polimi.heaven.core.teststand.events.heaven.HeavenInput;
+import it.polimi.heaven.core.teststand.events.HeavenInput;
+import it.polimi.heaven.core.teststand.rspengine.events.Stimulus;
+import it.polimi.heaven.core.teststand.streamer.Encoder;
 import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.FlowRateProfiler;
-import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.TripleContainer;
-import it.polimi.heaven.core.teststand.streamer.impl.flowrateprofiler.StepFlowRateProfiler;
+import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.profiles.StepFlowRateProfiler;
+import it.polimi.heaven.core.teststand.streamer.lubm.LUBMParser;
 import lombok.extern.log4j.Log4j;
 
 import org.junit.Rule;
@@ -15,6 +17,7 @@ import org.junit.rules.ExpectedException;
 public class StepEventBuilderTest {
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
+	private final LUBMParser parser = new LUBMParser();
 
 	@Test
 	public void stepEventBuilderTest() {
@@ -23,22 +26,33 @@ public class StepEventBuilderTest {
 		int width = 1;
 		int initSize = 5;
 
-		FlowRateProfiler<HeavenInput, TripleContainer> eb = new StepFlowRateProfiler(width, height, initSize, 0, 100); // 1
+		FlowRateProfiler eb = new StepFlowRateProfiler(parser, width, height, initSize, 0, 100); // 1
 		// 5
 		// 10
+		eb.setEncoder(new Encoder() {
 
+			@Override
+			public Stimulus[] encode(HeavenInput e) {
+				return null;
+			}
+		});
 		assertEquals(false, eb.isReady()); // The first RSPEvent
 
-		eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication0",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" }));
-		eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication13",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor21" }));
-		eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication12",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor22" }));
-		eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication13",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor23" }));
-		eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication14",
-				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor24" }));
+		eb.append("<http://www.Department1.University1.edu/AssociateProfessor2/Publication0> "
+				+ "<http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor> "
+				+ "<http://www.Department1.University1.edu/AssociateProfessor2> ");
+		eb.append("<http://www.Department1.University1.edu/AssociateProfessor2/Publication13> "
+				+ "<http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor> "
+				+ "<http://www.Department1.University1.edu/AssociateProfessor21> ");
+		eb.append("<http://www.Department1.University1.edu/AssociateProfessor2/Publication12> "
+				+ "<http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor> "
+				+ "<http://www.Department1.University1.edu/AssociateProfessor22> ");
+		eb.append("<http://www.Department1.University1.edu/AssociateProfessor2/Publication13> "
+				+ "<http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor> "
+				+ "<http://www.Department1.University1.edu/AssociateProfessor23> ");
+		eb.append("<http://www.Department1.University1.edu/AssociateProfessor2/Publication14> "
+				+ "<http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor> "
+				+ "<http://www.Department1.University1.edu/AssociateProfessor24> ");
 
 		assertEquals(true, eb.isReady()); // The first RSPEvent
 
@@ -48,9 +62,9 @@ public class StepEventBuilderTest {
 
 		for (int eventNumber = 2; eventNumber < 10; eventNumber++) {
 			for (int i = 0; i < eventNumber * height; i++) {
-				eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication" + i + "" + i,
-						"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
-						"http://www.Department1.University1.edu/AssociateProfessor2" + i }));
+				eb.append("<http://www.Department1.University1.edu/AssociateProfessor2/Publication" + i + "> "
+						+ "<http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor> "
+						+ "<http://www.Department1.University1.edu/AssociateProfessor2" + i + ">");
 
 				if (i + 1 == eventNumber * height) {
 					assertEquals(true, eb.isReady()); // The first RSPEvent
@@ -73,35 +87,28 @@ public class StepEventBuilderTest {
 		int width = 5;
 		int size = 5;
 		HeavenInput event;
-		FlowRateProfiler<HeavenInput, TripleContainer> eb = new StepFlowRateProfiler(width, height, size, 0, 100); /*
-																													 * 5
-																													 * 5
-																													 * 5
-																													 * 5
-																													 * 5
-																													 * /
-																													 * /
-																													 * 10
-																													 * 10
-																													 * 10
-																													 * 10
-																													 * 10
-																													 * /
-																													 * /
-																													 * 15
-																													 * 15
-																													 * 15
-																													 * 15
-																													 * 15
-																													 */
+		FlowRateProfiler eb = new StepFlowRateProfiler(parser, width, height, size, 0, 100);
+		eb.setEncoder(new Encoder() {
+
+			@Override
+			public Stimulus[] encode(HeavenInput e) {
+				return null;
+			}
+		});
+		/*
+		 * eb . setEncoder ( new Encoder ( ) {
+		 * 
+		 * @ Override public Stimulus [ ] encode ( HeavenInput e ) { return null
+		 * ; } } ) ; * 5 5 5 5 5 / / 10 10 10 10 10 / / 15 15 15 15 15
+		 */
 
 		assertEquals(false, eb.isReady()); // The first RSPEvent
 
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < size; j++) {
-				eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication14" + j + i,
-						"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
-						"http://www.Department1.University1.edu/AssociateProfessor24" }));
+				eb.append("<http://www.Department1.University1.edu/AssociateProfessor2/Publication14" + j + i + "> "
+						+ "<http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor> "
+						+ "<http://www.Department1.University1.edu/AssociateProfessor24> ");
 
 			}
 
@@ -116,9 +123,9 @@ public class StepEventBuilderTest {
 
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < size; j++) {
-				eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication14" + j + i,
-						"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
-						"http://www.Department1.University1.edu/AssociateProfessor24" }));
+				eb.append("<http://www.Department1.University1.edu/AssociateProfessor2/Publication14" + j + i + "> "
+						+ "<http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor> "
+						+ "<http://www.Department1.University1.edu/AssociateProfessor24> ");
 
 			}
 
@@ -133,9 +140,9 @@ public class StepEventBuilderTest {
 
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < size; j++) {
-				eb.append(new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication14" + j + i,
-						"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor",
-						"http://www.Department1.University1.edu/AssociateProfessor24" }));
+				eb.append("<http://www.Department1.University1.edu/AssociateProfessor2/Publication14" + j + i + "> "
+						+ "<http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor> "
+						+ "<http://www.Department1.University1.edu/AssociateProfessor24> ");
 
 			}
 

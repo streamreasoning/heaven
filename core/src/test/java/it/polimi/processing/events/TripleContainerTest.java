@@ -2,7 +2,7 @@ package it.polimi.processing.events;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.TripleContainer;
+import it.polimi.heaven.core.teststand.streamer.lubm.Line;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,14 +14,14 @@ public class TripleContainerTest {
 	@Test
 	public void zeroHashCodeTest() {
 
-		TripleContainer tc = new TripleContainer();
+		Line tc = new Line();
 		assertEquals(tc.hashCode(), 0);
 	}
 
 	@Test
 	public void emptyHashCodeTest() {
 
-		TripleContainer tc = new TripleContainer(new String[] { "", "", "" });
+		Line tc = new Line(new String[] { "", "", "" });
 		assertEquals(tc.hashCode(), 31 * ("".hashCode() * 3));
 	}
 
@@ -30,7 +30,7 @@ public class TripleContainerTest {
 		// <http://www.Department1.University1.edu/AssociateProfessor2/Publication9>
 		// <http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor>
 		// <http://www.Department1.University1.edu/AssociateProfessor2> .
-		TripleContainer tc = new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
+		Line tc = new Line(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
 		assertEquals(
 				tc.hashCode(),
@@ -44,13 +44,13 @@ public class TripleContainerTest {
 		// <http://www.Department1.University1.edu/AssociateProfessor2/Publication9>
 		// <http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor>
 		// <http://www.Department1.University1.edu/AssociateProfessor2> .
-		TripleContainer tc1 = new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
+		Line tc1 = new Line(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
 
-		TripleContainer tc2 = new TripleContainer(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
+		Line tc2 = new Line(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
 
-		Set<TripleContainer> set = new HashSet<TripleContainer>();
+		Set<Line> set = new HashSet<Line>();
 
 		set.add(tc1);
 		set.add(tc2);
