@@ -1,7 +1,7 @@
 package it.polimi.heaven.core.teststand.rspengine;
 
 import it.polimi.heaven.core.teststand.EventProcessor;
-import it.polimi.heaven.core.teststand.events.engine.Stimulus;
+import it.polimi.heaven.core.teststand.rspengine.events.Stimulus;
 
 import javax.sound.midi.Receiver;
 

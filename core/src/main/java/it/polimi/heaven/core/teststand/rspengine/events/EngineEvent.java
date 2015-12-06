@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.teststand.events.engine;
+package it.polimi.heaven.core.teststand.rspengine.events;
 
 public interface EngineEvent {
 

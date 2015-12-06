@@ -1,9 +1,9 @@
 package it.polimi.heaven.core.teststand.rspengine;
 
 import it.polimi.heaven.core.teststand.EventProcessor;
-import it.polimi.heaven.core.teststand.events.engine.Response;
-import it.polimi.heaven.core.teststand.events.heaven.HeavenEvent;
-import it.polimi.heaven.core.teststand.events.heaven.HeavenResult;
+import it.polimi.heaven.core.teststand.events.HeavenEvent;
+import it.polimi.heaven.core.teststand.events.HeavenResult;
+import it.polimi.heaven.core.teststand.rspengine.events.Response;
 import it.polimi.heaven.services.system.Memory;
 import lombok.extern.log4j.Log4j;
 
