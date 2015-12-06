@@ -3,7 +3,7 @@ package it.polimi.heaven.core.teststand;
 import it.polimi.heaven.core.teststand.collector.ResultCollector;
 import it.polimi.heaven.core.teststand.data.Experiment;
 import it.polimi.heaven.core.teststand.data.ExperimentExecution;
-import it.polimi.heaven.core.teststand.events.heaven.HeavenEvent;
+import it.polimi.heaven.core.teststand.events.HeavenEvent;
 import it.polimi.heaven.core.teststand.rspengine.RSPEngine;
 import it.polimi.heaven.core.teststand.rspengine.Receiver;
 import it.polimi.heaven.core.teststand.streamer.Streamer;
