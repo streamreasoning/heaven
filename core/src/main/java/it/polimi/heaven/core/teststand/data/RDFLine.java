@@ -4,24 +4,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * Thi class encapsulate the serialization of an RDF triple redefining equals concept
+ * Thi class encapsulate the serialization of an RDF triple redefining equals
+ * concept
  * 
  * @author Riccardo
  * 
  */
 @Getter
 @NoArgsConstructor
-public final class Line {
+public final class RDFLine implements Line {
 
 	private final String[] triple = new String[3];
 
-	public Line(String s, String p, String o) {
+	public RDFLine(String s, String p, String o) {
 		this.triple[0] = s;
 		this.triple[1] = p;
 		this.triple[2] = o;
 	}
 
-	public Line(String[] t) {
+	public RDFLine(String[] t) {
 		this.triple[0] = t[0];
 		this.triple[1] = t[1];
 		this.triple[2] = t[2];
@@ -41,7 +42,7 @@ public final class Line {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Line other = (Line) obj;
+		RDFLine other = (RDFLine) obj;
 		String[] t = other.getTriple();
 		return t[0].equals(triple[0]) && t[0].equals(triple[0]) && t[0].equals(triple[0]);
 	}

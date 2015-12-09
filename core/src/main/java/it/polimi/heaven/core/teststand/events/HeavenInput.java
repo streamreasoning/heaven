@@ -27,32 +27,31 @@ public class HeavenInput implements HeavenEvent {
 	private double streamer_size_inmemory;
 
 	private Stimulus[] stimuli;
-	private Set<Line> eventTriples;
+	private Set<Line> lines;
 
 	public int size() {
-		return eventTriples.size();
+		return lines.size();
 	}
 
-	public HeavenInput(String id, String stream_name, int eventNumber, int experimentNumber, long stimuli_application_timestamp,
-			Set<Line> eventTriples) {
+	public HeavenInput(String id, String stream_name, int eventNumber, int experimentNumber, long stimuli_application_timestamp, Set<Line> lines) {
 		this.id = id;
 		this.stream_name = stream_name;
 		this.eventNumber = eventNumber;
 		this.experimentNumber = experimentNumber;
 		this.stimuli_application_timestamp = stimuli_application_timestamp;
 		this.creation_timestamp = System.currentTimeMillis();
-		this.eventTriples = eventTriples;
+		this.lines = lines;
 	}
 
 	public HeavenInput rebuild(String id, String stream_name, int eventNumber, int experimentNumber, long stimuli_application_timestamp,
-			Set<Line> eventTriples) {
+			Set<Line> lines) {
 		this.id = id;
 		this.stream_name = stream_name;
 		this.eventNumber = eventNumber;
 		this.experimentNumber = experimentNumber;
 		this.stimuli_application_timestamp = stimuli_application_timestamp;
 		this.creation_timestamp = System.currentTimeMillis();
-		this.eventTriples = eventTriples;
+		this.lines = lines;
 		return this;
 	}
 

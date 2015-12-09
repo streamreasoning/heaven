@@ -52,8 +52,6 @@ public abstract class FlowRateProfiler {
 		return ready;
 	}
 
-	public abstract void updateSize();
-
 	public abstract boolean append(String s);
 
 	public long getTimestamp() {
