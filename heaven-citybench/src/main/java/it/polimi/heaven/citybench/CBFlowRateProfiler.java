@@ -6,13 +6,10 @@ import it.polimi.heaven.core.teststand.streamer.Encoder;
 import it.polimi.heaven.core.teststand.streamer.FlowRateProfiler;
 import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
 
-import java.io.IOException;
 import java.util.HashSet;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import org.insight_centre.aceis.io.streams.csparql.CSPARQLAarhusParkingStream;
 
 @Setter
 @Getter
@@ -48,12 +45,6 @@ public class CBFlowRateProfiler extends FlowRateProfiler {
 
 	public boolean append(String lineString) {
 		current_observation = parser.parse(lineString);
-		try {
-			CSPARQLAarhusParkingStream c = new CSPARQLAarhusParkingStream(lineString, lineString, null);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return true;
 	}
 

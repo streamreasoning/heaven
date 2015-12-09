@@ -55,15 +55,4 @@ public class AarhusTrafficObservation extends SensorObservation {
 			this.observation.addLiteral(hasValue, this.congestion_level);
 	}
 
-	public String[] getFields() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] getHeaders() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

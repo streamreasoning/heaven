@@ -38,15 +38,4 @@ public class WeatherObservation extends SensorObservation {
 			observation.addLiteral(hasValue, this.windSpeed);
 	}
 
-	@Override
-	public String[] getFields() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] getHeaders() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

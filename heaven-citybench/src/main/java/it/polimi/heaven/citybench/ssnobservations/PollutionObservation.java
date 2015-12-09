@@ -44,16 +44,6 @@ public class PollutionObservation extends SensorObservation {
 		observation.addLiteral(hasValue, getApi());
 	}
 
-	@Override
-	public String[] getFields() {
-		return null;
-	}
-
-	@Override
-	public String[] getHeaders() {
-		return null;
-	}
-
 	public double getApi() {
 		api = ozone;
 		if (this.particullate_matter > this.api)

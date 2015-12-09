@@ -5,7 +5,6 @@ import it.polimi.heaven.citybench.ssnobservations.AarhusTrafficObservation;
 import it.polimi.heaven.citybench.ssnobservations.PollutionObservation;
 import it.polimi.heaven.citybench.ssnobservations.SensorObservation;
 import it.polimi.heaven.citybench.ssnobservations.WeatherObservation;
-import it.polimi.heaven.core.teststand.data.Line;
 import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
 
 import java.io.IOException;
@@ -94,7 +93,7 @@ public class CBParser implements ParsingTemplate {
 
 	}
 
-	public Line parse(String line) {
+	public SensorObservation parse(String line) {
 
 		Map<String, String> obsMap = new HashMap<String, String>();
 		String[] fields = line.split(",");

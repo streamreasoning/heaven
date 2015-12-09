@@ -34,16 +34,4 @@ public class AarhusParkingObservation extends SensorObservation {
 		return (totalspaces - vehiclecount);
 	}
 
-	@Override
-	public String[] getFields() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] getHeaders() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
