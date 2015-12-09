@@ -18,4 +18,7 @@ public interface RSPEngine extends EventProcessor<Stimulus> {
 	public void registerQuery(Query q);
 
 	public void registerReceiver(Receiver r);
+
+	// TODO is reasoning enabled
+	// TODO is external time control enabled
 }

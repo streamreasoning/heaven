@@ -35,7 +35,7 @@
 			<groupId>org.apache.jena</groupId>
 			<artifactId>jena-arq</artifactId>
 			<version>2.12.1</version>
-			
+
 		</dependency>
 		<dependency>
 			<groupId>org.xerial</groupId>
@@ -62,11 +62,12 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>baselines</module>
-		
+
 		<module>core</module>
 		<module>heaven-commons</module>
 		<module>heaven-postprocessing</module>
 		<module>heaven-citybench</module>
+		<module>heaven-lubm</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
@@ -88,6 +89,16 @@
 			<dependency>
 				<groupId>it.polimi.heaven</groupId>
 				<artifactId>preprocessing</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>it.polimi.heaven</groupId>
+				<artifactId>heaven-lubm</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>it.polimi.heaven</groupId>
+				<artifactId>heaven-citybench</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 		</dependencies>

@@ -2,13 +2,17 @@ package it.polimi;
 
 import it.polimi.heaven.baselines.enums.JenaEventType;
 import it.polimi.heaven.baselines.enums.OntoLanguage;
-import it.polimi.heaven.baselines.esper.RSPListener;
-import it.polimi.heaven.baselines.jena.BaselineQuery;
 import it.polimi.heaven.baselines.jena.GraphBaseline;
 import it.polimi.heaven.baselines.jena.JenaEngine;
 import it.polimi.heaven.baselines.jena.StatementBaseline;
+<<<<<<< HEAD
 import it.polimi.heaven.baselines.jena.encoders.GraphEncoder;
 import it.polimi.heaven.baselines.jena.encoders.StatementEncoder;
+=======
+import it.polimi.heaven.baselines.jena.encoders.RDF2GraphStimulusEncoder;
+import it.polimi.heaven.baselines.jena.encoders.RDF2StatementStimulusEncoder;
+import it.polimi.heaven.baselines.jena.query.BaselineQuery;
+>>>>>>> 7e52970... lumb separationa and some minors
 import it.polimi.heaven.baselines.utils.BaselinesUtils;
 import it.polimi.heaven.baselines.utils.GetPropertyValues;
 import it.polimi.heaven.core.enums.Reasoning;
@@ -62,7 +66,6 @@ public class BaselineMain {
 
 	private static TestStand test_stand;
 	private static ResultCollector result_collector;
-	private static RSPListener listener;
 
 	private static int EXECUTION_NUMBER;
 
@@ -88,6 +91,14 @@ public class BaselineMain {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
 
+		init(args);
+		collectorSelection();
+		jenaEngineSelection();
+		run();
+
+	}
+
+	private static void init(String[] args) {
 		if (args.length >= 1) {
 			INPUT_PROPERTIES = args[0];
 			INPUT_FILE = args[1];
@@ -137,11 +148,6 @@ public class BaselineMain {
 		FileService.createOutputFolder(outputPath);
 
 		SQLListeService.openDatabase(dbPath, "experiments" + DT.format(EXPERIMENT_DATE).toString() + ".db");
-
-		collectorSelection();
-		jenaEngineSelection();
-		run();
-
 	}
 
 	protected static String flowRateProfileSelection() {
@@ -205,6 +211,7 @@ public class BaselineMain {
 
 		switch (CEP_EVENT_TYPE) {
 		case STATEMENT:
+<<<<<<< HEAD
 			baseline = new StatementBaseline(listener, receiver);
 			encoder = new StatementEncoder();
 			engine = baseline;
@@ -212,6 +219,15 @@ public class BaselineMain {
 		case GRAPH:
 			encoder = new GraphEncoder();
 			baseline = new GraphBaseline(listener, receiver);
+=======
+			baseline = new StatementBaseline(receiver);
+			encoder = new RDF2StatementStimulusEncoder();
+			engine = baseline;
+			break;
+		case GRAPH:
+			encoder = new RDF2GraphStimulusEncoder();
+			baseline = new GraphBaseline(receiver);
+>>>>>>> 7e52970... lumb separationa and some minors
 
 			break;
 		default:
@@ -228,8 +244,8 @@ public class BaselineMain {
 
 	private static BaselineQuery queryDefinition(String esperQuery) {
 		BaselineQuery query = new BaselineQuery();
-		query.setEsperQuery(esperQuery);
-		query.setSparqlQuery("SELECT ?s ?p ?o  WHERE {?s ?p ?o}");
+		query.setEsper_queries(esperQuery);
+		query.setSparql_query("SELECT ?s ?p ?o  WHERE {?s ?p ?o}");
 		query.setEsperStreams(new String[] { "lubmEvent" });
 		query.setTbox(RDFSUtils.loadModel(FileUtils.UNIV_BENCH_RHODF_MODIFIED));
 		return query;
