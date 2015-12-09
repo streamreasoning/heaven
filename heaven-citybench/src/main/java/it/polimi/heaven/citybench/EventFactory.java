@@ -1,10 +1,12 @@
-package it.polimi.heaven.core.tsimpl.streamer.rel2rdfstream.citybench;
+package it.polimi.heaven.citybench;
 
-import it.polimi.heaven.core.tsimpl.streamer.rel2rdfstream.citybench.ssnobservations.AarhusParkingObservation;
-import it.polimi.heaven.core.tsimpl.streamer.rel2rdfstream.citybench.ssnobservations.AarhusTrafficObservation;
-import it.polimi.heaven.core.tsimpl.streamer.rel2rdfstream.citybench.ssnobservations.PollutionObservation;
-import it.polimi.heaven.core.tsimpl.streamer.rel2rdfstream.citybench.ssnobservations.SensorObservation;
-import it.polimi.heaven.core.tsimpl.streamer.rel2rdfstream.citybench.ssnobservations.WeatherObservation;
+import it.polimi.heaven.citybench.ssnobservations.AarhusParkingObservation;
+import it.polimi.heaven.citybench.ssnobservations.AarhusTrafficObservation;
+import it.polimi.heaven.citybench.ssnobservations.PollutionObservation;
+import it.polimi.heaven.citybench.ssnobservations.SensorObservation;
+import it.polimi.heaven.citybench.ssnobservations.WeatherObservation;
+import it.polimi.heaven.core.teststand.data.Line;
+import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -13,23 +15,31 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EventFactory {
+import lombok.AllArgsConstructor;
+
+import org.insight_centre.aceis.eventmodel.EventDeclaration;
+import org.insight_centre.aceis.eventmodel.TrafficReportService;
+
+@AllArgsConstructor
+public class CBParser implements ParsingTemplate {
 
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss");
+	private Map<String, EventDeclaration> event_declarations;
 
-	public static SensorObservation createAarhusParkingObservation(Map<String, String> streamData) throws NumberFormatException, IOException,
-			ParseException {
+	public SensorObservation createAarhusParkingObservation(Map<String, String> streamData) throws NumberFormatException, IOException, ParseException {
 		int vehiclecount = Integer.parseInt(streamData.get("vehiclecount"));
 		int totalspaces = Integer.parseInt(streamData.get("totalspaces"));
 		String obId = "AarhusParkingObservation_" + Integer.parseInt(streamData.get("_id"));
 		String garageCode = streamData.get("garagecode");
 		Date obTimeStamp = sdf.parse(streamData.get("timestamp"));
 		String streamID = streamData.get("streamID");
-		return new AarhusParkingObservation(totalspaces, vehiclecount, garageCode, "", obTimeStamp, obId, streamID);
+
+		EventDeclaration ed = event_declarations.get(streamID);
+		String payload = ed.getPayloads().get(0).split("\\|")[2];
+		return new AarhusParkingObservation(totalspaces, vehiclecount, garageCode, payload, obTimeStamp, obId, streamID, ed.getServiceId());
 	}
 
-	public static SensorObservation createAarhusTrafficObservation(Map<String, String> streamData) throws NumberFormatException, IOException,
-			ParseException {
+	public SensorObservation createAarhusTrafficObservation(Map<String, String> streamData) throws NumberFormatException, IOException, ParseException {
 
 		String obId = "AarhusTrafficObservation_" + streamData.get("_id");
 		int reportID = Integer.parseInt(streamData.get("REPORT_ID"));
@@ -41,12 +51,18 @@ public class EventFactory {
 		String status = streamData.get("status");
 		int extID = Integer.parseInt(streamData.get("extID"));
 		String streamID = streamData.get("streamID");
+
+		EventDeclaration ed = event_declarations.get(streamID);
+		double distance = Double.parseDouble(((TrafficReportService) ed).getDistance() + "");
+		String payload = ed.getPayloads().get(0).split("\\|")[2];
+		double congestion_level = distance != 0 ? (vehicleCount / distance) : -1D;
+		double estimatedTime = avgSpeed != 0 ? (distance / avgSpeed) : -1D;
+
 		return new AarhusTrafficObservation(obId, streamID, obTimeStamp, status, avgMeasuredTime, avgSpeed, medianMeasuredTime, vehicleCount, extID,
-				reportID);
+				reportID, congestion_level, estimatedTime, payload, ed.getServiceId());
 	}
 
-	public static SensorObservation createWeatherObservation(Map<String, String> streamData) throws NumberFormatException, IOException,
-			ParseException {
+	public SensorObservation createWeatherObservation(Map<String, String> streamData) throws NumberFormatException, IOException, ParseException {
 
 		String obId = "WeatherObservation" + streamData.get("_id");
 		Date obTimeStamp = sdf.parse(streamData.get("TIMESTAMP"));
@@ -54,11 +70,12 @@ public class EventFactory {
 		double windSpeed = Double.parseDouble(streamData.get("windSpeed"));
 		double temperature = Double.parseDouble(streamData.get("temperature"));
 		String streamID = streamData.get("streamID");
-		return new WeatherObservation(obId, streamID, obTimeStamp, humidity, windSpeed, temperature);
+		EventDeclaration ed = event_declarations.get(streamID);
+		String payload = ed.getPayloads().get(0).split("\\|")[2];
+		return new WeatherObservation(obId, streamID, obTimeStamp, humidity, windSpeed, temperature, payload, ed.getServiceId());
 	}
 
-	public static SensorObservation createPollutionObservation(Map<String, String> streamData) throws NumberFormatException, IOException,
-			ParseException {
+	public SensorObservation createPollutionObservation(Map<String, String> streamData) throws NumberFormatException, IOException, ParseException {
 
 		String obId = "PollutionObservation" + (int) Math.random() * 10000;
 		Date obTimeStamp = sdf.parse(streamData.get("timestamp"));
@@ -70,12 +87,14 @@ public class EventFactory {
 		double lat = Double.parseDouble(streamData.get("lat"));
 		double lon = Double.parseDouble(streamData.get("lon"));
 		String streamID = streamData.get("streamID");
+		EventDeclaration ed = event_declarations.get(streamID);
+		String payload = ed.getPayloads().get(0).split("\\|")[2];
 		return new PollutionObservation(obId, streamID, obTimeStamp, ozone, particullate_matter, carbon_monoxide, sulfure_dioxide, nitrogen_dioxide,
-				lon, lat);
+				lon, lat, payload, ed.getServiceId());
 
 	}
 
-	public static SensorObservation createObservation(String line) {
+	public Line parse(String line) {
 
 		Map<String, String> obsMap = new HashMap<String, String>();
 		String[] fields = line.split(",");
@@ -122,4 +141,5 @@ public class EventFactory {
 		}
 
 	}
+
 }
