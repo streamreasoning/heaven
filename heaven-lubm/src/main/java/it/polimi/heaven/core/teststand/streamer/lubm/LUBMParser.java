@@ -1,10 +1,11 @@
 package it.polimi.heaven.core.teststand.streamer.lubm;
 
+import it.polimi.heaven.core.teststand.data.RDFLine;
 import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
 
 public class LUBMParser implements ParsingTemplate {
 
-	public String[] parse(String tripleInput) {
+	public RDFLine parse(String tripleInput) {
 
 		String[] values = new String[3];
 
@@ -42,7 +43,7 @@ public class LUBMParser implements ParsingTemplate {
 		values[2] = values[2].replace("<", "");
 		values[2] = values[2].replace(">", "");
 
-		return values;
+		return new RDFLine(values);
 	}
 
 }

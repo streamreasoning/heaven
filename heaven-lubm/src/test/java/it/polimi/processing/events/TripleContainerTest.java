@@ -2,7 +2,7 @@ package it.polimi.processing.events;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import it.polimi.heaven.core.teststand.data.Line;
+import it.polimi.heaven.core.teststand.data.RDFLine;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,14 +14,14 @@ public class TripleContainerTest {
 	@Test
 	public void zeroHashCodeTest() {
 
-		Line tc = new Line();
+		RDFLine tc = new RDFLine();
 		assertEquals(tc.hashCode(), 0);
 	}
 
 	@Test
 	public void emptyHashCodeTest() {
 
-		Line tc = new Line(new String[] { "", "", "" });
+		RDFLine tc = new RDFLine(new String[] { "", "", "" });
 		assertEquals(tc.hashCode(), 31 * ("".hashCode() * 3));
 	}
 
@@ -30,7 +30,7 @@ public class TripleContainerTest {
 		// <http://www.Department1.University1.edu/AssociateProfessor2/Publication9>
 		// <http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor>
 		// <http://www.Department1.University1.edu/AssociateProfessor2> .
-		Line tc = new Line(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
+		RDFLine tc = new RDFLine(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
 		assertEquals(
 				tc.hashCode(),
@@ -44,13 +44,13 @@ public class TripleContainerTest {
 		// <http://www.Department1.University1.edu/AssociateProfessor2/Publication9>
 		// <http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor>
 		// <http://www.Department1.University1.edu/AssociateProfessor2> .
-		Line tc1 = new Line(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
+		RDFLine tc1 = new RDFLine(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
 
-		Line tc2 = new Line(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
+		RDFLine tc2 = new RDFLine(new String[] { "http://www.Department1.University1.edu/AssociateProfessor2/Publication9",
 				"http://swat.cse.lehigh.edu/onto/univ-bench.owl#publicationAuthor", "http://www.Department1.University1.edu/AssociateProfessor2" });
 
-		Set<Line> set = new HashSet<Line>();
+		Set<RDFLine> set = new HashSet<RDFLine>();
 
 		set.add(tc1);
 		set.add(tc2);

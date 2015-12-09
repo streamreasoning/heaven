@@ -5,14 +5,9 @@ import it.polimi.heaven.baselines.enums.OntoLanguage;
 import it.polimi.heaven.baselines.jena.GraphBaseline;
 import it.polimi.heaven.baselines.jena.JenaEngine;
 import it.polimi.heaven.baselines.jena.StatementBaseline;
-<<<<<<< HEAD
-import it.polimi.heaven.baselines.jena.encoders.GraphEncoder;
-import it.polimi.heaven.baselines.jena.encoders.StatementEncoder;
-=======
 import it.polimi.heaven.baselines.jena.encoders.RDF2GraphStimulusEncoder;
 import it.polimi.heaven.baselines.jena.encoders.RDF2StatementStimulusEncoder;
 import it.polimi.heaven.baselines.jena.query.BaselineQuery;
->>>>>>> 7e52970... lumb separationa and some minors
 import it.polimi.heaven.baselines.utils.BaselinesUtils;
 import it.polimi.heaven.baselines.utils.GetPropertyValues;
 import it.polimi.heaven.core.enums.Reasoning;
@@ -46,12 +41,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BaselineMain {
 
 	// EVENT TYPES
@@ -211,15 +203,6 @@ public class BaselineMain {
 
 		switch (CEP_EVENT_TYPE) {
 		case STATEMENT:
-<<<<<<< HEAD
-			baseline = new StatementBaseline(listener, receiver);
-			encoder = new StatementEncoder();
-			engine = baseline;
-			break;
-		case GRAPH:
-			encoder = new GraphEncoder();
-			baseline = new GraphBaseline(listener, receiver);
-=======
 			baseline = new StatementBaseline(receiver);
 			encoder = new RDF2StatementStimulusEncoder();
 			engine = baseline;
@@ -227,8 +210,6 @@ public class BaselineMain {
 		case GRAPH:
 			encoder = new RDF2GraphStimulusEncoder();
 			baseline = new GraphBaseline(receiver);
->>>>>>> 7e52970... lumb separationa and some minors
-
 			break;
 		default:
 			throw new IllegalArgumentException("Not valid case [" + CEP_EVENT_TYPE + "]");

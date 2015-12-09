@@ -59,7 +59,7 @@ public abstract class LUBMFlowRateProfiler extends FlowRateProfiler {
 	}
 
 	public boolean append(String lineString) {
-		current_line = new Line(parser.parse(lineString));
+		current_line = parser.parse(lineString);
 		if (sizeReached) {
 			updateSize();
 			Set<Line> set = new HashSet<Line>();
@@ -70,7 +70,7 @@ public abstract class LUBMFlowRateProfiler extends FlowRateProfiler {
 			e = e.rebuild(event_id + current_heaven_input + ">", getStreamName(), current_heaven_input, experiment_number, getTimestamp(), set);
 			log.debug("is Full Event Size [" + e.size() + "] roundSize [" + roundSize + "]");
 		} else {
-			e.getEventTriples().add(current_line);
+			e.getLines().add(current_line);
 			log.debug("NotFull Event Size [" + e.size() + "] roundSize [" + roundSize + "]");
 		}
 

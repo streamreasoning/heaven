@@ -46,7 +46,7 @@ public class ConstantEventBuilderTest {
 
 		HeavenInput event = eb.build();
 
-		assertEquals(1, event.getEventTriples().size());
+		assertEquals(1, event.getLines().size());
 
 		assertEquals(true, eb.isReady());
 
@@ -56,7 +56,7 @@ public class ConstantEventBuilderTest {
 		assertEquals(true, eb.isReady());
 
 		event = eb.build();
-		assertEquals(1, event.getEventTriples().size());
+		assertEquals(1, event.getLines().size());
 
 	}
 
@@ -111,7 +111,7 @@ public class ConstantEventBuilderTest {
 
 		HeavenInput event = eb.build();
 
-		assertEquals(1, event.getEventTriples().size());
+		assertEquals(1, event.getLines().size());
 
 		assertEquals(true, eb.isReady());
 
@@ -120,7 +120,7 @@ public class ConstantEventBuilderTest {
 		assertEquals(true, eb.isReady());
 
 		event = eb.build();
-		assertEquals(1, event.getEventTriples().size());
+		assertEquals(1, event.getLines().size());
 
 	}
 
