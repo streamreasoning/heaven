@@ -19,7 +19,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 @Getter
 @NoArgsConstructor()
-public final class RDF2RDFStream extends Streamer {
+public final class TSStreamer extends Streamer {
 
 	private String line;
 	private int triples;
@@ -30,7 +30,7 @@ public final class RDF2RDFStream extends Streamer {
 	@Setter
 	private FlowRateProfiler profiler;
 
-	public RDF2RDFStream(int eventLimit, EventProcessor<Stimulus> engine, FlowRateProfiler profiler, ParsingTemplate parser) {
+	public TSStreamer(int eventLimit, EventProcessor<Stimulus> engine, FlowRateProfiler profiler, ParsingTemplate parser) {
 		super(eventLimit, engine, parser);
 		this.profiler = profiler;
 	}
@@ -43,18 +43,17 @@ public final class RDF2RDFStream extends Streamer {
 			while (streamedEvents <= eventLimit - 1) {
 				line = br.readLine();
 				status = ExecutionState.RUNNING;
-				profiler.append(line);
-				triples++;
 
-				if (profiler.isReady()) {
+				if (profiler.append(line)) {
 					last_input = profiler.build();
 					last_stimuli = last_input.getStimuli();
+					last_input.setMemory_usage_before_processing(Memory.getMemoryUsage());
+					collector.process(last_input);
 					for (Stimulus stimulus : last_stimuli) {
 						streamedEvents += engine.process(stimulus) ? 1 : 0;
 					}
 					log.debug("Streamed [" + triples + "] triples");
 					log.info("Process Complete [" + (double) streamedEvents * 100 / eventLimit + "%]");
-					last_input.setMemory_usage_before_processing(Memory.getMemoryUsage());
 					// last_input.setEngine_size_inmemory(Memory.sizeOf(engine));
 					// last_input.setTeststand_size_inmemory(Memory.sizeOf(collector));
 					// last_input.setStreamer_size_inmemory(Memory.sizeOf(this));

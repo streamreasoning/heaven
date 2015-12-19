@@ -10,7 +10,7 @@ public abstract class FlowRateProfiler {
 
 	protected HeavenInput e;
 	protected int current_heaven_input;
-	protected boolean ready;
+	protected boolean appended;
 	protected int experiment_number;
 	protected long current_assigned_timestamp;
 	protected String event_id;
@@ -45,11 +45,11 @@ public abstract class FlowRateProfiler {
 		e.setEncoding_start_time(System.currentTimeMillis());
 		e.setStimuli(encoder.encode(e));
 		e.setEncoding_end_time(System.currentTimeMillis());
-		return ready ? e : null;
+		return appended ? e : null;
 	}
 
 	public boolean isReady() {
-		return ready;
+		return appended;
 	}
 
 	public abstract boolean append(String s);
@@ -58,7 +58,5 @@ public abstract class FlowRateProfiler {
 		current_assigned_timestamp += timing;
 		return current_assigned_timestamp;
 	};
-
-	public abstract String getStreamName();
 
 }

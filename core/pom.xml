@@ -13,9 +13,9 @@
 			<artifactId>heaven-commons</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.espertech</groupId>
-			<artifactId>esper</artifactId>
-			<version>4.1.0</version>
+			<groupId>net.sourceforge.sizeof.SizeOf</groupId>
+			<artifactId>net.sourceforge.sizeof.sizeof</artifactId>
+			<version>1.0</version>
 		</dependency>
 	</dependencies>
 </project>

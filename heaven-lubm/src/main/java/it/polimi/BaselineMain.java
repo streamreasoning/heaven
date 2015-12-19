@@ -19,8 +19,8 @@ import it.polimi.heaven.core.teststand.rspengine.Receiver;
 import it.polimi.heaven.core.teststand.streamer.Encoder;
 import it.polimi.heaven.core.teststand.streamer.FlowRateProfiler;
 import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
-import it.polimi.heaven.core.teststand.streamer.RDF2RDFStream;
 import it.polimi.heaven.core.teststand.streamer.Streamer;
+import it.polimi.heaven.core.teststand.streamer.TSStreamer;
 import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.profiles.ConstantFlowRateProfiler;
 import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.profiles.CustomStepFlowRateProfiler;
 import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.profiles.FlowRateProfile;
@@ -144,7 +144,7 @@ public class BaselineMain {
 
 	protected static String flowRateProfileSelection() {
 
-		RDF2RDFStream rdf2rdfstream = new RDF2RDFStream();
+		TSStreamer rdf2rdfstream = new TSStreamer();
 		ParsingTemplate parser = new LUBMParser();
 		String code = "_FRP_";
 		String message = "Flow Rate Profile [" + FLOW_RATE_PROFILE + "] [" + INIT_SIZE + "] ";
