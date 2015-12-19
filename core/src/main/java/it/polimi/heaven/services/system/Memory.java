@@ -23,8 +23,6 @@
  ******************************************************************************/
 package it.polimi.heaven.services.system;
 
-import net.sourceforge.sizeof.SizeOf;
-
 public class Memory {
 
 	private static Runtime runtime = Runtime.getRuntime();
@@ -43,7 +41,7 @@ public class Memory {
 	}
 
 	public static double sizeOf(Object o) {
-		return SizeOf.deepSizeOf(o);
+		return 0D; // TODO SizeOf.deepSizeOf(o);
 	}
 
 }
