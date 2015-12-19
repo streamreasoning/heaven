@@ -1,7 +1,6 @@
 package it.polimi.heaven.citybench.encoders;
 
 import it.polimi.heaven.baselines.jena.events.stimuli.GraphStimulus;
-import it.polimi.heaven.baselines.jena.events.stimuli.StatementStimulus;
 import it.polimi.heaven.citybench.ssnobservations.SensorObservation;
 import it.polimi.heaven.core.teststand.data.Line;
 import it.polimi.heaven.core.teststand.events.HeavenInput;
@@ -11,38 +10,39 @@ import it.polimi.heaven.core.teststand.streamer.Encoder;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.graph.Graph;
+import com.hp.hpl.jena.graph.GraphUtil;
 
 public class CB2GraphStimulusEncoder implements Encoder {
 
-	private Stimulus[] stimulis;
-	private Map<String, Model> streams_models;
-	private SensorObservation so;
+	private Map<String, GraphStimulus> streams_models;
 	private String streamID;
+	long obTimeStamp;
 
 	@Override
 	public Stimulus[] encode(HeavenInput e) {
-		streams_models = new HashMap<String, Model>();
+		streams_models = new HashMap<String, GraphStimulus>();
 		for (Line tc : e.getLines()) {
-			so = (SensorObservation) tc;
+			SensorObservation so = (SensorObservation) tc;
 			streamID = so.getStreamID();
+			Graph base = so.toModel().getGraph();
 			if (streams_models.containsKey(streamID)) {
-				streams_models.put(streamID, streams_models.get(streamID).add(so.toModel()));
+
+				GraphStimulus graphStimulus = streams_models.get(streamID);
+				graphStimulus.setAppTimestamp(obTimeStamp = so.getObTimeStamp());
+
+				Graph content = graphStimulus.getContent();
+				GraphUtil.addInto(content, base);
+				streams_models.put(streamID, graphStimulus);
+
 			} else {
-				streams_models.put(streamID, so.toModel());
+				obTimeStamp = so.getObTimeStamp();
+				streams_models.put(streamID, new GraphStimulus(obTimeStamp, base, streamID));
 
 			}
 
 		}
 
-		stimulis = new StatementStimulus[streams_models.size()];
-		int i = 0;
-
-		for (String streams : streams_models.keySet()) {
-			stimulis[i] = new GraphStimulus(e.getStimuli_application_timestamp(), System.currentTimeMillis(), streams_models.get(streams).getGraph(),
-					streams);
-		}
-
-		return stimulis;
+		return streams_models.values().toArray(new GraphStimulus[streams_models.size()]);
 	}
 }

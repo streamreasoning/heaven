@@ -1,15 +1,22 @@
 package it.polimi.heaven.citybench;
 
+import it.polimi.heaven.baselines.enums.OntoLanguage;
 import it.polimi.heaven.baselines.jena.GraphBaseline;
 import it.polimi.heaven.baselines.jena.query.BaselineQuery;
 import it.polimi.heaven.citybench.encoders.CB2GraphStimulusEncoder;
+import it.polimi.heaven.core.teststand.TestStand;
+import it.polimi.heaven.core.teststand.collector.ResultCollector;
+import it.polimi.heaven.core.teststand.data.Experiment;
 import it.polimi.heaven.core.teststand.rspengine.Receiver;
 import it.polimi.heaven.core.teststand.streamer.Encoder;
 import it.polimi.heaven.core.teststand.streamer.FlowRateProfiler;
 import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
+import it.polimi.heaven.core.teststand.streamer.Streamer;
+import it.polimi.heaven.core.teststand.streamer.TSStreamer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -33,26 +40,13 @@ public class CityBenchMain {
 		for (String s : args) {
 			parameters.put(s.split("=")[0], s.split("=")[1]);
 		}
-		String query = "select ?obId1 ?obId2 ?v1 ?v2 "
-				+ "	where {"
-				+ "?p1   a <http://www.insight-centre.org/citytraffic#CongestionLevel>. "
-				+ "?p2   a <http://www.insight-centre.org/citytraffic#CongestionLevel>. "
-				+ "{ "
-				+ "?obId1 <http://purl.oclc.org/NET/ssnx/ssn#observedProperty> ?p1. "
-				+ "?obId1 <http://purl.oclc.org/NET/sao/hasValue> ?v1. "
-				+ "?obId1 <http://purl.oclc.org/NET/ssnx/ssn#observedBy> <http://www.insight-centre.org/dataset/SampleEventService#AarhusTrafficData182955>."
-				+ "} "
-				+ "{"
-				+ "?obId2 <http://purl.oclc.org/NET/ssnx/ssn#observedProperty> ?p2."
-				+ "?obId2 <http://purl.oclc.org/NET/sao/hasValue> ?v2. "
-				+ "?obId2 <http://purl.oclc.org/NET/ssnx/ssn#observedBy> <http://www.insight-centre.org/dataset/SampleEventService#AarhusTrafficData158505>."
-				+ "}} ";
+		String query = "select * " + "	where { ?s ?p ?o ." + "} ";
 
 		RDFFileManager.initializeDataset(dataset);
 
 		BaselineQuery q = new BaselineQuery();
 		q.setEsperStreams(new String[] { "AarhusTrafficData182955", "AarhusTrafficData158505" });
-		q.setEsper_queries(" select  * from AarhusTrafficData182955.win:time(3000 msec), AarhusTrafficData158505.win:time(3000 msec) output snapshot every 1000 msec");
+		q.setEsper_queries(" select * from   AarhusTrafficData182955.win:time(3000 msec)  output snapshot every 10000 msec");
 		q.setSparql_query(query);
 		q.setTbox(RDFFileManager.dataset.getDefaultModel());
 
@@ -60,9 +54,30 @@ public class CityBenchMain {
 		Map<String, EventDeclaration> event_declarations = startCSPARQLStreamsFromQuery(Arrays.asList(q.getEsperStreams()));
 		ParsingTemplate obs_factory = new CBParser(event_declarations);
 		Encoder encoder = new CB2GraphStimulusEncoder();
-		FlowRateProfiler cp_frp = new CBFlowRateProfiler(obs_factory, encoder, 0);
-		GraphBaseline baselines = new GraphBaseline(new Receiver());
+		FlowRateProfiler cp_frp = new CBFlowRateProfiler(obs_factory, encoder, 0, 1406872000000L);
+		Receiver receiver = new Receiver();
+		GraphBaseline baseline = new GraphBaseline(receiver);
+		baseline.setOntology_language(OntoLanguage.SMPL);
+		baseline.registerQuery(q);
+		ResultCollector result_collector = new ResultCollector(true, true, true);
+		Streamer streamer = new TSStreamer(1000, baseline, cp_frp, obs_factory);
+		TestStand ts = new TestStand(streamer, baseline, result_collector, receiver);
 
+		ts.init(createExperiment());
+		ts.run();
+	}
+
+	private static Experiment createExperiment() {
+		Experiment experiment = new Experiment();
+		experiment.setExperimentNumber(0);
+		experiment.setExecutionNumber(0);
+		experiment.setDate(new Date().toString());
+
+		experiment.setInputSource("./Q1.stream");
+		experiment.setOutputPath("/Users/Riccardo/_Projects/SR/heaven-citybench/data/output/");
+		experiment.setResponsivity(100L);
+
+		return experiment;
 	}
 
 	private static List<String> getStreamFileNamesFromQuery(String query) throws Exception {
@@ -75,7 +90,7 @@ public class CityBenchMain {
 				int indexOfLeftBracket = streamSegments[i].trim().indexOf("<");
 				int indexOfRightBracket = streamSegments[i].trim().indexOf(">");
 				String streamURI = streamSegments[i].substring(indexOfLeftBracket + 2, indexOfRightBracket + 1);
-				log.info("Stream detected: " + streamURI);
+				log.debug("Stream detected: " + streamURI);
 				resultSet.add(streamURI.split("#")[1] + ".stream");
 			}
 		}
@@ -87,10 +102,17 @@ public class CityBenchMain {
 
 	private static Map<String, EventDeclaration> startCSPARQLStreamsFromQuery(List<String> streamNames) throws Exception {
 		Map<String, EventDeclaration> event_declarations = new HashMap<String, EventDeclaration>();
+		Map<String, EventDeclaration> eds = er.getEds();
+		Set<String> keySet = eds.keySet();
+		for (String i : keySet) {
+			log.debug(i);
+		}
+		log.debug("----");
 		for (String sn : streamNames) {
-			log.info(sn);
 			String uri = RDFFileManager.defaultPrefix + sn.split("\\.")[0];
-			EventDeclaration ed = er.getEds().get(uri);
+			if (eds.containsKey(uri))
+				log.debug(eds.get(uri));
+			EventDeclaration ed = eds.get(uri);
 			String path = streams + "/" + sn;
 			event_declarations.put(sn, ed);
 			// if (!startedStreams.contains(uri)) {

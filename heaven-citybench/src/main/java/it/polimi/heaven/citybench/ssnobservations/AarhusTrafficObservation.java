@@ -1,7 +1,5 @@
 package it.polimi.heaven.citybench.ssnobservations;
 
-import java.util.Date;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,15 +8,11 @@ import org.insight_centre.aceis.io.rdf.RDFFileManager;
 import com.hp.hpl.jena.rdf.model.Property;
 
 //Fields  status,avgMeasuredTime,avgSpeed,extID,medianMeasuredTime,TIMESTAMP,vehicleCount,_id,REPORT_ID
-
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class AarhusTrafficObservation extends SensorObservation {
 
 	private static final long serialVersionUID = 1L;
-	private String obId;
-	private Date sysTimestamp;
-	private Date obTimeStamp;
 
 	private String status;
 	private double avgMeasuredTime, avgSpeed, medianMeasuredTime;
@@ -27,7 +21,7 @@ public class AarhusTrafficObservation extends SensorObservation {
 	private double estimatedTime;
 	private String payload;
 
-	public AarhusTrafficObservation(String obId, String streamID, Date obTimeStamp, String status, double avgMeasuredTime, double avgSpeed,
+	public AarhusTrafficObservation(String obId, String streamID, long obTimeStamp, String status, double avgMeasuredTime, double avgSpeed,
 			double medianMeasuredTime, int vehicleCount, int extID, int reportID, double congestion_level, double estimatedTime, String payload,
 			String serviceID) {
 		super(obTimeStamp, obId, streamID, serviceID);

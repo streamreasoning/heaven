@@ -1,7 +1,5 @@
 package it.polimi.heaven.citybench.ssnobservations;
 
-import java.util.Date;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,13 +12,11 @@ import com.hp.hpl.jena.rdf.model.Property;
 public class WeatherObservation extends SensorObservation {
 
 	private static final long serialVersionUID = 1L;
-	private String obId, payload;
-	private Date sysTimestamp;
-	private Date obTimeStamp;
+	private String payload;
 
 	private double humidity, windSpeed, temperature;
 
-	public WeatherObservation(String obId, String streamID, Date obTimeStamp, double humidity, double windSpeed, double temperature, String payload,
+	public WeatherObservation(String obId, String streamID, long obTimeStamp, double humidity, double windSpeed, double temperature, String payload,
 			String serviceID) {
 		super(obTimeStamp, obId, streamID, serviceID);
 		this.humidity = humidity;

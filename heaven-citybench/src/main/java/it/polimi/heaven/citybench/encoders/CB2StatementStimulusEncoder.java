@@ -42,7 +42,7 @@ public class CB2StatementStimulusEncoder implements Encoder {
 
 		for (String stream : streams_models.keySet()) {
 			for (Statement statement : streams_models.get(stream).listStatements().toList()) {
-				stimuli.add(new StatementStimulus(e.getStimuli_application_timestamp(), System.currentTimeMillis(), statement, stream));
+				stimuli.add(new StatementStimulus(e.getStimuli_application_timestamp(), statement, stream));
 			}
 		}
 		a = new Stimulus[stimuli.size()];

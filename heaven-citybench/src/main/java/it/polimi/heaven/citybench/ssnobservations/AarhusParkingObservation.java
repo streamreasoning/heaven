@@ -1,7 +1,5 @@
 package it.polimi.heaven.citybench.ssnobservations;
 
-import java.util.Date;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -16,7 +14,7 @@ public class AarhusParkingObservation extends SensorObservation {
 	private int totalspaces, vehiclecount;
 	private String garageCode, payload;
 
-	public AarhusParkingObservation(int totalspaces, int vehiclecount, String garageCode, String payload, Date obTimeStamp, String obId,
+	public AarhusParkingObservation(int totalspaces, int vehiclecount, String garageCode, String payload, long obTimeStamp, String obId,
 			String streamID, String serviceID) {
 		super(obTimeStamp, obId, streamID, serviceID);
 		this.totalspaces = totalspaces;

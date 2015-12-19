@@ -1,7 +1,5 @@
 package it.polimi.heaven.citybench.ssnobservations;
 
-import java.util.Date;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,10 +15,6 @@ public class PollutionObservation extends SensorObservation {
 
 	private static final long serialVersionUID = 1L;
 
-	private String obId;
-	private Date sysTimestamp;
-	private Date obTimeStamp;
-
 	private double ozone, particullate_matter, carbon_monoxide, sulfure_dioxide, nitrogen_dioxide;
 	private double lon, lat;
 
@@ -28,7 +22,7 @@ public class PollutionObservation extends SensorObservation {
 
 	private String payload;
 
-	public PollutionObservation(String obId, String streamID, Date obTimeStamp, double ozone, double particullate_matter, double carbon_monoxide,
+	public PollutionObservation(String obId, String streamID, long obTimeStamp, double ozone, double particullate_matter, double carbon_monoxide,
 			double sulfure_dioxide, double nitrogen_dioxide, double lon, double lat, String payload, String serviceID) {
 		super(obTimeStamp, obId, streamID, serviceID);
 		this.ozone = ozone;
