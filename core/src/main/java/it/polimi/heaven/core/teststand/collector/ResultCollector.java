@@ -55,8 +55,9 @@ public final class ResultCollector {
 		this.current_heaven_output.setQuery_latency(e.getCreation_timestamp() - e.getResponseCreationTime());
 		this.current_heaven_output.setQuery(e.getResponse().getQueryString());
 		// TODO response decoding
-		e.save(filePath + experiment_name);
-		current_heaven_output.save(filePath + experiment_name);
+		String where = filePath + experiment_name;
+		e.save(where);
+		current_heaven_output.save(where);
 		return true;
 	}
 }

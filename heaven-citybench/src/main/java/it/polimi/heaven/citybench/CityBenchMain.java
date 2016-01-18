@@ -40,13 +40,25 @@ public class CityBenchMain {
 		for (String s : args) {
 			parameters.put(s.split("=")[0], s.split("=")[1]);
 		}
-		String query = "select * " + "	where { ?s ?p ?o ." + "} ";
+		String query = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "
+				+ "select  ?obId1 ?obId2  ?v1 ?v2 "
+				+ "where { "
+				+ "	?p1   a <http://www.insight-centre.org/citytraffic#CongestionLevel>. "
+				+ "	?p2   a <http://www.insight-centre.org/citytraffic#CongestionLevel>. "
+
+				+ "?obId1 <http://purl.oclc.org/NET/ssnx/ssn#observedBy> <http://www.insight-centre.org/dataset/SampleEventService#AarhusTrafficData182955> . "
+				+ "?obId1 <http://purl.oclc.org/NET/ssnx/ssn#observedProperty> ?p1 . "
+				+ "?obId21 <http://purl.oclc.org/NET/sao/hasValue> ?v1 . "
+
+				+ "?obId2 <http://purl.oclc.org/NET/ssnx/ssn#observedProperty> ?p2 . "
+				+ "?obId2 <http://purl.oclc.org/NET/sao/hasValue> ?v2 . "
+				+ "?obId2 <http://purl.oclc.org/NET/ssnx/ssn#observedBy> <http://www.insight-centre.org/dataset/SampleEventService#AarhusTrafficData158505> . }";
 
 		RDFFileManager.initializeDataset(dataset);
 
 		BaselineQuery q = new BaselineQuery();
 		q.setEsperStreams(new String[] { "AarhusTrafficData182955", "AarhusTrafficData158505" });
-		q.setEsper_queries(" select * from   AarhusTrafficData182955.win:time(3000 msec)  output snapshot every 10000 msec");
+		q.setEsper_queries(" select * from  AarhusTrafficData182955.win:time(3000 msec), AarhusTrafficData158505.win:time(3000 msec) output snapshot every 1000 msec");
 		q.setSparql_query(query);
 		q.setTbox(RDFFileManager.dataset.getDefaultModel());
 
@@ -74,7 +86,7 @@ public class CityBenchMain {
 		experiment.setDate(new Date().toString());
 
 		experiment.setInputSource("./Q1.stream");
-		experiment.setOutputPath("/Users/Riccardo/_Projects/SR/heaven-citybench/data/output/");
+		experiment.setOutputPath("/Users/Riccardo/_Projects/SR/heaven/heaven-citybench/data/output/");
 		experiment.setResponsivity(100L);
 
 		return experiment;

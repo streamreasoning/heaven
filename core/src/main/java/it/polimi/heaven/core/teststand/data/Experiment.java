@@ -24,6 +24,6 @@ public class Experiment {
 	private long responsivity;
 
 	public String getName() {
-		return "EN" + experimentNumber + "EXE" + executionNumber + "_" + date + "_" + metadata;
+		return "EN" + experimentNumber + "EXE" + executionNumber + "_" + date + (metadata != null ? "_" + metadata : "");
 	}
 }

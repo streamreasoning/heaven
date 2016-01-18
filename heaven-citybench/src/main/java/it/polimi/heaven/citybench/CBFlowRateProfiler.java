@@ -43,7 +43,7 @@ public class CBFlowRateProfiler extends FlowRateProfiler {
 	public HeavenInput build() {
 		ret.setId(event_id + previous_observation.getObTimeStamp() + ">");
 		ret.setEncoding_start_time(System.currentTimeMillis());
-		ret.setStimuli(encoder.encode(e));
+		ret.setStimuli(encoder.encode(ret));
 		ret.setEncoding_end_time(System.currentTimeMillis());
 		eventNumber++;
 		return ret;
@@ -54,21 +54,22 @@ public class CBFlowRateProfiler extends FlowRateProfiler {
 	}
 
 	public boolean append(String lineString) {
-		log.info("Line to Append: " + lineString);
+
 		this.previous_observation = current_observation;
 		current_observation = (SensorObservation) parser.parse(lineString);
 		if (previous_observation != null && (contemporary = current_observation.getObTimeStamp() > previous_observation.getObTimeStamp())) {
-			log.info("Mismatch, create a new Result, ready to send the old one with timestamo " + previous_observation.getObTimeStamp());
+			log.info("Timestamp Mismatch, line [" + lineString + "] has a timestamp greater than [" + previous_observation.getObTimeStamp() + "]");
 			HashSet<Line> lines = new HashSet<Line>();
 			lines.add(current_observation);
 			this.ret = e;
 			e = new HeavenInput(event_id + current_observation.getObTimeStamp() + ">", "", eventNumber, experiment_number,
 					current_observation.getObTimeStamp(), lines);
 		} else {
+			log.info("Line to Append: " + lineString);
 			Set<Line> lines = e.getLines();
 			lines.add(current_observation);
 			e.setLines(lines);
-			log.info("The new Observation was appended ");
+			log.info("The new Observation was appended, current timestamp is [" + current_observation.getObTimeStamp() + "]");
 		}
 		return contemporary;
 	}

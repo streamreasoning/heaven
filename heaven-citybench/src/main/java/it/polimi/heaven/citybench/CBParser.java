@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
@@ -56,11 +57,12 @@ public class CBParser implements ParsingTemplate {
 		EventDeclaration ed = event_declarations.get(streamID);
 		TrafficReportService trafficReportService = (TrafficReportService) ed;
 		double distance = Double.parseDouble(trafficReportService.getDistance() + "");
-		String payload = ed.getPayloads().get(0).split("\\|")[2];
+		List<String> payloads = ed.getPayloads();
+		String payload = payloads.get(0).split("\\|")[2];
 		double congestion_level = distance != 0 ? (vehicleCount / distance) : -1D;
 		double estimatedTime = avgSpeed != 0 ? (distance / avgSpeed) : -1D;
 		return new AarhusTrafficObservation(obId, streamID, obTimeStamp.getTime(), status, avgMeasuredTime, avgSpeed, medianMeasuredTime,
-				vehicleCount, extID, reportID, congestion_level, estimatedTime, payload, ed.getServiceId());
+				vehicleCount, extID, reportID, congestion_level, estimatedTime, payloads, ed.getServiceId());
 	}
 
 	public SensorObservation createWeatherObservation(Map<String, String> streamData) throws NumberFormatException, IOException, ParseException {
