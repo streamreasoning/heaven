@@ -8,7 +8,6 @@ import lombok.Data;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
 
 @Data
 public abstract class SensorObservation implements Serializable, Line {
@@ -18,7 +17,7 @@ public abstract class SensorObservation implements Serializable, Line {
 	protected String obId;
 	protected String streamID;
 	protected String serviceID;
-	protected Resource observation;
+
 	protected Model model;
 
 	public SensorObservation(long obTimeStamp, String obId, String streamID, String serviceID) {

@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j;
 import org.insight_centre.aceis.io.rdf.RDFFileManager;
 
 import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 //Fields  status,avgMeasuredTime,avgSpeed,extID,medianMeasuredTime,TIMESTAMP,vehicleCount,_id,REPORT_ID
@@ -44,27 +45,34 @@ public class AarhusTrafficObservation extends SensorObservation {
 
 		for (String payload : payloads) {
 
+			String[] payload_elements = payload.split("\\|");
 			String uri = RDFFileManager.defaultPrefix + obId + UUID.randomUUID();
-			log.info(uri);
-			this.observation = model.createResource(uri);
-			this.observation.addProperty(RDF.type, model.createResource(RDFFileManager.ssnPrefix + "Observation"));
-			this.observation.addProperty(model.createProperty(RDFFileManager.ssnPrefix + "observedBy"), model.createResource(serviceID));
+
+			Resource observation = model.createResource(uri);
+			observation.addProperty(RDF.type, model.createResource(RDFFileManager.ssnPrefix + "Observation"));
+			observation.addProperty(model.createProperty(RDFFileManager.ssnPrefix + "observedBy"), model.createResource(serviceID));
 
 			Property hasValue = model.createProperty(RDFFileManager.saoPrefix + "hasValue");
-			String prop = payload.split("\\|")[2];
-			this.observation.addProperty(model.createProperty(RDFFileManager.ssnPrefix + "observedProperty"), model.createResource(prop));
+
+			String prop = payload_elements[2];
+			observation.addProperty(model.createProperty(RDFFileManager.ssnPrefix + "observedProperty"), model.createResource(prop));
 
 			if (payload.contains("AvgSpeed"))
 				observation.addLiteral(hasValue, this.avgSpeed);
+
 			else if (payload.contains("VehicleCount")) {
 				observation.addLiteral(hasValue, this.vehicleCount);
 			} else if (payload.contains("MeasuredTime"))
 				observation.addLiteral(hasValue, this.avgMeasuredTime);
 			else if (payload.contains("EstimatedTime"))
 				observation.addLiteral(hasValue, this.estimatedTime);
-			else if (payload.contains("CongestionLevel"))
+			else if (payload.contains("CongestionLevel")) {
 				observation.addLiteral(hasValue, this.congestion_level);
+			}
+			log.debug(uri + " " + payload_elements[0]);
+			log.debug(model);
 		}
+
 	}
 
 }

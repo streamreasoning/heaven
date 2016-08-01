@@ -16,7 +16,6 @@ public class Partitioner {
 		StringBuffer binary = new StringBuffer();
 		while (sum != 0 && sum != 1) {
 			binary.insert(0, sum % 2);
-			// println("sum=" + sum + "ำเสý=" + (sum % 2) + "ณýสý=" + sum / 2);
 			sum = sum / 2;
 			if (sum == 0 || sum == 1) {
 				binary.insert(0, sum % 2);

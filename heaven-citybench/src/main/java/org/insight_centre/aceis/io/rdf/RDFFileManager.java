@@ -54,15 +54,15 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 /**
  * @author feng
- * 
+ *
  *         RDF based IO module
- * 
+ *
  */
 public class RDFFileManager {
 	public static final String cqelsHome = "CQELS_DB/";
-	public static final String databaseDirectory = "DB/";
+	public static final String databaseDirectory = "/Users/Riccardo/_Projects/Streamreasoning/heaven/heaven-citybench/src/main/resources/DB/";
 	public static Dataset dataset;
-	public static final String datasetDirectory = "dataset/";
+	public static final String datasetDirectory = "/Users/Riccardo/_Projects/Streamreasoning/heaven/heaven-citybench/src/main/resources/dataset/";
 	public static final String defaultPrefix = "http://www.insight-centre.org/dataset/SampleEventService#",
 			ssnPrefix = "http://purl.oclc.org/NET/ssnx/ssn#", owlsPrefix = "http://www.daml.org/services/owl-s/1.2/Service.owl#",
 			owlsspPrefix = "http://www.daml.org/services/owl-s/1.2/ServiceParameter.owl#",
@@ -71,7 +71,7 @@ public class RDFFileManager {
 			drPrefix = "http://www.insight-centre.org/datarequest#", qPrefix = "http://www.ict-citypulse.eu/ontologies/streamQoI/Quality",
 			saoPrefix = "http://purl.oclc.org/NET/sao/", upPrefix = "http://www.ict-citypulse.eu/ontologies/userprofile#",
 			cesPrefix = "http://www.insight-centre.org/ces#", osmPrefix = "http://www.insight-centre.org/ontologies/osm#";
-	public static final String ontologyDirectory = "ontology/";
+	public static final String ontologyDirectory = "/Users/Riccardo/_Projects/Streamreasoning/heaven/heaven-citybench/src/main/resources/ontology/";
 
 	public static final OntModelSpec ontoSpec = OntModelSpec.RDFS_MEM_RDFS_INF;
 	public static final Map<String, String> prefixMap = new HashMap<String, String>();

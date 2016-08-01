@@ -76,7 +76,7 @@ public class CSPARQLAarhusTrafficStream extends CSPARQLSensorStream implements R
 		streamData.setDelimiter(',');
 		streamData.readHeaders();
 		// streamData.skipRecord();
-		metaData = new CsvReader("dataset/MetaData/trafficMetaData.csv");
+		metaData = new CsvReader("/Users/Riccardo/_Projects/SR/heaven/heaven-citybench/dataset/MetaData/trafficMetaData.csv");
 		metaData.readHeaders();
 		streamData.readRecord();
 		while (metaData.readRecord()) {

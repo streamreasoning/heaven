@@ -1,5 +1,6 @@
 package it.polimi.heaven.citybench;
 
+import com.csvreader.CsvReader;
 import it.polimi.heaven.citybench.ssnobservations.AarhusParkingObservation;
 import it.polimi.heaven.citybench.ssnobservations.AarhusTrafficObservation;
 import it.polimi.heaven.citybench.ssnobservations.PollutionObservation;
@@ -7,6 +8,8 @@ import it.polimi.heaven.citybench.ssnobservations.SensorObservation;
 import it.polimi.heaven.citybench.ssnobservations.WeatherObservation;
 import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import it.polimi.services.FileService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
@@ -37,14 +41,14 @@ public class CBParser implements ParsingTemplate {
 		String streamID = streamData.get("streamID");
 
 		EventDeclaration ed = event_declarations.get(streamID);
-		String payload = ed.getPayloads().get(0).split("\\|")[2];
-		return new AarhusParkingObservation(totalspaces, vehiclecount, garageCode, payload, obTimeStamp.getTime(), obId, streamID, ed.getServiceId());
+		List<String> payloads = ed.getPayloads();
+		return new AarhusParkingObservation(totalspaces, vehiclecount, garageCode, payloads, obTimeStamp.getTime(), obId, streamID, ed.getServiceId());
 	}
 
 	public SensorObservation createAarhusTrafficObservation(Map<String, String> streamData) throws NumberFormatException, IOException, ParseException {
 
 		String obId = "AarhusTrafficObservation_" + streamData.get("_id");
-		int reportID = streamData.containsKey("REPORT_ID") ? Integer.parseInt(streamData.get("REPORT_ID")) : -1;
+		int reportID = streamData.containsKey("_id") ? Integer.parseInt(streamData.get("_id")) : -1;
 		double avgSpeed = Double.parseDouble(streamData.get("avgSpeed"));
 		double avgMeasuredTime = Double.parseDouble(streamData.get("avgMeasuredTime"));
 		double medianMeasuredTime = Double.parseDouble(streamData.get("medianMeasuredTime"));
@@ -54,15 +58,29 @@ public class CBParser implements ParsingTemplate {
 		int extID = Integer.parseInt(streamData.get("extID"));
 		String streamID = streamData.get("streamID");
 
-		EventDeclaration ed = event_declarations.get(streamID);
-		TrafficReportService trafficReportService = (TrafficReportService) ed;
-		double distance = Double.parseDouble(trafficReportService.getDistance() + "");
+		double distance = 0D;
+
+        EventDeclaration ed = event_declarations.get(streamID);
+
 		List<String> payloads = ed.getPayloads();
-		String payload = payloads.get(0).split("\\|")[2];
+		CsvReader metaData = new CsvReader("/Users/Riccardo/_Projects/Streamreasoning/heaven/heaven-citybench/src/main/resources/dataset/MetaData/trafficMetaData.csv");
+		metaData.readHeaders();
+
+		while (metaData.readRecord()) {
+			if (reportID == Integer.parseInt(metaData.get("REPORT_ID"))) {
+				distance = Double.parseDouble(metaData.get("DISTANCE_IN_METERS"));
+				metaData.close();
+				break;
+			}
+		}
+
+
 		double congestion_level = distance != 0 ? (vehicleCount / distance) : -1D;
 		double estimatedTime = avgSpeed != 0 ? (distance / avgSpeed) : -1D;
 		return new AarhusTrafficObservation(obId, streamID, obTimeStamp.getTime(), status, avgMeasuredTime, avgSpeed, medianMeasuredTime,
 				vehicleCount, extID, reportID, congestion_level, estimatedTime, payloads, ed.getServiceId());
+
+
 	}
 
 	public SensorObservation createWeatherObservation(Map<String, String> streamData) throws NumberFormatException, IOException, ParseException {
@@ -74,8 +92,9 @@ public class CBParser implements ParsingTemplate {
 		double temperature = Double.parseDouble(streamData.get("temperature"));
 		String streamID = streamData.get("streamID");
 		EventDeclaration ed = event_declarations.get(streamID);
-		String payload = ed.getPayloads().get(0).split("\\|")[2];
-		return new WeatherObservation(obId, streamID, obTimeStamp.getTime(), humidity, windSpeed, temperature, payload, ed.getServiceId());
+		List<String> payloads = ed.getPayloads();
+
+		return new WeatherObservation(obId, streamID, obTimeStamp.getTime(), humidity, windSpeed, temperature, payloads, ed.getServiceId());
 	}
 
 	public SensorObservation createPollutionObservation(Map<String, String> streamData) throws NumberFormatException, IOException, ParseException {
@@ -91,9 +110,10 @@ public class CBParser implements ParsingTemplate {
 		double lon = Double.parseDouble(streamData.get("lon"));
 		String streamID = streamData.get("streamID");
 		EventDeclaration ed = event_declarations.get(streamID);
-		String payload = ed.getPayloads().get(0).split("\\|")[2];
+		List<String> payloads = ed.getPayloads();
+
 		return new PollutionObservation(obId, streamID, obTimeStamp.getTime(), ozone, particullate_matter, carbon_monoxide, sulfure_dioxide,
-				nitrogen_dioxide, lon, lat, payload, ed.getServiceId());
+				nitrogen_dioxide, lon, lat, payloads, ed.getServiceId());
 
 	}
 
