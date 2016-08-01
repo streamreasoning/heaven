@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.teststand.streamer.flowrateprofiler.profiles;
+package it.polimi.heaven.lubm;
 
 public enum FlowRateProfile {
 	CONSTANT(0), LINEAR(1), STEP(2), EXP(3), RANDOM(4), STEP_FACTOR(5), CUSTOM_STEP(6);

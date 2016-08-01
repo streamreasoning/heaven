@@ -1,7 +1,6 @@
-package it.polimi.heaven.core.teststand.streamer.flowrateprofiler.profiles;
+package it.polimi.heaven.lubm;
 
 import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
-import it.polimi.heaven.core.teststand.streamer.lubm.LUBMFlowRateProfiler;
 
 public class LinearFlowRateProfiler extends LUBMFlowRateProfiler {
 

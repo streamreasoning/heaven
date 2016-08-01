@@ -1,12 +1,12 @@
-package it.polimi.processing.events.profiler;
+package it.polimi.heaven.lubm;
 
 import static org.junit.Assert.assertEquals;
 import it.polimi.heaven.core.teststand.events.HeavenInput;
 import it.polimi.heaven.core.teststand.rspengine.events.Stimulus;
 import it.polimi.heaven.core.teststand.streamer.Encoder;
-import it.polimi.heaven.core.teststand.streamer.flowrateprofiler.profiles.ConstantFlowRateProfiler;
-import it.polimi.heaven.core.teststand.streamer.lubm.LUBMFlowRateProfiler;
-import it.polimi.heaven.core.teststand.streamer.lubm.LUBMParser;
+import it.polimi.heaven.lubm.ConstantFlowRateProfiler;
+import it.polimi.heaven.lubm.LUBMFlowRateProfiler;
+import it.polimi.heaven.lubm.LUBMParser;
 
 import org.junit.Rule;
 import org.junit.Test;

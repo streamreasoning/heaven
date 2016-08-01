@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.teststand.streamer.lubm;
+package it.polimi.heaven.lubm;
 
 import it.polimi.heaven.core.teststand.data.RDFLine;
 import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;

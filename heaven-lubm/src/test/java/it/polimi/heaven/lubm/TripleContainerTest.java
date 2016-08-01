@@ -1,4 +1,4 @@
-package it.polimi.processing.events;
+package it.polimi.heaven.lubm;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
