@@ -64,7 +64,7 @@
     </dependencies>
     <packaging>pom</packaging>
     <modules>
-        <module>core</module>
+        <module>heaven-core</module>
         <module>heaven-commons</module>
         <module>heaven-postprocessing</module>
         <module>heaven-citybench</module>
