@@ -12,10 +12,5 @@
 			<groupId>it.polimi.heaven</groupId>
 			<artifactId>heaven-commons</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>net.sourceforge.sizeof.SizeOf</groupId>
-			<artifactId>net.sourceforge.sizeof.sizeof</artifactId>
-			<version>1.0</version>
-		</dependency>
 	</dependencies>
 </project>
