@@ -7,12 +7,21 @@
         <version>0.0.1</version>
     </parent>
     <artifactId>heaven-citybench</artifactId>
+
     <repositories>
         <repository>
             <id>streamreasoning_repository</id>
             <name>streamreasoning repository</name>
             <url>http://streamreasoning.org/maven/</url>
             <layout>default</layout>
+        </repository>
+        <repository>
+            <id>cqels.mvn-repo</id>
+            <url>https://raw.github.com/KMax/cqels/mvn-repo/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
         </repository>
     </repositories>
 
