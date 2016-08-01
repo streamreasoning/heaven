@@ -54,7 +54,7 @@
         <dependency>
             <groupId>org.deri.cqels</groupId>
             <artifactId>cqels</artifactId>
-            <version>0.9</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.javacsv</groupId>
