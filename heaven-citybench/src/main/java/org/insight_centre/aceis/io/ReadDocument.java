@@ -1,26 +1,12 @@
 package org.insight_centre.aceis.io;
 
 import com.csvreader.CsvReader;
-
-import java.io.*;
-import java.lang.Double;
-import java.lang.String;
-import java.lang.System;
-import java.util.ArrayList;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.lang.String;
-import java.lang.System;
-
 import org.insight_centre.aceis.observations.AarhusTrafficObservation;
 
-import com.csvreader.CsvReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by sefki on 10/06/2014.

@@ -1,31 +1,21 @@
 package org.insight_centre.aceis.io.streams;
 
+import com.csvreader.CsvReader;
+import com.hp.hpl.jena.rdf.model.*;
+import com.hp.hpl.jena.vocabulary.RDF;
+import org.insight_centre.aceis.eventmodel.EventDeclaration;
+import org.insight_centre.aceis.eventmodel.TrafficReportService;
+import org.insight_centre.aceis.io.rdf.RDFFileManager;
+import org.insight_centre.aceis.observations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
-import org.insight_centre.aceis.eventmodel.EventDeclaration;
-import org.insight_centre.aceis.eventmodel.TrafficReportService;
-import org.insight_centre.aceis.io.rdf.RDFFileManager;
-import org.insight_centre.aceis.observations.AarhusParkingObservation;
-import org.insight_centre.aceis.observations.AarhusTrafficObservation;
-import org.insight_centre.aceis.observations.PollutionObservation;
-import org.insight_centre.aceis.observations.SensorObservation;
-import org.insight_centre.aceis.observations.WeatherObservation;
-import org.insight_centre.citybench.main.CityBench;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.csvreader.CsvReader;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.vocabulary.RDF;
 
 public class DataWrapper {
 	private static final Logger logger = LoggerFactory.getLogger(DataWrapper.class);
@@ -90,7 +80,6 @@ public class DataWrapper {
 				// Resource observedProperty = m.createResource(s);
 				String obId = data.getObId();
 				Resource observation = m.createResource(RDFFileManager.defaultPrefix + obId + UUID.randomUUID());
-				CityBench.obMap.put(observation.toString(), data);
 				// data.setObId(observation.toString());
 				// System.out.println("OB: " + observation.toString());
 				observation.addProperty(RDF.type, m.createResource(RDFFileManager.ssnPrefix + "Observation"));
@@ -147,7 +136,6 @@ public class DataWrapper {
 				Resource observation = m
 						.createResource(RDFFileManager.defaultPrefix + so.getObId() + UUID.randomUUID());
 				// so.setObId(RDFFileManager.defaultPrefix + observation.toString());
-				CityBench.obMap.put(observation.toString(), so);
 				observation.addProperty(RDF.type, m.createResource(RDFFileManager.ssnPrefix + "Observation"));
 
 				Resource serviceID = m.createResource(ed.getServiceId());
@@ -186,7 +174,6 @@ public class DataWrapper {
 				Resource observation = m
 						.createResource(RDFFileManager.defaultPrefix + wo.getObId() + UUID.randomUUID());
 				// wo.setObId(observation.toString());
-				CityBench.obMap.put(observation.toString(), wo);
 				observation.addProperty(RDF.type, m.createResource(RDFFileManager.ssnPrefix + "Observation"));
 				Resource serviceID = m.createResource(ed.getServiceId());
 				observation.addProperty(m.createProperty(RDFFileManager.ssnPrefix + "observedBy"), serviceID);
@@ -227,7 +214,6 @@ public class DataWrapper {
 		// Resource user = m.createResource(userStr);
 
 		Resource observation = m.createResource(RDFFileManager.defaultPrefix + so.getObId() + UUID.randomUUID());
-		CityBench.obMap.put(observation.toString(), so);
 		observation.addProperty(RDF.type, m.createResource(RDFFileManager.ssnPrefix + "Observation"));
 		// observation.addProperty(RDF.type, m.createResource(RDFFileManager.saoPrefix + "StreamData"));
 
@@ -279,7 +265,6 @@ public class DataWrapper {
 	public static List<Statement> getAarhusParkingStatements(SensorObservation so, EventDeclaration ed) {
 		Model m = ModelFactory.createDefaultModel();
 		Resource observation = m.createResource(RDFFileManager.defaultPrefix + so.getObId() + UUID.randomUUID());
-		CityBench.obMap.put(observation.toString(), so);
 		observation.addProperty(RDF.type, m.createResource(RDFFileManager.ssnPrefix + "Observation"));
 		// observation.addProperty(RDF.type,
 		// m.createResource(RDFFileManager.saoPrefix + "StreamData"));

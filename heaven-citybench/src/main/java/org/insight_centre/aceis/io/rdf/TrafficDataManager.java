@@ -1,23 +1,14 @@
 package org.insight_centre.aceis.io.rdf;
 
+import org.insight_centre.aceis.eventmodel.*;
+import org.insight_centre.aceis.io.EventRepository;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import org.insight_centre.aceis.eventmodel.EventDeclaration;
-import org.insight_centre.aceis.eventmodel.EventPattern;
-import org.insight_centre.aceis.eventmodel.Filter;
-import org.insight_centre.aceis.eventmodel.NodeRemovalException;
-import org.insight_centre.aceis.eventmodel.QosVector;
-import org.insight_centre.aceis.eventmodel.TrafficReportService;
-import org.insight_centre.aceis.io.EventRepository;
+import java.util.*;
 
 public class TrafficDataManager {
 

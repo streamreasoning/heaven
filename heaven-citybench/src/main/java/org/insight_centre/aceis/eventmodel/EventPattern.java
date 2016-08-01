@@ -1,18 +1,13 @@
 package org.insight_centre.aceis.eventmodel;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.*;
 import java.util.Map.Entry;
 
 //import org.insight_centre.aceis.engine.Comparator;
-import org.insight_centre.aceis.io.rdf.TextFileManager;
 //import org.insight_centre.aceis.utils.test.Simulator2;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author feng

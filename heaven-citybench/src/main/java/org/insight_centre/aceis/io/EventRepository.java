@@ -1,15 +1,14 @@
 package org.insight_centre.aceis.io;
 
-import java.util.*;
-import java.util.Map.Entry;
-
-//import org.insight_centre.aceis.engine.ReusabilityHierarchy;
-import org.insight_centre.aceis.eventmodel.*;
-//import org.insight_centre.aceis.utils.test.Simulator2;
+import org.insight_centre.aceis.eventmodel.EventDeclaration;
+import org.insight_centre.aceis.eventmodel.EventPattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//import compositionAlgorithms.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 
 /**
  * @author feng

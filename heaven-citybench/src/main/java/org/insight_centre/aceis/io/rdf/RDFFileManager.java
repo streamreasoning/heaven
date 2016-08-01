@@ -1,54 +1,24 @@
 package org.insight_centre.aceis.io.rdf;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
-
-import org.deri.cqels.engine.ExecContext;
-import org.deri.cqels.engine.ReasonerContext;
-import org.insight_centre.aceis.eventmodel.EventDeclaration;
-import org.insight_centre.aceis.eventmodel.EventOperator;
-import org.insight_centre.aceis.eventmodel.EventPattern;
-import org.insight_centre.aceis.eventmodel.Filter;
-import org.insight_centre.aceis.eventmodel.NodeRemovalException;
-import org.insight_centre.aceis.eventmodel.OperatorType;
-import org.insight_centre.aceis.eventmodel.QosVector;
-import org.insight_centre.aceis.eventmodel.Selection;
-import org.insight_centre.aceis.eventmodel.TrafficReportService;
-import org.insight_centre.aceis.eventmodel.WeightVector;
-import org.insight_centre.aceis.io.EventRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.hp.hpl.jena.ontology.OntModelSpec;
-import com.hp.hpl.jena.query.Dataset;
-import com.hp.hpl.jena.query.DatasetFactory;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.Container;
-import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.NodeIterator;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.RDFWriter;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.reasoner.Reasoner;
+import com.hp.hpl.jena.query.*;
+import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.sparql.core.DatasetGraph;
 import com.hp.hpl.jena.sparql.core.DatasetImpl;
 import com.hp.hpl.jena.tdb.TDBFactory;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
+import org.insight_centre.aceis.eventmodel.*;
+import org.insight_centre.aceis.io.EventRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.*;
+import java.util.Map.Entry;
 
 //import virtuoso.jena.driver.VirtGraph;
 
@@ -995,45 +965,6 @@ public class RDFFileManager {
 
 	}
 
-	public static ExecContext initializeCQELSContext(String serviceDesc, Reasoner r) {
-		ExecContext context;
-		if (r != null)
-			context = new ReasonerContext(cqelsHome, true, r);
-		else
-			context = new ExecContext(cqelsHome, true);
-		context.loadDefaultDataset(datasetDirectory + serviceDesc);
-		context.loadDataset(cesPrefix, ontologyDirectory + "ces.n3");
-		context.loadDataset("culturalevents", datasetDirectory + "AarhusCulturalEvents.n3");
-		context.loadDataset("libraryevents", datasetDirectory + "AarhusLibraryEvents.n3");
-		// context.l
-		// context.loadDataset(ssnPrefix, ontologyDirectory + "ssn.owl");
-		// context.loadDataset(ctPrefix, ontologyDirectory + "city.n3");
-		// context.loadDataset(owlsPrefix, ontologyDirectory + "Service.owl");
-		// context.loadDataset(owlsPrefix, ontologyDirectory + "Grounding.owl");
-		// context.loadDataset(owlsPrefix, ontologyDirectory + "Process.owl");
-		// context.loadDataset(owlsPrefix, ontologyDirectory + "Profile.owl");
-
-		dataset = context.getDataset().toDataset();
-		// dataset.
-		// while (dataset.listNames().hasNext())
-		// System.out.println(dataset.listNames().next());
-		return context;
-	}
-
-	public static Dataset initializeCSPARQLContext(String serviceDesc, Reasoner r) {
-		// ExecContext context;
-		// if (r != null)
-		// context = new ReasonerContext(cqelsHome, true,
-		// ReasonerRegistry.getRDFSReasoner());
-		// else
-		// context = new ExecContext(cqelsHome, true);
-		Model defaultModel = FileManager.get().loadModel(datasetDirectory + serviceDesc);
-		Model ces = FileManager.get().loadModel(ontologyDirectory + "ces.n3");
-
-		dataset = DatasetFactory.create(defaultModel);
-		dataset.addNamedModel(cesPrefix, ces);
-		return dataset;
-	}
 
 	public static void initializeDataset() {
 		dataset = TDBFactory.createDataset(databaseDirectory);
