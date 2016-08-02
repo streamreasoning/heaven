@@ -18,11 +18,11 @@ It is composed by
 </repositories>
 
 
-	<dependency>
-	    <groupId>com.github.streamreasoning</groupId>
-	    <artifactId>Heaven</artifactId>
-	    <version>0.9</version>
-	</dependency>
+<dependency>
+	<groupId>com.github.streamreasoning</groupId>
+	<artifactId>Heaven</artifactId>
+	<version>0.9</version>
+</dependency>
 	
 	
 ##Module
