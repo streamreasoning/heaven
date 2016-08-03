@@ -1,11 +1,12 @@
 package org.insight_centre.aceis.utils;
 
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.util.FileManager;
+
 import javax.swing.JFrame;
 
-//package org.insight_centre.aceis.utils;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,17 +14,8 @@ import java.util.UUID;
 
 import javax.swing.*;
 
-import org.insight_centre.aceis.io.rdf.RDFFileManager;
 
-import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.ResIterator;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.util.FileManager;
-import com.hp.hpl.jena.vocabulary.RDF;
+
 
 /* FrameDemo.java requires no other files. */
 public class FrameDemo {

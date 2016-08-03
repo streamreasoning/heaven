@@ -1,13 +1,13 @@
 package org.insight_centre.aceis.io.rdf;
 
-import com.hp.hpl.jena.ontology.OntModelSpec;
-import com.hp.hpl.jena.query.*;
-import com.hp.hpl.jena.rdf.model.*;
-import com.hp.hpl.jena.sparql.core.DatasetGraph;
-import com.hp.hpl.jena.sparql.core.DatasetImpl;
-import com.hp.hpl.jena.tdb.TDBFactory;
-import com.hp.hpl.jena.util.FileManager;
-import com.hp.hpl.jena.vocabulary.RDF;
+import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.sparql.core.DatasetGraph;
+import org.apache.jena.sparql.core.DatasetImpl;
+import org.apache.jena.tdb.TDBFactory;
+import org.apache.jena.util.FileManager;
+import org.apache.jena.vocabulary.RDF;
 import org.insight_centre.aceis.eventmodel.*;
 import org.insight_centre.aceis.io.EventRepository;
 import org.slf4j.Logger;
