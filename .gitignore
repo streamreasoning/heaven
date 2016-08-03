@@ -43,7 +43,9 @@ target
 .idea/*
 *.iml
 /bin
+*.eml
 
+heaven-pkg/
 
 # Output data
 heaven-lubm/data/output/*
