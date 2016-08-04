@@ -1,0 +1,8 @@
+Bundle-Version: 0.0.0.${tstamp}
+Export-Package: it.polimi.services
+src: src/main/java
+bin: target/classes
+target-dir: generated
+testsrc: src/test/java
+testbin: target/test-classes
+-buildpath: cglib.cglib-nodep
