@@ -1,8 +1,8 @@
 package org.insight_centre.aceis.io.streams;
 
 import com.csvreader.CsvReader;
-import com.hp.hpl.jena.rdf.model.*;
-import com.hp.hpl.jena.vocabulary.RDF;
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.vocabulary.RDF;
 import org.insight_centre.aceis.eventmodel.EventDeclaration;
 import org.insight_centre.aceis.eventmodel.TrafficReportService;
 import org.insight_centre.aceis.io.rdf.RDFFileManager;

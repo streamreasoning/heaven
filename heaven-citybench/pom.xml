@@ -27,7 +27,6 @@
             <artifactId>jena-arq</artifactId>
             <version>3.1.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.jena/jena-tdb -->
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>jena-tdb</artifactId>

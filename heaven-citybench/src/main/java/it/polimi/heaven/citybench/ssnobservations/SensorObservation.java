@@ -1,13 +1,10 @@
 package it.polimi.heaven.citybench.ssnobservations;
-
 import it.polimi.heaven.core.teststand.data.Line;
+import lombok.Data;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 
 import java.io.Serializable;
-
-import lombok.Data;
-
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 @Data
 public abstract class SensorObservation implements Serializable, Line {
