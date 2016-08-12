@@ -17,7 +17,7 @@ properties/*
 
 #Output
 
-<<<<<<< HEAD
+
 # Eclipse
 bin/*
 .classpath
@@ -43,3 +43,15 @@ target
 .idea/*
 *.iml
 /bin
+*.eml
+
+heaven-pkg/
+
+# Output data
+heaven-lubm/data/output/*
+heaven-citybench/DB/*
+*.idn
+*.dat
+*.log
+*.select
+

@@ -19,7 +19,7 @@ import lombok.extern.log4j.Log4j;
 public class FileService {
 
 	public static boolean write(String where, String data) {
-		log.debug("Try to write ["+data+"] to [" + where + "]");
+		log.info("Try to write [" + data + "] to [" + where + "]");
 		try {
 			FileWriter writer;
 			File file = new File(where);

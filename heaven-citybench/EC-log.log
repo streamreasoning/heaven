@@ -1,0 +1,80 @@
+2015-12-08 17:10:08 INFO  RDFFileManager:121 - Extracting service repository.
+2015-12-08 17:10:13 INFO  RDFFileManager:153 - Service repository created in: 5980 ms with 908 EDs and 0 EPs.
+2015-12-08 17:10:14 INFO  CityBenchMain:91 - AarhusTrafficData182955
+2015-12-08 17:10:14 INFO  CityBenchMain:91 - AarhusTrafficData158505
+2015-12-08 17:10:14 INFO  JenaEngine:48 - Added [GraphStimulus on Stream [null] [{content=interface com.hp.hpl.jena.graph.Graph, app_timestamp=long, sys_timestamp=long}]] as TEvent
+2015-12-09 12:00:59 INFO  RDFFileManager:121 - Extracting service repository.
+2015-12-09 12:01:07 INFO  RDFFileManager:153 - Service repository created in: 8001 ms with 908 EDs and 0 EPs.
+2015-12-09 12:01:07 INFO  CityBenchMain:91 - AarhusTrafficData182955
+2015-12-09 12:01:07 INFO  CityBenchMain:91 - AarhusTrafficData158505
+2015-12-09 12:01:07 INFO  JenaEngine:48 - Added [GraphStimulus on Stream [null] [{content=interface com.hp.hpl.jena.graph.Graph, app_timestamp=long, sys_timestamp=long}]] as TEvent
+2015-12-09 12:07:44 INFO  RDFFileManager:121 - Extracting service repository.
+2015-12-09 12:07:50 INFO  RDFFileManager:153 - Service repository created in: 6297 ms with 908 EDs and 0 EPs.
+2015-12-09 12:07:50 INFO  CityBenchMain:91 - AarhusTrafficData182955
+2015-12-09 12:07:50 INFO  CityBenchMain:91 - AarhusTrafficData158505
+2015-12-09 12:07:50 INFO  JenaEngine:48 - Added [GraphStimulus on Stream [null] [{content=interface com.hp.hpl.jena.graph.Graph, app_timestamp=long, sys_timestamp=long}]] as TEvent
+2015-12-09 12:17:26 INFO  RDFFileManager:121 - Extracting service repository.
+2015-12-09 12:17:33 INFO  RDFFileManager:153 - Service repository created in: 6798 ms with 908 EDs and 0 EPs.
+2015-12-09 12:17:33 INFO  CityBenchMain:91 - AarhusTrafficData182955
+2015-12-09 12:17:33 INFO  CityBenchMain:91 - AarhusTrafficData158505
+2015-12-09 12:17:33 INFO  JenaEngine:48 - Added [GraphStimulus on Stream [null] [{content=interface com.hp.hpl.jena.graph.Graph, app_timestamp=long, sys_timestamp=long}]] as TEvent
+2015-12-09 12:22:44 INFO  RDFFileManager:121 - Extracting service repository.
+2015-12-09 12:22:50 INFO  RDFFileManager:153 - Service repository created in: 5948 ms with 908 EDs and 0 EPs.
+2015-12-09 12:22:50 INFO  CityBenchMain:91 - AarhusTrafficData182955
+2015-12-09 12:22:50 INFO  CityBenchMain:91 - AarhusTrafficData158505
+2015-12-09 12:22:50 INFO  JenaEngine:48 - Added [GraphStimulus on Stream [null] [{content=interface com.hp.hpl.jena.graph.Graph, app_timestamp=long, sys_timestamp=long}]] as TEvent
+2015-12-09 12:24:44 INFO  RDFFileManager:121 - Extracting service repository.
+2015-12-09 12:24:51 INFO  RDFFileManager:153 - Service repository created in: 6598 ms with 908 EDs and 0 EPs.
+2015-12-09 12:24:51 INFO  CityBenchMain:91 - AarhusTrafficData182955
+2015-12-09 12:24:51 INFO  CityBenchMain:91 - AarhusTrafficData158505
+2015-12-09 12:24:51 INFO  JenaEngine:48 - Added [GraphStimulus on Stream [null] [{content=interface com.hp.hpl.jena.graph.Graph, app_timestamp=long, sys_timestamp=long}]] as TEvent
+2015-12-09 12:31:34 INFO  RDFFileManager:121 - Extracting service repository.
+2015-12-09 12:31:40 INFO  RDFFileManager:153 - Service repository created in: 6120 ms with 908 EDs and 0 EPs.
+2015-12-09 12:31:40 INFO  CityBenchMain:91 - AarhusTrafficData182955
+2015-12-09 12:31:40 INFO  CityBenchMain:91 - AarhusTrafficData158505
+2015-12-09 12:31:40 INFO  JenaEngine:48 - Added [GraphStimulus on Stream [null] [{content=interface com.hp.hpl.jena.graph.Graph, app_timestamp=long, sys_timestamp=long}]] as TEvent
+2015-12-09 12:33:44 INFO  RDFFileManager:121 - Extracting service repository.
+2015-12-09 12:33:50 INFO  RDFFileManager:153 - Service repository created in: 6092 ms with 908 EDs and 0 EPs.
+2015-12-09 12:33:50 INFO  CityBenchMain:91 - AarhusTrafficData182955
+2015-12-09 12:33:50 INFO  CityBenchMain:91 - AarhusTrafficData158505
+2015-12-09 12:33:50 INFO  JenaEngine:48 - Added [GraphStimulus on Stream [null] [{content=interface com.hp.hpl.jena.graph.Graph, app_timestamp=long, sys_timestamp=long}]] as TEvent
+2015-12-09 12:38:56 INFO  RDFFileManager:121 - Extracting service repository.
+2015-12-09 12:39:02 INFO  RDFFileManager:153 - Service repository created in: 6154 ms with 908 EDs and 0 EPs.
+2015-12-09 12:39:02 INFO  CityBenchMain:91 - AarhusTrafficData182955
+2015-12-09 12:39:02 INFO  CityBenchMain:91 - AarhusTrafficData158505
+2015-12-09 12:39:02 INFO  JenaEngine:48 - Added [GraphStimulus on Stream [null] [{content=interface com.hp.hpl.jena.graph.Graph, app_timestamp=long, sys_timestamp=long}]] as TEvent
+2015-12-09 12:39:32 INFO  RDFFileManager:121 - Extracting service repository.
+2015-12-09 12:39:38 INFO  RDFFileManager:153 - Service repository created in: 5875 ms with 908 EDs and 0 EPs.
+2015-12-09 12:39:38 INFO  CityBenchMain:91 - AarhusTrafficData182955
+2015-12-09 12:39:38 INFO  CityBenchMain:91 - AarhusTrafficData158505
+2015-12-09 12:39:38 INFO  JenaEngine:48 - Added [GraphStimulus on Stream [null] [{content=interface com.hp.hpl.jena.graph.Graph, app_timestamp=long, sys_timestamp=long}]] as TEvent
+2015-12-09 12:41:03 INFO  RDFFileManager:121 - Extracting service repository.
+2015-12-09 12:41:09 INFO  RDFFileManager:153 - Service repository created in: 6654 ms with 908 EDs and 0 EPs.
+2015-12-09 12:41:09 INFO  CityBenchMain:91 - AarhusTrafficData182955
+2015-12-09 12:41:09 INFO  CityBenchMain:91 - AarhusTrafficData158505
+2015-12-09 12:41:09 INFO  JenaEngine:48 - Added [GraphStimulus on Stream [null] [{content=interface com.hp.hpl.jena.graph.Graph, app_timestamp=long, sys_timestamp=long}]] as TEvent
+2015-12-09 12:41:44 INFO  RDFFileManager:121 - Extracting service repository.
+2015-12-09 12:41:50 INFO  RDFFileManager:153 - Service repository created in: 5981 ms with 908 EDs and 0 EPs.
+2015-12-09 12:41:50 INFO  CityBenchMain:91 - AarhusTrafficData182955
+2015-12-09 12:41:50 INFO  CityBenchMain:91 - AarhusTrafficData158505
+2015-12-09 12:41:50 INFO  JenaEngine:48 - Added [GraphStimulus on Stream [null] [{content=interface com.hp.hpl.jena.graph.Graph, app_timestamp=long, sys_timestamp=long}]] as TEvent
+2015-12-09 12:47:50 INFO  RDFFileManager:121 - Extracting service repository.
+2015-12-09 12:47:57 INFO  RDFFileManager:153 - Service repository created in: 6331 ms with 908 EDs and 0 EPs.
+2015-12-09 12:47:57 INFO  CityBenchMain:91 - AarhusTrafficData182955
+2015-12-09 12:47:57 INFO  CityBenchMain:91 - AarhusTrafficData158505
+2015-12-09 12:47:57 INFO  JenaEngine:48 - Added [GraphStimulus on Stream [null] [{content=interface com.hp.hpl.jena.graph.Graph, app_timestamp=long, sys_timestamp=long}]] as TEvent
+2015-12-09 12:48:26 INFO  RDFFileManager:121 - Extracting service repository.
+2015-12-09 12:48:34 INFO  RDFFileManager:153 - Service repository created in: 7842 ms with 908 EDs and 0 EPs.
+2015-12-09 12:48:34 INFO  CityBenchMain:91 - AarhusTrafficData182955
+2015-12-09 12:48:34 INFO  CityBenchMain:91 - AarhusTrafficData158505
+2015-12-09 12:48:34 INFO  JenaEngine:48 - Added [GraphStimulus on Stream [null] [{content=interface com.hp.hpl.jena.graph.Graph, app_timestamp=long, sys_timestamp=long}]] as TEvent
+2015-12-09 12:51:03 INFO  RDFFileManager:121 - Extracting service repository.
+2015-12-09 12:51:09 INFO  RDFFileManager:153 - Service repository created in: 5952 ms with 908 EDs and 0 EPs.
+2015-12-09 12:51:09 INFO  CityBenchMain:91 - AarhusTrafficData182955
+2015-12-09 12:51:09 INFO  CityBenchMain:91 - AarhusTrafficData158505
+2015-12-09 12:51:09 INFO  JenaEngine:48 - Added [GraphStimulus on Stream [null] [{content=interface com.hp.hpl.jena.graph.Graph, app_timestamp=long, sys_timestamp=long}]] as TEvent
+2015-12-09 13:03:12 INFO  RDFFileManager:121 - Extracting service repository.
+2015-12-09 13:03:18 INFO  RDFFileManager:153 - Service repository created in: 6042 ms with 908 EDs and 0 EPs.
+2015-12-09 13:03:18 INFO  CityBenchMain:91 - AarhusTrafficData182955
+2015-12-09 13:03:18 INFO  CityBenchMain:91 - AarhusTrafficData158505
+2015-12-09 13:03:18 INFO  JenaEngine:48 - Added [GraphStimulus on Stream [null] [{content=interface com.hp.hpl.jena.graph.Graph, app_timestamp=long, sys_timestamp=long}]] as TEvent
