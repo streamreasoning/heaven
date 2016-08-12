@@ -3,7 +3,7 @@ package it.polimi.heaven.core.teststand.streamer;
 import it.polimi.heaven.core.enums.ExecutionState;
 import it.polimi.heaven.core.teststand.EventProcessor;
 import it.polimi.heaven.core.teststand.events.HeavenInput;
-import it.polimi.heaven.core.teststand.rspengine.events.Stimulus;
+import it.polimi.heaven.core.teststand.rsp.data.Stimulus;
 import it.polimi.heaven.services.system.Memory;
 import it.polimi.services.FileService;
 

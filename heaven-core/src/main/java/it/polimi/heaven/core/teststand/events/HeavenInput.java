@@ -1,7 +1,7 @@
 package it.polimi.heaven.core.teststand.events;
 
 import it.polimi.heaven.core.teststand.data.Line;
-import it.polimi.heaven.core.teststand.rspengine.events.Stimulus;
+import it.polimi.heaven.core.teststand.rsp.data.Stimulus;
 
 import java.util.Set;
 
