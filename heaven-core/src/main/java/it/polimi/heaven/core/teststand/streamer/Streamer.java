@@ -2,7 +2,7 @@ package it.polimi.heaven.core.teststand.streamer;
 
 import it.polimi.heaven.core.teststand.EventProcessor;
 import it.polimi.heaven.core.teststand.events.HeavenEvent;
-import it.polimi.heaven.core.teststand.rspengine.events.Stimulus;
+import it.polimi.heaven.core.teststand.rsp.data.Stimulus;
 
 import java.io.FileReader;
 
@@ -18,10 +18,10 @@ import lombok.extern.log4j.Log4j;
  * Experiment event trough the method process(Experiment e). It must be
  * initialized before processing to stop the processing until next
  * initialization. It builds an flow rate according to the provided
- * FlowRateProfiler and send events to the next provided EventProcessor in
+ * FlowRateProfiler and send data to the next provided EventProcessor in
  * CTEvent format
  * 
- * A limitation in the number of generated events can be set up in construction
+ * A limitation in the number of generated data can be set up in construction
  * 
  * 
  * 

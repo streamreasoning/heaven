@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.teststand.rspengine.events;
+package it.polimi.heaven.core.teststand.rsp.data;
 
 public interface Response {
 
