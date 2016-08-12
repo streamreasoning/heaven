@@ -1,7 +1,7 @@
-package it.polimi.heaven.lubm;
+package it.polimi.heaven.lubm.test;
 
 import it.polimi.heaven.core.teststand.events.HeavenInput;
-import it.polimi.heaven.core.teststand.rspengine.events.Stimulus;
+import it.polimi.heaven.core.teststand.rsp.data.Stimulus;
 import it.polimi.heaven.core.teststand.streamer.Encoder;
 import it.polimi.heaven.core.teststand.streamer.FlowRateProfiler;
 import it.polimi.heaven.lubm.ConstantRandomFlowRateProfiler;

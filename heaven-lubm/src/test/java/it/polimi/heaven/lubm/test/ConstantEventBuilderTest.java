@@ -1,16 +1,16 @@
-package it.polimi.heaven.lubm;
+package it.polimi.heaven.lubm.test;
 
-import static org.junit.Assert.assertEquals;
 import it.polimi.heaven.core.teststand.events.HeavenInput;
-import it.polimi.heaven.core.teststand.rspengine.events.Stimulus;
+import it.polimi.heaven.core.teststand.rsp.data.Stimulus;
 import it.polimi.heaven.core.teststand.streamer.Encoder;
 import it.polimi.heaven.lubm.ConstantFlowRateProfiler;
 import it.polimi.heaven.lubm.LUBMFlowRateProfiler;
 import it.polimi.heaven.lubm.LUBMParser;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import static org.junit.Assert.assertEquals;
 
 public class ConstantEventBuilderTest {
 	@Rule

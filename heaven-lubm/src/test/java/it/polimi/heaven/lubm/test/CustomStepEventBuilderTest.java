@@ -1,17 +1,17 @@
-package it.polimi.heaven.lubm;
+package it.polimi.heaven.lubm.test;
 
-import static org.junit.Assert.assertEquals;
 import it.polimi.heaven.core.teststand.events.HeavenInput;
-import it.polimi.heaven.core.teststand.rspengine.events.Stimulus;
+import it.polimi.heaven.core.teststand.rsp.data.Stimulus;
 import it.polimi.heaven.core.teststand.streamer.Encoder;
 import it.polimi.heaven.core.teststand.streamer.FlowRateProfiler;
 import it.polimi.heaven.lubm.CustomStepFlowRateProfiler;
 import it.polimi.heaven.lubm.LUBMParser;
 import lombok.extern.log4j.Log4j;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import static org.junit.Assert.assertEquals;
 
 @Log4j
 public class CustomStepEventBuilderTest {
