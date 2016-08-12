@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2014 DEIB -Politecnico di Milano
- * <p/>
+ * 
  * Marco Balduini (marco.balduini@polimi.it)
  * Emanuele Della Valle (emanuele.dellavalle@polimi.it)
  * Davide Barbieri
@@ -23,7 +23,6 @@
  ******************************************************************************/
 package it.polimi.heaven.services.system;
 
-
 public class Memory {
 
     private static Runtime runtime = Runtime.getRuntime();
@@ -41,5 +40,8 @@ public class Memory {
         return (runtime.totalMemory() - runtime.freeMemory()) / mb;
     }
 
+	public static double sizeOf(Object o) {
+		return 0D; // TODO SizeOf.deepSizeOf(o);
+	}
 
 }
