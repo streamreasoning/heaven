@@ -1,7 +1,9 @@
-package it.polimi.heaven.core.teststand.rspengine;
+package it.polimi.heaven.core.teststand.rsp;
 
 import it.polimi.heaven.core.teststand.EventProcessor;
-import it.polimi.heaven.core.teststand.rspengine.events.Stimulus;
+import it.polimi.heaven.core.teststand.rsp.data.Stimulus;
+import it.polimi.heaven.core.teststand.rsp.querying.ContinousQueryExecution;
+import it.polimi.heaven.core.teststand.rsp.querying.Query;
 
 import javax.sound.midi.Receiver;
 
@@ -15,7 +17,7 @@ public interface RSPEngine extends EventProcessor<Stimulus> {
 
 	public void stopProcessing();
 
-	public void registerQuery(Query q);
+	public ContinousQueryExecution registerQuery(Query q);
 
 	public void registerReceiver(Receiver r);
 
