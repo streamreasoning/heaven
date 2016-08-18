@@ -15,7 +15,8 @@ Export-Package: \
 	it.polimi.heaven.core.teststand.rspengine.events,\
 	it.polimi.heaven.core.teststand.streamer,\
 	it.polimi.heaven.services.system,\
-	it.polimi.services
+	it.polimi.services,\
+	it.polimi.heaven.core.teststand.rsp.data
 -buildpath: \
 	osgi.annotation,\
 	osgi.core,\
