@@ -16,7 +16,19 @@ Export-Package: \
 	it.polimi.heaven.core.teststand.streamer,\
 	it.polimi.heaven.services.system,\
 	it.polimi.services,\
-	it.polimi.heaven.core.teststand.rsp.data
+	it.polimi.heaven.core.teststand.rsp.data,\
+	it.polimi.heaven.core.enums,\
+	it.polimi.heaven.core.exceptions,\
+	it.polimi.heaven.core.teststand,\
+	it.polimi.heaven.core.teststand.collector,\
+	it.polimi.heaven.core.teststand.data,\
+	it.polimi.heaven.core.teststand.events,\
+	it.polimi.heaven.core.teststand.rsp,\
+	it.polimi.heaven.core.teststand.rsp.data,\
+	it.polimi.heaven.core.teststand.rsp.querying,\
+	it.polimi.heaven.core.teststand.streamer,\
+	it.polimi.heaven.services.system,\
+	it.polimi.services
 -buildpath: \
 	osgi.annotation,\
 	osgi.core,\

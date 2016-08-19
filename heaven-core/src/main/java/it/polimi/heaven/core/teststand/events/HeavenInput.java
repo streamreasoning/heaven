@@ -55,4 +55,10 @@ public class HeavenInput implements HeavenEvent {
 		return this;
 	}
 
+	@Override
+	public boolean save(String where) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
