@@ -97,11 +97,9 @@ public class QosVector implements Cloneable {
 	}
 
 	public boolean satisfyConstraint(QosVector constraint) {
-		if (this.getAccuracy() >= constraint.getAccuracy() && this.getReliability() >= constraint.getReliability()
+		return this.getAccuracy() >= constraint.getAccuracy() && this.getReliability() >= constraint.getReliability()
 				&& this.getSecurity() >= constraint.getSecurity() && this.getLatency() <= constraint.getLatency()
-				&& this.getPrice() <= constraint.getPrice())
-			return true;
-		return false;
+				&& this.getPrice() <= constraint.getPrice();
 	}
 
 	public String toString() {
@@ -123,10 +121,7 @@ public class QosVector implements Cloneable {
 			return false;
 		if (this.price != other.getPrice())
 			return false;
-		if (this.security != other.getPrice())
-			return false;
-
-		return true;
+		return this.security == other.getPrice();
 
 	}
 

@@ -76,6 +76,6 @@ public class CBFlowRateProfiler extends FlowRateProfiler {
 
 	public long getTimestamp() {
 		return current_assigned_timestamp;
-	};
+	}
 
 }

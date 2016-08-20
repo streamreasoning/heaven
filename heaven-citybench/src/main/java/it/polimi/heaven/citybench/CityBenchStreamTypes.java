@@ -5,7 +5,7 @@ public enum CityBenchStreamTypes {
 
 	private final String name;
 
-	private CityBenchStreamTypes(String s) {
+	CityBenchStreamTypes(String s) {
 		name = s;
 	}
 
