@@ -1,6 +1,6 @@
 package it.polimi.heaven.core.teststand.events;
 
-import it.polimi.heaven.core.teststand.data.Line;
+import it.polimi.rdf.Line;
 import it.polimi.streaming.Stimulus;
 import lombok.Data;
 import lombok.NoArgsConstructor;

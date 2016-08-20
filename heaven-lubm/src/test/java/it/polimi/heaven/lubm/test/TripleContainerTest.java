@@ -2,7 +2,7 @@ package it.polimi.heaven.lubm.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import it.polimi.heaven.core.teststand.data.RDFLine;
+import it.polimi.rdf.RDFLine;
 
 import java.util.HashSet;
 import java.util.Set;

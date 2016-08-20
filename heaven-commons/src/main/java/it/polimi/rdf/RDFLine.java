@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.teststand.data;
+package it.polimi.rdf;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

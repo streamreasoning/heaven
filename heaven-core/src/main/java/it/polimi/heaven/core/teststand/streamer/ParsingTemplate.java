@@ -1,6 +1,6 @@
 package it.polimi.heaven.core.teststand.streamer;
 
-import it.polimi.heaven.core.teststand.data.Line;
+import it.polimi.rdf.Line;
 
 public interface ParsingTemplate {
 

@@ -1,7 +1,7 @@
 package it.polimi.heaven.citybench;
 
 import it.polimi.heaven.citybench.ssnobservations.SensorObservation;
-import it.polimi.heaven.core.teststand.data.Line;
+import it.polimi.rdf.Line;
 import it.polimi.heaven.core.teststand.events.HeavenInput;
 import it.polimi.heaven.core.teststand.streamer.Encoder;
 import it.polimi.heaven.core.teststand.streamer.FlowRateProfiler;
