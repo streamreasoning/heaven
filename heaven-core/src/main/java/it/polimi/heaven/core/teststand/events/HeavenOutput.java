@@ -1,6 +1,5 @@
 package it.polimi.heaven.core.teststand.events;
 
-import it.polimi.heaven.core.teststand.collector.Collectable;
 import it.polimi.services.FileService;
 import lombok.Data;
 import lombok.extern.log4j.Log4j;

@@ -286,7 +286,7 @@ public class RDFFileManager {
 		if (f.getVal() instanceof String)
 			filter.addLiteral(op, m.createTypedLiteral((String) f.getVal()));
 		else if (f.getVal() instanceof Integer)
-			filter.addLiteral(op, m.createTypedLiteral((Integer) f.getVal()));
+			filter.addLiteral(op, m.createTypedLiteral(f.getVal()));
 		else
 			filter.addLiteral(op, m.createTypedLiteral(Double.parseDouble(f.getVal().toString())));
 	}
@@ -875,7 +875,7 @@ public class RDFFileManager {
 					if (ed.getEp() != null) {
 						List<EventDeclaration> eds = ed.getEp().clone().getCompletePattern().getEds();
 						List<Resource> serviceIDs = dataset.getDefaultModel()
-								.listSubjectsWithProperty(patternModel.createProperty(ssnPrefix + "observes"), (Resource) property).toList();
+								.listSubjectsWithProperty(patternModel.createProperty(ssnPrefix + "observes"), property).toList();
 						boolean found = false;
 						for (EventDeclaration ed2 : eds) {
 							for (Resource r : serviceIDs) {

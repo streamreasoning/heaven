@@ -4,6 +4,6 @@ import it.polimi.heaven.core.teststand.data.Line;
 
 public interface ParsingTemplate {
 
-	public Line parse(String s);
+    Line parse(String s);
 
 }

@@ -41,9 +41,7 @@ public class Filter implements Cloneable {
 	}
 
 	public boolean equals(Filter f) {
-		if (this.op == f.getOp() && this.var.equals(f.getVar()) && this.val.equals(f.getVal()))
-			return true;
-		return false;
+		return this.op == f.getOp() && this.var.equals(f.getVar()) && this.val.equals(f.getVal());
 	}
 
 	public boolean coveredBy(Filter f) {

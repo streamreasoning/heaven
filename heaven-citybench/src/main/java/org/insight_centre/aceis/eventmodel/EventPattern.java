@@ -327,7 +327,7 @@ public class EventPattern implements Cloneable, Comparable<EventPattern> {
 		for (Map.Entry en : this.getProvenanceMap().entrySet()) {
 			clone.getProvenanceMap().put((String) en.getKey(), new ArrayList<String>());
 			for (String s : (List<String>) en.getValue()) {
-				clone.getProvenanceMap().get((String) en.getKey()).add(s);
+				clone.getProvenanceMap().get(en.getKey()).add(s);
 			}
 		}
 		for (Map.Entry en : this.getTemporalMap().entrySet()) {
@@ -1147,7 +1147,7 @@ public class EventPattern implements Cloneable, Comparable<EventPattern> {
 		if (this.getTemporalMap().containsValue(nodeId)) {
 			Iterator<Entry<String, String>> it = this.getTemporalMap().entrySet().iterator();
 			while (it.hasNext()) {
-				Entry<String, String> e = (Entry<String, String>) it.next();
+				Entry<String, String> e = it.next();
 				if (e.getValue().equals(nodeId)) {
 					precessor = e.getKey();
 					break;
@@ -1566,10 +1566,10 @@ public class EventPattern implements Cloneable, Comparable<EventPattern> {
 		// System.out.println("Replication before: " + this.provenanceMap + "\n" + this.temporalMap);
 		List<String> nodesToRemove = new ArrayList<String>();
 		nodesToRemove.add(repId);
-		EventPattern subtreeReplica1 = (EventPattern) this.getSubtreeByRoot(repId);
+		EventPattern subtreeReplica1 = this.getSubtreeByRoot(repId);
 		// int initialOffset = this.idCnt - Integer.parseInt(repId) + 1;
 		for (int i = 1; i < cardinality; i++) {
-			EventPattern subtreeReplica = (EventPattern) subtreeReplica1.clone();
+			EventPattern subtreeReplica = subtreeReplica1.clone();
 			int offset = this.idCnt + 1;
 
 			// System.out.println("Creating replica for " + repId + ": " + subtreeReplica.toString());

@@ -1,20 +1,21 @@
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>it.polimi.heaven</groupId>
         <artifactId>heaven</artifactId>
+        <groupId>it.polimi.heaven</groupId>
         <version>0.0.1</version>
     </parent>
-    <artifactId>heaven-postprocessing</artifactId>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>heaven-rsp</artifactId>
     <dependencies>
-        <dependency>
-            <groupId>it.polimi.heaven</groupId>
-            <artifactId>heaven-core</artifactId>
-        </dependency>
         <dependency>
             <groupId>it.polimi.heaven</groupId>
             <artifactId>heaven-commons</artifactId>
         </dependency>
     </dependencies>
+
+
 </project>

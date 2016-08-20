@@ -67,10 +67,8 @@ public class Selection implements Cloneable {
 	}
 
 	public boolean substitues(Selection sel) {
-		if (this.getOriginalED().getEventType().equals(sel.getOriginalED().getEventType())
-				&& this.getPropertyType().equals(sel.getPropertyType()) && this.getFoi().equals(sel.getFoi()))
-			return true;
-		return false;
+		return this.getOriginalED().getEventType().equals(sel.getOriginalED().getEventType())
+				&& this.getPropertyType().equals(sel.getPropertyType()) && this.getFoi().equals(sel.getFoi());
 	}
 
 	// public boolean covers(Selection sel) {

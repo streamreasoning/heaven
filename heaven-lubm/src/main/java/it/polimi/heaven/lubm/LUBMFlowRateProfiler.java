@@ -82,9 +82,9 @@ public abstract class LUBMFlowRateProfiler extends FlowRateProfiler {
 
 	public long getTimestamp() {
 		return current_assigned_timestamp;
-	};
+	}
 
 	public String getStreamName() {
 		return "lubmEvent";
-	};
+	}
 }

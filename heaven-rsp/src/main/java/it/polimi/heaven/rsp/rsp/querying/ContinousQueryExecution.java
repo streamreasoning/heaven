@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.teststand.rsp.querying;
+package it.polimi.heaven.rsp.rsp.querying;
 
 /**
  * Created by Riccardo on 12/08/16.
