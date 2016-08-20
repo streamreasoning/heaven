@@ -1,11 +1,11 @@
 package it.polimi.heaven.lubm.test;
 
 import it.polimi.heaven.core.teststand.events.HeavenInput;
-import it.polimi.heaven.core.teststand.rsp.data.Stimulus;
 import it.polimi.heaven.core.teststand.streamer.Encoder;
 import it.polimi.heaven.lubm.ConstantFlowRateProfiler;
 import it.polimi.heaven.lubm.LUBMFlowRateProfiler;
 import it.polimi.heaven.lubm.LUBMParser;
+import it.polimi.streaming.Stimulus;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

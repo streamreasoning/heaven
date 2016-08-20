@@ -5,7 +5,7 @@ public enum FlowRateProfile {
 
 	private int id;
 
-	private FlowRateProfile(final int i) {
+	FlowRateProfile(final int i) {
 		id = i;
 	}
 
