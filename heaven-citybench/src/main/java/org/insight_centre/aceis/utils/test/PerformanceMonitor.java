@@ -18,7 +18,7 @@ public class PerformanceMonitor implements Runnable {
 	private String resultName;
 	private long start = 0;
 	private ConcurrentHashMap<String, List<Long>> latencyMap = new ConcurrentHashMap<String, List<Long>>();
-	private List<Double> memoryList = new ArrayList<Double>();;
+	private List<Double> memoryList = new ArrayList<Double>();
 	private ConcurrentHashMap<String, Long> resultCntMap = new ConcurrentHashMap<String, Long>();
 	private CsvWriter cw;
 	private long resultInitTime = 0, lastCheckPoint = 0, globalInit = 0;

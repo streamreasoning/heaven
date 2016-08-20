@@ -2,11 +2,11 @@ package it.polimi.heaven.lubm.test;
 
 import static org.junit.Assert.assertEquals;
 import it.polimi.heaven.core.teststand.events.HeavenInput;
-import it.polimi.heaven.core.teststand.rsp.data.Stimulus;
 import it.polimi.heaven.core.teststand.streamer.Encoder;
 import it.polimi.heaven.core.teststand.streamer.FlowRateProfiler;
 import it.polimi.heaven.lubm.StepFlowRateProfiler;
 import it.polimi.heaven.lubm.LUBMParser;
+import it.polimi.streaming.Stimulus;
 import lombok.extern.log4j.Log4j;
 
 import org.junit.Rule;
