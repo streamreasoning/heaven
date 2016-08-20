@@ -1,6 +1,6 @@
 package it.polimi.heaven.lubm;
 
-import it.polimi.heaven.core.teststand.data.Line;
+import it.polimi.rdf.Line;
 import it.polimi.heaven.core.teststand.events.HeavenInput;
 import it.polimi.heaven.core.teststand.streamer.Encoder;
 import it.polimi.heaven.core.teststand.streamer.FlowRateProfiler;

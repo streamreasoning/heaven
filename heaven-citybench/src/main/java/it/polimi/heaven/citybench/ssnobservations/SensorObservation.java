@@ -1,5 +1,5 @@
 package it.polimi.heaven.citybench.ssnobservations;
-import it.polimi.heaven.core.teststand.data.Line;
+import it.polimi.rdf.Line;
 import lombok.Data;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
