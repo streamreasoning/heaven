@@ -1,7 +1,7 @@
 package it.polimi.heaven.lubm;
 
 import it.polimi.rdf.RDFLine;
-import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
+import it.polimi.rdf.ParsingTemplate;
 
 public class LUBMParser implements ParsingTemplate {
 

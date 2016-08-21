@@ -4,7 +4,7 @@ import it.polimi.rdf.Line;
 import it.polimi.heaven.core.teststand.events.HeavenInput;
 import it.polimi.heaven.core.teststand.streamer.Encoder;
 import it.polimi.heaven.core.teststand.streamer.FlowRateProfiler;
-import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
+import it.polimi.rdf.ParsingTemplate;
 
 import java.util.HashSet;
 import java.util.Set;
