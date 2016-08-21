@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.teststand.streamer;
+package it.polimi.rdf;
 
 import it.polimi.rdf.Line;
 

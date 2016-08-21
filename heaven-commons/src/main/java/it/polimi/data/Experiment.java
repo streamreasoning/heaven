@@ -1,4 +1,4 @@
-package it.polimi.heaven.core.teststand.data;
+package it.polimi.data;
 
 import lombok.Data;
 
