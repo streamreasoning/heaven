@@ -6,10 +6,8 @@ import it.polimi.heaven.citybench.ssnobservations.AarhusTrafficObservation;
 import it.polimi.heaven.citybench.ssnobservations.PollutionObservation;
 import it.polimi.heaven.citybench.ssnobservations.SensorObservation;
 import it.polimi.heaven.citybench.ssnobservations.WeatherObservation;
-import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
+import it.polimi.rdf.ParsingTemplate;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,12 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import it.polimi.services.FileService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 import org.insight_centre.aceis.eventmodel.EventDeclaration;
-import org.insight_centre.aceis.eventmodel.TrafficReportService;
 
 @Log4j
 @AllArgsConstructor
