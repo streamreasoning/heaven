@@ -1,5 +1,6 @@
 package it.polimi.heaven.core.teststand.streamer;
 
+import it.polimi.rdf.ParsingTemplate;
 import it.polimi.streaming.Stimulus;
 import it.polimi.heaven.core.teststand.events.HeavenEvent;
 import it.polimi.streaming.EventProcessor;

@@ -1,6 +1,7 @@
 package it.polimi.heaven.core.teststand.streamer;
 
 import it.polimi.heaven.core.teststand.events.HeavenInput;
+import it.polimi.rdf.ParsingTemplate;
 import lombok.Getter;
 import lombok.Setter;
 
