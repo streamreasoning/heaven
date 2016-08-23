@@ -1,11 +1,11 @@
 package it.polimi.heaven.citybench.ssnobservations;
 
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.vocabulary.RDF;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.vocabulary.RDF;
 import org.insight_centre.aceis.io.rdf.RDFFileManager;
-import com.hp.hpl.jena.rdf.model.Resource;
 
 import java.util.List;
 import java.util.UUID;

@@ -1,6 +1,6 @@
 package it.polimi.heaven.lubm;
 
-import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
+import it.polimi.rdf.ParsingTemplate;
 
 public class StepFlowRateProfiler extends LUBMFlowRateProfiler {
 

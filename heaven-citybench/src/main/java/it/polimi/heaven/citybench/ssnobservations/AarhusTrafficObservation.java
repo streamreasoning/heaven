@@ -1,17 +1,15 @@
 package it.polimi.heaven.citybench.ssnobservations;
 
-import java.util.List;
-import java.util.UUID;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j;
-
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.vocabulary.RDF;
 import org.insight_centre.aceis.io.rdf.RDFFileManager;
 
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.RDF;
+import java.util.List;
+import java.util.UUID;
 
 //Fields  status,avgMeasuredTime,avgSpeed,extID,medianMeasuredTime,TIMESTAMP,vehicleCount,_id,REPORT_ID
 @Data

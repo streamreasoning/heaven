@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>it.polimi.heaven</groupId>
-    <artifactId>Heaven</artifactId>
+    <artifactId>heaven</artifactId>
     <version>0.0.1</version>
     <description>
     </description>
@@ -81,6 +81,7 @@
         <module>heaven-postprocessing</module>
         <module>heaven-citybench</module>
         <module>heaven-lubm</module>
+        <module>heaven-rsp</module>
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -112,6 +113,11 @@
             <dependency>
                 <groupId>it.polimi.heaven</groupId>
                 <artifactId>heaven-citybench</artifactId>
+                <version>0.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>it.polimi.heaven</groupId>
+                <artifactId>heaven-rsp</artifactId>
                 <version>0.0.1</version>
             </dependency>
         </dependencies>

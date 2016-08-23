@@ -1,11 +1,11 @@
 package it.polimi.heaven.citybench;
 
 import it.polimi.heaven.citybench.ssnobservations.SensorObservation;
-import it.polimi.heaven.core.teststand.data.Line;
+import it.polimi.rdf.Line;
 import it.polimi.heaven.core.teststand.events.HeavenInput;
 import it.polimi.heaven.core.teststand.streamer.Encoder;
 import it.polimi.heaven.core.teststand.streamer.FlowRateProfiler;
-import it.polimi.heaven.core.teststand.streamer.ParsingTemplate;
+import it.polimi.rdf.ParsingTemplate;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -76,6 +76,6 @@ public class CBFlowRateProfiler extends FlowRateProfiler {
 
 	public long getTimestamp() {
 		return current_assigned_timestamp;
-	};
+	}
 
 }

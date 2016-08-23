@@ -1,6 +1,6 @@
 package it.polimi.heaven.core.teststand.collector;
 
-import it.polimi.heaven.core.teststand.data.Experiment;
+import it.polimi.data.Experiment;
 import it.polimi.heaven.core.teststand.events.HeavenEvent;
 import it.polimi.heaven.core.teststand.events.HeavenInput;
 import it.polimi.heaven.core.teststand.events.HeavenOutput;

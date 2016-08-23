@@ -1,8 +1,8 @@
 package org.insight_centre.aceis.io.streams;
 
 import com.csvreader.CsvReader;
-import com.hp.hpl.jena.rdf.model.*;
-import com.hp.hpl.jena.vocabulary.RDF;
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.vocabulary.RDF;
 import org.insight_centre.aceis.eventmodel.EventDeclaration;
 import org.insight_centre.aceis.eventmodel.TrafficReportService;
 import org.insight_centre.aceis.io.rdf.RDFFileManager;
@@ -33,7 +33,7 @@ public class DataWrapper {
 				// List<Statement> stmts = this.getStatements(po);
 
 				// logger.info("previous: " + previousTime + ", current: " + current.getObTimeStamp().getTime());
-				long ms = (long) ((current.getObTimeStamp().getTime() - previousTime));
+				long ms = (current.getObTimeStamp().getTime() - previousTime);
 				// logger.info("waiting..." + ms / rate);
 				Thread.sleep((long) (ms / rate));
 				current.setSysTimestamp(new Date());
@@ -63,7 +63,6 @@ public class DataWrapper {
 			else
 				data.setCongestionLevel(-1.0);
 			data.setObId(obId);
-			;
 			// this.currentObservation = data;
 			return data;
 		} catch (NumberFormatException | IOException e) {
